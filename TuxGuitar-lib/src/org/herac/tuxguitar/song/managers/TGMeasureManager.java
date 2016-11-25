@@ -1157,8 +1157,7 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un tapping
 	 */
-	public void changeTapping(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
+	public void changeTapping(TGNote note){
 		if(note != null){
 			note.getEffect().setTapping(!note.getEffect().isTapping());
 		}

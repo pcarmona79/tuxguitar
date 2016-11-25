@@ -29,6 +29,11 @@ public class UIPosition {
 	public void setY(float y) {
 		this.y = y;
 	}
+
+	public void set(UIPosition position) {
+		this.x = position.getX();
+		this.y = position.getY();
+	}
 	
 	@Override
 	public boolean equals(Object obj) {

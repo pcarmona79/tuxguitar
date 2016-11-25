@@ -84,6 +84,8 @@ import org.herac.tuxguitar.app.action.impl.measure.TGOpenMeasureRemoveDialogActi
 import org.herac.tuxguitar.app.action.impl.note.TGOpenBeatMoveDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenStrokeDownDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenStrokeUpDialogAction;
+import org.herac.tuxguitar.app.action.impl.selector.TGSetSelectionBeginingAction;
+import org.herac.tuxguitar.app.action.impl.selector.TGUpdateSelectionAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGOpenKeyBindingEditorAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGOpenPluginListDialogAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGOpenSettingsEditorAction;
@@ -299,7 +301,11 @@ public class TGActionInstaller {
 		installAction(new TGGoLeftAction(context));
 		installAction(new TGGoUpAction(context));
 		installAction(new TGGoDownAction(context));
-		
+
+		//selector actions
+		installAction(new TGSetSelectionBeginingAction(context));
+		installAction(new TGUpdateSelectionAction(context));
+
 		//song actions
 		installAction(new TGCopySongFromAction(context));
 		installAction(new TGClearSongAction(context));

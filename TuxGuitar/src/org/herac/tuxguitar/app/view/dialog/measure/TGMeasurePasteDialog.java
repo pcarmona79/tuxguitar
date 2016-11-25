@@ -20,15 +20,18 @@ import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGMeasurePasteDialog {
-	
+
+	private UIFactory uiFactory;
+	private UIWindow uiParent;
+	private UITableLayout dialogLayout;
+	private UIWindow dialog;
+
 	public void show(final TGViewContext context) {
-		final UIFactory uiFactory = TGApplication.getInstance(context.getContext()).getFactory();
-		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
-		final UITableLayout dialogLayout = new UITableLayout();
-		final UIWindow dialog = uiFactory.createWindow(uiParent, true, false);
-		
-		dialog.setLayout(dialogLayout);
-		dialog.setText(TuxGuitar.getProperty("edit.paste"));
+		uiFactory = TGApplication.getInstance(context.getContext()).getFactory();
+		uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
+		dialogLayout = new UITableLayout();
+
+		createWindow();
 		
 		//-----------------COUNT------------------------
 		UITableLayout groupLayout = new UITableLayout();
@@ -100,7 +103,13 @@ public class TGMeasurePasteDialog {
 		
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
-	
+
+	private void createWindow() {
+		dialog = uiFactory.createWindow(uiParent, true, false);
+		dialog.setLayout(dialogLayout);
+		dialog.setText(TuxGuitar.getProperty("edit.paste"));
+	}
+
 	public void processAction(TGContext context, Integer pasteMode, Integer pasteCount) {
 		TGActionProcessor tgActionProcessor = new TGActionProcessor(context, TGPasteMeasureAction.NAME);
 		tgActionProcessor.setAttribute(TGPasteMeasureAction.ATTRIBUTE_PASTE_MODE, pasteMode);

@@ -30,7 +30,7 @@ public class EditorKit {
 	
 	public static final String ATTRIBUTE_X = "editorKit-x";
 	public static final String ATTRIBUTE_Y = "editorKit-y";
-	
+
 	public static final int MOUSE_MODE_SELECTION = 1;
 	public static final int MOUSE_MODE_EDITION = 2;
 	

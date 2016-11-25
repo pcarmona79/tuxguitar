@@ -5,14 +5,18 @@ import org.herac.tuxguitar.action.TGActionContextFactory;
 import org.herac.tuxguitar.action.TGActionException;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.view.component.tab.Caret;
+import org.herac.tuxguitar.app.view.component.tab.Selector;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.document.TGDocumentManager;
+import org.herac.tuxguitar.song.models.TGNote;
+import org.herac.tuxguitar.util.TGNoteRange;
 
 public class TGActionContextFactoryImpl implements TGActionContextFactory{
 
 	public TGActionContext createActionContext() throws TGActionException {
 		Caret caret = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret();
 		TGDocumentManager tgDocumentManager = TuxGuitar.getInstance().getDocumentManager();
+		Selector selector = TuxGuitar.getInstance().getTablatureEditor().getTablature().getSelector();
 		
 		TGActionContext tgActionContext = new TGActionContextImpl();
 		tgActionContext.setAttribute(TGDocumentManager.class.getName(), tgDocumentManager);
@@ -30,7 +34,18 @@ public class TGActionContextFactoryImpl implements TGActionContextFactory{
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_VELOCITY, caret.getVelocity());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_POSITION, caret.getPosition());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER, caret.getMeasure().getHeader().getMarker());
+		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_NOTE_RANGE, getNoteRange(selector, caret.getSelectedNote()));
 		
 		return tgActionContext;
+	}
+
+	private TGNoteRange getNoteRange(Selector selector, TGNote defaultNote) {
+		if (selector.isActive()) {
+			return selector.getNoteRange();
+		}
+		else if (defaultNote != null) {
+			return TGNoteRange.single(defaultNote);
+		}
+		return TGNoteRange.empty();
 	}
 }
