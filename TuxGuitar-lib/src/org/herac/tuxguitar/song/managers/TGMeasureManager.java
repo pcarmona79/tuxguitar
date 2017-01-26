@@ -1089,11 +1089,8 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un vibrato
 	 */
-	public void changeVibratoNote(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){
-			note.getEffect().setVibrato(!note.getEffect().isVibrato());
-		}
+	public void changeVibratoNote(TGNote note){
+		note.getEffect().setVibrato(!note.getEffect().isVibrato());
 	}
 	
 	/** 
@@ -1127,21 +1124,15 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un palm-mute
 	 */
-	public void changePalmMute(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){
-			note.getEffect().setPalmMute(!note.getEffect().isPalmMute());
-		}
+	public void changePalmMute(TGNote note){
+		note.getEffect().setPalmMute(!note.getEffect().isPalmMute());
 	}
 	
 	/** 
 	 * Agrega un staccato
 	 */
-	public void changeStaccato(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){
-			note.getEffect().setStaccato(!note.getEffect().isStaccato());
-		}
+	public void changeStaccato(TGNote note){
+		note.getEffect().setStaccato(!note.getEffect().isStaccato());
 	}
 	
 	/** 
@@ -1166,21 +1157,15 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un slapping
 	 */
-	public void changeSlapping(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){
-			note.getEffect().setSlapping(!note.getEffect().isSlapping());
-		}
+	public void changeSlapping(TGNote note){
+		note.getEffect().setSlapping(!note.getEffect().isSlapping());
 	}
 	
 	/** 
 	 * Agrega un popping
 	 */
-	public void changePopping(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){
-			note.getEffect().setPopping(!note.getEffect().isPopping());
-		}
+	public void changePopping(TGNote note){
+		note.getEffect().setPopping(!note.getEffect().isPopping());
 	}
 	
 	/** 
