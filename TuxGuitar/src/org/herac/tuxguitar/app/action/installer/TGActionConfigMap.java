@@ -499,9 +499,9 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGSetChordDiagramEnabledAction.NAME, LOCKABLE | SHORTCUT, UPDATE_SONG_CTL);
 		
 		this.map(TGSetLayoutScaleAction.NAME, LOCKABLE | SYNC_THREAD, UPDATE_SONG_CTL);
-		this.map(TGSetLayoutScaleIncrementAction.NAME, LOCKABLE | SYNC_THREAD, UPDATE_SONG_CTL);
-		this.map(TGSetLayoutScaleDecrementAction.NAME, LOCKABLE | SYNC_THREAD, UPDATE_SONG_CTL);
-		this.map(TGSetLayoutScaleResetAction.NAME, LOCKABLE | SYNC_THREAD, UPDATE_SONG_CTL);
+		this.map(TGSetLayoutScaleIncrementAction.NAME, LOCKABLE | SHORTCUT | SYNC_THREAD, UPDATE_SONG_CTL);
+		this.map(TGSetLayoutScaleDecrementAction.NAME, LOCKABLE | SHORTCUT | SYNC_THREAD, UPDATE_SONG_CTL);
+		this.map(TGSetLayoutScaleResetAction.NAME, LOCKABLE | SHORTCUT | SYNC_THREAD, UPDATE_SONG_CTL);
 		
 		//tools
 		this.map(TGSelectScaleAction.NAME, LOCKABLE);

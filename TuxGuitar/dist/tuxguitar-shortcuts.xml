@@ -91,4 +91,7 @@
 	<shortcut keys="Control u" action="action.gui.open-stroke-up-dialog"/>
 	<shortcut keys="F6" action="action.gui.toggle-fretboard-editor"/>
 	<shortcut keys="F7" action="action.gui.toggle-piano-editor"/>
+	<shortcut keys="Control =" action="action.view.layout-increment-scale"/>
+	<shortcut keys="Control -" action="action.view.layout-decrement-scale"/>
+	<shortcut keys="Control 0" action="action.view.layout-reset-scale"/>
 </shortcuts>

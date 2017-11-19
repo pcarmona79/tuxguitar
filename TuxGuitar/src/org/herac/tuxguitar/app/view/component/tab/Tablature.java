@@ -26,9 +26,9 @@ import org.herac.tuxguitar.ui.resource.UIResourceFactory;
 import org.herac.tuxguitar.util.TGContext;
 
 public class Tablature implements TGController {
-	
-	public static final Float DEFAULT_SCALE = 1f;
-	
+
+	public static final float DEFAULT_SCALE = 1.f;
+
 	private TGContext context; 
 	private UIResourceFactory resourceFactory;
 	private TGDocumentManager documentManager;
@@ -44,7 +44,8 @@ public class Tablature implements TGController {
 	public Tablature(TGContext context, TGDocumentManager documentManager) {
 		this.context = context;
 		this.documentManager = documentManager;
-		this.scale = DEFAULT_SCALE;
+		TGConfigManager config = TGConfigManager.getInstance(this.context);
+		this.scale = config.getFloatValue(TGConfigKeys.LAYOUT_ZOOM, DEFAULT_SCALE);
 		this.caret = new Caret(this);
 		this.selector = new Selector();
 		this.editorKit = new EditorKit(this);
@@ -163,6 +164,9 @@ public class Tablature implements TGController {
 		if(!this.scale.equals(scale)) {
 			this.scale = (scale != null ? scale : DEFAULT_SCALE);
 			this.reloadStyles();
+
+			TGConfigManager config = TGConfigManager.getInstance(getContext());
+			config.setValue(TGConfigKeys.LAYOUT_ZOOM, this.scale);
 		}
 	}
 	

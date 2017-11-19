@@ -171,7 +171,7 @@ public class ViewMenuItem extends TGMenuItem {
 		this.compact.setEnabled((style & TGLayout.DISPLAY_MULTITRACK) == 0 || tablature.getViewLayout().getSong().countTracks() == 1);
 		this.chordName.setChecked( (style & TGLayout.DISPLAY_CHORD_NAME) != 0 );
 		this.chordDiagram.setChecked( (style & TGLayout.DISPLAY_CHORD_DIAGRAM) != 0 );
-		this.zoomReset.setEnabled(!Tablature.DEFAULT_SCALE.equals(tablature.getScale()));
+		this.zoomReset.setEnabled(Tablature.DEFAULT_SCALE != tablature.getScale());
 	}
 	
 	public void loadProperties(){
