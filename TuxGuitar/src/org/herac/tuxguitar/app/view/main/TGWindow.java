@@ -11,6 +11,7 @@ import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tabfolder.TGTabFolder;
 import org.herac.tuxguitar.app.view.component.table.TGTableViewer;
 import org.herac.tuxguitar.app.view.dialog.fretboard.TGFretBoardEditor;
+import org.herac.tuxguitar.app.view.docking.TGDockingManager;
 import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
 import org.herac.tuxguitar.app.view.toolbar.main.TGMainToolBar;
 import org.herac.tuxguitar.app.view.util.TGCursorController;
@@ -68,10 +69,6 @@ public class TGWindow implements TGEventListener {
 		TGMainToolBar tgToolBar = TGMainToolBar.getInstance(this.context);
 		tgToolBar.createToolBar(this.window, tgConfig.getBooleanValue(TGConfigKeys.SHOW_MAIN_TOOLBAR));
 		
-		UIPanel topDockingArea = uiFactory.createPanel(this.window, false);
-		topDockingArea.setLayout(new UITableLayout(0f));
-		topDockingArea.getLayout().set(UITableLayout.IGNORE_INVISIBLE, true);
-		
 		UITableLayout topContainerLayout = new UITableLayout(0f);
 		UIPanel topContainer = uiFactory.createPanel(this.window, false);
 		topContainer.setLayout(topContainerLayout);
@@ -93,15 +90,10 @@ public class TGWindow implements TGEventListener {
 		TGTableViewer tgTableViewer = TGTableViewer.getInstance(this.context);
 		tgTableViewer.init(this.window);
 		
-		UIPanel bottomDockingArea = uiFactory.createPanel(this.window, false);
-		bottomDockingArea.setLayout(new UITableLayout(0f));
-		bottomDockingArea.getLayout().set(UITableLayout.IGNORE_INVISIBLE, true);
-		
-		TGFretBoardEditor tgFretBoardEditor = TGFretBoardEditor.getInstance(this.context);
-		tgFretBoardEditor.createFretBoard(topDockingArea, tgConfig.getBooleanValue(TGConfigKeys.SHOW_FRETBOARD));
+		TGDockingManager dockingManager = new TGDockingManager(uiFactory, context, window);
 		
 		// Layout
-		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topDockingArea, topContainer, tgWindowDivider.getControl(), tgTableViewer.getControl(), bottomDockingArea));
+		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topContainer, tgWindowDivider.getControl(), tgTableViewer.getControl(), dockingManager));
 	}
 	
 	private void loadInitialBounds() {
