@@ -10,17 +10,25 @@ import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
+import org.herac.tuxguitar.util.singleton.TGSingletonFactory;
+import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
 
 public class TGDockingManager {
 
-  private final UIFactory         uiFactory;
-  private final TGContext         context;
-  private final UILayoutContainer topDockingArea;
-  private final UILayoutContainer bottomDockingArea;
+  private final TGContext   context;
 
-  public TGDockingManager(UIFactory uiFactory, TGContext context, UIWindow window) {
-    this.uiFactory = uiFactory;
+  private UIFactory         uiFactory;
+  private UILayoutContainer topDockingArea;
+  private UILayoutContainer bottomDockingArea;
+
+  private boolean           dockedToTop = false;
+
+  public TGDockingManager(TGContext context) {
     this.context = context;
+  }
+
+  public void init(UIFactory uiFactory, UIWindow window) {
+    this.uiFactory = uiFactory;
     this.topDockingArea = createDockingArea(window);
     this.bottomDockingArea = createDockingArea(window);
   }
@@ -40,8 +48,13 @@ public class TGDockingManager {
     return this.bottomDockingArea;
   }
 
+  public boolean isDockedToTop() {
+    return dockedToTop;
+  }
+
   public void dock(boolean toTop) {
     this.dock(toTop ? topDockingArea : bottomDockingArea);
+    this.dockedToTop = toTop;
   }
 
   private void dock(UILayoutContainer dockingArea) {
@@ -69,5 +82,15 @@ public class TGDockingManager {
     for (UIControl children : bottomDockingArea.getChildren()) {
       children.dispose();
     }
+  }
+
+  public static TGDockingManager getInstance(TGContext context) {
+    return TGSingletonUtil.getInstance(context, TGDockingManager.class.getName(),
+        new TGSingletonFactory<TGDockingManager>() {
+
+          public TGDockingManager createInstance(TGContext context) {
+            return new TGDockingManager(context);
+          }
+        });
   }
 }

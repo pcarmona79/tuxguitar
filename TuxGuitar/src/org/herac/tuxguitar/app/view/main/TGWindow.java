@@ -90,10 +90,12 @@ public class TGWindow implements TGEventListener {
 		TGTableViewer tgTableViewer = TGTableViewer.getInstance(this.context);
 		tgTableViewer.init(this.window);
 		
-		TGDockingManager dockingManager = new TGDockingManager(uiFactory, context, window);
+		TGDockingManager dockingManager = TGDockingManager.getInstance(this.context);
+		dockingManager.init(uiFactory, window);
 		
 		// Layout
 		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topContainer, tgWindowDivider.getControl(), tgTableViewer.getControl(), dockingManager));
+		dockingManager.dock(tgConfig.getBooleanValue(TGConfigKeys.LAYOUT_DOCK_TO_TOP));
 	}
 	
 	private void loadInitialBounds() {

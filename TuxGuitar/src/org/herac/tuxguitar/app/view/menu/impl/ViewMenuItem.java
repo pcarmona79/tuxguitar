@@ -13,6 +13,7 @@ import org.herac.tuxguitar.app.action.impl.layout.TGSetPageLayoutAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetScoreEnabledAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetTablatureEnabledAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
+import org.herac.tuxguitar.app.action.impl.view.TGToggleDockingToTopAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleEditToolbarAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleFretBoardEditorAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleMainToolbarAction;
@@ -43,6 +44,7 @@ public class ViewMenuItem extends TGMenuItem {
 	private UIMenuCheckableItem showFretBoard;
 	private UIMenuCheckableItem showPiano;
 	private UIMenuCheckableItem showMatrix;
+  private UIMenuCheckableItem dockToTop;
 	private UIMenuCheckableItem pageLayout;
 	private UIMenuCheckableItem linearLayout;
 	private UIMenuCheckableItem multitrack;
@@ -89,6 +91,12 @@ public class ViewMenuItem extends TGMenuItem {
 		//--MATRIX--
 		this.showMatrix = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
+		
+		this.layoutMenuItem.getMenu().createSeparator();
+		
+		//--DOCKING--
+		this.dockToTop = this.layoutMenuItem.getMenu().createCheckItem();
+		this.dockToTop.addSelectionListener(this.createActionProcessor(TGToggleDockingToTopAction.NAME));
 		
 		this.layoutMenuItem.getMenu().createSeparator();
 		
@@ -155,6 +163,7 @@ public class ViewMenuItem extends TGMenuItem {
 		this.showMatrix.setChecked(!TuxGuitar.getInstance().getMatrixEditor().isDisposed());
 		this.pageLayout.setChecked(tablature.getViewLayout() instanceof TGLayoutVertical);
 		this.linearLayout.setChecked(tablature.getViewLayout() instanceof TGLayoutHorizontal);
+		this.dockToTop.setChecked(TuxGuitar.getInstance().getDockingManager().isDockedToTop());
 		this.multitrack.setChecked( (style & TGLayout.DISPLAY_MULTITRACK) != 0 );
 		this.scoreEnabled.setChecked( (style & TGLayout.DISPLAY_SCORE) != 0 );
 		this.tablatureEnabled.setChecked( (style & TGLayout.DISPLAY_TABLATURE) != 0 );
@@ -174,6 +183,8 @@ public class ViewMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.showFretBoard, "view.show-fretboard", TGToggleFretBoardEditorAction.NAME);
 		setMenuItemTextAndAccelerator(this.showPiano, "view.show-piano", TGTogglePianoEditorAction.NAME);
 		setMenuItemTextAndAccelerator(this.showMatrix, "view.show-matrix", TGToggleMatrixEditorAction.NAME);
+		setMenuItemTextAndAccelerator(this.dockToTop, "view.dock-to-top", TGToggleDockingToTopAction.NAME);
+		
 		setMenuItemTextAndAccelerator(this.pageLayout, "view.layout.page", TGSetPageLayoutAction.NAME);
 		setMenuItemTextAndAccelerator(this.linearLayout, "view.layout.linear", TGSetLinearLayoutAction.NAME);
 		setMenuItemTextAndAccelerator(this.multitrack, "view.layout.multitrack", TGSetMultitrackViewAction.NAME);
