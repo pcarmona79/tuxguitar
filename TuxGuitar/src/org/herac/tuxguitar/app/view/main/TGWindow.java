@@ -68,6 +68,10 @@ public class TGWindow implements TGEventListener {
 		TGMainToolBar tgToolBar = TGMainToolBar.getInstance(this.context);
 		tgToolBar.createToolBar(this.window, tgConfig.getBooleanValue(TGConfigKeys.SHOW_MAIN_TOOLBAR));
 		
+		UIPanel topDockingArea = uiFactory.createPanel(this.window, false);
+		topDockingArea.setLayout(new UITableLayout(0f));
+		topDockingArea.getLayout().set(UITableLayout.IGNORE_INVISIBLE, true);
+		
 		UITableLayout topContainerLayout = new UITableLayout(0f);
 		UIPanel topContainer = uiFactory.createPanel(this.window, false);
 		topContainer.setLayout(topContainerLayout);
@@ -75,12 +79,12 @@ public class TGWindow implements TGEventListener {
 		
 		TGEditToolBar tgEditToolBar = TGEditToolBar.getInstance(this.context);
 		tgEditToolBar.createToolBar(topContainer, tgConfig.getBooleanValue(TGConfigKeys.SHOW_EDIT_TOOLBAR));
-		topContainerLayout.set(tgEditToolBar.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+		topContainerLayout.set(tgEditToolBar.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
 		topContainerLayout.set(tgEditToolBar.getControl(), UITableLayout.PACKED_HEIGHT, 0f);
-		
+
 		TGTabFolder tgTabFolder = TGTabFolder.getInstance(this.context);
 		tgTabFolder.init(topContainer);
-		topContainerLayout.set(tgTabFolder.getControl(), 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+		topContainerLayout.set(tgTabFolder.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 		topContainerLayout.set(tgTabFolder.getControl(), UITableLayout.PACKED_HEIGHT, 0f);
 		
 		TGWindowDivider tgWindowDivider = new TGWindowDivider(this.context);
@@ -89,15 +93,15 @@ public class TGWindow implements TGEventListener {
 		TGTableViewer tgTableViewer = TGTableViewer.getInstance(this.context);
 		tgTableViewer.init(this.window);
 		
-		UIPanel bottom = uiFactory.createPanel(this.window, false);
-		bottom.setLayout(new UITableLayout(0f));
-		bottom.getLayout().set(UITableLayout.IGNORE_INVISIBLE, true);
+		UIPanel bottomDockingArea = uiFactory.createPanel(this.window, false);
+		bottomDockingArea.setLayout(new UITableLayout(0f));
+		bottomDockingArea.getLayout().set(UITableLayout.IGNORE_INVISIBLE, true);
 		
 		TGFretBoardEditor tgFretBoardEditor = TGFretBoardEditor.getInstance(this.context);
-		tgFretBoardEditor.createFretBoard(bottom, tgConfig.getBooleanValue(TGConfigKeys.SHOW_FRETBOARD));
+		tgFretBoardEditor.createFretBoard(topDockingArea, tgConfig.getBooleanValue(TGConfigKeys.SHOW_FRETBOARD));
 		
 		// Layout
-		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topContainer, tgWindowDivider.getControl(), tgTableViewer.getControl(), bottom));
+		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topDockingArea, topContainer, tgWindowDivider.getControl(), tgTableViewer.getControl(), bottomDockingArea));
 	}
 	
 	private void loadInitialBounds() {
