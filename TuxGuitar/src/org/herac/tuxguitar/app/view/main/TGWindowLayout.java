@@ -13,14 +13,14 @@ public class TGWindowLayout extends UITableLayout {
 	private UIControl topContainer;
 	private UIControl divider;
 	private UIControl bottomContainer;
-  private TGDockingManager dockingManager;
+	private TGDockingManager dockingManager;
 	
 	public TGWindowLayout(UIControl top, UIControl topContainer, UIControl divider, UIControl bottomContainer, TGDockingManager dockingManager) {
 		this.top = top;
 		this.topContainer = topContainer;
 		this.divider = divider;
 		this.bottomContainer = bottomContainer;
-    this.dockingManager = dockingManager;
+		this.dockingManager = dockingManager;
 		this.configure();
 	}
 	

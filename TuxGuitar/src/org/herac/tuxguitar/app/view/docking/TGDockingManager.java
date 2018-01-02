@@ -58,7 +58,6 @@ public class TGDockingManager {
   }
 
   private void dock(UILayoutContainer dockingArea) {
-    // Clean docking area first
     this.clear();
 
     TGConfigManager tgConfig = TGConfigManager.getInstance(this.context);

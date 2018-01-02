@@ -44,7 +44,7 @@ public class ViewMenuItem extends TGMenuItem {
 	private UIMenuCheckableItem showFretBoard;
 	private UIMenuCheckableItem showPiano;
 	private UIMenuCheckableItem showMatrix;
-  private UIMenuCheckableItem dockToTop;
+	private UIMenuCheckableItem dockToTop;
 	private UIMenuCheckableItem pageLayout;
 	private UIMenuCheckableItem linearLayout;
 	private UIMenuCheckableItem multitrack;
