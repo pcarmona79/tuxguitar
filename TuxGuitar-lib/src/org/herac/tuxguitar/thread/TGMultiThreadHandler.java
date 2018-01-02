@@ -64,6 +64,12 @@ public class TGMultiThreadHandler implements TGThreadHandler, Runnable {
 		}
 		if( runnable != null ) {
 			runnable.run();
+		} else {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				throw new TGException(e.getMessage(), e);
+			}
 		}
 	}
 	
