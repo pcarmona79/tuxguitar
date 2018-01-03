@@ -9,7 +9,9 @@ import org.herac.tuxguitar.app.action.impl.caret.TGGoLeftAction;
 import org.herac.tuxguitar.app.action.impl.caret.TGGoRightAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
 import org.herac.tuxguitar.app.ui.TGApplication;
+import org.herac.tuxguitar.app.view.component.docked.TGDockedPlayingComponent;
 import org.herac.tuxguitar.app.view.component.tab.Caret;
+import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterListenerLocked;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterLocked.TGBufferedPainterHandle;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
@@ -36,15 +38,15 @@ import org.herac.tuxguitar.ui.resource.UIImage;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICanvas;
+import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.ui.widget.UIImageView;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISeparator;
-import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
 
-public class TGPiano {
+public class TGPiano extends TGDockedPlayingComponent {
 	
 	private static final boolean TYPE_NOTES[] = new boolean[]{true,false,true,false,true,true,false,true,false,true,false,true};
 	private static final int NATURAL_NOTES = 7;
@@ -58,7 +60,6 @@ public class TGPiano {
 	private int duration;
 	private boolean changes;
 	private TGPianoConfig config;
-	private UIPanel control;
 	private UIPanel toolComposite;
 	private UICanvas canvas;
 	private UIImageView durationLabel;
@@ -73,7 +74,7 @@ public class TGPiano {
 	private TGBeat externalBeat;
 	private UIImage image;
 	
-	public TGPiano(TGContext context, UIWindow parent) {
+	public TGPiano(TGContext context, UIContainer parent) {
 		this.context = context;
 		this.config = new TGPianoConfig(context);
 		this.config.load();
@@ -90,7 +91,7 @@ public class TGPiano {
 	
 	public void createControlLayout() {
 		UITableLayout uiLayout = new UITableLayout(0f);
-		uiLayout.set(this.toolComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
+		uiLayout.set(this.toolComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		uiLayout.set(this.canvas, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		uiLayout.set(this.canvas, UITableLayout.PACKED_WIDTH, Float.valueOf(NATURAL_WIDTH * (MAX_OCTAVES * NATURAL_NOTES)));
 		uiLayout.set(this.canvas, UITableLayout.PACKED_HEIGHT, Float.valueOf(NATURAL_HEIGHT));
@@ -529,18 +530,6 @@ public class TGPiano {
 		}
 	}
 	
-	public void setVisible(boolean visible) {
-		this.control.setVisible(visible);
-	}
-	
-	public boolean isVisible() {
-		return (this.control.isVisible());
-	}
-	
-	public boolean isDisposed() {
-		return (this.control.isDisposed());
-	}
-	
 	public void dispose(){
 		this.control.dispose();
 		this.image.dispose();
@@ -569,18 +558,19 @@ public class TGPiano {
 		this.setChanges(true);
 		this.control.layout();
 	}
+
+//	public void computePackedSize() {
+//	  this.control.getLayout().set(this.canvas, UITableLayout.PACKED_HEIGHT, Float.valueOf(((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING));
+//	  this.control.computePackedSize();
+//	}
 	
 	public void configure(){
-		this.config.configure((UIWindow) this.control.getParent());
+		this.config.configure(TGWindow.getInstance(this.context).getWindow());
 	}
 	
 	public void reloadFromConfig() {
 		this.setChanges(true);
 		this.redraw();
-	}
-	
-	public UIPanel getControl(){
-		return this.control;
 	}
 	
 	public UICanvas getCanvas() {

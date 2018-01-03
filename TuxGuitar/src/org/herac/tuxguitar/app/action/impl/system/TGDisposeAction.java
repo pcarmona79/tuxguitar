@@ -9,6 +9,7 @@ import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.component.table.TGTableViewer;
 import org.herac.tuxguitar.app.view.dialog.fretboard.TGFretBoardEditor;
 import org.herac.tuxguitar.app.view.dialog.marker.TGMarkerList;
+import org.herac.tuxguitar.app.view.dialog.piano.TGPianoEditor;
 import org.herac.tuxguitar.app.view.dialog.transport.TGTransportDialog;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
@@ -41,7 +42,7 @@ public class TGDisposeAction extends TGActionBase {
 		config.setValue(TGConfigKeys.LAYOUT_MODE,TablatureEditor.getInstance(getContext()).getTablature().getViewLayout().getMode());
 		config.setValue(TGConfigKeys.LAYOUT_STYLE,TablatureEditor.getInstance(getContext()).getTablature().getViewLayout().getStyle());
 		config.setValue(TGConfigKeys.LAYOUT_DOCK_TO_TOP,TuxGuitar.getInstance().getDockingManager().isDockedToTop());
-		config.setValue(TGConfigKeys.SHOW_PIANO,!TuxGuitar.getInstance().getPianoEditor().isDisposed());
+		config.setValue(TGConfigKeys.SHOW_PIANO,TuxGuitar.getInstance().getPianoEditor().isVisible());
 		config.setValue(TGConfigKeys.SHOW_MATRIX,!TuxGuitar.getInstance().getMatrixEditor().isDisposed());
 		config.setValue(TGConfigKeys.SHOW_FRETBOARD,TuxGuitar.getInstance().getFretBoardEditor().isVisible());
 		config.setValue(TGConfigKeys.SHOW_INSTRUMENTS,!TuxGuitar.getInstance().getChannelManager().isDisposed());
@@ -66,6 +67,7 @@ public class TGDisposeAction extends TGActionBase {
 	protected void dispose(){
 		TGTableViewer.getInstance(getContext()).dispose();
 		TGFretBoardEditor.getInstance(getContext()).dispose();
+		TGPianoEditor.getInstance(getContext()).dispose();
 		TablatureEditor.getInstance(getContext()).getTablature().dispose();
 		TGWindow.getInstance(getContext()).getWindow().dispose();
 		TGSkinManager.getInstance(getContext()).dispose();

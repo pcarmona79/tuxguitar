@@ -273,7 +273,7 @@ public class TGFretBoardConfig {
 		this.dispose();
 		this.load();
 		
-		TGFretBoardEditor.getInstance(this.context).getFretBoard().reloadFromConfig();
+		TGFretBoardEditor.getInstance(this.context).getComponent().reloadFromConfig();
 	}
 	
 	private UIColorModel getColorChooser(final UIWindow window, UILayoutContainer parent, String title, UIColor rgb, int row){

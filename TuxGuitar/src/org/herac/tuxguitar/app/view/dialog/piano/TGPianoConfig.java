@@ -170,7 +170,7 @@ public class TGPianoConfig {
 		this.dispose();
 		this.load();
 		
-		TGPianoEditor.getInstance(this.context).getPiano().reloadFromConfig();
+		TGPianoEditor.getInstance(this.context).getComponent().reloadFromConfig();
 	}
 	
 	private UIColorModel getColorChooser(final UIWindow window, UILayoutContainer parent, String title, UIColor rgb, int row){

@@ -12,6 +12,7 @@ import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
+import org.herac.tuxguitar.app.view.component.docked.TGDockedPlayingComponent;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterListenerLocked;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterLocked.TGBufferedPainterHandle;
@@ -51,7 +52,7 @@ import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UISeparator;
 import org.herac.tuxguitar.util.TGContext;
 
-public class TGFretBoard {
+public class TGFretBoard extends TGDockedPlayingComponent {
 	
 	public static final int MAX_FRETS = 24;
 	public static final int TOP_SPACING = 10;
@@ -62,7 +63,6 @@ public class TGFretBoard {
 	
 	private TGContext context;
 	private TGFretBoardConfig config;
-	private UIPanel control;
 	private UIPanel toolComposite;
 	private UIImageView durationLabel;
 	private UILabel scaleName;
@@ -72,7 +72,7 @@ public class TGFretBoard {
 	private UIButton increment;
 	private UIButton decrement;
 	private UIButton settings;
-	private UIImage fretBoard;
+	private UIImage image;
 	
 	private TGBeat beat;
 	private TGBeat externalBeat;
@@ -84,7 +84,7 @@ public class TGFretBoard {
 	private UISize lastSize;
 	private int duration;
 	protected UIDropDownSelect<Integer> handSelector;
-	protected UICanvas fretBoardComposite;
+	protected UICanvas canvas;
 	
 	public TGFretBoard(TGContext context, UIContainer parent) {
 		this.context = context;
@@ -99,13 +99,13 @@ public class TGFretBoard {
 		this.loadProperties();
 		
 		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.toolComposite);
-		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.fretBoardComposite);
+		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.canvas);
 	}
 	
 	public void createControlLayout() {
 		UITableLayout uiLayout = new UITableLayout(0f);
 		uiLayout.set(this.toolComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
-		uiLayout.set(this.fretBoardComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+		uiLayout.set(this.canvas, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 		
 		this.control.setLayout(uiLayout);
 	}
@@ -215,10 +215,10 @@ public class TGFretBoard {
 	
 	private void initEditor() {
 		this.lastSize = new UISize();
-		this.fretBoardComposite = getUIFactory().createCanvas(this.control, false);
-		this.fretBoardComposite.setBgColor(this.config.getColorBackground());
-		this.fretBoardComposite.addMouseUpListener(new TGFretBoardMouseListener());
-		this.fretBoardComposite.addPaintListener(new TGBufferedPainterListenerLocked(this.context, new TGFretBoardPainterListener()));
+		this.canvas = getUIFactory().createCanvas(this.control, false);
+		this.canvas.setBgColor(this.config.getColorBackground());
+		this.canvas.addMouseUpListener(new TGFretBoardMouseListener());
+		this.canvas.addPaintListener(new TGBufferedPainterListenerLocked(this.context, new TGFretBoardPainterListener()));
 	}
 	
 	private void loadDurationImage(boolean force) {
@@ -247,8 +247,8 @@ public class TGFretBoard {
 	}
 	
 	private void disposeFretBoardImage(){
-		if( this.fretBoard != null && !this.fretBoard.isDisposed() ){
-			this.fretBoard.dispose();
+		if( this.image != null && !this.image.isDisposed() ){
+			this.image.dispose();
 		}
 	}
 	
@@ -312,7 +312,7 @@ public class TGFretBoard {
 			}
 			
 			if( this.lastSize.getHeight() != clientHeight ) {
-				TuxGuitar.getInstance().getFretBoardEditor().showFretBoard();
+				TuxGuitar.getInstance().getFretBoardEditor().showComponent();
 			}
 			this.lastSize.setWidth(clientWidth);
 			this.lastSize.setHeight(clientHeight);
@@ -320,13 +320,13 @@ public class TGFretBoard {
 	}
 	
 	private void paintFretBoard(UIPainter painter){
-		if(this.fretBoard == null || this.fretBoard.isDisposed()){
+		if(this.image == null || this.image.isDisposed()){
 			UIFactory factory = getUIFactory();
 			UIRectangle area = this.control.getChildArea();
 			
-			this.fretBoard = factory.createImage(area.getWidth(), ((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING);
+			this.image = factory.createImage(area.getWidth(), ((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING);
 			
-			UIPainter painterBuffer = this.fretBoard.createPainter();
+			UIPainter painterBuffer = this.image.createPainter();
 			
 			//fondo
 			painterBuffer.setBackground(this.config.getColorBackground());
@@ -366,7 +366,7 @@ public class TGFretBoard {
 			
 			painterBuffer.dispose();
 		}
-		painter.drawImage(this.fretBoard,0,0);
+		painter.drawImage(this.image,0,0);
 	}
 	
 	private void paintFretPoints(UIPainter painter, int fretIndex) {
@@ -594,7 +594,7 @@ public class TGFretBoard {
 		this.config.saveDirection( this.getDirection(direction) );
 		this.initFrets(10);
 		this.setChanges(true);
-		this.fretBoardComposite.redraw();
+		this.canvas.redraw();
 	}
 	
 	public boolean hasChanges(){
@@ -616,28 +616,16 @@ public class TGFretBoard {
 	public void redraw() {
 		if(!this.isDisposed()){
 			this.control.redraw();
-			this.fretBoardComposite.redraw();
+			this.canvas.redraw();
 			this.loadDurationImage(false);
 		}
 	}
 	
 	public void redrawPlayingMode(){
 		if(!this.isDisposed()){
-			this.fretBoardComposite.redraw();
+			this.canvas.redraw();
 		}
 	 }
-	
-	public void setVisible(boolean visible) {
-		this.control.setVisible(visible);
-	}
-	
-	public boolean isVisible() {
-		return (this.control.isVisible());
-	}
-	
-	public boolean isDisposed() {
-		return (this.control.isDisposed());
-	}
 	
 	public void dispose(){
 		this.control.dispose();
@@ -681,7 +669,7 @@ public class TGFretBoard {
 	}
 	
 	public void computePackedSize() {
-		this.control.getLayout().set(this.fretBoardComposite, UITableLayout.PACKED_HEIGHT, Float.valueOf(((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING));
+		this.control.getLayout().set(this.canvas, UITableLayout.PACKED_HEIGHT, Float.valueOf(((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING));
 		this.control.computePackedSize(null, null);
 	}
 	
@@ -703,12 +691,8 @@ public class TGFretBoard {
 		this.redraw();
 	}
 	
-	public UIPanel getControl(){
-		return this.control;
-	}
-	
-	public UICanvas getFretBoardComposite(){
-		return this.fretBoardComposite;
+	public UICanvas getCanvas(){
+		return this.canvas;
 	}
 	
 	public UIFactory getUIFactory() {
@@ -722,7 +706,7 @@ public class TGFretBoard {
 		}
 		
 		public void onMouseUp(UIMouseEvent event) {
-			getFretBoardComposite().setFocus();
+			getCanvas().setFocus();
 			if( event.getButton() == 1 ){
 				if(!TuxGuitar.getInstance().getPlayer().isRunning() && !TGEditorManager.getInstance(TGFretBoard.this.context).isLocked()){
 					if( getExternalBeat() == null ){
@@ -749,7 +733,7 @@ public class TGFretBoard {
 		}
 
 		public UICanvas getPaintableControl() {
-			return TGFretBoard.this.fretBoardComposite;
+			return TGFretBoard.this.canvas;
 		}
 	}
 }

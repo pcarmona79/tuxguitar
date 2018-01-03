@@ -191,10 +191,6 @@ public class TuxGuitar {
 		if(config.getBooleanValue(TGConfigKeys.SHOW_MATRIX)){
 			new TGActionProcessor(this.context, TGToggleMatrixEditorAction.NAME).process();
 		}
-		//---Piano---
-		if(config.getBooleanValue(TGConfigKeys.SHOW_PIANO)){
-			new TGActionProcessor(this.context, TGTogglePianoEditorAction.NAME).process();
-		}
 		//---Markers---
 		if(config.getBooleanValue(TGConfigKeys.SHOW_MARKERS)){
 			new TGActionProcessor(this.context, TGToggleMarkerListAction.NAME).process();

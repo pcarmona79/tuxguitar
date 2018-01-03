@@ -7,10 +7,10 @@ public class TGPianoEditorController implements TGToggleViewController {
 
 	public void toggleView(TGViewContext context) {
 		TGPianoEditor editor = TGPianoEditor.getInstance(context.getContext());
-		if( editor.isDisposed()){
-			editor.show();
+		if( editor.isVisible()){
+			editor.hideComponent();
 		} else {
-			editor.dispose();
+			editor.showComponent();
 		}
 	}
 }

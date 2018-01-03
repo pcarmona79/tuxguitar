@@ -8,9 +8,9 @@ public class TGFretBoardEditorController implements TGToggleViewController {
 	public void toggleView(TGViewContext context) {
 		TGFretBoardEditor editor = TGFretBoardEditor.getInstance(context.getContext());
 		if( editor.isVisible()){
-			editor.hideFretBoard();
+			editor.hideComponent();
 		} else {
-			editor.showFretBoard();
+			editor.showComponent();
 		}
 	}
 }
