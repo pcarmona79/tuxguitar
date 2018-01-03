@@ -43,8 +43,6 @@ public class TGPianoEditor extends TGDockedPlayingComponentEditor<TGPiano> {
 
 	@Override
 	protected void showComponentInner() {
-//		getComponent().computePackedSize();
-		
 		TGEditorManager.getInstance(this.context).addRedrawListener(this);
 		TGExternalBeatViewerManager.getInstance(this.context).addBeatViewerListener(this);
 	}

@@ -12,8 +12,9 @@ import org.herac.tuxguitar.util.TGSynchronizer;
 public abstract class TGDockedComponentEditor<T extends TGDockedComponent> implements TGEventListener {
 
   protected TGContext context;
-  private T           component;
   protected boolean   visible;
+
+  private T           component;
 
   public TGDockedComponentEditor(TGContext context) {
     this.context = context;

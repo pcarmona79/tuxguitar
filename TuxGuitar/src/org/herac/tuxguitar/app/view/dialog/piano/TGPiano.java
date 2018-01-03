@@ -558,11 +558,6 @@ public class TGPiano extends TGDockedPlayingComponent {
 		this.setChanges(true);
 		this.control.layout();
 	}
-
-//	public void computePackedSize() {
-//	  this.control.getLayout().set(this.canvas, UITableLayout.PACKED_HEIGHT, Float.valueOf(((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING));
-//	  this.control.computePackedSize();
-//	}
 	
 	public void configure(){
 		this.config.configure(TGWindow.getInstance(this.context).getWindow());
