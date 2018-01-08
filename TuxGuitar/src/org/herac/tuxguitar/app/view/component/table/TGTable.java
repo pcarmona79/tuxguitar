@@ -71,7 +71,7 @@ public class TGTable {
 		int columnIndex = 0;
 		this.createColumnHeaderLayout(uiLayout, this.columnNumber, ++columnIndex, false, null);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnNumber, this.columnSoloMute), ++columnIndex);
-		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, null);
+		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, 42f);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnSoloMute, this.columnName), ++columnIndex);
 		this.createColumnHeaderLayout(uiLayout, this.columnName, ++columnIndex, false, 250f);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnName, this.columnInstrument), ++columnIndex);
