@@ -7,19 +7,22 @@ import org.herac.tuxguitar.ui.event.UIMouseDoubleClickListener;
 import org.herac.tuxguitar.ui.event.UIMouseDownListener;
 import org.herac.tuxguitar.ui.event.UIMouseEvent;
 import org.herac.tuxguitar.ui.event.UIMouseUpListener;
+import org.herac.tuxguitar.ui.layout.UILayout;
+import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.widget.UICanvas;
+import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 
 public class TGTableRow {
 	
 	private TGTable table;
 	private UIPanel row;
-	private TGTableRowCell number;
-	private TGTableRowCell soloMute;
-	private TGTableRowCell name;
-	private TGTableRowCell instrument;
+	private TGTableRowTextCell number;
+	private TGTableRowTextCell soloMute;
+	private TGTableRowTextCell name;
+	private TGTableRowTextCell instrument;
 	private UICanvas painter;
 	
 	private UIMouseUpListener mouseUpListenerLabel;
@@ -37,7 +40,7 @@ public class TGTableRow {
 		this.init();
 	}
 	
-	public void init(){
+	private void init(){
 		UIFactory uiFactory = this.table.getUIFactory();
 		MouseListenerLabel mouseListenerLabel = new MouseListenerLabel();
 		MouseListenerCanvas mouseListenerCanvas = new MouseListenerCanvas();
@@ -45,22 +48,22 @@ public class TGTableRow {
 		this.row = uiFactory.createPanel(this.table.getRowControl(), false);
 		this.row.setLayout(new TGTableRowLayout(this));
 		
-		this.number = new TGTableRowCell(this);
+		this.number = new TGTableRowTextCell(this);
 		this.number.addMouseDownListener(mouseListenerLabel);
 		this.number.addMouseUpListener(mouseListenerLabel);
 		this.number.addMouseDoubleClickListener(mouseListenerLabel);
 		
-		this.soloMute = new TGTableRowCell(this);
+		this.soloMute = new TGTableRowTextCell(this);
 		this.soloMute.addMouseDownListener(mouseListenerLabel);
 		this.soloMute.addMouseUpListener(mouseListenerLabel);
 		this.soloMute.addMouseDoubleClickListener(mouseListenerLabel);
 		
-		this.name = new TGTableRowCell(this);
+		this.name = new TGTableRowTextCell(this);
 		this.name.addMouseDownListener(mouseListenerLabel);
 		this.name.addMouseUpListener(mouseListenerLabel);
 		this.name.addMouseDoubleClickListener(mouseListenerLabel);
 		
-		this.instrument = new TGTableRowCell(this);
+		this.instrument = new TGTableRowTextCell(this);
 		this.instrument.addMouseDownListener(mouseListenerLabel);
 		this.instrument.addMouseUpListener(mouseListenerLabel);
 		this.instrument.addMouseDoubleClickListener(mouseListenerLabel);
@@ -103,19 +106,19 @@ public class TGTableRow {
 		return this.painter;
 	}
 	
-	public TGTableRowCell getInstrument() {
+	public TGTableRowTextCell getInstrument() {
 		return this.instrument;
 	}
 	
-	public TGTableRowCell getName() {
+	public TGTableRowTextCell getName() {
 		return this.name;
 	}
 	
-	public TGTableRowCell getNumber() {
+	public TGTableRowTextCell getNumber() {
 		return this.number;
 	}
 	
-	public TGTableRowCell getSoloMute() {
+	public TGTableRowTextCell getSoloMute() {
 		return this.soloMute;
 	}
 

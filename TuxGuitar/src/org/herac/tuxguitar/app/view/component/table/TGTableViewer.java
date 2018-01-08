@@ -243,6 +243,7 @@ public class TGTableViewer implements TGEventListener {
 					this.updateTableRow(row.getNumber(), track, Integer.toString(track.getNumber()));
 					
 					//Solo-Mute
+					// FIXME: Change
 					this.updateTableRow(row.getSoloMute(), track, getSoloMute(track));
 					
 					//Name
@@ -340,7 +341,7 @@ public class TGTableViewer implements TGEventListener {
 		return false;
 	}
 	
-	private void updateTableRow(TGTableRowCell cell, TGTrack track, String label) {
+	private void updateTableRow(TGTableRowTextCell cell, TGTrack track, String label) {
 		cell.setText(label);
 		cell.setData(TGTrack.class.getName(), track);
 		cell.setMenu((UIPopupMenu) this.menu.getMenu());
@@ -375,6 +376,7 @@ public class TGTableViewer implements TGEventListener {
 			TGTableRow row = this.table.getRow(i);
 			
 			row.getNumber().setText(Integer.toString(((TGTrack)row.getNumber().getData(TGTrack.class.getName())).getNumber()));
+			// FIXME: Change
 			row.getSoloMute().setText(getSoloMute((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())));
 			row.getName().setText(((TGTrack)row.getName().getData(TGTrack.class.getName())).getName());
 			row.getInstrument().setText(getInstrument((TGTrack)row.getInstrument().getData(TGTrack.class.getName())));
