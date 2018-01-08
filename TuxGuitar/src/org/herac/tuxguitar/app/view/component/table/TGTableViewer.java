@@ -339,12 +339,12 @@ public class TGTableViewer implements TGEventListener {
 		cell.setText(label);
 		updateTableRow(cell, track);
 	}
-  
-  private void updateTableSoloMuteRow(TGTableRowSoloMuteCell cell, TGTrack track) {
-    cell.setSolo(track.isSolo());
-    cell.setMute(track.isMute());
-    updateTableRow(cell, track);
-  }
+	
+	private void updateTableSoloMuteRow(TGTableRowSoloMuteCell cell, TGTrack track) {
+		cell.setSolo(track.isSolo());
+		cell.setMute(track.isMute());
+		updateTableRow(cell, track);
+	}
 	
 	private void updateTableMenu() {
 		this.disposeMenu();
