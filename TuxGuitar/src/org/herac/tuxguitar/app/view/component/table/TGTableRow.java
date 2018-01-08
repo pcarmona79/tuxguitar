@@ -20,7 +20,7 @@ public class TGTableRow {
 	private TGTable table;
 	private UIPanel row;
 	private TGTableRowTextCell number;
-	private TGTableRowTextCell soloMute;
+	private TGTableRowSoloMuteCell soloMute;
 	private TGTableRowTextCell name;
 	private TGTableRowTextCell instrument;
 	private UICanvas painter;
@@ -53,7 +53,7 @@ public class TGTableRow {
 		this.number.addMouseUpListener(mouseListenerLabel);
 		this.number.addMouseDoubleClickListener(mouseListenerLabel);
 		
-		this.soloMute = new TGTableRowTextCell(this);
+		this.soloMute = new TGTableRowSoloMuteCell(this);
 		this.soloMute.addMouseDownListener(mouseListenerLabel);
 		this.soloMute.addMouseUpListener(mouseListenerLabel);
 		this.soloMute.addMouseDoubleClickListener(mouseListenerLabel);
@@ -118,7 +118,7 @@ public class TGTableRow {
 		return this.number;
 	}
 	
-	public TGTableRowTextCell getSoloMute() {
+	public TGTableRowSoloMuteCell getSoloMute() {
 		return this.soloMute;
 	}
 

@@ -215,16 +215,6 @@ public class TGTableViewer implements TGEventListener {
 		return new String();
 	}
 	
-	private String getSoloMute(TGTrack track){
-		if( track.isSolo() ){
-			return TuxGuitar.getProperty("track.short-solo-mute.s");
-		}
-		if( track.isMute() ){
-			return TuxGuitar.getProperty("track.short-solo-mute.m");
-		}
-		return TuxGuitar.getProperty("track.short-solo-mute.none");
-	}
-	
 	private void updateTable(){
 		if( this.update ){
 			this.updateTableMenu();
@@ -240,17 +230,16 @@ public class TGTableViewer implements TGEventListener {
 				final TGTableRow row = this.table.getRow(i);
 				if(row != null){
 					//Number
-					this.updateTableRow(row.getNumber(), track, Integer.toString(track.getNumber()));
+					this.updateTableTextRow(row.getNumber(), track, Integer.toString(track.getNumber()));
 					
 					//Solo-Mute
-					// FIXME: Change
-					this.updateTableRow(row.getSoloMute(), track, getSoloMute(track));
+					this.updateTableSoloMuteRow(row.getSoloMute(), track);
 					
 					//Name
-					this.updateTableRow(row.getName(), track, track.getName());
+					this.updateTableTextRow(row.getName(), track, track.getName());
 					
 					//Instrument
-					this.updateTableRow(row.getInstrument(), track, getInstrument(track));
+					this.updateTableTextRow(row.getInstrument(), track, getInstrument(track));
 					
 					row.setMouseUpListenerLabel(new UIMouseUpListener() {
 						public void onMouseUp(UIMouseEvent event) {
@@ -341,11 +330,21 @@ public class TGTableViewer implements TGEventListener {
 		return false;
 	}
 	
-	private void updateTableRow(TGTableRowTextCell cell, TGTrack track, String label) {
-		cell.setText(label);
+	private void updateTableRow(TGTableRowCell cell, TGTrack track) {
 		cell.setData(TGTrack.class.getName(), track);
 		cell.setMenu((UIPopupMenu) this.menu.getMenu());
 	}
+	
+	private void updateTableTextRow(TGTableRowTextCell cell, TGTrack track, String label) {
+		cell.setText(label);
+		updateTableRow(cell, track);
+	}
+  
+  private void updateTableSoloMuteRow(TGTableRowSoloMuteCell cell, TGTrack track) {
+    cell.setSolo(track.isSolo());
+    cell.setMute(track.isMute());
+    updateTableRow(cell, track);
+  }
 	
 	private void updateTableMenu() {
 		this.disposeMenu();
@@ -376,8 +375,8 @@ public class TGTableViewer implements TGEventListener {
 			TGTableRow row = this.table.getRow(i);
 			
 			row.getNumber().setText(Integer.toString(((TGTrack)row.getNumber().getData(TGTrack.class.getName())).getNumber()));
-			// FIXME: Change
-			row.getSoloMute().setText(getSoloMute((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())));
+			row.getSoloMute().setSolo(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isSolo());
+			row.getSoloMute().setMute(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isMute());
 			row.getName().setText(((TGTrack)row.getName().getData(TGTrack.class.getName())).getName());
 			row.getInstrument().setText(getInstrument((TGTrack)row.getInstrument().getData(TGTrack.class.getName())));
 		}
