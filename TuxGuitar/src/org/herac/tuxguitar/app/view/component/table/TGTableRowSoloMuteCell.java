@@ -66,13 +66,6 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
     this.muteCheckbox.addMouseUpListener(listener);
   }
 
-  @Override
-  public void addMouseDoubleClickListener(UIMouseDoubleClickListener listener) {
-    super.addMouseDoubleClickListener(listener);
-    this.soloCheckbox.addMouseDoubleClickListener(listener);
-    this.muteCheckbox.addMouseDoubleClickListener(listener);
-  }
-
   public void setSolo(boolean solo) {
     this.soloCheckbox.setSelected(solo);
   }
