@@ -5,6 +5,7 @@ import org.herac.tuxguitar.app.system.config.TGConfigDefaults;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
+import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.chooser.UIColorChooser;
@@ -28,7 +29,6 @@ import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UILegendPanel;
-import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
@@ -37,8 +37,6 @@ import org.herac.tuxguitar.util.properties.TGProperties;
 public class TGFretBoardConfig {
 	
 	private static final float MINIMUM_CONTROL_WIDTH = 180f;
-	private static final float MINIMUM_BUTTON_WIDTH = 80;
-	private static final float MINIMUM_BUTTON_HEIGHT = 25;
 	
 	public static final int DISPLAY_TEXT_NOTE = 0x01;
 	public static final int DISPLAY_TEXT_SCALE = 0x02;
@@ -214,53 +212,35 @@ public class TGFretBoardConfig {
 		groupLayout.set(displayTextScale, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		// ------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = factory.createPanel(window, false);
-		buttons.setLayout(buttonsLayout);
-		windowLayout.set(buttons, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		final UIButton buttonDefaults = factory.createButton(buttons);
-		buttonDefaults.setText(TuxGuitar.getProperty("defaults"));
-		buttonDefaults.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				window.dispose();
-				defaults();
-				applyChanges();
-			}
-		});
-		buttonsLayout.set(buttonDefaults, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
-		
-		final UIButton buttonOK = factory.createButton(buttons);
-		buttonOK.setDefaultButton();
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				int style = 0;
-				style |= (displayTextNote.isSelected() ? DISPLAY_TEXT_NOTE : 0 );
-				style |= (displayTextScale.isSelected() ? DISPLAY_TEXT_SCALE : 0 );
-				
-				Integer direction = directionCombo.getSelectedValue();
-				if( direction == null ) {
-					direction = DIRECTION_RIGHT;
-				}
-				
-				window.dispose();
-				
-				save(style, direction, fontData, rgbBackground, rgbString, rgbFretPoint, rgbNote, rgbScale);
-				applyChanges();
-			}
-		});
-		buttonsLayout.set(buttonOK, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
-		
-		final UIButton buttonCancel = factory.createButton(buttons);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-		buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				window.dispose();
-			}
-		});
-		buttonsLayout.set(buttonCancel, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
-		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
+		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context, factory, window,
+				new Runnable() {
+					public void run() {
+						int style = 0;
+						style |= (displayTextNote.isSelected() ? DISPLAY_TEXT_NOTE : 0 );
+						style |= (displayTextScale.isSelected() ? DISPLAY_TEXT_SCALE : 0 );
+						
+						Integer direction = directionCombo.getSelectedValue();
+						if( direction == null ) {
+							direction = DIRECTION_RIGHT;
+						}
+						
+						window.dispose();
+						
+						save(style, direction, fontData, rgbBackground, rgbString, rgbFretPoint, rgbNote, rgbScale);
+						applyChanges();
+					}
+				}, new Runnable() {
+					public void run() {
+						window.dispose();
+					}
+				}, new Runnable() {
+					public void run() {
+						window.dispose();
+						defaults();
+						applyChanges();
+					}
+				});
+		windowLayout.set(okCancelDefaults.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		TGDialogUtil.openDialog(window, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
