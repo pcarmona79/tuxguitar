@@ -10,19 +10,14 @@ import org.herac.tuxguitar.app.system.keybindings.KeyBindingAction;
 import org.herac.tuxguitar.app.system.keybindings.KeyBindingActionDefaults;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
+import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.ui.UIFactory;
-import org.herac.tuxguitar.ui.event.UIDisposeEvent;
-import org.herac.tuxguitar.ui.event.UIDisposeListener;
 import org.herac.tuxguitar.ui.event.UIMouseDoubleClickListener;
 import org.herac.tuxguitar.ui.event.UIMouseEvent;
-import org.herac.tuxguitar.ui.event.UISelectionEvent;
-import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIKeyCombination;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UITable;
 import org.herac.tuxguitar.ui.widget.UITableItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -74,36 +69,24 @@ public class TGKeyBindingEditor {
 		this.loadCurrentKeyBindingActions();
 		
 		//------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(this.dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		UIButton defaults = uiFactory.createButton(buttons);
-		defaults.setText(TuxGuitar.getProperty("defaults"));
-		defaults.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				TGKeyBindingEditor.this.loadDefaultKeyBindingActions();
-			}
-		});
-		buttonsLayout.set(defaults, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton close = uiFactory.createButton(buttons);
-		close.setText(TuxGuitar.getProperty("close"));
-		close.setDefaultButton();
-		close.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				TGKeyBindingEditor.this.dialog.dispose();
-			}
-		});
-		buttonsLayout.set(close, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(close, UITableLayout.MARGIN_RIGHT, 0f);
-		
-		this.dialog.addDisposeListener(new UIDisposeListener() {
-			public void onDispose(UIDisposeEvent event) {
-				save();
-			}
-		});
+		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context.getContext(), uiFactory, this.dialog,
+				new Runnable() {
+					public void run() {
+						save();
+						TGKeyBindingEditor.this.dialog.dispose();
+					}
+				},
+				new Runnable() {
+					public void run() {
+						TGKeyBindingEditor.this.dialog.dispose();
+					}
+				},
+				new Runnable() {
+					public void run() {
+						TGKeyBindingEditor.this.loadDefaultKeyBindingActions();
+					}
+				});
+		dialogLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
