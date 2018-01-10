@@ -13,6 +13,7 @@ import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialog;
 import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialogController;
+import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.dialog.settings.items.LanguageOption;
 import org.herac.tuxguitar.app.view.dialog.settings.items.MainOption;
 import org.herac.tuxguitar.app.view.dialog.settings.items.SkinOption;
@@ -23,12 +24,9 @@ import org.herac.tuxguitar.app.view.util.TGCursorController;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.ui.UIFactory;
-import org.herac.tuxguitar.ui.event.UISelectionEvent;
-import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UICursor;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
-import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -66,42 +64,25 @@ public class TGSettingsEditor{
 		this.createComposites(mainComposite);
 		
 		//-------buttons-------------------------------------
-		UITableLayout buttonsLayout = new UITableLayout();
-		UIPanel buttons = uiFactory.createPanel(this.dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
-		
-		UIButton buttonDefaults = uiFactory.createButton(buttons); 
-		buttonDefaults.setText(TuxGuitar.getProperty("defaults"));
-		buttonDefaults.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dispose();
-				setDefaults();
-				applyConfigWithConfirmation(true);
-			}
-		});
-		buttonsLayout.set(buttonDefaults, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setDefaultButton();
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				updateOptions();
-				dispose();
-				applyConfigWithConfirmation(false);
-			}
-		});
-		buttonsLayout.set(buttonOK, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton buttonCancel = uiFactory.createButton(buttons);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-		buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dispose();
-			}
-		});
-		buttonsLayout.set(buttonCancel, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
+		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context.getContext(), uiFactory, this.dialog,
+				new Runnable() {
+					public void run() {
+						updateOptions();
+						dispose();
+						applyConfigWithConfirmation(false);
+					}
+				}, new Runnable() {
+					public void run() {
+						dispose();
+					}
+				}, new Runnable() {
+					public void run() {
+						dispose();
+						setDefaults();
+						applyConfigWithConfirmation(true);
+					}
+				});
+		dialogLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
