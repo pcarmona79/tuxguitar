@@ -110,6 +110,7 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 	
 	private void parseMessage(int trackNumber,long tick,MidiMessage message){
 		long parsedTick = parseTick(tick + this.resolution);
+		// FIXME
 		
 		//NOTE ON
 		if(message.getType() == MidiMessage.TYPE_SHORT && message.getCommand() == MidiMessage.NOTE_ON){

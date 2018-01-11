@@ -1,15 +1,19 @@
 package org.herac.tuxguitar.player.impl.sequencer;
 
+import java.nio.charset.Charset;
+
 public class MidiEvent {
 	
 	public static final int ALL_TRACKS = -1;
 	
+	// FIXME: Monitor references
 	public static final int MIDI_SYSTEM_EVENT = 1;
 	public static final int MIDI_EVENT_NOTEON = 2;
 	public static final int MIDI_EVENT_NOTEOFF = 3;
 	public static final int MIDI_EVENT_PROGRAM_CHANGE = 4;
 	public static final int MIDI_EVENT_CONTROL_CHANGE = 5;
 	public static final int MIDI_EVENT_PITCH_BEND = 6;
+	public static final int MIDI_EVENT_TRACK_NAME = 7;
 	
 	private long tick;
 	private int type;
@@ -65,6 +69,10 @@ public class MidiEvent {
 	
 	public static MidiEvent programChange(long tick,int track,int channel,int value){
 		return new MidiEvent(tick,MIDI_EVENT_PROGRAM_CHANGE,track,new byte[]{(byte)channel,(byte)value});
+	}
+	
+	public static MidiEvent trackName(long tick, int track, String name){
+		return new MidiEvent(tick, MIDI_EVENT_TRACK_NAME, track, name.getBytes(Charset.forName("UTF-8")));
 	}
 	
 	public static MidiEvent tempoInUSQ(long tick,int usq){
