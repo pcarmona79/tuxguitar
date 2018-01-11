@@ -1,5 +1,7 @@
 package org.herac.tuxguitar.io.midi.base;
 
+import java.util.Arrays;
+
 public class MidiMessage{
 	
 	public static final int TYPE_SHORT = 1;
@@ -62,5 +64,10 @@ public class MidiMessage{
 		MidiMessage message = new MidiMessage(TYPE_META,command);
 		message.setData(data);
 		return message;
+	}
+	
+	@Override
+	public String toString() {
+		return "MidiMessage [" + this.command + ", " + this.message + ", " + Arrays.toString(this.data) + "]";
 	}
 }
