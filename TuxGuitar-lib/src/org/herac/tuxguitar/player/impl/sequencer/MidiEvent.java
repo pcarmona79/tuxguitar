@@ -6,7 +6,6 @@ public class MidiEvent {
 	
 	public static final int ALL_TRACKS = -1;
 	
-	// FIXME: Monitor references
 	public static final int MIDI_SYSTEM_EVENT = 1;
 	public static final int MIDI_EVENT_NOTEON = 2;
 	public static final int MIDI_EVENT_NOTEOFF = 3;
