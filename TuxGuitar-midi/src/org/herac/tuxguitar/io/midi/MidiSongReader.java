@@ -2,8 +2,10 @@ package org.herac.tuxguitar.io.midi;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.herac.tuxguitar.gm.GMChannelRoute;
 import org.herac.tuxguitar.gm.GMChannelRouter;
@@ -157,7 +159,7 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 			parseNoteOff(track,tick,data);
 		}else if(value > 0){
 			makeTempNotesBefore(tick,track);
-			getTempChannel(channel).setTrack(track);
+			getTempChannel(channel).addTrack(track);
 			getTrackTuningHelper(track).checkValue(value);
 			this.tempNotes.add(new TempNote(track,channel,value,tick));
 		}
@@ -444,7 +446,7 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 	private void checkChannels(){
 		for(int tc = 0 ; tc < this.tempChannels.size() ; tc ++ ){
 			TempChannel tempChannel = (TempChannel)this.tempChannels.get( tc );
-			if( tempChannel.getTrack() > 0 ){
+			if( !tempChannel.getTracks().isEmpty() ){
 				boolean channelExists = false;
 				for(int c = 0 ; c < this.channels.size() ; c ++ ){
 					TGChannel tgChannel = (TGChannel) this.channels.get(c);
@@ -471,11 +473,11 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 					
 					for(int tcAux = (tc + 1) ; tcAux < this.tempChannels.size() ; tcAux ++ ){
 						TempChannel tempChannelAux = (TempChannel)this.tempChannels.get( tcAux );
-						if( tempChannel.getTrack() == tempChannelAux.getTrack() ){
+						if( tempChannel.getTracks().equals(tempChannelAux.getTracks()) ){
 							if( gmChannelRoute.getChannel2() == gmChannelRoute.getChannel1() ){
 								gmChannelRoute.setChannel2( tempChannelAux.getChannel() );
 							}else{
-								tempChannelAux.setTrack(-1);
+								tempChannelAux.clearTracks();
 							}
 						}
 					}
@@ -501,20 +503,14 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 	}
 	
 	private void checkTracks(TGSongManager songManager){
-		Iterator<TGTrack> it = this.tracks.iterator();
-		while(it.hasNext()){
-			TGTrack track = (TGTrack)it.next();
+		for (TGTrack track : this.tracks) {
 			TGChannel trackChannel = null;
 			
-			Iterator<TempChannel> tcIt = this.tempChannels.iterator();
-			while(tcIt.hasNext()){
-				TempChannel tempChannel = (TempChannel)tcIt.next();
-				if( tempChannel.getTrack() == track.getNumber() ){
-					Iterator<TGChannel> channelIt = this.channels.iterator();
-					while( channelIt.hasNext() ){
-						TGChannel tgChannel = (TGChannel)channelIt.next();
+			for (TempChannel tempChannel : this.tempChannels) {
+				if (tempChannel.getTracks().contains(track.getNumber())) {
+					for (TGChannel tgChannel : this.channels) {
 						GMChannelRoute gmChannelRoute = this.channelRouter.getRoute(tgChannel.getChannelId());
-						if( gmChannelRoute != null && tempChannel.getChannel() == gmChannelRoute.getChannel1() ){
+						if (gmChannelRoute != null && tempChannel.getChannel() == gmChannelRoute.getChannel1()) {
 							trackChannel = tgChannel;
 						}
 					}
@@ -573,14 +569,14 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 		private int instrument;
 		private int volume;
 		private int balance;
-		private int track;
+		private Set<Integer> tracks;
 		
 		public TempChannel(int channel) {
 			this.channel = channel;
 			this.instrument = 0;
 			this.volume = 127;
 			this.balance = 64;
-			this.track = -1;
+			this.tracks = new HashSet<Integer>();
 		}
 		
 		public int getBalance() {
@@ -603,12 +599,16 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 			this.instrument = instrument;
 		}
 		
-		public int getTrack() {
-			return this.track;
+		public Set<Integer> getTracks() {
+			return this.tracks;
 		}
 		
-		public void setTrack(int track) {
-			this.track = track;
+		public void addTrack(int track) {
+			this.tracks.add(track);
+		}
+		
+		public void clearTracks() {
+			this.tracks.clear();
 		}
 		
 		public int getVolume() {
