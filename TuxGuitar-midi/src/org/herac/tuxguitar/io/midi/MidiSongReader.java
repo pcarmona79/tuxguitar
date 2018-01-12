@@ -45,7 +45,7 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 	private GMChannelRouter channelRouter;
 	private MidiSettings settings;
 	private TGFactory factory;
-	private String sequenceName;
+	private String sequenceName = "";
 	
 	public MidiSongReader() {
 		super();
