@@ -196,17 +196,17 @@ public class MidiSongReader extends MidiFileFormat implements TGSongReader {
 		}
 	}
 
-  /**
-   * If in a format 0 track, or the first track in a format 1 file, the name of the sequence.
-   * Otherwise, the name of the track.
-   */
+	/**
+	 * If in a format 0 track, or the first track in a format 1 file, the name of the sequence.
+	 * Otherwise, the name of the track.
+	 */
 	private void parseTrackName(int trackIdx, int trackNumber, byte[] data) {
 		String name = new String(data, Charset.forName("UTF-8"));
 		if (trackIdx == 0) {
-		  this.sequenceName = name;
+			this.sequenceName = name;
 		} else {
-      TGTrack track = getTrack(trackNumber);
-      track.setName(name);
+			TGTrack track = getTrack(trackNumber);
+			track.setName(name);
 		}
 	}
 	
