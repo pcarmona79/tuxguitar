@@ -68,6 +68,6 @@ public class MidiMessage{
 	
 	@Override
 	public String toString() {
-		return "MidiMessage [" + this.command + ", " + this.message + ", " + Arrays.toString(this.data) + "]";
+		return "MidiMessage(" + this.command + ", " + this.message + ", " + Arrays.toString(this.data) + ")";
 	}
 }
