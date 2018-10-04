@@ -17,7 +17,7 @@ def plugins = [
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '28.0.1'
     
     defaultConfig {
         applicationId "org.herac.tuxguitar.android.application"
@@ -27,6 +27,7 @@ android {
         versionCode Integer.parseInt(new Date().format('yyMMddHH'))
         versionName "SNAPSHOT"
         setProperty("archivesBaseName", "tuxguitar-android-SNAPSHOT")
+        multiDexEnabled true
     }
 	
     buildTypes {
@@ -44,6 +45,9 @@ android {
         	java.srcDirs = ['./build/generated/tuxguitar-android-apk-src/src']
 			resources.srcDirs = ['./build/generated/tuxguitar-android-apk-src/share']
         }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 }
 
