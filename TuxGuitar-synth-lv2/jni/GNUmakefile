@@ -1,5 +1,6 @@
 LILV_INCLUDE_PATH?=/usr/include/lilv-0/lilv
-JNI_INCLUDE_PATH?=$(shell gcj -print-file-name=include/)
+
+JNI_INCLUDE_PATH?=-I../../build-scripts/native-modules/common-include
 
 RM?=rm -f
 CFLAGS?=-I$(JNI_INCLUDE_PATH) -I$(LILV_INCLUDE_PATH) -fPIC

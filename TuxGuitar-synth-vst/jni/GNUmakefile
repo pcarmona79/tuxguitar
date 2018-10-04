@@ -1,7 +1,8 @@
 VST_SDK_HOME?=/home/julian/Documents/vst/VST_SDK/VST3_SDK/pluginterfaces/vst2.x/
 
 RM?=rm -f
-CFLAGS?=-I$(shell gcj -print-file-name=include/) -I$(VST_SDK_HOME) -fPIC -fpermissive
+
+CFLAGS?=-I../../build-scripts/native-modules/common-include -I$(VST_SDK_HOME) -fPIC -fpermissive
 LDFLAGS?=
 LDLIBS?=-ldl -lX11
 LDPATH?=-L/usr/lib
