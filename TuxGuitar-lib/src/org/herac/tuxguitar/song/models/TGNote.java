@@ -14,19 +14,33 @@ import org.herac.tuxguitar.song.factory.TGFactory;
  * TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
 public abstract class TGNote {
+	// MIDI value
 	private int value;
 	private int velocity;
 	private int string;
 	private boolean tiedNote;
 	private TGNoteEffect effect;
 	private TGVoice voice;
+	private TGNoteSpelling spelling;
 	
 	public TGNote(TGFactory factory) {
 		this.value = 0;
+		this.spelling = factory.newNoteSpelling();
 		this.velocity = TGVelocities.DEFAULT;
 		this.string = 1;
 		this.tiedNote = false;
 		this.effect = factory.newEffect();
+	}
+	
+	public void setSpelling(TGNoteSpelling spelling) {
+		this.spelling = spelling;
+	}
+
+	public TGNoteSpelling getSpelling() {
+		// if this has never been set, initialize with default setting
+		if (spelling.getNoteName() < 0)
+			spelling.setSpelling(this.value);
+		return this.spelling;
 	}
 	
 	public int getValue() {
@@ -35,6 +49,7 @@ public abstract class TGNote {
 	
 	public void setValue(int value) {
 		this.value = value;
+		this.spelling.setSpelling(value);
 	}
 	
 	public int getVelocity() {

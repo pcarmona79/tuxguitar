@@ -139,6 +139,12 @@ public class TGFactory {
 		};
 	}
 	
+	public TGNoteSpelling newNoteSpelling(){
+		return new TGNoteSpelling(){
+			// TGNoteSpelling implementation
+		};
+	}
+		
 	public TGString newString(){
 		return new TGString(){
 			//TGString Implementation
