@@ -350,8 +350,12 @@ public class GPXDocumentParser {
 			}
 			
 			tgNote.getEffect().setGhostNote(gpNote.isGhost());
+			// TODO: which way is better?
 			tgNote.getEffect().setSlapping(slapped);
 			tgNote.getEffect().setPopping(popped);
+			// TODO: which way is better?
+			tgNote.getEffect().setSlapping(gpBeat.isSlapped());
+			tgNote.getEffect().setPopping(gpBeat.isPopped());
 			
 			if ( gpNote.getAccent() > 0)
 			{
