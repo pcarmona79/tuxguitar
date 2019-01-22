@@ -13,6 +13,7 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGNoteEffect;
+import org.herac.tuxguitar.song.models.TGNoteSpelling;
 import org.herac.tuxguitar.song.models.TGScale;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.song.models.TGString;
