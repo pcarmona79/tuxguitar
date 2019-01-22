@@ -28,6 +28,7 @@ public class GPXNote {
 	private boolean vibrato;
 	private int accent;
 	private boolean tapped;
+	private boolean fadeIn;
 	private boolean tieDestination;
 	private boolean mutedEnabled;
 	private boolean palmMutedEnabled;
@@ -294,4 +295,11 @@ public class GPXNote {
 	public void setHarmonicType(String harmonicType) {
 		this.harmonicType = harmonicType;
 	}
+	
+	public void setFadeIn(boolean fadeIn) {
+		this.fadeIn = fadeIn;
+	}
+
+	public boolean isFadeIn() {
+		return this.fadeIn;
 }

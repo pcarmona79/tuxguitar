@@ -443,9 +443,31 @@ public class GPXDocumentParser {
 		// position is where the bend happens, 0 to 12 (where 12 basically represents the start of the next note)
 		// GPX: 100 seems to be a full bend, so 100 * 12 / 300 = 4
 		TGEffectBend bend = this.factory.newEffectBend();
-		bend.addPoint(0, note.getBendOriginValue() * 12 / 300);
-		bend.addPoint(6, note.getBendMiddleValue() * 12 / 300);
-		bend.addPoint(12,note.getBendDestinationValue() * 12 / 300);
+		if (note.getBendOriginValue() > 0) {
+			// pre-bend
+			bend.addPoint(0, note.getBendOriginValue() * 12 / 300);
+			bend.addPoint(4, note.getBendMiddleValue() * 12 / 300);
+			bend.addPoint(8, note.getBendDestinationValue() * 12 / 300);
+			bend.addPoint(12, 0);
+		} else if (note.getBendDestinationValue() > 0) {
+			// bend/release/bend?
+			bend.addPoint(0, note.getBendOriginValue() * 12 / 300);
+			bend.addPoint(4, note.getBendMiddleValue() * 12 / 300);
+			bend.addPoint(8, note.getBendDestinationValue() * 12 / 300);
+			bend.addPoint(12, 0);
+		} else  if (note.getBendMiddleValue() != note.getBendDestinationValue()){
+			// bend/release
+			bend.addPoint(0, note.getBendOriginValue() * 12 / 300);
+			bend.addPoint(3, note.getBendMiddleValue() * 12 / 300);
+			bend.addPoint(6, note.getBendMiddleValue() * 12 / 300);
+			bend.addPoint(9, note.getBendDestinationValue() * 12 / 300);
+			bend.addPoint(12, note.getBendDestinationValue() * 12 / 300);
+		} else {
+			// bend
+			bend.addPoint(0, note.getBendOriginValue() * 12 / 300);
+			bend.addPoint(6, note.getBendMiddleValue() * 12 / 300);
+			bend.addPoint(12, note.getBendDestinationValue() * 12 / 300);
+		}
 		return bend;
 	  }
 	
