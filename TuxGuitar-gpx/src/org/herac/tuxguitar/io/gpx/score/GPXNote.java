@@ -302,4 +302,5 @@ public class GPXNote {
 
 	public boolean isFadeIn() {
 		return this.fadeIn;
+	}
 }
