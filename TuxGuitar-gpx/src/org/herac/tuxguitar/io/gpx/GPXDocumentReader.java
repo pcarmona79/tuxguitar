@@ -327,6 +327,12 @@ public class GPXDocumentReader {
 								if( propertyName.equals("Brush") ){
 									beat.setBrush( getChildNodeContent(propertyNode, "Direction") );
 								}
+								if( propertyName.equals("Slapped") ){
+									beat.setSlapped( getChildNode(propertyNode, "Enable") != null );
+								}
+								if( propertyName.equals("Popped") ){
+									beat.setPopped( getChildNode(propertyNode, "Enable") != null );
+								}
 							}
 						}
 					}

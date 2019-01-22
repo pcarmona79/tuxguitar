@@ -273,11 +273,13 @@ public class GPXDocumentParser {
 							this.parseRhythm(gpRhythm, tgVoice.getDuration());
 							if( beat.getNoteIds() != null ){
 								int tgVelocity = this.parseDynamic(beat);
+								boolean popped = beat.isPopped();
+								boolean slapped = beat.isSlapped();
 								
 								for( int n = 0 ; n < beat.getNoteIds().length; n ++ ){
 									GPXNote gpNote = this.document.getNote( beat.getNoteIds()[n] );
 									if( gpNote != null ){
-										this.parseNote(gpNote, tgVoice, tgVelocity, beat);
+										this.parseNote(gpNote, tgVoice, tgVelocity, slapped, popped, beat);
 									}
 								}
 							}
@@ -294,7 +296,7 @@ public class GPXDocumentParser {
 		}
 	}
 	
-	private void parseNote(GPXNote gpNote, TGVoice tgVoice, int tgVelocity, GPXBeat gpBeat){
+	private void parseNote(GPXNote gpNote, TGVoice tgVoice, int tgVelocity, boolean slapped, boolean popped, GPXBeat gpBeat){
 		int tgValue = -1;
 		int tgString = -1;
 		
@@ -348,6 +350,9 @@ public class GPXDocumentParser {
 			}
 			
 			tgNote.getEffect().setGhostNote(gpNote.isGhost());
+			tgNote.getEffect().setSlapping(slapped);
+			tgNote.getEffect().setPopping(popped);
+			
 			if ( gpNote.getAccent() > 0)
 			{
 				switch(gpNote.getAccent()) {
