@@ -348,11 +348,19 @@ public class GPXDocumentReader {
 					
 					Node tieNode = getChildNode(noteNode, "Tie");
 					note.setTieDestination( tieNode != null ? getAttributeValue(tieNode, "destination").equals("true") : false);
-					
-					String ghostNodeContent = getChildNodeContent(noteNode, "AntiAccent");
-					if( ghostNodeContent != null ){
-						note.setGhost(ghostNodeContent.equals("Normal"));
+
+					//not sure if this is better or worse than TG 1.5.2
+					// committing fork r27
+					Node ghostNode = getChildNode(noteNode, "AntiAccent");
+					if ( ghostNode != null ) {
+						String ghost = ghostNode.getTextContent();
+						if ( ghost.equals("Normal"))
+							note.setGhost(true);
 					}
+
+					int accent = getChildNodeIntegerContent(noteNode, "Accent");
+					if (accent > 0)
+						note.setAccent(accent);
 					
 					note.setAccent(getChildNodeIntegerContent(noteNode, "Accent"));
 					note.setTrill(getChildNodeIntegerContent(noteNode, "Trill"));

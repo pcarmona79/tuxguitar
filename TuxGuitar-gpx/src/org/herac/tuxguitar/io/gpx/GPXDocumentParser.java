@@ -336,6 +336,7 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setDeadNote(gpNote.isMutedEnabled());
 			tgNote.getEffect().setPalmMute(gpNote.isPalmMutedEnabled());
 			tgNote.getEffect().setTapping(gpNote.isTapped());
+			tgNote.getEffect().setHammer(gpNote.isHammer());
 			if (gpNote.isHarmonic())
 			{
 				tgNote.getEffect().setHarmonic( makeHarmonic ( gpNote ) );
@@ -346,8 +347,21 @@ public class GPXDocumentParser {
 				tgNote.getEffect().setBend( makeBend ( gpNote ) );
 			}
 			
-			tgNote.getEffect().setHammer(gpNote.isHammer());
 			tgNote.getEffect().setGhostNote(gpNote.isGhost());
+			if ( gpNote.getAccent() > 0)
+			{
+				switch(gpNote.getAccent()) {
+				case 1:	// staccato
+					tgNote.getEffect().setStaccato(true);
+					break;
+				case 4: // martellato 
+					tgNote.getEffect().setHeavyAccentuatedNote(true);
+					break;
+				case 8: // marcato
+					tgNote.getEffect().setAccentuatedNote(true);
+					break;
+				}
+			}
 			tgNote.getEffect().setSlapping(gpBeat.isSlapped());
 			tgNote.getEffect().setPopping(gpBeat.isPopped());
 			tgNote.getEffect().setStaccato(gpNote.getAccent() == 1);
