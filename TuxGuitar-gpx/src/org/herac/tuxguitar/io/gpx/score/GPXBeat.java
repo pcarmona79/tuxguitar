@@ -29,6 +29,7 @@ public class GPXBeat {
 		this.tremolo = null;
 		this.brush = new String();
 		this.text = new String();
+		this.tremolo = null;
 	}
 	
 	public int getId() {

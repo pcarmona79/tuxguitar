@@ -290,6 +290,7 @@ public class GPXDocumentReader {
 					beat.setRhythmId(getAttributeIntegerValue(getChildNode(beatNode, "Rhythm"), "ref"));
 					beat.setTremolo( getChildNodeIntegerContentArray(beatNode, "Tremolo", "/"));
 					beat.setNoteIds( getChildNodeIntegerContentArray(beatNode, "Notes"));
+					beat.setTremolo( getChildNodeIntegerContentArray(beatNode, "Tremolo", "/"));
 					beat.setChordId( getChildNodeIntegerContent(beatNode, "Chord", null));
 					beat.setFadding( getChildNodeContent(beatNode, "Fadding"));
 					

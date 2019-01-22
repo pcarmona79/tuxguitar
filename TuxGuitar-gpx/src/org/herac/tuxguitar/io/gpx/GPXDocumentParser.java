@@ -357,6 +357,20 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setSlapping(gpBeat.isSlapped());
 			tgNote.getEffect().setPopping(gpBeat.isPopped());
 			
+			if ( gpNote.getTrill() > 0)
+			{
+				// A trill from string E frets 3 to 4 returns : <Trill>68</Trill> and <XProperties><XProperty id="688062467"><Int>30</Int></XProperty></XProperties>
+				// gpNote.getTrill() returns the MIDI note to trill this note with, TG wants a duration as well.
+				TGEffectTrill tr = factory.newEffectTrill();
+				tr.setFret(gpNote.getTrill());
+				// TODO: add a duration
+				tgNote.getEffect().setTrill(tr);
+			}
+			if (gpBeat.getTremolo() != null) {
+				TGEffectTremoloPicking tp = factory.newEffectTremoloPicking();
+				tp.setDuration(parseTremolo(gpBeat.getTremolo()));
+				tgNote.getEffect().setTremoloPicking(tp);
+			}			
 			if ( gpNote.getAccent() > 0)
 			{
 				switch(gpNote.getAccent()) {
@@ -384,6 +398,14 @@ public class GPXDocumentParser {
 			
 			tgVoice.addNote( tgNote );
 		}
+	}
+
+	private TGDuration parseTremolo(int[] GPTremolo) {
+		if ( GPTremolo != null && GPTremolo.length == 2) {
+			long time = (long)( TGDuration.QUARTER_TIME * ( 4.0f / GPTremolo[1] / GPTremolo[0] ) ) ;
+			return TGDuration.fromTime(this.factory, time);
+		}
+		return null;
 	}
 
 	private TGEffectHarmonic makeHarmonic(GPXNote note){
