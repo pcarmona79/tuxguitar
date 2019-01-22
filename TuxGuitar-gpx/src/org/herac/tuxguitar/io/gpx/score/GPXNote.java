@@ -32,6 +32,7 @@ public class GPXNote {
 	private boolean mutedEnabled;
 	private boolean palmMutedEnabled;
 	
+	private boolean harmonic;
 	private int harmonicFret;
 	private String harmonicType;
 
@@ -52,6 +53,10 @@ public class GPXNote {
 		this.slideFlags = 0;
 		this.harmonicType = "";
 		this.harmonicFret = -1;
+		this.bendEnabled = false;
+		this.bendOriginValue = 0;
+		this.bendMiddleValue = 0;
+		this.bendDestinationValue = 0;
 	}
 	
 	public int getId() {
@@ -270,6 +275,10 @@ public class GPXNote {
 		this.tapped = tapped;
 	}
 	
+	public boolean isHarmonic() {
+		return this.harmonic;
+	}
+  
 	public int getHarmonicFret() {
 		return harmonicFret;
 	}

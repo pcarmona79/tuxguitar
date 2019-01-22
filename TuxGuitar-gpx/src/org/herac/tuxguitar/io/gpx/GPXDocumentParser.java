@@ -336,6 +336,16 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setDeadNote(gpNote.isMutedEnabled());
 			tgNote.getEffect().setPalmMute(gpNote.isPalmMutedEnabled());
 			tgNote.getEffect().setTapping(gpNote.isTapped());
+			if (gpNote.isHarmonic())
+			{
+				tgNote.getEffect().setHarmonic( makeHarmonic ( gpNote ) );
+				// TODO: if this is a tapped harmonic, update setTapping()?
+			}
+			if (gpNote.isBendEnabled())
+			{
+				tgNote.getEffect().setBend( makeBend ( gpNote ) );
+			}
+			
 			tgNote.getEffect().setHammer(gpNote.isHammer());
 			tgNote.getEffect().setGhostNote(gpNote.isGhost());
 			tgNote.getEffect().setSlapping(gpBeat.isSlapped());
@@ -352,6 +362,47 @@ public class GPXDocumentParser {
 			tgVoice.addNote( tgNote );
 		}
 	}
+
+	private TGEffectHarmonic makeHarmonic(GPXNote note){
+		TGEffectHarmonic harmonic = this.factory.newEffectHarmonic();
+
+		String type = note.getHarmonicType();
+		if (type.equals("Artificial"))
+			harmonic.setType(TGEffectHarmonic.TYPE_ARTIFICIAL);
+		if (type.equals("Natural"))
+			harmonic.setType(TGEffectHarmonic.TYPE_NATURAL);
+		if (type.equals("Pinch"))
+			harmonic.setType(TGEffectHarmonic.TYPE_PINCH);
+
+		int hFret = note.getHarmonicFret();
+
+		// midi export does this, but not for natural harmonics
+		// key = (orig + TGEffectHarmonic.NATURAL_FREQUENCIES[note.getEffect().getHarmonic().getData()][1]);
+		
+		if (hFret >= 0)
+		{
+			for(int i = 0;i < TGEffectHarmonic.NATURAL_FREQUENCIES.length;i ++){
+				if(hFret == (TGEffectHarmonic.NATURAL_FREQUENCIES[i][0] ) ){
+					harmonic.setData(i);
+					break;
+				}
+			}
+		}
+
+		return harmonic;
+	}
+	
+	private TGEffectBend makeBend(GPXNote note){
+		// TG: position and value arguments.
+		// value 4 is a whole bend, so it's measured in quarter-tones (1 is a 1/4 bend), maximum of 3 whole steps
+		// position is where the bend happens, 0 to 12 (where 12 basically represents the start of the next note)
+		// GPX: 100 seems to be a full bend, so 100 * 12 / 300 = 4
+		TGEffectBend bend = this.factory.newEffectBend();
+		bend.addPoint(0, note.getBendOriginValue() * 12 / 300);
+		bend.addPoint(6, note.getBendMiddleValue() * 12 / 300);
+		bend.addPoint(12,note.getBendDestinationValue() * 12 / 300);
+		return bend;
+	  }
 	
 	private TGEffectTrill parseTrill(GPXNote gpNote){
 		TGEffectTrill tr = null;
