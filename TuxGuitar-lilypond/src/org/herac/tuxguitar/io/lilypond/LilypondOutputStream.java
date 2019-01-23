@@ -490,6 +490,8 @@ public class LilypondOutputStream {
 	}
 	
 	private void addBeat(int key,TGBeat beat, TGVoice voice){		
+		// keep track of octave displacements
+		int ottava = 0;
 		if(voice.isRestVoice()){
 			boolean skip = false;
 			for( int v = 0 ; v < beat.countVoices() ; v ++ ){
@@ -508,7 +510,6 @@ public class LilypondOutputStream {
 
 			int size = voice.countNotes();
 			
-			int ottava = 0;
 			for(int i = 0 ; i < size ; i ++){
 				TGNote note = voice.getNote(i);
 				int thisnote = beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue();
@@ -545,9 +546,6 @@ public class LilypondOutputStream {
 			this.addDuration( voice.getDuration() );
 			this.addEffectsOnDuration( voice );
 			this.addEffectsOnBeat( voice );
-			if (ottava != 0) {
-				this.addOttava(0);
-			}
 		}
 		
 		// Add Chord, if was not previously added in another voice
@@ -576,6 +574,11 @@ public class LilypondOutputStream {
 			if( !skip ){
 				this.writer.print("-\\tag #'texts ^\\markup {\"" + beat.getText().getValue() + "\"}");
 			}
+		}
+
+		// Only add this after all of the tags
+		if (ottava != 0) {
+			this.addOttava(0);
 		}
 		
 		// Check if it's a lyric beat to skip
