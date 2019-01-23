@@ -161,18 +161,21 @@ public class GPXDocumentParser {
 				tgMeasureHeader.getTimeSignature().setNumerator(mbar.getTime()[0]);
 				tgMeasureHeader.getTimeSignature().getDenominator().setValue(mbar.getTime()[1]);
 			}
-			if( gpTempoAutomation != null && gpTempoAutomation.getValue().length == 2 ){
-				int tgTempo = gpTempoAutomation.getValue()[0];
-				if( gpTempoAutomation.getValue()[1] == 1 ){
-					tgTempo = (tgTempo / 2);
-				}else if( gpTempoAutomation.getValue()[1] == 3 ){
-					tgTempo = (tgTempo + (tgTempo / 2));
-				}else if( gpTempoAutomation.getValue()[1] == 4 ){
-					tgTempo = (tgTempo * 2);
-				}else if( gpTempoAutomation.getValue()[1] == 5 ){
-					tgTempo = (tgTempo + (tgTempo * 2));
+			if( gpTempoAutomation != null) {
+				int[] gpTempo = gpTempoAutomation.getValue();
+				if (gpTempo.length == 2 ){
+					int tgTempo = gpTempo[0];
+					if( gpTempo[1] == 1 ){
+						tgTempo = (tgTempo / 2);
+					}else if( gpTempo[1] == 3 ){
+						tgTempo = (tgTempo + (tgTempo / 2));
+					}else if( gpTempo[1] == 4 ){
+						tgTempo = (tgTempo * 2);
+					}else if( gpTempo[1] == 5 ){
+						tgTempo = (tgTempo + (tgTempo * 2));
+					}
+					tgMeasureHeader.getTempo().setValue( tgTempo );
 				}
-				tgMeasureHeader.getTempo().setValue( tgTempo );
 			}
 			tgSong.addMeasureHeader(tgMeasureHeader);
 			

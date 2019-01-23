@@ -297,10 +297,15 @@ public class GPXDocumentReader {
 					
 					// TODO: <Legato destination="false" origin="true"/>
 					// TODO: <Hairpin>Crescendo</Hairpin>
-															beat.setNoteIds( getChildNodeIntegerContentArray(beatNode, "Notes"));
+					beat.setNoteIds( getChildNodeIntegerContentArray(beatNode, "Notes"));
 					beat.setTremolo( getChildNodeIntegerContentArray(beatNode, "Tremolo", "/"));
 					beat.setChordId( getChildNodeIntegerContent(beatNode, "Chord", null));
 					beat.setFadding( getChildNodeContent(beatNode, "Fadding"));
+					
+					String text = getChildNodeContent(beatNode, "FreeText");
+					if ( text != null ) {
+						beat.setText(text);
+					}		
 					
 					NodeList propertyNodes = getChildNodeList(beatNode, "Properties");
 					if( propertyNodes != null ){
