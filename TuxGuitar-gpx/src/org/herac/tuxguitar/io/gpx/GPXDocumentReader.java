@@ -18,6 +18,8 @@ import org.herac.tuxguitar.io.gpx.score.GPXVoice;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.song.models.TGNoteSpelling;
 
 public class GPXDocumentReader {
 	
@@ -117,6 +119,13 @@ public class GPXDocumentReader {
 							track.setGmProgram(getChildNodeIntegerContent(gmNode, "Program"));
 							track.setGmChannel1(getChildNodeIntegerContent(gmNode, "PrimaryChannel"));
 							track.setGmChannel2(getChildNodeIntegerContent(gmNode, "SecondaryChannel"));
+						}
+						Node partSounding = getChildNode(trackNode, "PartSounding");
+						if( partSounding != null ){
+							TGNoteSpelling spelling = new TGFactory().newNoteSpelling();
+							String key = getChildNodeContent(partSounding, "NominalKey");
+							int keyValue = spelling.fromString(key);
+							// TODO: set key
 						}
 					} else if (this.version == GP7) {
 						Node midiConnectionNode = getChildNode(trackNode, "MidiConnection");
