@@ -528,7 +528,13 @@ public class LilypondOutputStream {
 				
 				this.addEffectsBeforeNote(note);
 				
-				this.addKey(key, (beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()) );
+				String spelling = note.getSpelling().toLilyPondString();
+				if (spelling.length() > 0) {
+					this.writer.print(spelling);
+				} else {
+					this.addKey(key, (beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()) );
+				}
+				
 				if(this.isAnyTiedTo(note)){
 					this.writer.print("~");
 				}
@@ -722,7 +728,13 @@ public class LilypondOutputStream {
 				if( i > 0 ){
 					this.writer.print(" ");
 				}
-				this.addKey(measure.getKeySignature(), (string.getValue() + grace.getFret()) );
+				String spelling = note.getSpelling().toLilyPondString();
+				if (spelling.length() > 0)
+				{
+					this.writer.print(spelling);
+				} else {
+					this.addKey(measure.getKeySignature(), (string.getValue() + grace.getFret()) );
+				}
 				this.addString(note.getString());
 			}
 			this.writer.print(">");

@@ -2,11 +2,11 @@ package org.herac.tuxguitar.song.models;
 
 public abstract class TGNoteSpelling {
 
-	public static int ACCIDENTAL_NONE = 0;
-	public static int ACCIDENTAL_SHARP = 1;
-	public static int ACCIDENTAL_DOUBLESHARP = 2;
-	public static int ACCIDENTAL_FLAT = -1;
-	public static int ACCIDENTAL_DOUBLEFLAT = -2;
+	final public int ACCIDENTAL_NONE = 0;
+	final public int ACCIDENTAL_SHARP = 1;
+	final public int ACCIDENTAL_DOUBLESHARP = 2;
+	final public int ACCIDENTAL_FLAT = -1;
+	final public int ACCIDENTAL_DOUBLEFLAT = -2;
 	
 	// Spelling
 	private int noteName; // C=0, B=6, -1 is undefined (default)
@@ -27,6 +27,22 @@ public abstract class TGNoteSpelling {
 		this.key_signature = -1;
 	}
 
+	public int fromString(String signature)
+	{
+		// ref initializeKey
+		int val = 0;
+		String[] keys = {"c","g","d","a","e","b","fis","cis","f","bes","ees","aes", "des", "ges","ces"};
+		for(int i = 0; i < keys.length; i++)
+		{
+			if (signature.toLowerCase() == keys[i])
+			{
+				val = i-7;
+			}
+		}
+		
+		return val;
+	}
+	
 	private int initializeKey (int keysignature) {
 		// keysignature 1 to 7 is number of sharps, 8 to 14 is (number of flats + 7)
 		// rearrange so these are in order flat to sharp, with C = 7   "c","g","d","a","e","b","fis","cis","f","bes","ees","aes", "des", "ges","ces"
@@ -119,11 +135,41 @@ public abstract class TGNoteSpelling {
 		return this.accidental;
 	}
 	
+	public String toLilyPondString() {
+		String noteNames[] = { "c", "d", "e", "f", "g", "a", "b" };
+		String result = "";
+		if (noteName >= 0){
+			result += noteNames[getNoteName()];
+			switch(getAccidental())
+			{
+			case ACCIDENTAL_NONE:
+				break;
+			case ACCIDENTAL_SHARP:
+				result += "is";
+				break;
+			case ACCIDENTAL_DOUBLESHARP:
+				result += "isis";
+				break;
+			case ACCIDENTAL_FLAT:
+				result += "es";
+				break;
+			case ACCIDENTAL_DOUBLEFLAT:
+				result += "eses";
+				break;
+			}
+			result += accidentals[getAccidental()+1];
+		}
+		return result;
+	}
+	
 	public String toString() {
 		String noteNames[] = { "C", "D", "E", "F", "G", "A", "B" };
 		String accidentals[] =  { "b", "", "#" };
-		String result = noteNames[getNoteName()];
-		result += accidentals[getAccidental()+1];
+		String result = "";
+		if (noteName >= 0){
+			result += noteNames[getNoteName()];
+			result += accidentals[getAccidental()+1];
+		}
 		return result;
 	}
 }
