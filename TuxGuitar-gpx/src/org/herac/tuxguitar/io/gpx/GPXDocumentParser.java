@@ -399,6 +399,7 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setBend(parseBend( gpNote ) );
 			tgNote.getEffect().setTremoloBar(parseTremoloBar( gpBeat ));
 			
+			tgNote.getSpelling().setSpellingFromKey(tgNote.getValue(), tgVoice.getBeat().getMeasure().getKeySignature());
 			tgVoice.addNote( tgNote );
 		}
 	}
