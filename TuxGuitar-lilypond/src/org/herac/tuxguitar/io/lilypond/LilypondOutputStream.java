@@ -433,7 +433,7 @@ public class LilypondOutputStream {
 			clefName = "tenor";
 		}
 		if(clefName!=""){
-			this.writer.println(indent(indent) + "\\clef #(if $inTab \"tab\" \"" + clefName + "_8\")");
+			this.writer.println(indent(indent) + "\\clef #(if inTab \"tab\" \"" + clefName + "_8\")");
 		}
 	}
 	
@@ -601,7 +601,7 @@ public class LilypondOutputStream {
 	private void addKey(int keySignature,int value){
 		this.writer.print( getLilypondKey(keySignature, value) );
 	}
-	
+
 	private void addString(int string){
 		this.writer.print("\\" + string);
 	}
