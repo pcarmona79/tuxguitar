@@ -43,6 +43,7 @@ public class GP2InputStream extends GTPInputStream {
 	};
 	
 	private static final int TRACK_COUNT = 8;
+	private int keySignature;
 	
 	private static final short TRACK_CHANNELS[][] = new short[][]{
 		new short[]{1,0,1},
@@ -74,7 +75,8 @@ public class GP2InputStream extends GTPInputStream {
 			int tempo = readInt();
 			int tripletFeel = ((readInt() == 1)?TGMeasureHeader.TRIPLET_FEEL_EIGHTH:TGMeasureHeader.TRIPLET_FEEL_NONE);
 			
-			readInt(); //key
+			//readInt(); //key
+			this.keySignature = readKeySignature();
 			
 			for (int i = 0; i < TRACK_COUNT; i++) {
 				TGChannel channel = getFactory().newChannel();
@@ -283,6 +285,7 @@ public class GP2InputStream extends GTPInputStream {
 					note.setEffect(effect.clone(getFactory()));
 					note.getEffect().setDeadNote(  (fret < 0 || fret >= 100)  );
 					
+					note.getSpelling().setSpellingFromKey(note.getValue(), this.keySignature);
 					voice.addNote(note);
 				}
 				
@@ -416,6 +419,16 @@ public class GP2InputStream extends GTPInputStream {
 		if ((flags & 0x01) != 0) {
 			readUnsignedByte();
 		}
+	}
+	
+	private int readKeySignature() throws IOException {
+		// 0: C 1: G, -1: F		
+		int keySignature = readByte();
+		if (keySignature < 0){
+			keySignature = 7 - keySignature; // translate -1 to 8, etc.
+		}
+		
+		return keySignature;
 	}
 	
 	private int parseRepeatAlternative(TGSong song,int measure,int value){

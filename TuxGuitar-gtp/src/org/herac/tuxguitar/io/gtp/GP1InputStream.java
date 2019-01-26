@@ -51,6 +51,7 @@ public class GP1InputStream extends GTPInputStream {
 	};
 	
 	private int trackCount;
+	private int keySignature;
 	
 	public GP1InputStream(GTPSettings settings){
 		super(settings, SUPPORTED_VERSIONS);
@@ -74,7 +75,7 @@ public class GP1InputStream extends GTPInputStream {
 			int tripletFeel = ((readInt() == 1)?TGMeasureHeader.TRIPLET_FEEL_EIGHTH:TGMeasureHeader.TRIPLET_FEEL_NONE);
 			
 			if(getVersion().getVersionCode() > 2){
-				readInt(); //key
+				this.keySignature = readKeySignature();
 			}
 			
 			for (int i = 0; i < this.trackCount; i++) {
@@ -204,6 +205,16 @@ public class GP1InputStream extends GTPInputStream {
 	private void readTimeSignature(TGTimeSignature timeSignature) throws IOException {
 		timeSignature.setNumerator(readUnsignedByte());
 		timeSignature.getDenominator().setValue(readUnsignedByte());
+	}
+	
+	private int readKeySignature() throws IOException {
+		// 0: C 1: G, -1: F		
+		int keySignature = readByte();
+		if (keySignature < 0){
+			keySignature = 7 - keySignature; // translate -1 to 8, etc.
+		}
+		
+		return keySignature;
 	}
 	
 	private long readBeat(TGTrack track, TGMeasure measure, long start, long lastReadedStart) throws IOException {
