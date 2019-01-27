@@ -157,7 +157,6 @@ public abstract class TGNoteSpelling {
 				result += "eses";
 				break;
 			}
-			result += accidentals[getAccidental()+1];
 		}
 		return result;
 	}
