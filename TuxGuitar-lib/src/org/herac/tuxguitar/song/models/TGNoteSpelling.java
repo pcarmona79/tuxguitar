@@ -1,5 +1,23 @@
 package org.herac.tuxguitar.song.models;
+/*
+	"A Mathematical Model Of Tonal Function", Robert T. Kelley, Lander University
+	http://www.robertkelleyphd.com/AMathematicalModelOfTonalFunction.pdf
+	
+	Any tonal pitch or pitch class may be represented as an ordered triple of integers. We
+	shall arbitrarily assign the ordered triple (0, 0, 0) to the pitch C4, or "middle C". The first
+	component of the ordered triple represents a measurement of distance in semitones away
+	from C4. Thus, the first integer in the ordered triple of the pitch D4 is 2, and F#3 is -6. The
+	second integer in the ordered triple represents a distance away from C4 measured in diatonic
+	steps, without regard to chromatic inflection. Thus, the ordered triples for the pitches Db4,
+	D4, and D#4 all have 1 as their second component, though their first components are 1, 2,
+	and 3, respectively. In other words, all "C"s have second component 0; all "D"s have second
+	component 1; all "E"s, 2, and so on through "B", which has second component 6. The first
+	two components of the ordered triple thus completely encapsulate the information required
+	to write a pitch in music notation, including how the pitch is spelled. *
 
+	Brinkman (1986) uses this ordered pair notation for the computer representation of the diatonic 
+	spelling of a pitch 
+ */
 public abstract class TGNoteSpelling {
 
 	final public int ACCIDENTAL_NONE = 0;
@@ -9,22 +27,38 @@ public abstract class TGNoteSpelling {
 	final public int ACCIDENTAL_DOUBLEFLAT = -2;
 	
 	// Spelling
-	private int noteName; // C=0, B=6, -1 is undefined (default)
+	private int noteName;   // C=0, B=6, -1 is undefined (default)
 	private int accidental; // ACCIDENTAL_* values
+	private int octave;     // octave 4 = C4 = midi note 60
+	private int midiValue;
 
-	private int key_signature;
-	private int[] roots;
+	private int keySignature; // translated
+	private static int[] roots;
 	private int[] scale;
 	
-	// helper data
+	// helper data TODO: leverage TGMeasureImpl.ACCIDENTAL_SHARP_NOTES / ACCIDENTAL_FLAT_NOTES
+	// when this logic is debugged
 	private static int[] accidentals = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
 	private static int[] notes = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
 	public TGNoteSpelling() {
-		this.noteName = -1;
-		this.accidental = 0;
-		this.key_signature = -1;
+		this.noteName = -1; // undefined
+		this.accidental = 0; // none
+		this.keySignature = -1; // undefined
+		this.octave = 0;
+
+		if (roots.length < 1)
+		{
+			// set the root note name for each key, to match keysignature
+			// e.g. key signature 0 is Cb, 1 is Gb so root 0 is C, root 1 is G
+			roots= new int[15];
+			int rootname = 0;
+			for (int i = 0; i < roots.length; i++) {
+				roots[i] = rootname % 7;
+				rootname += 4;
+			}
+		}
 	}
 
 	public int fromString(String signature)
@@ -36,6 +70,7 @@ public abstract class TGNoteSpelling {
 		{
 			if (signature.toLowerCase() == keys[i])
 			{
+				// TODO fix this
 				val = i-7;
 			}
 		}
@@ -44,46 +79,36 @@ public abstract class TGNoteSpelling {
 	}
 	
 	private int initializeKey (int keysignature) {
-		// keysignature 1 to 7 is number of sharps, 8 to 14 is (number of flats + 7)
-		// rearrange so these are in order flat to sharp, with C = 7   "c","g","d","a","e","b","fis","cis","f","bes","ees","aes", "des", "ges","ces"
+		// TuxGuitar keysignature 1 to 7 is number of sharps, 8 to 14 is (number of flats + 7)
+		// rearrange so these are in order Cb=0, C=7, C#=14 
 		if (keysignature <= 7)
 			keysignature = keysignature + 7;
 		else
 			keysignature = 14 - keysignature;
 		
-		if (this.key_signature != keysignature)
+		if (this.keySignature != keysignature)
 		{
-			// one-time initialization in case the object is getting re-used
-			roots = new int[15];
-			// set the root note name for each key, to match keysignature
-	
-			int rootname = 0;
-			for (int i = 0; i < roots.length; i++) {
-				// for semitones:roots[i] = ( (i*5) + 11 ) % 12;
-				roots[i] = rootname % 7;
-				rootname += 4;
-			}
-	
-			// scale represents the accidental of each note, C to B
+			// scale represents the accidental of each note, C to B, initialize as all flat
 			scale = new int[7];
 			for (int i = 0; i < scale.length; i++) {
-				scale[i] = ACCIDENTAL_FLAT; 
+				scale[i] = ACCIDENTAL_FLAT;
 			}
 
 			// raise the seventh until we get to the right key
-			int offset = 3; // Fb -> F natural
+			// starting with Fb -> F natural to go from Cb to Gb
+			int offset = 3; 
 			for ( int i = 1; i <= keysignature; i++) {
-				scale[offset]++;
+				scale[offset]++; // ACCIDENTAL_FLAT goes to ACCIDENTAL_NONE, which goes to ACCIDENTAL_SHARP
 				offset = (offset + 4) % 7;
 			}
 			
 			// update and return
-			this.key_signature = keysignature;
+			this.keySignature = keysignature;
 		}
 		return keysignature;
 	}
 	
-	public void setSpellingFromKey(int value, int keysignature) {
+	public void setSpellingFromKey(int midiValue, int keysignature) {
 		
 		keysignature = initializeKey(keysignature);
 		
@@ -91,10 +116,8 @@ public abstract class TGNoteSpelling {
 		int key_semitone = semitones[key_notename] + scale[key_notename];
 		// int key_accidental = scale[0];		
 		// int interval = ((semitone + 12) - root) % 12; // distance in semitones
-		int note_semitone = value % 12; // c to b in semitones
+		int note_semitone = midiValue % 12; // c to b in semitones
 		
-		//"A Mathematical Model Of Tonal Function", Robert T. Kelley, Lander University
-		// http://www.robertkelleyphd.com/AMathematicalModelOfTonalFunction.pdf
 		// NOTE: Mod function as described expects (-3 Mod 12 = 9) so I added an extra "+12" in here
 		int note_notename = (7 * note_semitone-((((7 * ((note_semitone + 12 - key_semitone) % 12)+5) % 12)-5)+ (7 * key_semitone) - (12 * key_notename) )) / 12;
 
@@ -104,7 +127,9 @@ public abstract class TGNoteSpelling {
 	public void setSpelling(int value) {
 		int temp = value % 12;
 		this.noteName = notes[temp];
-		this.accidental = accidentals[temp];		
+		this.accidental = accidentals[temp];
+		this.midiValue = value;
+		this.octave = (value - temp)/12 - 1;
 	}
 
 	public void setSpelling(int noteName, int accidental) {
@@ -116,6 +141,7 @@ public abstract class TGNoteSpelling {
 	public int setSpelling(int noteName, int accidental, int octave) {
 		this.noteName = noteName;
 		this.accidental = accidental;
+		this.octave = octave;
 		int value = (octave + 1) * 12;
 		// find the first natural note this matches
 		for (value = 0; value < notes.length; value++) {
