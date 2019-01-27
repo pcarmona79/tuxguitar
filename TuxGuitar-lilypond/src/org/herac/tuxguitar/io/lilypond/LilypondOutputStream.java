@@ -126,21 +126,21 @@ public class LilypondOutputStream {
 	private void addLayout(){
 		this.writer.println("\\layout {");
 		this.writer.println(indent(1) + "\\context { \\Score");
-		this.writer.println(indent(2) + "\\override MetronomeMark #'padding = #'5");
+		this.writer.println(indent(2) + "\\override MetronomeMark.padding = #'5");
 		this.writer.println(indent(1) + "}");
 		this.writer.println(indent(1) + "\\context { \\Staff");
-		this.writer.println(indent(2) + "\\override TimeSignature #'style = #'numbered");
-		this.writer.println(indent(2) + "\\override StringNumber #'transparent = #" + getLilypondBoolean(true));
+		this.writer.println(indent(2) + "\\override TimeSignature.style = #'numbered");
+		this.writer.println(indent(2) + "\\override StringNumber.transparent = #" + getLilypondBoolean(true));
 		this.writer.println(indent(1) + "}");
 		this.writer.println(indent(1) + "\\context { \\TabStaff");
-		this.writer.println(indent(2) + "\\override TimeSignature #'style = #'numbered");
-		this.writer.println(indent(2) + "\\override Stem #'transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
-		this.writer.println(indent(2) + "\\override Beam #'transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
-		this.writer.println(indent(2) + "\\override Tie  #'after-line-breaking = #tie::tab-clear-tied-fret-numbers");
+		this.writer.println(indent(2) + "\\override TimeSignature.style = #'numbered");
+		this.writer.println(indent(2) + "\\override Stem.transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
+		this.writer.println(indent(2) + "\\override Beam.transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
+		this.writer.println(indent(2) + "\\override Tie.after-line-breaking = #tie::tab-clear-tied-fret-numbers");
 		this.writer.println(indent(1) + "}");
 		if( this.settings.isScoreEnabled() ){
 			this.writer.println(indent(1) + "\\context { \\TabVoice");
-			this.writer.println(indent(2) + "\\override Tie #'stencil = ##f");
+			this.writer.println(indent(2) + "\\override Tie.stencil = ##f");
 			this.writer.println(indent(1) + "}");
 		}
 		this.writer.println(indent(1) + "\\context { \\StaffGroup");
@@ -467,7 +467,7 @@ public class LilypondOutputStream {
 				}
 				
 				if(!this.temp.isDivisionTypeOpen() && !divisionType.isEqual(TGDivisionType.NORMAL)){
-					this.writer.print("\\times " + divisionType.getTimes() + "/" + divisionType.getEnters() + " {");
+					this.writer.print("\\tuplet " + divisionType.getEnters() + "/" + divisionType.getTimes() + " {");
 					this.temp.setDivisionTypeOpen(true);
 				}
 				
