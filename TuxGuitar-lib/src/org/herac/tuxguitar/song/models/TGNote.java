@@ -39,7 +39,13 @@ public abstract class TGNote {
 	public TGNoteSpelling getSpelling() {
 		// if this has never been set, initialize with default setting
 		if (spelling.getNoteName() < 0)
-			spelling.setSpelling(this.value);
+		{
+			int keySignature = this.getVoice().getBeat().getMeasure().getKeySignature();
+			if (keySignature == 0)
+				spelling.setSpelling(this.value);
+			else 
+				spelling.setSpellingFromKey(this.value,  keySignature);
+		}
 		return this.spelling;
 	}
 	
@@ -49,7 +55,6 @@ public abstract class TGNote {
 	
 	public void setValue(int value) {
 		this.value = value;
-		this.spelling.setSpelling(value);
 	}
 	
 	public int getVelocity() {
