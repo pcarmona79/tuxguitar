@@ -133,7 +133,7 @@ public class LilypondSettings {
 		settings.setChordDiagramEnabled(true);
 		settings.setTrackNameEnabled(true);
 		settings.setTrackGroupEnabled(false);
-		settings.setLilypondVersion("2.14.0");
+		settings.setLilypondVersion("2.18.0");
 		return settings;
 	}
 }

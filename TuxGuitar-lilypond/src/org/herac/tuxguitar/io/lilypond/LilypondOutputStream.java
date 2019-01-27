@@ -124,24 +124,46 @@ public class LilypondOutputStream {
 	}
 	
 	private void addLayout(){
-		this.writer.println("\\layout {");
-		this.writer.println(indent(1) + "\\context { \\Score");
-		this.writer.println(indent(2) + "\\override MetronomeMark.padding = #'5");
-		this.writer.println(indent(1) + "}");
-		this.writer.println(indent(1) + "\\context { \\Staff");
-		this.writer.println(indent(2) + "\\override TimeSignature.style = #'numbered");
-		this.writer.println(indent(2) + "\\override StringNumber.transparent = #" + getLilypondBoolean(true));
-		this.writer.println(indent(1) + "}");
-		this.writer.println(indent(1) + "\\context { \\TabStaff");
-		this.writer.println(indent(2) + "\\override TimeSignature.style = #'numbered");
-		this.writer.println(indent(2) + "\\override Stem.transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
-		this.writer.println(indent(2) + "\\override Beam.transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
-		this.writer.println(indent(2) + "\\override Tie.after-line-breaking = #tie::tab-clear-tied-fret-numbers");
-		this.writer.println(indent(1) + "}");
-		if( this.settings.isScoreEnabled() ){
-			this.writer.println(indent(1) + "\\context { \\TabVoice");
-			this.writer.println(indent(2) + "\\override Tie.stencil = ##f");
+		if ( this.settings.getLilypondVersion().compareTo("2.17.46") < 0) {
+			this.writer.println("\\layout {");
+			this.writer.println(indent(1) + "\\context { \\Score");
+			this.writer.println(indent(2) + "\\override MetronomeMark #'padding = #'5");
 			this.writer.println(indent(1) + "}");
+			this.writer.println(indent(1) + "\\context { \\Staff");
+			this.writer.println(indent(2) + "\\override TimeSignature #'style = #'numbered");
+			this.writer.println(indent(2) + "\\override StringNumber #'transparent = #" + getLilypondBoolean(true));
+			this.writer.println(indent(1) + "}");
+			this.writer.println(indent(1) + "\\context { \\TabStaff");
+			this.writer.println(indent(2) + "\\override TimeSignature #'style = #'numbered");
+			this.writer.println(indent(2) + "\\override Stem #'transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
+			this.writer.println(indent(2) + "\\override Beam #'transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
+			this.writer.println(indent(2) + "\\override Tie  #'after-line-breaking = #tie::tab-clear-tied-fret-numbers");
+			this.writer.println(indent(1) + "}");
+			if( this.settings.isScoreEnabled() ){
+				this.writer.println(indent(1) + "\\context { \\TabVoice");
+				this.writer.println(indent(2) + "\\override Tie #'stencil = ##f");
+				this.writer.println(indent(1) + "}");
+			}			
+		} else {
+			this.writer.println("\\layout {");
+			this.writer.println(indent(1) + "\\context { \\Score");
+			this.writer.println(indent(2) + "\\override MetronomeMark.padding = #'5");
+			this.writer.println(indent(1) + "}");
+			this.writer.println(indent(1) + "\\context { \\Staff");
+			this.writer.println(indent(2) + "\\override TimeSignature.style = #'numbered");
+			this.writer.println(indent(2) + "\\override StringNumber.transparent = #" + getLilypondBoolean(true));
+			this.writer.println(indent(1) + "}");
+			this.writer.println(indent(1) + "\\context { \\TabStaff");
+			this.writer.println(indent(2) + "\\override TimeSignature.style = #'numbered");
+			this.writer.println(indent(2) + "\\override Stem.transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
+			this.writer.println(indent(2) + "\\override Beam.transparent = #" + getLilypondBoolean(this.settings.isScoreEnabled()));
+			this.writer.println(indent(2) + "\\override Tie.after-line-breaking = #tie::tab-clear-tied-fret-numbers");
+			this.writer.println(indent(1) + "}");
+			if( this.settings.isScoreEnabled() ){
+				this.writer.println(indent(1) + "\\context { \\TabVoice");
+				this.writer.println(indent(2) + "\\override Tie.stencil = ##f");
+				this.writer.println(indent(1) + "}");
+			}
 		}
 		this.writer.println(indent(1) + "\\context { \\StaffGroup");
 		this.writer.println(indent(2) + "\\consists \"Instrument_name_engraver\"");
@@ -528,12 +550,7 @@ public class LilypondOutputStream {
 				
 				this.addEffectsBeforeNote(note);
 				
-				String spelling = note.getSpelling().toLilyPondString();
-				if (spelling.length() > 0) {
-					this.writer.print(spelling);
-				} else {
-					this.addKey(key, (beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()) );
-				}
+				this.addKey(key, (beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()) );
 				
 				if(this.isAnyTiedTo(note)){
 					this.writer.print("~");
@@ -728,13 +745,7 @@ public class LilypondOutputStream {
 				if( i > 0 ){
 					this.writer.print(" ");
 				}
-				String spelling = note.getSpelling().toLilyPondString();
-				if (spelling.length() > 0)
-				{
-					this.writer.print(spelling);
-				} else {
-					this.addKey(measure.getKeySignature(), (string.getValue() + grace.getFret()) );
-				}
+				this.addKey(measure.getKeySignature(), (string.getValue() + grace.getFret()) );
 				this.addString(note.getString());
 			}
 			this.writer.print(">");
