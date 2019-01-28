@@ -27,7 +27,7 @@ public abstract class TGNoteSpelling {
 	final public int ACCIDENTAL_DOUBLEFLAT = -2;
 	
 	// Spelling
-	private int noteName;   // C=0, B=6, -1 is undefined (default)
+	private int pitchNumber;   // C=0, B=6, -1 is undefined (default)
 	private int accidental; // ACCIDENTAL_* values
 	private int octave;     // octave 4 = C4 = midi note 60
 	private int midiValue;
@@ -43,12 +43,12 @@ public abstract class TGNoteSpelling {
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
 	public TGNoteSpelling() {
-		this.noteName = -1; // undefined
+		this.pitchNumber = -1; // undefined
 		this.accidental = 0; // none
 		this.keySignature = -1; // undefined
 		this.octave = 0;
 
-		if (roots.length < 1)
+		if (roots == null)
 		{
 			// set the root note name for each key, to match keysignature
 			// e.g. key signature 0 is Cb, 1 is Gb so root 0 is C, root 1 is G
@@ -110,42 +110,54 @@ public abstract class TGNoteSpelling {
 	
 	public void setSpellingFromKey(int midiValue, int keysignature) {
 		
+		// TuxGuitar key signature is translated to fit this logic
 		keysignature = initializeKey(keysignature);
 		
-		int key_notename = roots[keysignature];
-		int key_semitone = semitones[key_notename] + scale[key_notename];
-		// int key_accidental = scale[0];		
+		int keyPitchNumber = roots[keysignature];
+		//int keySemitone = semitones[keyPitchNumber] + scale[keyPitchNumber];
+		int keySemitone = semitones[keyPitchNumber] + scale[keyPitchNumber];
+		int newNoteSemitone = midiValue % 12; // c to b in semitones
+		int t1 = 0; // TODO:
+		
+		// int key_accidental = scale[0];
 		// int interval = ((semitone + 12) - root) % 12; // distance in semitones
-		int note_semitone = midiValue % 12; // c to b in semitones
 		
 		// NOTE: Mod function as described expects (-3 Mod 12 = 9) so I added an extra "+12" in here
-		int note_notename = (7 * note_semitone-((((7 * ((note_semitone + 12 - key_semitone) % 12)+5) % 12)-5)+ (7 * key_semitone) - (12 * key_notename) )) / 12;
 
-		this.setSpelling(note_notename,  scale[note_notename]);
+		// Kelley: Because the ordered pair for the tonic, Bb, is (10, 6), we shall use the value
+		// 10 in place of the variable t1, and the value 6 in place of the variable t2. Then the
+		// value 1 replaces the variable a. After solving the equation using a little bit of
+		// arithmetic, the result is the ordered pair (1, 1), meaning that the pitch class 1
+		// is to be spelled as Db rather than C#
+
+		// (7·a-((((7·((a-t1) mod 12)+5) mod 12)-5)+7·t1-12·t2)) / 12
+		int newPitchNumber = (7*newNoteSemitone-((((7*((newNoteSemitone-t1) % 12)+5) % 12)-5)+7*t1-12*keyPitchNumber)) / 12;
+		
+		this.setSpelling(newPitchNumber,  scale[newPitchNumber]);
 	}
 
 	public void setSpelling(int value) {
 		int temp = value % 12;
-		this.noteName = notes[temp];
+		this.pitchNumber = notes[temp];
 		this.accidental = accidentals[temp];
 		this.midiValue = value;
 		this.octave = (value - temp)/12 - 1;
 	}
 
-	public void setSpelling(int noteName, int accidental) {
-		this.noteName = noteName;
+	public void setSpelling(int pitchNumber, int accidental) {
+		this.pitchNumber = pitchNumber;
 		this.accidental = accidental;
 	}
 
 	// Octave should represent MIDI octave, so setSpelling(0, 0, 4) would return 60
-	public int setSpelling(int noteName, int accidental, int octave) {
-		this.noteName = noteName;
+	public int setSpelling(int pitchNumber, int accidental, int octave) {
+		this.pitchNumber = pitchNumber;
 		this.accidental = accidental;
 		this.octave = octave;
 		int value = (octave + 1) * 12;
 		// find the first natural note this matches
 		for (value = 0; value < notes.length; value++) {
-			if ( noteName == notes[value] /* and accidental[value] == 0 */)
+			if ( pitchNumber == notes[value] /* and accidental[value] == 0 */)
 				break;
 		}
 		// adjust
@@ -153,8 +165,8 @@ public abstract class TGNoteSpelling {
 		return value;
 	}
 	
-	public int getNoteName() {
-		return this.noteName;
+	public int getPitchNumber() {
+		return this.pitchNumber;
 	}
 
 	public int getAccidental() {
@@ -164,8 +176,8 @@ public abstract class TGNoteSpelling {
 	public String toLilyPondString() {
 		String noteNames[] = { "c", "d", "e", "f", "g", "a", "b" };
 		String result = "";
-		if (noteName >= 0){
-			result += noteNames[getNoteName()];
+		if (pitchNumber >= 0){
+			result += noteNames[getPitchNumber()];
 			switch(getAccidental())
 			{
 			case ACCIDENTAL_NONE:
@@ -191,8 +203,8 @@ public abstract class TGNoteSpelling {
 		String noteNames[] = { "C", "D", "E", "F", "G", "A", "B" };
 		String accidentals[] =  { "b", "", "#" };
 		String result = "";
-		if (noteName >= 0){
-			result += noteNames[getNoteName()];
+		if (pitchNumber >= 0){
+			result += noteNames[getPitchNumber()];
 			result += accidentals[getAccidental()+1];
 		}
 		return result;
