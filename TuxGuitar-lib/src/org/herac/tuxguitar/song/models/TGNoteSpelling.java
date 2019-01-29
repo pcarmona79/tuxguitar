@@ -1,4 +1,7 @@
 package org.herac.tuxguitar.song.models;
+
+import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
+
 /*
 	"A Mathematical Model Of Tonal Function", Robert T. Kelley, Lander University
 	http://www.robertkelleyphd.com/AMathematicalModelOfTonalFunction.pdf
@@ -36,10 +39,8 @@ public abstract class TGNoteSpelling {
 	private static int[] roots;
 	private int[] scale;
 	
-	// helper data TODO: leverage TGMeasureImpl.ACCIDENTAL_SHARP_NOTES / ACCIDENTAL_FLAT_NOTES
 	// when this logic is debugged
 	private static int[] accidentals = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
-	private static int[] notes = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
 	public TGNoteSpelling() {
@@ -51,6 +52,7 @@ public abstract class TGNoteSpelling {
 		if (roots == null)
 		{
 			// set the root note name for each key, to match keysignature
+			// aka diatonic distance from C
 			// e.g. key signature 0 is Cb, 1 is Gb so root 0 is C, root 1 is G
 			roots= new int[15];
 			int rootname = 0;
@@ -114,10 +116,10 @@ public abstract class TGNoteSpelling {
 		keysignature = initializeKey(keysignature);
 		
 		int keyPitchNumber = roots[keysignature];
-		//int keySemitone = semitones[keyPitchNumber] + scale[keyPitchNumber];
 		int keySemitone = semitones[keyPitchNumber] + scale[keyPitchNumber];
-		int newNoteSemitone = midiValue % 12; // c to b in semitones
-		int t1 = 0; // TODO:
+		int newNoteSemitone = midiValue % 12; // distance from C in semitones
+		int t1 = keySemitone;
+		int t2 = keyPitchNumber;
 		
 		// int key_accidental = scale[0];
 		// int interval = ((semitone + 12) - root) % 12; // distance in semitones
@@ -131,17 +133,20 @@ public abstract class TGNoteSpelling {
 		// is to be spelled as Db rather than C#
 
 		// (7·a-((((7·((a-t1) mod 12)+5) mod 12)-5)+7·t1-12·t2)) / 12
-		int newPitchNumber = (7*newNoteSemitone-((((7*((newNoteSemitone-t1) % 12)+5) % 12)-5)+7*t1-12*keyPitchNumber)) / 12;
+		int newPitchNumber = (7*newNoteSemitone-((((7*((newNoteSemitone-t1) +12 % 12)+5) % 12)-5)+7*t1-12*t2)) / 12;
 		
-		this.setSpelling(newPitchNumber,  scale[newPitchNumber]);
+		int thisOctave = (midiValue - newNoteSemitone)/12 - 1;
+
+		this.setSpelling(newPitchNumber,  scale[newPitchNumber], thisOctave);
 	}
 
-	public void setSpelling(int value) {
-		int temp = value % 12;
-		this.pitchNumber = notes[temp];
+	public void setSpelling(int midiValue) {
+		int temp =midiValue % 12;
+		// TODO: TGMeasureImpl.ACCIDENTAL_SHARP_NOTES / ACCIDENTAL_FLAT_NOTES
+		this.pitchNumber = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES[temp];
 		this.accidental = accidentals[temp];
-		this.midiValue = value;
-		this.octave = (value - temp)/12 - 1;
+		this.midiValue = midiValue;
+		this.octave = (midiValue - temp)/12 - 1;
 	}
 
 	public void setSpelling(int pitchNumber, int accidental) {
@@ -154,6 +159,14 @@ public abstract class TGNoteSpelling {
 		this.pitchNumber = pitchNumber;
 		this.accidental = accidental;
 		this.octave = octave;
+		
+		int[] notes;
+		if (this.keySignature >= 7) // translated above
+			notes = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES;
+		else
+			notes = TGMeasureImpl.ACCIDENTAL_FLAT_NOTES;
+
+		// I don't remember what this is supposed to do.
 		int value = (octave + 1) * 12;
 		// find the first natural note this matches
 		for (value = 0; value < notes.length; value++) {

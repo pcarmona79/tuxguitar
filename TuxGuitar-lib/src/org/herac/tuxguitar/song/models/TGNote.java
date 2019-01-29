@@ -38,17 +38,17 @@ public abstract class TGNote {
 
 	public TGNoteSpelling getSpelling() {
 		// if this has never been set, initialize with default setting
-		// TODO: get MIDI note value instead of value, which is effectively fret
 		if (spelling.getPitchNumber() < 0)
 		{
-			TGVoice voice = this.getVoice();
-			if (voice != null)
-			{
-			int keySignature = voice.getBeat().getMeasure().getKeySignature();
-			if (keySignature == 0)
-				spelling.setSpelling(this.value);
-			else 
-				spelling.setSpellingFromKey(this.value,  keySignature);
+			try {
+				int keySignature = this.getVoice().getBeat().getMeasure().getKeySignature();
+				// TODO: get MIDI note value instead of value, which is effectively fret
+				if (keySignature == 0)
+					spelling.setSpelling(this.value);
+				else 
+					spelling.setSpellingFromKey(this.value,  keySignature);
+			} catch(Exception e) {
+				// do nothing
 			}
 		}
 		return this.spelling;
