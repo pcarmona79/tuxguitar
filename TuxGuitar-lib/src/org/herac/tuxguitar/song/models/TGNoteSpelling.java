@@ -43,11 +43,17 @@ public abstract class TGNoteSpelling {
 	private static int[] accidentals = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
+	private static String[] keys = {
+			"ces","ges","des","aes","ees","bes",
+			"f", "c","g","d","a","e","b",
+			"fis","cis","gis","dis","ais","eis","bis"};
+	
 	public TGNoteSpelling() {
 		this.pitchNumber = -1; // undefined
 		this.accidental = 0; // none
 		this.keySignature = -1; // undefined
-		this.octave = 0;
+		this.octave = -1;
+		this.midiValue = -1;
 
 		if (roots == null)
 		{
@@ -65,15 +71,12 @@ public abstract class TGNoteSpelling {
 
 	public int fromString(String signature)
 	{
-		// ref initializeKey
-		int val = 0;
-		String[] keys = {"c","g","d","a","e","b","fis","cis","f","bes","ees","aes", "des", "ges","ces"};
+		int val = 7; // default: C major
 		for(int i = 0; i < keys.length; i++)
 		{
 			if (signature.toLowerCase() == keys[i])
 			{
-				// TODO fix this
-				val = i-7;
+				val = i;
 			}
 		}
 		
@@ -82,7 +85,7 @@ public abstract class TGNoteSpelling {
 	
 	private int initializeKey (int keysignature) {
 		// TuxGuitar keysignature 1 to 7 is number of sharps, 8 to 14 is (number of flats + 7)
-		// rearrange so these are in order Cb=0, C=7, C#=14 
+		// rearrange so these are in order Cb=0, C=7, C#=14 as in fromString()
 		if (keysignature <= 7)
 			keysignature = keysignature + 7;
 		else
@@ -186,6 +189,7 @@ public abstract class TGNoteSpelling {
 		return this.accidental;
 	}
 	
+	// TODO: move this into lilypond output, "fromSpelling()" or something like that.
 	public String toLilyPondString() {
 		String noteNames[] = { "c", "d", "e", "f", "g", "a", "b" };
 		String result = "";
@@ -208,7 +212,33 @@ public abstract class TGNoteSpelling {
 				result += "eses";
 				break;
 			}
+		} else {
+			// TODO: fallback logic, similar to getLilypondKey()
 		}
+		
+		if (this.midiValue>= 0)
+		{
+			// logic from getLilypondKey()
+			for(int i = 4; i < (this.midiValue / 12); i ++){
+				result += ("'");
+			}
+			for(int i = (this.midiValue / 12); i < 4; i ++){
+				result += (",");
+			}
+		}
+		else if(this.octave >= 0)
+		{
+			int t = this.octave;
+			while (t > 4) {
+				result += ("'");
+				t--;
+			}
+			while (t < 4) {
+				result += (",");
+				t++;
+			}
+		}
+		
 		return result;
 	}
 	
