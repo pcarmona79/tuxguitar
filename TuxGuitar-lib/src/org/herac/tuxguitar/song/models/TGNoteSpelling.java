@@ -55,9 +55,9 @@ public abstract class TGNoteSpelling {
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
 	private static String[] keys = {
-			"ces","ges","des","aes","ees","bes",
-			"f", "c","g","d","a","e","b",
-			"fis","cis","gis","dis","ais","eis","bis"};
+			"c","g","d","a","e","b","fis","cis",
+			"f","bes","ees","aes","des","ges","ces"};
+			//"gis","dis","ais","eis","bis"};
 	
 	public TGNoteSpelling() {
 		this.pitchNumber = -1; // undefined
@@ -82,16 +82,18 @@ public abstract class TGNoteSpelling {
 
 	public int fromString(String signature)
 	{
-		int val = 7; // default: C major
+		int keysignature = 0; // default: C major
 		for(int i = 0; i < keys.length; i++)
 		{
-			if (signature.toLowerCase() == keys[i])
+			if (signature.equalsIgnoreCase(keys[i]))
 			{
-				val = i;
+				keysignature = i;
+				break;
 			}
 		}
 		
-		return val;
+		initializeKey(keysignature);
+		return keysignature; // return TG value, not translated value
 	}
 	
 	private int initializeKey (int keysignature) {
@@ -115,7 +117,7 @@ public abstract class TGNoteSpelling {
 			// raise the seventh until we get to the right key
 			// starting with Fb -> F natural to go from Cb to Gb
 			int offset = 3; 
-			for ( int i = -7; i <= keysignature; i++) {
+			for ( int i = -7; i < keysignature; i++) {
 				scale[offset]++; // ACCIDENTAL_FLAT goes to ACCIDENTAL_NONE, which goes to ACCIDENTAL_SHARP
 				offset = (offset + 4) % 7;
 			}
@@ -153,7 +155,8 @@ public abstract class TGNoteSpelling {
 		keysignature = initializeKey(keysignature);
 	
 		int newNoteSemitone = midiValue % 12;
-		int thisOctave = (midiValue - newNoteSemitone)/12 - 1;
+		// octave s/b -1, but TG stores the sounding note, not written
+		int thisOctave = (midiValue - newNoteSemitone)/12; 
 		int tpc = (midiValue * 7 + 26 - (prefer + keysignature)) % 12 + (prefer + keysignature);
 		int newPitchNumber = steps[(tpc+1) % 7];
 		this.setSpelling(newPitchNumber,  scale[newPitchNumber], thisOctave);

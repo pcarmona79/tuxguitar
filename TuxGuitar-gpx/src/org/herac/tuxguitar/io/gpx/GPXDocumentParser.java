@@ -393,8 +393,10 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setBend(parseBend( gpNote ) );
 			tgNote.getEffect().setTremoloBar(parseTremoloBar( gpBeat ));
 			
-			tgNote.getSpelling().setSpellingFromKey(gpNote.getMidiNumber(), tgVoice.getBeat().getMeasure().getKeySignature());
-			
+			// gpNote.getMidiNumber() is only set when XML set it
+			int midiValue = (tgVoice.getBeat().getMeasure().getTrack().getString(tgNote.getString()).getValue() + tgNote.getValue()); 
+			tgNote.getSpelling().setSpellingFromKey(midiValue, tgVoice.getBeat().getMeasure().getKeySignature());
+
 			tgVoice.addNote( tgNote );
 		}
 	}

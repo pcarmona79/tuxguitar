@@ -124,8 +124,11 @@ public class GPXDocumentReader {
 						if( partSounding != null ){
 							TGNoteSpelling spelling = new TGFactory().newNoteSpelling();
 							String key = getChildNodeContent(partSounding, "NominalKey");
+							int transposition = getChildNodeIntegerContent(partSounding, "TranspositionPitch");
 							int keyValue = spelling.fromString(key);
-							// TODO: set key
+							// TODO: set key.  Seems to be in the GPXMasterBar
+							// transposition -1 is assumed, deal with anything else
+							// MasterBar // Key // AccidentalCount overrides this
 						}
 					} else if (this.version == GP7) {
 						Node midiConnectionNode = getChildNode(trackNode, "MidiConnection");
