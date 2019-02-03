@@ -5,8 +5,10 @@ import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
 /*
 	"A Mathematical Model Of Tonal Function", Robert T. Kelley, Lander University
 	http://www.robertkelleyphd.com/AMathematicalModelOfTonalFunction.pdf
+
+	The following notes from Kelley describe the numerical representation:
 	
-	Any tonal pitch or pitch class may be represented as an ordered triple of integers. We
+	"Any tonal pitch or pitch class may be represented as an ordered triple of integers. We
 	shall arbitrarily assign the ordered triple (0, 0, 0) to the pitch C4, or "middle C". The first
 	component of the ordered triple represents a measurement of distance in semitones away
 	from C4. Thus, the first integer in the ordered triple of the pitch D4 is 2, and F#3 is -6. The
@@ -16,10 +18,19 @@ import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
 	and 3, respectively. In other words, all "C"s have second component 0; all "D"s have second
 	component 1; all "E"s, 2, and so on through "B", which has second component 6. The first
 	two components of the ordered triple thus completely encapsulate the information required
-	to write a pitch in music notation, including how the pitch is spelled. *
+	to write a pitch in music notation, including how the pitch is spelled. *"
 
 	Brinkman (1986) uses this ordered pair notation for the computer representation of the diatonic 
 	spelling of a pitch 
+
+	That did not seem to work.  Replacing with ideas from MuseScore,GPL v2
+	https://github.com/musescore/MuseScore/blob/master/libmscore/pitchspelling.cpp
+	https://musescore.org/en/plugin-development/tonal-pitch-class-enum
+	
+	With the comment:
+    This file contains the implementation of an pitch spelling
+    algorithmus from Emilios Cambouropoulos as published in:
+    "Automatic Pitch Spelling: From Numbers to Sharps and Flats"
  */
 public abstract class TGNoteSpelling {
 
@@ -85,11 +96,13 @@ public abstract class TGNoteSpelling {
 	
 	private int initializeKey (int keysignature) {
 		// TuxGuitar keysignature 1 to 7 is number of sharps, 8 to 14 is (number of flats + 7)
-		// rearrange so these are in order Cb=0, C=7, C#=14 as in fromString()
+		// rearrange so these are in order Cb=-7, C=0, C#=7 TODO: see fromString()
 		if (keysignature <= 7)
 			keysignature = keysignature + 7;
 		else
 			keysignature = 14 - keysignature;
+		
+		keysignature -= 7; // MuseScore
 		
 		if (this.keySignature != keysignature)
 		{
@@ -102,7 +115,7 @@ public abstract class TGNoteSpelling {
 			// raise the seventh until we get to the right key
 			// starting with Fb -> F natural to go from Cb to Gb
 			int offset = 3; 
-			for ( int i = 1; i <= keysignature; i++) {
+			for ( int i = -7; i <= keysignature; i++) {
 				scale[offset]++; // ACCIDENTAL_FLAT goes to ACCIDENTAL_NONE, which goes to ACCIDENTAL_SHARP
 				offset = (offset + 4) % 7;
 			}
@@ -113,48 +126,52 @@ public abstract class TGNoteSpelling {
 		return keysignature;
 	}
 	
-	public void setSpellingFromKey(int midiValue, int keysignature) {
+	// MuseScore:
+	// enum class Prefer : char { FLATS=8, NEAREST=11, SHARPS=13 };
+	// int pitch2tpc(int pitch, Key key, Prefer prefer)
+    // {
+	//	return (pitch * 7 + 26 - (int(prefer) + int(key))) % 12 + (int(prefer) + int(key));
+	// }
+	// int tpc2step(int tpc)
+	//     {
+	//     // 14 - C
+	//     // 15 % 7 = 1
+    //                                            f  c  g  d  a  e  b
+	//     static const int steps[STEP_DELTA_OCTAVE] = { 3, 0, 4, 1, 5, 2, 6 };
+    // 	TODO: optimize -TCP_MIN
+	//     return steps[(tpc-Tpc::TPC_MIN) % STEP_DELTA_OCTAVE];
+    //	without a table, could also be rendered as:
+    //    return ((tpc-Tpc::TPC_MIN) * STEP_DELTA_TPC) / STEP_DELTA_OCTAVE + TPC_FIRST_STEP;
+	//     }
+	
+	public void setSpellingFromKey(int midiValue, int keysignature/*, int prefer*/) {
+		
+		int prefer = 11; // Prefer.NEAREST
+		final int steps[] = { 3, 0, 4, 1, 5, 2, 6 };
 		
 		// TuxGuitar key signature is translated to fit this logic
 		keysignature = initializeKey(keysignature);
-		
-		int keyPitchNumber = roots[keysignature];
-		int keySemitone = semitones[keyPitchNumber] + scale[keyPitchNumber];
-		int newNoteSemitone = midiValue % 12; // distance from C in semitones
-		int t1 = keySemitone;
-		int t2 = keyPitchNumber;
-		
-		// int key_accidental = scale[0];
-		// int interval = ((semitone + 12) - root) % 12; // distance in semitones
-		
-		// NOTE: Mod function as described expects (-3 Mod 12 = 9) so I added an extra "+12" in here
-
-		// Kelley: Because the ordered pair for the tonic, Bb, is (10, 6), we shall use the value
-		// 10 in place of the variable t1, and the value 6 in place of the variable t2. Then the
-		// value 1 replaces the variable a. After solving the equation using a little bit of
-		// arithmetic, the result is the ordered pair (1, 1), meaning that the pitch class 1
-		// is to be spelled as Db rather than C#
-
-		// (7·a-((((7·((a-t1) mod 12)+5) mod 12)-5)+7·t1-12·t2)) / 12
-		int newPitchNumber = (7*newNoteSemitone-((((7*((newNoteSemitone-t1) +12 % 12)+5) % 12)-5)+7*t1-12*t2)) / 12;
-		
+	
+		int newNoteSemitone = midiValue % 12;
 		int thisOctave = (midiValue - newNoteSemitone)/12 - 1;
-
+		int tpc = (midiValue * 7 + 26 - (prefer + keysignature)) % 12 + (prefer + keysignature);
+		int newPitchNumber = steps[(tpc+1) % 7];
 		this.setSpelling(newPitchNumber,  scale[newPitchNumber], thisOctave);
 	}
 
 	public void setSpelling(int midiValue) {
-		int temp =midiValue % 12;
-		// TODO: TGMeasureImpl.ACCIDENTAL_SHARP_NOTES / ACCIDENTAL_FLAT_NOTES
-		this.pitchNumber = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES[temp];
+		int temp = midiValue % 12;
+		
+		int[] notes;
+		if (this.keySignature >= 0) // translated above
+			notes = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES;
+		else
+			notes = TGMeasureImpl.ACCIDENTAL_FLAT_NOTES;
+		
+		this.pitchNumber = notes[temp];
 		this.accidental = accidentals[temp];
 		this.midiValue = midiValue;
 		this.octave = (midiValue - temp)/12 - 1;
-	}
-
-	public void setSpelling(int pitchNumber, int accidental) {
-		this.pitchNumber = pitchNumber;
-		this.accidental = accidental;
 	}
 
 	// Octave should represent MIDI octave, so setSpelling(0, 0, 4) would return 60
@@ -164,12 +181,12 @@ public abstract class TGNoteSpelling {
 		this.octave = octave;
 		
 		int[] notes;
-		if (this.keySignature >= 7) // translated above
+		if (this.keySignature >= 0) // translated above
 			notes = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES;
 		else
 			notes = TGMeasureImpl.ACCIDENTAL_FLAT_NOTES;
 
-		// I don't remember what this is supposed to do.
+		// TODO: calculate midi value.  Is that what this is supposed to do?
 		int value = (octave + 1) * 12;
 		// find the first natural note this matches
 		for (value = 0; value < notes.length; value++) {
