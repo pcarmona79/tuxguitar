@@ -33,6 +33,9 @@ public class GPXNote {
 	private boolean mutedEnabled;
 	private boolean palmMutedEnabled;
 	
+	private String step;
+	private String accidental;
+	
 	private boolean harmonic;
 	private int harmonicFret;
 	private String harmonicType;
@@ -58,6 +61,8 @@ public class GPXNote {
 		this.bendOriginValue = 0;
 		this.bendMiddleValue = 0;
 		this.bendDestinationValue = 0;
+		this.step = "";
+		this.accidental = "";
 	}
 	
 	public int getId() {
@@ -303,4 +308,21 @@ public class GPXNote {
 	public boolean isFadeIn() {
 		return this.fadeIn;
 	}
+	
+	public void setStep(String step) {
+		this.step =step;
+	}
+	
+	public String getStep() {
+		return this.step;
+	}
+	
+	public void setAccidental(String accidental) {
+		this.accidental =accidental;
+	}
+	
+	public String getAccidental() {
+		return this.accidental;
+	}
+	
 }

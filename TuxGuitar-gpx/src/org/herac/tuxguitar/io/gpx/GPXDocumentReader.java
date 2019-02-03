@@ -411,6 +411,15 @@ public class GPXDocumentReader {
 								if( propertyName.equals("Fret") ){
 									note.setFret( getChildNodeIntegerContent(propertyNode, "Fret") );
 								}
+								if( propertyName.equals("ConcertPitch") ){
+									Node pitchNode = getChildNode(propertyNode, "Pitch");
+									if (pitchNode != null)
+									{
+										note.setStep(getChildNodeContent(pitchNode, "Step")); 
+										note.setAccidental(getChildNodeContent(pitchNode, "Accidental")); 
+										note.setOctave(getChildNodeIntegerContent(pitchNode, "Octave")); 
+									}
+								}
 								if( propertyName.equals("Midi") ){
 									note.setMidiNumber( getChildNodeIntegerContent(propertyNode, "Number") );
 								}
