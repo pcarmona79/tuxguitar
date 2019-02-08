@@ -55,9 +55,14 @@ public abstract class TGNoteSpelling {
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
 	private static String[] keys = {
-			"c","g","d","a","e","b","fis","cis",
-			"f","bes","ees","aes","des","ges","ces"};
-			//"gis","dis","ais","eis","bis"};
+			// TuxGuitar order
+			//"c","g","d","a","e","b","fis","cis",//"gis","dis","ais","eis","bis"};
+			//"f","bes","ees","aes","des","ges","ces"};
+			// this order / MuseScore, note G# and later won't be used
+			"ces","ges","des","aes","ees","bes","f",
+			"c","g","d","a","e","b","fis",
+			"cis","gis","dis","ais","eis","bis"
+	};
 	
 	public TGNoteSpelling() {
 		this.pitchNumber = -1; // undefined
@@ -82,23 +87,48 @@ public abstract class TGNoteSpelling {
 
 	public int fromString(String signature)
 	{
+		// handle signatures not valid for TuxGuitar
+		switch(signature)
+		{
+		case "fes":
+			signature = "e";
+			break;
+		case "gis":
+			signature = "aes";
+			break;
+		case "dis":
+			signature = "ees";
+			break;
+		case "ais":
+			signature = "ges";
+			break;
+		case "eis":
+			signature = "f";
+			break;
+		case "bis":
+			signature = "c";
+			break;
+		}
+		
 		int keysignature = 0; // default: C major
 		for(int i = 0; i < keys.length; i++)
 		{
 			if (signature.equalsIgnoreCase(keys[i]))
 			{
-				keysignature = i;
+				keysignature = i - 7;
 				break;
 			}
 		}
 		
 		initializeKey(keysignature);
-		return keysignature; // return TG value, not translated value
+		return keysignature; // return translated value
 	}
 	
 	private int initializeKey (int keysignature) {
 		// TuxGuitar keysignature 1 to 7 is number of sharps, 8 to 14 is (number of flats + 7)
-		// rearrange so these are in order Cb=-7, C=0, C#=7 TODO: see fromString()
+		// rearrange so these are in order Cb=-7, C=0, C#=7
+		// Tuxguitar leaves out G#, D#, A#, E#, B#, and Fb 
+		// but you can do enharmonic spellings to get all of them
 		if (keysignature <= 7)
 			keysignature = keysignature + 7;
 		else
