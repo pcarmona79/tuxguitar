@@ -54,10 +54,12 @@ public abstract class TGNoteSpelling {
 	private static int[] accidentals = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
-	private static String[] keys = {
+	private static String[] tuxGuitarKeys = {
 			// TuxGuitar order
-			//"c","g","d","a","e","b","fis","cis",//"gis","dis","ais","eis","bis"};
-			//"f","bes","ees","aes","des","ges","ces"};
+			"c","g","d","a","e","b","fis","cis",//"gis","dis","ais","eis","bis"};
+			"f","bes","ees","aes","des","ges","ces"};
+	
+	private static String[] keys = {
 			// this order / MuseScore, note G# and later won't be used
 			"ces","ges","des","aes","ees","bes","f",
 			"c","g","d","a","e","b","fis",
@@ -87,6 +89,15 @@ public abstract class TGNoteSpelling {
 
 	public int fromString(String signature)
 	{
+		if (signature.endsWith("#"))
+			signature = signature.replace("#", "is");
+		else if (signature.length()> 1 && signature.endsWith("b"))
+			signature = signature.replace("b", "es");
+		else if (signature.codePointAt(signature.length() - 1) == 0x266d)
+			signature = signature.substring(0, 1).concat("es");
+		else if (signature.codePointAt(signature.length() - 1) == 0x266f)
+			signature = signature.substring(0, 1).concat("is");
+		
 		// handle signatures not valid for TuxGuitar
 		switch(signature)
 		{
@@ -111,11 +122,10 @@ public abstract class TGNoteSpelling {
 		}
 		
 		int keysignature = 0; // default: C major
-		for(int i = 0; i < keys.length; i++)
+		for(int i = 0; i < tuxGuitarKeys.length; i++)
 		{
-			if (signature.equalsIgnoreCase(keys[i]))
+			if (signature.equalsIgnoreCase(tuxGuitarKeys[i]))
 			{
-				keysignature = i - 7;
 				break;
 			}
 		}
