@@ -131,8 +131,10 @@ public abstract class TGNoteSpelling {
 			}
 		}
 		
-		initializeKey(keysignature);
-		return keysignature; // return translated value
+		// translate
+		keysignature = initializeKey(keysignature);
+		// return translated value
+		return keysignature; 
 	}
 	
 	private int initializeKey (int keysignature) {
@@ -181,7 +183,6 @@ public abstract class TGNoteSpelling {
 	//     // 15 % 7 = 1
     //                                            f  c  g  d  a  e  b
 	//     static const int steps[STEP_DELTA_OCTAVE] = { 3, 0, 4, 1, 5, 2, 6 };
-    // 	TODO: optimize -TCP_MIN
 	//     return steps[(tpc-Tpc::TPC_MIN) % STEP_DELTA_OCTAVE];
     //	without a table, could also be rendered as:
     //    return ((tpc-Tpc::TPC_MIN) * STEP_DELTA_TPC) / STEP_DELTA_OCTAVE + TPC_FIRST_STEP;
