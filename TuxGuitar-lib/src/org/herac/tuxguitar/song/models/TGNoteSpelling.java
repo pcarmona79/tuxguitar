@@ -126,6 +126,7 @@ public abstract class TGNoteSpelling {
 		{
 			if (signature.equalsIgnoreCase(tuxGuitarKeys[i]))
 			{
+				keysignature = i;
 				break;
 			}
 		}
