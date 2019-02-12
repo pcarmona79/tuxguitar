@@ -34,11 +34,11 @@ import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
  */
 public abstract class TGNoteSpelling {
 
-	final public int ACCIDENTAL_NONE = 0;
-	final public int ACCIDENTAL_SHARP = 1;
-	final public int ACCIDENTAL_DOUBLESHARP = 2;
-	final public int ACCIDENTAL_FLAT = -1;
-	final public int ACCIDENTAL_DOUBLEFLAT = -2;
+	public static int ACCIDENTAL_NONE = 0;
+	public static int ACCIDENTAL_SHARP = 1;
+	public static int ACCIDENTAL_DOUBLESHARP = 2;
+	public static int ACCIDENTAL_FLAT = -1;
+	public static int ACCIDENTAL_DOUBLEFLAT = -2;
 	
 	// Spelling
 	private int pitchNumber;   // C=0, B=6, -1 is undefined (default)
