@@ -34,11 +34,11 @@ import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
  */
 public abstract class TGNoteSpelling {
 
-	public static int ACCIDENTAL_NONE = 0;
-	public static int ACCIDENTAL_SHARP = 1;
-	public static int ACCIDENTAL_DOUBLESHARP = 2;
-	public static int ACCIDENTAL_FLAT = -1;
-	public static int ACCIDENTAL_DOUBLEFLAT = -2;
+	final public static int ACCIDENTAL_NONE = 0;
+	final public static int ACCIDENTAL_SHARP = 1;
+	final public static int ACCIDENTAL_DOUBLESHARP = 2;
+	final public static int ACCIDENTAL_FLAT = -1;
+	final public static int ACCIDENTAL_DOUBLEFLAT = -2;
 	
 	// Spelling
 	private int pitchNumber;   // C=0, B=6, -1 is undefined (default)
@@ -252,6 +252,7 @@ public abstract class TGNoteSpelling {
 	}
 	
 	// TODO: move this into lilypond output, "fromSpelling()" or something like that.
+	// That loses access to private variables.  May be best to keep it here.
 	public String toLilyPondString() {
 		String noteNames[] = { "c", "d", "e", "f", "g", "a", "b" };
 		String result = "";
