@@ -221,13 +221,16 @@ public abstract class TGNoteSpelling {
 		int temp = midiValue % 12;
 		
 		int[] notes;
-		if (this.keySignature >= 0) // translated above
+		// keySignature is translated above
+		if (this.keySignature >= 0) {
 			notes = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES;
-		else
+			this.accidental = accidentals[temp];
+		} else {
 			notes = TGMeasureImpl.ACCIDENTAL_FLAT_NOTES;
+			this.accidental = 0- accidentals[temp];
+		}
 		
 		this.pitchNumber = notes[temp];
-		this.accidental = accidentals[temp];
 		this.midiValue = midiValue;
 		this.octave = (midiValue - temp)/12 - 1;
 	}
