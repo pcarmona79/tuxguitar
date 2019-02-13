@@ -440,7 +440,8 @@ public class GP5InputStream extends GTPInputStream {
 		if ((flags & 0x08) != 0) {
 			readNoteEffects(note.getEffect());
 		}
-		note.getSpelling().setSpellingFromKey(note.getValue(), this.keySignature);
+		int midiValue = string.getValue() + note.getValue(); 
+		note.getSpelling().setSpellingFromKey(midiValue, this.keySignature);
 		return note;
 	}
 	

@@ -232,7 +232,7 @@ public abstract class TGNoteSpelling {
 		
 		this.pitchNumber = notes[temp];
 		this.midiValue = midiValue;
-		this.octave = (midiValue - temp)/12 - 1;
+		this.octave = (midiValue - temp)/12;
 	}
 
 	// Octave should represent MIDI octave, so setSpelling(0, 0, 4) would return 60
