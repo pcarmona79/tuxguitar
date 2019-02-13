@@ -201,7 +201,20 @@ public abstract class TGNoteSpelling {
 		int thisOctave = (midiValue - newNoteSemitone)/12; 
 		int tpc = (midiValue * 7 + 26 - (prefer + keysignature)) % 12 + (prefer + keysignature);
 		int newPitchNumber = steps[(tpc+1) % 7];
-		this.setSpelling(newPitchNumber,  scale[newPitchNumber], thisOctave);
+		this.midiValue = midiValue;
+		
+		int accidental = 0;
+		
+		while ((semitones[newPitchNumber] + accidental) > newNoteSemitone)
+		{
+			accidental--;
+		}
+		while ((semitones[newPitchNumber] + accidental) < newNoteSemitone)
+		{
+			accidental++;
+		}
+		
+		this.setSpelling(newPitchNumber,  accidental, thisOctave);
 	}
 
 	public void setSpelling(int midiValue) {
