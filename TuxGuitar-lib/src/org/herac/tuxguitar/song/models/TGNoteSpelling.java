@@ -99,27 +99,18 @@ public abstract class TGNoteSpelling {
 			signature = signature.substring(0, 1).concat("is");
 		
 		// handle signatures not valid for TuxGuitar
-		switch(signature)
-		{
-		case "fes":
+		if (signature == "fes")
 			signature = "e";
-			break;
-		case "gis":
+		else if (signature == "gis")
 			signature = "aes";
-			break;
-		case "dis":
+		else if (signature == "dis")
 			signature = "ees";
-			break;
-		case "ais":
+		else if (signature == "ais")
 			signature = "ges";
-			break;
-		case "eis":
+		else if (signature == "eis")
 			signature = "f";
-			break;
-		case "bis":
+		else if (signature == "bis")
 			signature = "c";
-			break;
-		}
 		
 		int keysignature = 0; // default: C major
 		for(int i = 0; i < tuxGuitarKeys.length; i++)
