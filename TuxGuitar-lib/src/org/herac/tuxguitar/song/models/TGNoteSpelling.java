@@ -268,7 +268,6 @@ public abstract class TGNoteSpelling {
 	}
 	
 	// TODO: move this into lilypond output, "fromSpelling()" or something like that.
-	// That loses access to private variables.  May be best to keep it here.
 	public String toLilyPondString() {
 		String noteNames[] = { "c", "d", "e", "f", "g", "a", "b" };
 		String result = "";
@@ -292,7 +291,12 @@ public abstract class TGNoteSpelling {
 				break;
 			}
 		} else {
-			// TODO: fallback logic, similar to getLilypondKey()
+				final String[] LILYPOND_SHARP_NOTES = new String[]{"c","cis","d","dis","e","f","fis","g","gis","a","ais","b"};
+				final String[] LILYPOND_FLAT_NOTES = new String[]{"c","des","d","ees","e","f","ges","g","aes","a","bes","b"};
+				
+				// logic from getLilypondKey()
+				String[] LILYPOND_NOTES = (keySignature >= 0 ? LILYPOND_SHARP_NOTES : LILYPOND_FLAT_NOTES );
+				result = (LILYPOND_NOTES[ this.midiValue % 12 ]);
 		}
 		
 		if (this.midiValue>= 0)
