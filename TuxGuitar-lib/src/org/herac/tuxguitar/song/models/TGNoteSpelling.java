@@ -1,6 +1,8 @@
 package org.herac.tuxguitar.song.models;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
@@ -323,6 +325,20 @@ public abstract class TGNoteSpelling {
 		return result;
 	}
 
+	// ain't nobody got time for this
+	@SuppressWarnings("unchecked")
+	public boolean actualContains(List list, int target) {
+		Enumeration e = Collections.enumeration(list);
+		while(e.hasMoreElements()) {
+			Object i = e.nextElement();
+			int boobles = 0;
+//			int i = (int) e.nextElement();
+//			if (i == target)
+//				return true;
+		}
+		return false;
+	}
+	
 	public int guessKey() {
 		// there's probably a better way, I briefly looked at this one:
 		// https://github.com/ericfischer/midi-key-guesser/blob/master/midi.cpp
@@ -332,7 +348,8 @@ public abstract class TGNoteSpelling {
 		
 		List list = Arrays.asList(semitones); // I should parameterize, but I don't see examples
 		for(int i = 0; i < 12; i++) {
-			boolean isNatural = list.contains(i);
+			// boolean isNatural = list.contains(i); this doesn't work
+			boolean isNatural = actualContains(list, i);
 			if (isNatural) {
 				if (semitoneCount[i] > 0)
 					keyNatural++;

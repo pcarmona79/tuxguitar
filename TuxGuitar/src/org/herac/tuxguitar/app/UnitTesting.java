@@ -17,7 +17,8 @@ public class UnitTesting {
 	};
 	
 	private static String[] expectedNotes = {
-			// not sure why gis is the result for key of C
+			// gis is the result for key of C, likely because in A minor G# is the harmonic 7th
+			// otherwise favor sharps with a key signature of sharps, flats for flats.
 			"gis'", "gis'", "gis'", "gis'", "gis'", "gis'", "gis'", "gis'",
 			"aes'", "aes'", "aes'", "aes'", "aes'", "aes'", "aes'"
 	};
@@ -43,6 +44,14 @@ public class UnitTesting {
 				if (!result.equals(expectedNotes[i]))
 					throw new Exception();
 			}
+			
+			// start over
+			spelling = new TGFactory().newNoteSpelling();
+			spelling.setSpelling(60); // c
+			spelling.setSpelling(66); // f#
+			int key = spelling.guessKey();
+			if (key != 1)
+				throw new Exception();
 			
 		} catch (Throwable e) {
 			e.printStackTrace();
