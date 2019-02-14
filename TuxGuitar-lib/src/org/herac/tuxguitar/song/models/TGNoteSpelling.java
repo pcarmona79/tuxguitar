@@ -1,5 +1,8 @@
 package org.herac.tuxguitar.song.models;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
 
 /*
@@ -50,7 +53,9 @@ public abstract class TGNoteSpelling {
 	private static int[] roots;
 	private int[] scale;
 	
-	// when this logic is debugged
+	// for key guessing
+	private static int[] semitoneCount = new int[12];
+	
 	private static int[] accidentals = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
 	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
@@ -188,6 +193,8 @@ public abstract class TGNoteSpelling {
 		keysignature = initializeKey(keysignature);
 	
 		int newNoteSemitone = midiValue % 12;
+		semitoneCount[newNoteSemitone]++;
+		
 		// octave s/b -1, but TG stores the sounding note, not written
 		int thisOctave = (midiValue - newNoteSemitone)/12; 
 		int tpc = (midiValue * 7 + 26 - (prefer + keysignature)) % 12 + (prefer + keysignature);
@@ -209,21 +216,22 @@ public abstract class TGNoteSpelling {
 	}
 
 	public void setSpelling(int midiValue) {
-		int temp = midiValue % 12;
+		int newNoteSemitone = midiValue % 12;
+		semitoneCount[newNoteSemitone]++;
 		
 		int[] notes;
 		// keySignature is translated above
 		if (this.keySignature >= 0) {
 			notes = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES;
-			this.accidental = accidentals[temp];
+			this.accidental = accidentals[newNoteSemitone];
 		} else {
 			notes = TGMeasureImpl.ACCIDENTAL_FLAT_NOTES;
-			this.accidental = 0- accidentals[temp];
+			this.accidental = 0- accidentals[newNoteSemitone];
 		}
 		
-		this.pitchNumber = notes[temp];
+		this.pitchNumber = notes[newNoteSemitone];
 		this.midiValue = midiValue;
-		this.octave = (midiValue - temp)/12;
+		this.octave = (midiValue - newNoteSemitone)/12;
 	}
 
 	// Octave should represent MIDI octave, so setSpelling(0, 0, 4) would return 60
@@ -238,14 +246,13 @@ public abstract class TGNoteSpelling {
 		else
 			notes = TGMeasureImpl.ACCIDENTAL_FLAT_NOTES;
 
-		// TODO: calculate midi value.  Is that what this is supposed to do?
 		int value = (octave + 1) * 12;
 		// find the first natural note this matches
 		for (value = 0; value < notes.length; value++) {
 			if ( pitchNumber == notes[value] /* and accidental[value] == 0 */)
 				break;
 		}
-		// adjust
+		// ... and adjust
 		value += accidental;
 		return value;
 	}
@@ -314,6 +321,70 @@ public abstract class TGNoteSpelling {
 		}
 		
 		return result;
+	}
+
+	public int guessKey() {
+		// there's probably a better way, I briefly looked at this one:
+		// https://github.com/ericfischer/midi-key-guesser/blob/master/midi.cpp
+		int keyNatural = 0;
+		int keyAccidental = 0;
+		int tuxGuitarKey = 0; // default C
+		
+		List list = Arrays.asList(semitones); // I should parameterize, but I don't see examples
+		for(int i = 0; i < 12; i++) {
+			boolean isNatural = list.contains(i);
+			if (isNatural) {
+				if (semitoneCount[i] > 0)
+					keyNatural++;
+			} else {
+				if (semitoneCount[i] > 0)
+					keyAccidental++;
+			}
+		}
+		
+		if (keyAccidental > 0) {
+			// there might be a few accidentals and still be in C, 
+			// but zero accidentals is definitely C
+			// this is brute force, there should be an algorithm for this
+			// also maybe we should count more F# than F is key of G, 
+			// more Bb than B is F, and branch the options from there
+			int temp = semitoneCount[6] - semitoneCount[10];
+			if (temp == 0)
+				tuxGuitarKey = 0; // zero or equal sharps/flats
+			else {
+				if (temp > 0)
+					tuxGuitarKey = 1; // g
+				else {
+					tuxGuitarKey = 8; // f
+				}
+				
+				temp = semitoneCount[1] - semitoneCount[3];
+				if (temp != 0)
+				{
+					if (temp > 0)
+						tuxGuitarKey = 2; // d
+					else if(temp < 0)
+						tuxGuitarKey = 8; // Bb
+						
+					// this one's tricky. A has 3 sharps incl. G#, Eb has 3 flats incl. Ab
+					// is this the algorithm?  Just add one if these aren't equal?
+					// add 7 and subtract 7, mod 12?
+					temp = semitoneCount[8] - semitoneCount[8];
+					if (temp != 0)
+					{
+						if (tuxGuitarKey == 2)
+							tuxGuitarKey = 3; // d
+						else if(tuxGuitarKey == 8){
+							tuxGuitarKey = 9;
+						}
+					}
+				}
+				
+			}
+		}
+
+		// convert to TG key scale
+		return 0;
 	}
 	
 	public String toString() {
