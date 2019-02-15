@@ -51,22 +51,22 @@ public abstract class TGNoteSpelling {
 	private int octave;     // octave 4 = C4 = midi note 60
 	private int midiValue;
 
-	private int keySignature; // translated
+	private int keySignature; // translated from tuxguitar to musescore
 	private static int[] roots;
 	private int[] scale;
 	
 	// for key guessing
 	private static int[] semitoneCount = new int[12];
 	
-	private static int[] accidentals = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
-	private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
+	final private static int[] accidentals = { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
+	final private static int[] semitones = { 0, 2, 4, 5, 7, 9, 11 };
 
-	private static String[] tuxGuitarKeys = {
+	final private static String[] tuxGuitarKeys = {
 			// TuxGuitar order
 			"c","g","d","a","e","b","fis","cis",//"gis","dis","ais","eis","bis"};
 			"f","bes","ees","aes","des","ges","ces"};
 	
-	private static String[] keys = {
+	final private static String[] keys = {
 			// this order / MuseScore, note G# and later won't be used
 			"ces","ges","des","aes","ees","bes","f",
 			"c","g","d","a","e","b","fis",
@@ -325,8 +325,22 @@ public abstract class TGNoteSpelling {
 		return result;
 	}
 
+	
+	public String toString() {
+		String noteNames[] = { "C", "D", "E", "F", "G", "A", "B" };
+		String accidentals[] =  { "b", "", "#" };
+		String result = "";
+		if (pitchNumber >= 0){
+			result += noteNames[getPitchNumber()];
+			result += accidentals[getAccidental()+1];
+		}
+		return result;
+	}
+	
+	// static methods
+	
 	// ain't nobody got time for this
-	public boolean actualContains(int[] list, int target) {
+	public static boolean actualContains(int[] list, int target) {
 		for(int i = 0; i < list.length; i++) {
 			if (list[i] == target)
 				return true;
@@ -334,11 +348,11 @@ public abstract class TGNoteSpelling {
 		return false;
 	}
 
-	public void resetKey() {
+	public static void resetKey() {
 		semitoneCount = new int[12];
 	}
 	
-	public int guessKey() {
+	public static int guessKey() {
 		// there's probably a better way, I briefly looked at this one:
 		// https://github.com/ericfischer/midi-key-guesser/blob/master/midi.cpp
 		int keyNatural = 0;
@@ -400,16 +414,5 @@ public abstract class TGNoteSpelling {
 		}
 
 		return tuxGuitarKey;
-	}
-	
-	public String toString() {
-		String noteNames[] = { "C", "D", "E", "F", "G", "A", "B" };
-		String accidentals[] =  { "b", "", "#" };
-		String result = "";
-		if (pitchNumber >= 0){
-			result += noteNames[getPitchNumber()];
-			result += accidentals[getAccidental()+1];
-		}
-		return result;
 	}
 }
