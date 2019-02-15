@@ -326,15 +326,10 @@ public abstract class TGNoteSpelling {
 	}
 
 	// ain't nobody got time for this
-	@SuppressWarnings("unchecked")
-	public boolean actualContains(List list, int target) {
-		Enumeration e = Collections.enumeration(list);
-		while(e.hasMoreElements()) {
-			Object i = e.nextElement();
-			int boobles = 0;
-//			int i = (int) e.nextElement();
-//			if (i == target)
-//				return true;
+	public boolean actualContains(int[] list, int target) {
+		for(int i = 0; i < list.length; i++) {
+			if (list[i] == target)
+				return true;
 		}
 		return false;
 	}
@@ -346,10 +341,10 @@ public abstract class TGNoteSpelling {
 		int keyAccidental = 0;
 		int tuxGuitarKey = 0; // default C
 		
-		List list = Arrays.asList(semitones); // I should parameterize, but I don't see examples
 		for(int i = 0; i < 12; i++) {
+			// List list = Arrays.asList(semitones); 
 			// boolean isNatural = list.contains(i); this doesn't work
-			boolean isNatural = actualContains(list, i);
+			boolean isNatural = actualContains(semitones, i);
 			if (isNatural) {
 				if (semitoneCount[i] > 0)
 					keyNatural++;
@@ -381,7 +376,7 @@ public abstract class TGNoteSpelling {
 					if (temp > 0)
 						tuxGuitarKey = 2; // d
 					else if(temp < 0)
-						tuxGuitarKey = 8; // Bb
+						tuxGuitarKey = 9; // Bb
 						
 					// this one's tricky. A has 3 sharps incl. G#, Eb has 3 flats incl. Ab
 					// is this the algorithm?  Just add one if these aren't equal?
@@ -389,10 +384,10 @@ public abstract class TGNoteSpelling {
 					temp = semitoneCount[8] - semitoneCount[8];
 					if (temp != 0)
 					{
-						if (tuxGuitarKey == 2)
-							tuxGuitarKey = 3; // d
-						else if(tuxGuitarKey == 8){
-							tuxGuitarKey = 9;
+						if (tuxGuitarKey == 3)
+							tuxGuitarKey = 3;
+						else if(tuxGuitarKey == 10){
+							tuxGuitarKey = 10;
 						}
 					}
 				}
@@ -400,8 +395,7 @@ public abstract class TGNoteSpelling {
 			}
 		}
 
-		// convert to TG key scale
-		return 0;
+		return tuxGuitarKey;
 	}
 	
 	public String toString() {
