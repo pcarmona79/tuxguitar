@@ -8,6 +8,8 @@ public class PTNote{
 	private boolean dead;
 	private boolean hammer;
 	private boolean slide;
+	private boolean pulloff;
+	private boolean harmonic;
 	
 	public PTNote(){
 		super();
@@ -59,6 +61,22 @@ public class PTNote{
 	
 	public void setHammer(boolean hammer) {
 		this.hammer = hammer;
+	}
+	
+	public boolean IsPullOff() {
+		return this.pulloff;
+	}
+	
+	public void setPullOff(boolean pulloff) {
+		this.pulloff = pulloff;
+	}
+	
+	public boolean IsHarmonic() {
+		return this.harmonic;
+	}
+	
+	public void setHarmonic(boolean harmonic) {
+		this.harmonic = harmonic;
 	}
 	
 	public boolean isSlide() {

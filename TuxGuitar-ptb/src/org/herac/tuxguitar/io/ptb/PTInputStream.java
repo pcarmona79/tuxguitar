@@ -340,8 +340,12 @@ public class PTInputStream implements TGSongReader{
 		}
 		note.setValue(position & 0x1f);
 		note.setString(((position & 0xe0) >> 5) + 1);
+		// ref ptparser 1.1.2 source, note.h
 		note.setTied((simpleData & 0x01) != 0);
-		note.setDead((simpleData & 0x02) != 0);
+		note.setDead((simpleData & 0x02) != 0); // actually muted
+		note.setHammer((simpleData & 0x08) != 0);
+		note.setPullOff((simpleData & 0x10) != 0);
+		note.setHarmonic((simpleData & 0x40) != 0);
 		beat.addNote(note);
 	}
 	

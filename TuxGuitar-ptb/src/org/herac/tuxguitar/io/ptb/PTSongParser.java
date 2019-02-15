@@ -28,6 +28,7 @@ import org.herac.tuxguitar.song.models.TGStroke;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 
 public class PTSongParser {
 	
@@ -221,10 +222,17 @@ public class PTSongParser {
 				note.setValue(ptNote.getValue());
 				note.setTiedNote( ptNote.isTied() );
 				note.getEffect().setVibrato( beat.isVibrato() );
-				note.getEffect().setDeadNote( ptNote.isDead() );
+				note.getEffect().setPalmMute( ptNote.isDead() );
 				note.getEffect().setHammer( ptNote.isHammer() );
+				//note.getEffect().set( ptNote.IsPullOff()() );
 				note.getEffect().setSlide( ptNote.isSlide() );
 				note.getEffect().setBend( makeBend(ptNote.getBend()));
+				
+				if (ptNote.IsHarmonic()) {
+					// ptab only has one type apparently
+					TGEffectHarmonic harmonic =this.manager.getFactory().newEffectHarmonic();
+					harmonic.setType(TGEffectHarmonic.TYPE_NATURAL);
+				}
 				tgVoice.addNote(note);
 			}
 		}
