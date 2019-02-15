@@ -46,7 +46,7 @@ public class UnitTesting {
 			}
 			
 			// start over
-			spelling = new TGFactory().newNoteSpelling();
+			spelling.resetKey();
 			spelling.setSpelling(60); // c
 			spelling.setSpelling(66); // f#
 			int key = spelling.guessKey();

@@ -333,6 +333,10 @@ public abstract class TGNoteSpelling {
 		}
 		return false;
 	}
+
+	public void resetKey() {
+		semitoneCount = new int[12];
+	}
 	
 	public int guessKey() {
 		// there's probably a better way, I briefly looked at this one:
