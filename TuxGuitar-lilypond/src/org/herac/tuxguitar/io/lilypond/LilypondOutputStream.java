@@ -14,6 +14,7 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGNoteEffect;
+import org.herac.tuxguitar.song.models.TGNoteSpelling;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGStroke;
@@ -332,7 +333,10 @@ public class LilypondOutputStream {
 			this.addClef(measure.getClef(),indent);
 		}
 		if(previous == null || measure.getKeySignature() != previous.getKeySignature()){
-			this.addKeySignature(measure.getKeySignature(),indent);
+			// TODO: allow users to enter a key signature in the ui
+			// or allow users to check a "guess signature" box
+			this.addKeySignature(TGNoteSpelling.guessKey(),indent);
+			//this.addKeySignature(measure.getKeySignature(),indent);
 		}
 		
 		if(previous == null || !measure.getTimeSignature().isEqual(previous.getTimeSignature())){
@@ -649,14 +653,14 @@ public class LilypondOutputStream {
 		if( effect.isGhostNote() ){
 			this.writer.print("\\parenthesize ");
 		}
-		if( effect.isBend() ){
-			this.writer.print("\\bendAfter #+6 ");
-		}
 	}
 	
 	private void addEffectsOnNote(TGNoteEffect effect){
 		if( effect.isHarmonic() ){
 			this.writer.print("\\harmonic");
+		}
+		if( effect.isBend() ){
+			this.writer.print(" \\bendAfter #+6 ");
 		}
 	}
 	
