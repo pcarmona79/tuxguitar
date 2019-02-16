@@ -42,11 +42,12 @@ public abstract class TGNote {
 		{
 			try {
 				int keySignature = this.getVoice().getBeat().getMeasure().getKeySignature();
-				// TODO: get MIDI note value instead of value, which is effectively fret
+				int midiValue = (this.getVoice().getBeat().getMeasure().getTrack().getString(this.getString()).getValue() + this.getValue()); 
+				
 				if (keySignature == 0)
-					spelling.setSpelling(this.value);
+					spelling.setSpelling(midiValue);
 				else 
-					spelling.setSpellingFromKey(this.value,  keySignature);
+					spelling.setSpellingFromKey(midiValue,  keySignature);
 			} catch(Exception e) {
 				// do nothing
 			}
