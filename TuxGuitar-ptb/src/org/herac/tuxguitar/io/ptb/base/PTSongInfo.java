@@ -9,6 +9,7 @@ public class PTSongInfo {
 	private int year;
 	private int style;
 	private int level;
+	private int keysignature;
 	private boolean liveRecording;
 	private String name;
 	private String interpret;
@@ -202,6 +203,14 @@ public class PTSongInfo {
 	
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public int getKeySignature() {
+		return this.keysignature;
+	}
+	
+	public void setKeysignature(int keysignature) {
+		this.keysignature = keysignature;
 	}
 	
 	public void copy( PTSongInfo info ){

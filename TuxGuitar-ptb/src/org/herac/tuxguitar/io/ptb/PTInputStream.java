@@ -286,9 +286,14 @@ public class PTInputStream implements TGSongReader{
 		readByte();
 		
 		int data1 = readByte();
-		readByte();
+		int data2 = readByte(); // this seems to be palm mute
 		int data3 = readByte();
 		int durationValue = readByte();
+		
+		// ref simpleFlags in position.h
+		// this seems to be palm mute
+		//if (data2 & 0x2000 == 0x2000)
+			//this.
 		
 		int multiBarRest = 1;
 		int complexCount = readByte();
@@ -331,21 +336,34 @@ public class PTInputStream implements TGSongReader{
 		int simpleData = readShort();
 		int symbolCount = readByte();
 		for (int i = 0; i < symbolCount; i++) {
-			readByte();
-			readByte();
-			int data3 = readByte();
-			int data4 = readByte();
-			note.setBend((data4 == 101)?((data3 / 16) + 1):0);
-			note.setSlide((data4 == 100));
+			int data1 = readByte();
+			int data2 = readByte();
+			int type = readByte();
+			int symbolType = readByte();
+			//
+			String sf1=String.format("%d %d %d %d %d %d %d",
+					position, simpleData, symbolCount,
+					data1, data2, type, symbolType);
+			System.out.println(sf1);
+			//
+			note.setBend((symbolType == 101)?((type / 16) + 1):0);
+			note.setSlide((symbolType == 100));
 		}
+		
+		String sf1=String.format("%d %d %d", position, simpleData, symbolCount);
+		System.out.println(sf1);
+		
 		note.setValue(position & 0x1f);
 		note.setString(((position & 0xe0) >> 5) + 1);
-		// ref ptparser 1.1.2 source, note.h
 		note.setTied((simpleData & 0x01) != 0);
-		note.setDead((simpleData & 0x02) != 0); // actually muted
-		note.setHammer((simpleData & 0x08) != 0);
-		note.setPullOff((simpleData & 0x10) != 0);
-		note.setHarmonic((simpleData & 0x40) != 0);
+		// for debugging
+		if ((position & 0x1f) == 1)
+		{
+			note.setDead((simpleData & 0x02) != 0); // actually muted
+			note.setHammer((simpleData & 0x08) != 0);
+			note.setPullOff((simpleData & 0x10) != 0);
+			note.setHarmonic((simpleData & 0x40) != 0);
+		}
 		beat.addNote(note);
 	}
 	
@@ -358,7 +376,8 @@ public class PTInputStream implements TGSongReader{
 	}
 	
 	private void readKeySignature(){
-		readByte();
+		int i = readByte();
+		this.song.getInfo().setKeysignature(i & 0x0f);
 	}
 	
 	private void readBarLine(PTSection section){

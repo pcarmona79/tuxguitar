@@ -34,6 +34,7 @@ public class PTSongParser {
 	
 	private TGSongManager manager;
 	private TrackHelper helper;
+	private int keysignature;
 	
 	public PTSongParser(TGFactory factory){
 		this.manager = new TGSongManager(factory);
@@ -94,6 +95,7 @@ public class PTSongParser {
 			}
 			tgSong.setComments( comments );
 		}
+		this.keysignature = info.getKeySignature();
 	}
 	
 	private void parseTrack(TGSong tgSong, PTTrack track){
@@ -222,7 +224,8 @@ public class PTSongParser {
 				note.setValue(ptNote.getValue());
 				note.setTiedNote( ptNote.isTied() );
 				note.getEffect().setVibrato( beat.isVibrato() );
-				note.getEffect().setPalmMute( ptNote.isDead() );
+				note.getEffect().setDeadNote(ptNote.isDead() );
+				//note.getEffect().setPalmMute(palmMute);
 				note.getEffect().setHammer( ptNote.isHammer() );
 				//note.getEffect().set( ptNote.IsPullOff()() );
 				note.getEffect().setSlide( ptNote.isSlide() );
@@ -316,6 +319,7 @@ public class PTSongParser {
 		while( (measure = this.manager.getTrackManager().getMeasureAt(track, start)) == null){
 			this.manager.addNewMeasureBeforeEnd(tgSong);
 		}
+		measure.setKeySignature(this.keysignature);
 		return measure;
 	}
 	

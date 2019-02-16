@@ -18,6 +18,7 @@ public class PTBeat implements PTComponent{
 	private boolean grace;
 	private boolean arpeggioUp;
 	private boolean arpeggioDown;
+	private boolean palmMute;
 	private List<PTNote> notes;
 	
 	public PTBeat(int staff,int voice){
@@ -121,6 +122,14 @@ public class PTBeat implements PTComponent{
 	
 	public void setArpeggioDown(boolean arpeggioDown) {
 		this.arpeggioDown = arpeggioDown;
+	}
+	
+	public boolean isPalmMute() {
+		return this.palmMute;
+	}
+	
+	public void setPalmMute(boolean palmMute) {
+		this.palmMute = palmMute;
 	}
 	
 	public PTComponent getClone(){
