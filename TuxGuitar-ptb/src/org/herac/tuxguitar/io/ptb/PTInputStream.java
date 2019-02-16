@@ -285,15 +285,10 @@ public class PTInputStream implements TGSongReader{
 		
 		readByte();
 		
-		int data1 = readByte();
-		int data2 = readByte(); // this seems to be palm mute
+		int data1 = readByte();// position and duration are in the same int
+		int data2 = readByte(); 
 		int data3 = readByte();
 		int durationValue = readByte();
-		
-		// ref simpleFlags in position.h
-		// this seems to be palm mute
-		//if (data2 & 0x2000 == 0x2000)
-			//this.
 		
 		int multiBarRest = 1;
 		int complexCount = readByte();
@@ -326,6 +321,10 @@ public class PTInputStream implements TGSongReader{
 		beat.setArpeggioDown((data1 & 0x40) != 0);
 		beat.setEnters(((beaming - (beaming % 8)) / 8) + 1);
 		beat.setTimes((beaming % 8) + 1);
+		
+		// ref simpleFlags in position.h
+		// data2 is the high word, so 20 instead of 2000
+		beat.setPalmMute((data2 & 0x20) == 0x20);
 		
 		section.getPosition(position).addComponent(beat);
 	}
