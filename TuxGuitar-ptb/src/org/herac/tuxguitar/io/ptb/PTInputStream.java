@@ -339,30 +339,20 @@ public class PTInputStream implements TGSongReader{
 			int data2 = readByte();
 			int type = readByte();
 			int symbolType = readByte();
-			//
-			String sf1=String.format("%d %d %d %d %d %d %d",
-					position, simpleData, symbolCount,
-					data1, data2, type, symbolType);
-			System.out.println(sf1);
-			//
+
 			note.setBend((symbolType == 101)?((type / 16) + 1):0);
 			note.setSlide((symbolType == 100));
 		}
 		
-		String sf1=String.format("%d %d %d", position, simpleData, symbolCount);
-		System.out.println(sf1);
-		
 		note.setValue(position & 0x1f);
 		note.setString(((position & 0xe0) >> 5) + 1);
 		note.setTied((simpleData & 0x01) != 0);
-		// for debugging
-		if ((position & 0x1f) == 1)
-		{
-			note.setDead((simpleData & 0x02) != 0); // actually muted
-			note.setHammer((simpleData & 0x08) != 0);
-			note.setPullOff((simpleData & 0x10) != 0);
-			note.setHarmonic((simpleData & 0x40) != 0);
-		}
+
+		note.setDead((simpleData & 0x02) != 0);
+		note.setHammer((simpleData & 0x08) != 0);
+		note.setPullOff((simpleData & 0x10) != 0);
+		note.setHarmonic((simpleData & 0x40) != 0);
+
 		beat.addNote(note);
 	}
 	

@@ -144,6 +144,7 @@ public class PTBeat implements PTComponent{
 		beat.setVibrato( isVibrato() );
 		beat.setArpeggioUp( isArpeggioUp() );
 		beat.setArpeggioDown( isArpeggioDown() );
+		beat.setPalmMute( isPalmMute() );
 		Iterator<PTNote> it = getNotes().iterator();
 		while( it.hasNext() ){
 			beat.addNote( ((PTNote)it.next()).getClone() );
