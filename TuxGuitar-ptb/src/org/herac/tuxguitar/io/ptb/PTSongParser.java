@@ -226,6 +226,7 @@ public class PTSongParser {
 				note.getEffect().setVibrato( beat.isVibrato() );
 				note.getEffect().setDeadNote(ptNote.isDead() );
 				note.getEffect().setPalmMute(beat.isPalmMute());
+				note.getEffect().setLetRing(beat.isLetRing());
 				note.getEffect().setHammer( ptNote.isHammer() );
 				//note.getEffect().set( ptNote.IsPullOff()() );
 				note.getEffect().setSlide( ptNote.isSlide() );

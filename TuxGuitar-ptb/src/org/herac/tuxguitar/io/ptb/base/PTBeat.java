@@ -19,6 +19,7 @@ public class PTBeat implements PTComponent{
 	private boolean arpeggioUp;
 	private boolean arpeggioDown;
 	private boolean palmMute;
+	private boolean letRing;
 	private List<PTNote> notes;
 	
 	public PTBeat(int staff,int voice){
@@ -132,6 +133,14 @@ public class PTBeat implements PTComponent{
 		this.palmMute = palmMute;
 	}
 	
+	public boolean isLetRing() {
+		return this.letRing;
+	}
+	
+	public void setLetRing(boolean letRing) {
+		this.letRing = letRing;
+	}
+	
 	public PTComponent getClone(){
 		PTBeat beat = new PTBeat( getStaff(), getVoice() );
 		beat.setDuration( getDuration() );
@@ -145,6 +154,7 @@ public class PTBeat implements PTComponent{
 		beat.setArpeggioUp( isArpeggioUp() );
 		beat.setArpeggioDown( isArpeggioDown() );
 		beat.setPalmMute( isPalmMute() );
+		beat.setLetRing( isLetRing() );
 		Iterator<PTNote> it = getNotes().iterator();
 		while( it.hasNext() ){
 			beat.addNote( ((PTNote)it.next()).getClone() );

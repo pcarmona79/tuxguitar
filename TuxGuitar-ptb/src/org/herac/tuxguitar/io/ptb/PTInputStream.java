@@ -322,9 +322,11 @@ public class PTInputStream implements TGSongReader{
 		beat.setEnters(((beaming - (beaming % 8)) / 8) + 1);
 		beat.setTimes((beaming % 8) + 1);
 		
-		// ref simpleFlags in position.h
+		// ref simpleFlags in powertab editor 2, position.h (wxWindows license, essentially LGPL)
+		// https://github.com/powertab/powertabeditor/blob/master/source/formats/powertab_old/powertabdocument/position.h
 		// data2 is the high word, so 20 instead of 2000
-		beat.setPalmMute((data2 & 0x20) == 0x20);
+		beat.setPalmMute((data2 & 0x20) != 0);
+		beat.setLetRing((data3 & 0x8) != 0);
 		
 		section.getPosition(position).addComponent(beat);
 	}
