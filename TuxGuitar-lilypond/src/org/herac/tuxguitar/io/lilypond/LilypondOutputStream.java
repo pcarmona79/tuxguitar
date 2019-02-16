@@ -333,10 +333,13 @@ public class LilypondOutputStream {
 			this.addClef(measure.getClef(),indent);
 		}
 		if(previous == null || measure.getKeySignature() != previous.getKeySignature()){
-			// TODO: allow users to enter a key signature in the ui
-			// or allow users to check a "guess signature" box
-			this.addKeySignature(TGNoteSpelling.guessKey(),indent);
-			//this.addKeySignature(measure.getKeySignature(),indent);
+			if (measure.getKeySignature() == 0) {
+				// TODO: allow users to enter a key signature in the ui
+				// or allow users to check a "guess signature" box
+				this.addKeySignature(TGNoteSpelling.guessKey(),indent);
+			} else {
+				this.addKeySignature(measure.getKeySignature(),indent);
+			}
 		}
 		
 		if(previous == null || !measure.getTimeSignature().isEqual(previous.getTimeSignature())){
