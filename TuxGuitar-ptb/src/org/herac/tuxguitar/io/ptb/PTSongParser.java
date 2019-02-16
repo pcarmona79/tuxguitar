@@ -237,6 +237,9 @@ public class PTSongParser {
 					TGEffectHarmonic harmonic =this.manager.getFactory().newEffectHarmonic();
 					harmonic.setType(TGEffectHarmonic.TYPE_NATURAL);
 				}
+				int midiValue = (tgVoice.getBeat().getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()); 
+				note.getSpelling().setSpellingFromKey(midiValue, tgVoice.getBeat().getMeasure().getKeySignature());
+				
 				tgVoice.addNote(note);
 			}
 		}
