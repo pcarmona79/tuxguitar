@@ -75,7 +75,6 @@ public class GP2InputStream extends GTPInputStream {
 			int tempo = readInt();
 			int tripletFeel = ((readInt() == 1)?TGMeasureHeader.TRIPLET_FEEL_EIGHTH:TGMeasureHeader.TRIPLET_FEEL_NONE);
 			
-			//readInt(); //key
 			this.keySignature = readKeySignature();
 			
 			for (int i = 0; i < TRACK_COUNT; i++) {
@@ -423,7 +422,7 @@ public class GP2InputStream extends GTPInputStream {
 	
 	private int readKeySignature() throws IOException {
 		// 0: C 1: G, -1: F		
-		int keySignature = readByte();
+		int keySignature = readInt() & 0xFF;
 		if (keySignature < 0){
 			keySignature = 7 - keySignature; // translate -1 to 8, etc.
 		}

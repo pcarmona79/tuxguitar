@@ -100,6 +100,11 @@ public class GP1InputStream extends GTPInputStream {
 				track.getColor().copyFrom(TGColor.RED);
 				
 				int strings = ((getVersion().getVersionCode() > 1)?readInt():6);
+				
+				if (strings > 1000) {
+					throw new TGFileFormatException("Too many strings in GP1 file!");
+				}
+				
 				for (int j = 0; j < strings; j++) {
 					TGString string = getFactory().newString();
 					string.setNumber( j + 1 );
@@ -209,7 +214,7 @@ public class GP1InputStream extends GTPInputStream {
 	
 	private int readKeySignature() throws IOException {
 		// 0: C 1: G, -1: F		
-		int keySignature = readByte();
+		int keySignature = readInt() & 0xFF;
 		if (keySignature < 0){
 			keySignature = 7 - keySignature; // translate -1 to 8, etc.
 		}
