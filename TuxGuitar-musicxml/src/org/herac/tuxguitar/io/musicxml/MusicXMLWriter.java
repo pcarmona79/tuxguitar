@@ -2,6 +2,7 @@ package org.herac.tuxguitar.io.musicxml;
 
 import java.io.OutputStream;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,6 +32,8 @@ import org.herac.tuxguitar.song.models.TGTempo;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -250,6 +253,9 @@ public class MusicXMLWriter {
 	private void writeBeats(Node parent, TGMeasure measure){
 		int ks = measure.getKeySignature();
 		int beatCount = measure.countBeats();
+		
+		boolean needRelease = false;
+		
 		for(int b = 0; b < beatCount; b ++){
 			TGBeat beat = measure.getBeat( b );
 			TGVoice voice = beat.getVoice(0);
@@ -275,6 +281,25 @@ public class MusicXMLWriter {
 					}
 					
 					Node technicalNode = this.addNode(this.addNode(noteNode, "notations"), "technical");
+
+					if (note.getEffect().isBend()) {
+						Node bendNode = this.addNode(technicalNode, "bend");
+
+						TGEffectBend bend = note.getEffect().getBend();
+						int points = bend.getPoints().size();
+						for (int i = 0; i < points; i++) {
+							TGEffectBend.BendPoint point = (TGEffectBend.BendPoint) bend.getPoints().get(i);
+							needRelease = (point.getValue() > 0);
+							this.addNode(bendNode, "bend-alter", Integer.toString( point.getValue()) );
+							// TODO:
+						}
+					} else if (needRelease) {
+						Node bendNode = this.addNode(technicalNode, "bend");
+						this.addNode(bendNode, "bend-alter", Integer.toString( 0 ));
+						this.addNode(bendNode, "release");
+						needRelease = false;
+					}
+					
 					this.addNode(technicalNode,"fret", Integer.toString( note.getValue() ));
 					this.addNode(technicalNode,"string", Integer.toString( note.getString() ));
 					
