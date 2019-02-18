@@ -663,6 +663,11 @@ public class LilypondOutputStream {
 			this.writer.print("\\harmonic");
 		}
 		if( effect.isBend() ){
+			// note: bendAfter requires some customization to include pitch differential
+			// http://lilypondblog.org/2017/03/the-story-of-string-bending-in-lilypond/
+			// v2.19 adds an experimental include file
+			// git clone https://pagure.io/lilypond-bend-spanner.git
+			// example "a8 c d\startBend dis\stopBend\startBend d\stopBend( c) a4 |"
 			this.writer.print(" \\bendAfter #+6 ");
 		}
 	}
