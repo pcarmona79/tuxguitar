@@ -496,20 +496,26 @@ public class GP3InputStream extends GTPInputStream {
 		effect.setGrace(grace);
 	}
 	
+	// https://pyguitarpro.readthedocs.io/en/stable/pyguitarpro/format.html#guitarpro.gp3.GP3File.readBend
 	private void readBend(TGNoteEffect effect) throws IOException {
 		TGEffectBend bend = getFactory().newEffectBend();
-		skip(5);
+		// was: skip(5);
+		byte bendType = readByte();
+		bend.setBendType(bendType);
+		int bendValue = readInt();
+		bend.setBendValue(bendValue);
+		//
 		int points = readInt();
 		for (int i = 0; i < points; i++) {
 			int bendPosition = readInt();
-			int bendValue = readInt();
+			/*int*/ bendValue = readInt();
 			readByte(); //vibrato
 			
 			int pointPosition = Math.round(bendPosition * TGEffectBend.MAX_POSITION_LENGTH / GP_BEND_POSITION);
 			int pointValue = Math.round(bendValue * TGEffectBend.SEMITONE_LENGTH / GP_BEND_SEMITONE);
 			bend.addPoint(pointPosition,pointValue);
 		}
-		if(!bend.getPoints().isEmpty()){
+		if(!bend.getPoints().isEmpty() || bend.getBendValue() != 0){
 			effect.setBend(bend);
 		}
 	}

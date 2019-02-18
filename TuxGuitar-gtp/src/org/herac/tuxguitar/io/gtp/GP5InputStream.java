@@ -620,19 +620,24 @@ public class GP5InputStream extends GTPInputStream {
 	}
 	
 	private void readBend(TGNoteEffect effect) throws IOException {
-		skip(5);
 		TGEffectBend bend = getFactory().newEffectBend();
+		// was: skip(5);
+		byte bendType = readByte();
+		bend.setBendType(bendType);
+		int bendValue = readInt();
+		bend.setBendValue(bendValue);
+		//
 		int numPoints = readInt();
 		for (int i = 0; i < numPoints; i++) {
 			int bendPosition = readInt();
-			int bendValue = readInt();
+			bendValue = readInt();
 			readByte();
 			
 			int pointPosition = Math.round(bendPosition * TGEffectBend.MAX_POSITION_LENGTH / GP_BEND_POSITION);
 			int pointValue = Math.round(bendValue * TGEffectBend.SEMITONE_LENGTH / GP_BEND_SEMITONE);
 			bend.addPoint(pointPosition,pointValue);
 		}
-		if(!bend.getPoints().isEmpty()){
+		if(!bend.getPoints().isEmpty() || bend.getBendValue() != 0){
 			effect.setBend(bend);
 		}
 	}

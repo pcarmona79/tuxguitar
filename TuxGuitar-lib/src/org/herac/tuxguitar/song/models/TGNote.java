@@ -38,7 +38,7 @@ public abstract class TGNote {
 
 	public TGNoteSpelling getSpelling() {
 		// if this has never been set, initialize with default setting
-		if (spelling.getPitchNumber() < 0)
+		if (spelling.getPitchNumber() < 0 && this.getVoice() != null)
 		{
 			try {
 				int keySignature = this.getVoice().getBeat().getMeasure().getKeySignature();

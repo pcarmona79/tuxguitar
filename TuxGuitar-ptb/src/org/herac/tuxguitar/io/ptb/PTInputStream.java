@@ -326,6 +326,7 @@ public class PTInputStream implements TGSongReader{
 		// https://github.com/powertab/powertabeditor/blob/master/source/formats/powertab_old/powertabdocument/position.h
 		// data2 is the high word, so 20 instead of 2000
 		beat.setPalmMute((data2 & 0x20) != 0);
+		beat.setTap((data2 & 0x40) != 0);
 		beat.setLetRing((data3 & 0x8) != 0);
 		
 		section.getPosition(position).addComponent(beat);

@@ -24,10 +24,26 @@ public abstract class TGEffectBend {
 	public static final int MAX_POSITION_LENGTH = 12;
 	public static final int MAX_VALUE_LENGTH = (SEMITONE_LENGTH * 12);
 	
+	public static final int None = 0;
+	public static final int Bend = 1;
+	public static final int BendRelease = 2;
+	public static final int BendReleaseBend = 3;
+	public static final int PreBend = 4;
+	public static final int PreBendRelease = 5;
+	public static final int Dip = 6;
+	public static final int Dive = 7;
+	public static final int ReleaseUp = 8;
+	public static final int InvertedDip = 9;
+	public static final int ReturnBar = 10;
+	public static final int RelaseBar = 11;
+	
 	private List<BendPoint> points;
+	private int bendtype;
+	private int bendvalue;
 	
 	public TGEffectBend(){
 		this.points = new ArrayList<BendPoint>();
+		this.bendtype = 0;
 	}
 	
 	public void addPoint(int position,int value){
@@ -36,6 +52,23 @@ public abstract class TGEffectBend {
 	
 	public List<BendPoint> getPoints(){
 		return this.points;
+	}
+	
+	public int getBendType() {
+		return bendtype;
+	}
+	
+	public void setBendType(int bendtype) {
+		this.bendtype = bendtype;
+	}
+	
+	public int getBendValue()
+	{
+		return bendvalue;
+	}
+	
+	public void setBendValue(int bendvalue) {
+		this.bendvalue = bendvalue;
 	}
 	
 	public TGEffectBend clone(TGFactory factory){

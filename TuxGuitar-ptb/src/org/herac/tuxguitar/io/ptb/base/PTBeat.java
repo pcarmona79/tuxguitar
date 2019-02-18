@@ -19,6 +19,7 @@ public class PTBeat implements PTComponent{
 	private boolean arpeggioUp;
 	private boolean arpeggioDown;
 	private boolean palmMute;
+	private boolean tap;
 	private boolean letRing;
 	private List<PTNote> notes;
 	
@@ -133,6 +134,14 @@ public class PTBeat implements PTComponent{
 		this.palmMute = palmMute;
 	}
 	
+	public boolean isTap() {
+		return this.tap;
+	}
+	
+	public void setTap(boolean tap) {
+		this.tap = tap;
+	}
+	
 	public boolean isLetRing() {
 		return this.letRing;
 	}
@@ -154,6 +163,7 @@ public class PTBeat implements PTComponent{
 		beat.setArpeggioUp( isArpeggioUp() );
 		beat.setArpeggioDown( isArpeggioDown() );
 		beat.setPalmMute( isPalmMute() );
+		beat.setTap( isTap() );
 		beat.setLetRing( isLetRing() );
 		Iterator<PTNote> it = getNotes().iterator();
 		while( it.hasNext() ){
