@@ -311,6 +311,7 @@ public class PTInputStream implements TGSongReader{
 		}
 		beat.setMultiBarRest((itemCount == 0)?multiBarRest:1);
 		beat.setVibrato(((data1 & 0x08) != 0) || ((data1 & 0x10) != 0));
+		//acciaccatura, closest TG has seems to be grace note 
 		beat.setGrace((data3 & 0x01) != 0);
 		
 		// Set the duration
