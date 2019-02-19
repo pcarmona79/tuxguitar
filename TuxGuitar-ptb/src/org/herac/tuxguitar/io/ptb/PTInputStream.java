@@ -355,6 +355,7 @@ public class PTInputStream implements TGSongReader{
 		note.setHammer((simpleData & 0x08) != 0);
 		note.setPullOff((simpleData & 0x10) != 0);
 		note.setHarmonic((simpleData & 0x40) != 0);
+		note.setGhost((simpleData & 0x80) != 0);
 
 		beat.addNote(note);
 	}

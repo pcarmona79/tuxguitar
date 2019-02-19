@@ -10,6 +10,7 @@ public class PTNote{
 	private boolean slide;
 	private boolean pulloff;
 	private boolean harmonic;
+	private boolean ghost;
 	
 	public PTNote(){
 		super();
@@ -87,6 +88,14 @@ public class PTNote{
 		this.slide = slide;
 	}
 	
+	public boolean isGhost() {
+		return this.ghost;
+	}
+	
+	public void setGhost(boolean ghost) {
+		this.ghost = ghost;
+	}
+	
 	public PTNote getClone(){
 		PTNote note = new PTNote();
 		note.setValue( getValue() );
@@ -96,6 +105,7 @@ public class PTNote{
 		note.setBend( getBend() );
 		note.setHammer( isHammer() );
 		note.setSlide( isSlide() );
+		note.setGhost( isGhost() );
 		return note;
 	}
 }

@@ -231,6 +231,7 @@ public class PTSongParser {
 				note.getEffect().setHammer( ptNote.isHammer() );
 				//note.getEffect().set( ptNote.IsPullOff()() );
 				note.getEffect().setSlide( ptNote.isSlide() );
+				note.getEffect().setGhostNote( ptNote.isGhost() );
 				note.getEffect().setBend( makeBend(ptNote.getBend()));
 				
 				if (ptNote.IsHarmonic()) {
