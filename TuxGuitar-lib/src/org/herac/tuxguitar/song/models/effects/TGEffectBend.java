@@ -24,6 +24,7 @@ public abstract class TGEffectBend {
 	public static final int MAX_POSITION_LENGTH = 12;
 	public static final int MAX_VALUE_LENGTH = (SEMITONE_LENGTH * 12);
 	
+	// these are GPT values, powertab are different
 	public static final int None = 0;
 	public static final int Bend = 1;
 	public static final int BendRelease = 2;
