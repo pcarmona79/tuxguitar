@@ -240,7 +240,7 @@ public class GPXDocumentReader {
 					if( repeatNode != null ){
 						masterBar.setRepeatStart(getAttributeBooleanValue(repeatNode, "start"));
 						if( getAttributeBooleanValue(repeatNode, "end") ){
-							masterBar.setRepeatCount( getAttributeIntegerValue(repeatNode, "count"));
+							masterBar.setRepeatCount( getAttributeIntegerValue(repeatNode, "count") - 1);
 						}
 					}
 					
