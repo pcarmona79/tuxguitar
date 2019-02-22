@@ -54,7 +54,7 @@ import org.herac.tuxguitar.util.TGContext;
 
 public class TGFretBoard extends TGDockedPlayingComponent {
 	
-	public static final int MAX_FRETS = 24;
+	public static final int MAX_FRETS = 25; // show frets 0 to 24
 	public static final int TOP_SPACING = 10;
 	public static final int BOTTOM_SPACING = 10;
 	
