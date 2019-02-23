@@ -340,6 +340,7 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setPalmMute(gpNote.isPalmMutedEnabled());
 			tgNote.getEffect().setTapping(gpNote.isTapped());
 			tgNote.getEffect().setHammer(gpNote.isHammer());
+			tgNote.getEffect().setPullOff(gpNote.isPullOff());
 			if (gpNote.isHarmonic())
 			{
 				tgNote.getEffect().setHarmonic( makeHarmonic ( gpNote ) );

@@ -476,7 +476,7 @@ public class GPXDocumentReader {
 									note.setHammer(true);
 								}
 								if( propertyName.equals("HopoDestination") ){
-	//								this is a hammer-on or pull-off
+									note.setPullOff(true);
 								}
 								if( propertyName.equals("HarmonicFret") ){
 									note.setHarmonicFret( ( getChildNodeIntegerContent(propertyNode, "HFret") ) );

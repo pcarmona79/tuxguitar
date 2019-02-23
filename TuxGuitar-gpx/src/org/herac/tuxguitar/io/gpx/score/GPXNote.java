@@ -22,6 +22,7 @@ public class GPXNote {
 	private Integer bendDestinationOffset;
 	
 	private boolean hammer;
+	private boolean pulloff;
 	private boolean ghost;
 	private boolean slide;
 	private int slideFlags;	// 1, 2, 4, 8, 16 - 2 seems to be up, 4 seems to be down.
@@ -247,6 +248,14 @@ public class GPXNote {
 
 	public void setHammer(boolean hammer) {
 		this.hammer = hammer;
+	}
+	
+	public boolean isPullOff() {
+		return pulloff;
+	}
+	
+	public void setPullOff(boolean pulloff) {
+		this.pulloff = pulloff;
 	}
 
 	public boolean isGhost() {

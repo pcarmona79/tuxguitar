@@ -30,7 +30,8 @@ public abstract class TGNoteEffect {
 	private boolean vibrato;
 	private boolean deadNote;
 	private boolean slide;
-	private boolean hammer;
+	private boolean hammer; // originally used for both hammer/pull
+	private boolean pulloff;
 	private boolean ghostNote;
 	private boolean accentuatedNote;
 	private boolean heavyAccentuatedNote;
@@ -197,6 +198,18 @@ public abstract class TGNoteEffect {
 			this.tremoloBar = null;
 			this.tremoloPicking = null;
 		}
+	}
+	
+	public boolean isPullOff() {
+		return this.pulloff;
+	}
+	
+	public void setPullOff(boolean pulloff) {
+		// reuse code, TG sees these as the same thing
+		// so take care when producing output
+		this.setHammer(pulloff);
+		//and actually set it
+		this.pulloff = pulloff;
 	}
 	
 	public boolean isSlide() {
@@ -376,6 +389,7 @@ public abstract class TGNoteEffect {
 				isDeadNote() ||
 				isSlide() ||
 				isHammer() ||
+				isPullOff() ||
 				isGhostNote() ||
 				isAccentuatedNote() ||
 				isHeavyAccentuatedNote() ||
@@ -394,6 +408,7 @@ public abstract class TGNoteEffect {
 		effect.setDeadNote(isDeadNote());
 		effect.setSlide(isSlide());
 		effect.setHammer(isHammer());
+		effect.setPullOff(isPullOff());
 		effect.setGhostNote(isGhostNote());
 		effect.setAccentuatedNote(isAccentuatedNote());
 		effect.setHeavyAccentuatedNote(isHeavyAccentuatedNote());

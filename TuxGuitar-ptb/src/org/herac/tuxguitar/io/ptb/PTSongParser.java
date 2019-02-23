@@ -229,7 +229,7 @@ public class PTSongParser {
 				note.getEffect().setTapping(beat.isTap());
 				note.getEffect().setLetRing(beat.isLetRing());
 				note.getEffect().setHammer( ptNote.isHammer() );
-				//note.getEffect().set( ptNote.IsPullOff()() );
+				note.getEffect().setPullOff( ptNote.IsPullOff() );
 				note.getEffect().setSlide( ptNote.isSlide() );
 				note.getEffect().setGhostNote( ptNote.isGhost() );
 				note.getEffect().setBend( makeBend(ptNote.getBend()));

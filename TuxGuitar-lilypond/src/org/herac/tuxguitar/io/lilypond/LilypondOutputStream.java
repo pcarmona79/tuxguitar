@@ -664,7 +664,11 @@ public class LilypondOutputStream {
 		}
 		if( effect.isBend() ){
 			if ( this.settings.getLilypondVersion().compareTo("2.19") < 0) {
-				this.writer.print(" \\bendAfter #+6 ");
+				int value = effect.getBend().getBendValue();
+				if (value > 0)
+					this.writer.print(" \\bendAfter #" + value + " ");
+				else
+					this.writer.print(" \\bendAfter #-" + value + " ");
 			} else {
 				// note: bendAfter requires some customization to include pitch differential
 				// http://lilypondblog.org/2017/03/the-story-of-string-bending-in-lilypond/
