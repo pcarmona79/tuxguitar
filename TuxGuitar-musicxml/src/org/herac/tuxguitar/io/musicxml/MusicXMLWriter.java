@@ -36,6 +36,7 @@ import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 public class MusicXMLWriter {
@@ -282,26 +283,54 @@ public class MusicXMLWriter {
 					
 					Node technicalNode = this.addNode(this.addNode(noteNode, "notations"), "technical");
 
-					if (note.getEffect().isBend()) {
-						Node bendNode = this.addNode(technicalNode, "bend");
-
-						TGEffectBend bend = note.getEffect().getBend();
-						int points = bend.getPoints().size();
-						for (int i = 0; i < points; i++) {
-							TGEffectBend.BendPoint point = (TGEffectBend.BendPoint) bend.getPoints().get(i);
-							needRelease = (point.getValue() > 0);
-							this.addNode(bendNode, "bend-alter", Integer.toString( point.getValue()) );
-							// TODO:
+					// TODO: musicxml2ly.py errors on multiple bend alters
+					// so figure a betterr way to do this.
+					if (false) {
+						if (note.getEffect().isBend()) {
+							Node bendNode = this.addNode(technicalNode, "bend");
+	
+							TGEffectBend bend = note.getEffect().getBend();
+							int points = bend.getPoints().size();
+							for (int i = 0; i < points; i++) {
+								TGEffectBend.BendPoint point = (TGEffectBend.BendPoint) bend.getPoints().get(i);
+								needRelease = (point.getValue() > 0);
+								this.addNode(bendNode, "bend-alter", Integer.toString( point.getValue()) );
+							}
+						} else if (needRelease) {
+							Node bendNode = this.addNode(technicalNode, "bend");
+							this.addNode(bendNode, "bend-alter", Integer.toString( 0 ));
+							this.addNode(bendNode, "release");
+							needRelease = false;
 						}
-					} else if (needRelease) {
-						Node bendNode = this.addNode(technicalNode, "bend");
-						this.addNode(bendNode, "bend-alter", Integer.toString( 0 ));
-						this.addNode(bendNode, "release");
-						needRelease = false;
+					}
+
+					// see comments in setPullOff()
+					if(note.getEffect().isPullOff()) {
+						Node hammer = this.addNode(technicalNode,"hammer-on");
+						((Element)hammer).setAttribute("number","1");
+						((Element)hammer).setAttribute("type","stop");
+					} else if(note.getEffect().isHammer()) {
+						Node hammer = this.addNode(technicalNode,"hammer-on", "H");
+						((Element)hammer).setAttribute("number","1");
+						((Element)hammer).setAttribute("type","start");
 					}
 					
 					this.addNode(technicalNode,"fret", Integer.toString( note.getValue() ));
 					this.addNode(technicalNode,"string", Integer.toString( note.getString() ));
+
+					/////////
+					String muteType = "";
+					if (note.getEffect().isPalmMute()) {
+						muteType = "palm";
+					}
+					if (note.getEffect().isDeadNote()) {
+						muteType = "straight";
+					}
+					if (!muteType.isEmpty()) {
+						Node playNode = this.addNode(noteNode, "play");
+						this.addNode(playNode, "mute", muteType);
+					}
+					//////////
 					
 					this.addNode(noteNode,"voice","1");
 					this.writeDuration(noteNode, voice.getDuration());
