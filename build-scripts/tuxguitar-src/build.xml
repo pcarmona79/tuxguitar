@@ -5,7 +5,7 @@
 		TuxGuitar Source Package
 	</description>
 	
-	<property name="source.version" value="SNAPSHOT"/>
+	<property name="source.version" value="2.0-SNAPSHOT"/>
 	
 	<property name="source.dir" value="../../"/>
 	<property name="target.dir" value="target"/>
