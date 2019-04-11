@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.1'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':tuxguitar-android')
-    compile 'com.android.support:appcompat-v7:27.0.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':tuxguitar-android')
+    implementation 'com.android.support:appcompat-v7:27.0.0'
 }

@@ -17,7 +17,7 @@ def plugins = [
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.1'
+    buildToolsVersion '28.0.3'
     
     defaultConfig {
         applicationId "org.herac.tuxguitar.android.application"
@@ -73,19 +73,19 @@ task generateSources {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:27.0.0'
-    compile 'com.android.support:design:27.0.0'
-    compile project(':tuxguitar-android')
-    compile project(':tuxguitar-android-resources')
-    compile project(':tuxguitar-android-gervill')
-    compile project(':tuxguitar-android-midi')
-    compile project(':tuxguitar-android-midimaster')
-    compile project(':tuxguitar-android-browser-saf')
-    compile project(':tuxguitar-android-gdrive')
-    compile project(':tuxguitar-android-gervill-soundbank')
-    
-    compile 'com.itextpdf:itextpdf:5.5.10'
-    compile 'com.itextpdf.tool:xmlworker:1.1.1'
-    compile 'org.apache.commons:commons-compress:1.5'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation project(':tuxguitar-android')
+    implementation project(':tuxguitar-android-resources')
+    implementation project(':tuxguitar-android-gervill')
+    implementation project(':tuxguitar-android-midi')
+    implementation project(':tuxguitar-android-midimaster')
+    implementation project(':tuxguitar-android-browser-saf')
+    implementation project(':tuxguitar-android-gdrive')
+    implementation project(':tuxguitar-android-gervill-soundbank')
+
+    implementation 'com.itextpdf:itextpdf:5.5.10'
+    implementation 'com.itextpdf.tool:xmlworker:1.1.1'
+    implementation 'org.apache.commons:commons-compress:1.12'
 }
