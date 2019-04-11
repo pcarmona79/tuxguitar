@@ -335,7 +335,7 @@
 	<string name="track_tuning_dlg_value_label">Value:</string>
 	<string name="track_tuning_dlg_preview_label">Label:</string>
 	<string name="track_tuning_dlg_offset_select_value">Offset #%1$d</string>
-	<string name="track_tuning_dlg_preset_select_value">-- Presets --</string>
+	<string name="track_tuning_dlg_preset_select_value">-- Custom --</string>
 	<string name="track_tuning_dlg_options_transpose">Transpose afected notes</string>
 	<string name="track_tuning_dlg_options_transpose_apply_to_chords">Transpose choors</string>
 	<string name="track_tuning_dlg_options_transpose_try_keep_strings">Try keep notes at same string</string>
