@@ -24,7 +24,9 @@ public class MidiReceiverImpl implements GMReceiver{
 	}
 	
 	public void sendControlChange(int channel, int controller, int value) {
-		this.synth.sendControlChange(channel, controller, value);
+		if (value <= 127) {
+			this.synth.sendControlChange(channel, controller, value);
+		}
 	}
 	
 	public void sendProgramChange(int channel, int value) {
