@@ -17,11 +17,12 @@ public class TuningManager {
 	
 	private List<TGTuning> allTunings;
 	private TuningGroup tuningsRoot;
-	
+	private int treeDepth;
+
 	private TuningManager(TGContext context){
 		this.context = context;
 		this.allTunings = new ArrayList<TGTuning>();
-		this.tuningsRoot = new TuningGroup("", new ArrayList<TGTuning>(), new ArrayList<TuningGroup>());
+		this.tuningsRoot = new TuningGroup();
 		this.loadTunings();
 	}
 	
@@ -32,21 +33,27 @@ public class TuningManager {
 	public TuningGroup getTuningsRoot() {
 		return this.tuningsRoot;
 	}
+	public int getTreeDepth() { return this.treeDepth; }
 	
-	private void addTuningsToAll(String prefix, TuningGroup group) {
-		for (TGTuning tuning : group.getTunings()) {
-			TGTuning prefixedTuning = new TGTuning(prefix + tuning.getName(), tuning.getValues());
+	private void addTuningsToAll(int depth, String prefix, TuningGroup group) {
+		if (!group.getTunings().isEmpty()) {
+			this.treeDepth = Math.max(depth, this.treeDepth);
+		}
+		for (TuningPreset tuning : group.getTunings()) {
+			TGTuning prefixedTuning = new TGTuning();
+			prefixedTuning.setName(prefix + tuning.getName());
+			prefixedTuning.setValues(tuning.getValues());
 			this.allTunings.add(prefixedTuning);
 		}
 		for (TuningGroup subGroup : group.getGroups()) {
-			addTuningsToAll(prefix + subGroup.getName() + " / ", subGroup);
+			addTuningsToAll(depth + 1, prefix + subGroup.getName() + " / ", subGroup);
 		}
 	}
 	
 	private void loadTunings(){
 		try{
 			new TuningReader().loadTunings(this.tuningsRoot, TGResourceManager.getInstance(this.context).getResourceAsStream("tunings/tunings.xml") );
-			addTuningsToAll("", this.tuningsRoot);
+			addTuningsToAll(1, "", this.tuningsRoot);
 		} catch (Throwable e) {
 			TGErrorManager.getInstance(this.context).handleError(e);
 		}

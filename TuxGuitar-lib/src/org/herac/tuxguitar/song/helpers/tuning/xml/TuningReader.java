@@ -8,8 +8,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.herac.tuxguitar.song.models.TGTuning;
 import org.herac.tuxguitar.song.helpers.tuning.TuningGroup;
+import org.herac.tuxguitar.song.helpers.tuning.TuningPreset;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -71,13 +71,13 @@ public class TuningReader {
 					}
 				}
 				
-				TGTuning tuning = new TGTuning(name, noteValues);
+				TuningPreset tuning = new TuningPreset(group, name, noteValues);
 				group.getTunings().add(tuning);
 			} else if (nodeName.equals(GROUP_TAG)) {
 				NamedNodeMap params = child.getAttributes();
 				String name = params.getNamedItem(NAME_ATTRIBUTE).getNodeValue();
 
-				TuningGroup subGroup = new TuningGroup(name, new ArrayList<TGTuning>(), new ArrayList<TuningGroup>());
+				TuningGroup subGroup = new TuningGroup(group, name);
 				loadTunings(subGroup, child);
 				group.getGroups().add(subGroup);
 			}
