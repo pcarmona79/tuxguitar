@@ -7,3 +7,4 @@ release/
 local.properties
 *.o
 *.so
+**/jni/*.dll
