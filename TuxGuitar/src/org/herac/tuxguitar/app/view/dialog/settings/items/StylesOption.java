@@ -53,6 +53,7 @@ public class StylesOption extends TGSettingsOption {
 	private TGColorButton scoreNoteColorButton;
 	private TGColorButton tabNoteColorButton;
 	private TGColorButton playNoteColorButton;
+	private TGColorButton selectionColorButton;
 	private TGColorButton linesColorButton;
 	
 	public StylesOption(TGSettingsEditor configEditor, UIToolBar toolBar, UILayoutContainer parent){
@@ -102,9 +103,12 @@ public class StylesOption extends TGSettingsOption {
 		
 		showLabel(mainSection, TuxGuitar.getProperty("settings.config.styles.color.play-note"), false, 7, 1);
 		this.playNoteColorButton = this.createColorButton(mainSection, TuxGuitar.getProperty("choose"), 7, 2);
-		
-		showLabel(mainSection, TuxGuitar.getProperty("settings.config.styles.color.lines"), false, 8, 1);
-		this.linesColorButton = this.createColorButton(mainSection, TuxGuitar.getProperty("choose"), 8, 2);
+
+		showLabel(mainSection, TuxGuitar.getProperty("settings.config.styles.color.selection"), false, 8, 1);
+		this.selectionColorButton = this.createColorButton(mainSection, TuxGuitar.getProperty("choose"), 8, 2);
+
+		showLabel(mainSection, TuxGuitar.getProperty("settings.config.styles.color.lines"), false, 9, 1);
+		this.linesColorButton = this.createColorButton(mainSection, TuxGuitar.getProperty("choose"), 9, 2);
 		
 		//=================================================== PRINTER STYLES ===================================================//
 		showLabel(getPanel(), TuxGuitar.getProperty("settings.config.styles.printer"), true, 3, 1);
@@ -212,6 +216,7 @@ public class StylesOption extends TGSettingsOption {
 				final UIColorModel scoreNoteRGB  = getConfig().getColorModelConfigValue(TGConfigKeys.COLOR_SCORE_NOTE);
 				final UIColorModel tabNoteRGB  = getConfig().getColorModelConfigValue(TGConfigKeys.COLOR_TAB_NOTE);
 				final UIColorModel playNoteRGB  = getConfig().getColorModelConfigValue(TGConfigKeys.COLOR_PLAY_NOTE);
+				final UIColorModel selectionRGB  = getConfig().getColorModelConfigValue(TGConfigKeys.COLOR_SELECTION);
 				final UIColorModel linesRGB  = getConfig().getColorModelConfigValue(TGConfigKeys.COLOR_LINE);
 				TGSynchronizer.getInstance(getViewContext().getContext()).executeLater(new Runnable() {
 					public void run() {
@@ -227,6 +232,7 @@ public class StylesOption extends TGSettingsOption {
 							StylesOption.this.scoreNoteColorButton.loadColor(scoreNoteRGB);
 							StylesOption.this.tabNoteColorButton.loadColor(tabNoteRGB);
 							StylesOption.this.playNoteColorButton.loadColor(playNoteRGB);
+							StylesOption.this.selectionColorButton.loadColor(selectionRGB);
 							StylesOption.this.linesColorButton.loadColor(linesRGB);
 							StylesOption.this.initialized = true;
 							StylesOption.this.pack();
@@ -250,6 +256,7 @@ public class StylesOption extends TGSettingsOption {
 			getConfig().setValue(TGConfigKeys.COLOR_SCORE_NOTE,this.scoreNoteColorButton.getValue());
 			getConfig().setValue(TGConfigKeys.COLOR_TAB_NOTE,this.tabNoteColorButton.getValue());
 			getConfig().setValue(TGConfigKeys.COLOR_PLAY_NOTE,this.playNoteColorButton.getValue());
+			getConfig().setValue(TGConfigKeys.COLOR_SELECTION,this.selectionColorButton.getValue());
 			getConfig().setValue(TGConfigKeys.COLOR_LINE,this.linesColorButton.getValue());
 		}
 	}
@@ -267,6 +274,7 @@ public class StylesOption extends TGSettingsOption {
 			getConfig().setValue(TGConfigKeys.COLOR_SCORE_NOTE, getDefaults().getValue(TGConfigKeys.COLOR_SCORE_NOTE));
 			getConfig().setValue(TGConfigKeys.COLOR_TAB_NOTE, getDefaults().getValue(TGConfigKeys.COLOR_TAB_NOTE));
 			getConfig().setValue(TGConfigKeys.COLOR_PLAY_NOTE, getDefaults().getValue(TGConfigKeys.COLOR_PLAY_NOTE));
+			getConfig().setValue(TGConfigKeys.COLOR_SELECTION, getDefaults().getValue(TGConfigKeys.COLOR_SELECTION));
 			getConfig().setValue(TGConfigKeys.COLOR_LINE, getDefaults().getValue(TGConfigKeys.COLOR_LINE));
 		}
 	}

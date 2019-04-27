@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.herac.tuxguitar.graphics.TGColor;
-import org.herac.tuxguitar.graphics.TGColorModel;
-import org.herac.tuxguitar.graphics.TGPainter;
 import org.herac.tuxguitar.graphics.control.painters.TGClefPainter;
 import org.herac.tuxguitar.graphics.control.painters.TGKeySignaturePainter;
 import org.herac.tuxguitar.graphics.control.painters.TGNumberPainter;
@@ -28,6 +25,7 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.ui.resource.UIColor;
+import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIResourceFactory;
 
@@ -1404,7 +1402,7 @@ public class TGMeasureImpl extends TGMeasure{
 		return markerColor;
 	}
 
-	public void paintInternalSelection(TGLayout layout, TGPainter painter, TGBeat from, TGBeat to) {
+	public void paintInternalSelection(TGLayout layout, UIPainter painter, TGBeat from, TGBeat to) {
 		float x = getBeatLeftEdge(layout, (TGBeatImpl) from);
 		float y = getTopEdge(layout);
 		float width = getBeatRightEdge(layout, (TGBeatImpl) to) - x;
@@ -1415,7 +1413,7 @@ public class TGMeasureImpl extends TGMeasure{
 		painter.closePath();
 	}
 
-	public void paintSelectionStart(TGLayout layout, TGPainter painter, TGBeat from) {
+	public void paintSelectionStart(TGLayout layout, UIPainter painter, TGBeat from) {
 		float x1 = getBeatLeftEdge(layout, (TGBeatImpl) from);
 		float x2 = getRightEdge(layout);
 		float y1 = getTopEdge(layout);
@@ -1433,7 +1431,7 @@ public class TGMeasureImpl extends TGMeasure{
 		return getPosX() + beat.getPosX() + getHeaderImpl().getLeftSpacing(layout);
 	}
 
-	public void paintSelectionEnd(TGLayout layout, TGPainter painter, TGBeat to) {
+	public void paintSelectionEnd(TGLayout layout, UIPainter painter, TGBeat to) {
 		float x1 = getPosX();
 		float x2 = getBeatRightEdge(layout, (TGBeatImpl) to);
 		float y1 = getTopEdge(layout);
@@ -1451,7 +1449,7 @@ public class TGMeasureImpl extends TGMeasure{
 		return getPosX() + beat.getPosX() + beat.getMinimumWidth() + getHeaderImpl().getLeftSpacing(layout);
 	}
 
-	public void paintFullSelection(TGLayout layout, TGPainter painter) {
+	public void paintFullSelection(TGLayout layout, UIPainter painter) {
 		float x1 = getPosX();
 		float x2 = getRightEdge(layout);
 		float y1 = getTopEdge(layout);
@@ -1465,10 +1463,10 @@ public class TGMeasureImpl extends TGMeasure{
 		painter.closePath();
 	}
 
-	private void initSelectionPath(TGLayout layout, TGPainter painter) {
+	private void initSelectionPath(TGLayout layout, UIPainter painter) {
 		float scale = layout.getScale();
 		painter.setLineWidth(1f * scale);
-		painter.setForeground(layout.getResources().getForegroundColor());
+		painter.setForeground(layout.getResources().getSelectionColor());
 		painter.initPath();
 		painter.setAntialias(false);
 	}
