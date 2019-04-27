@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.song.models;
 
 import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.ui.resource.UIColorModel;
 
 public abstract class TGColor {
 	
@@ -52,6 +53,10 @@ public abstract class TGColor {
 		TGColor tgColor = factory.newColor();
 		tgColor.copyFrom(this);
 		return tgColor;
+	}
+
+	public UIColorModel toColorModel() {
+		return new UIColorModel(r, g, b);
 	}
 	
 	public void copyFrom(TGColor color){

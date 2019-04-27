@@ -5,21 +5,13 @@ import org.herac.tuxguitar.app.system.config.TGConfigDefaults;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
+import org.herac.tuxguitar.app.view.component.TGColorButton;
 import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.ui.UIFactory;
-import org.herac.tuxguitar.ui.chooser.UIColorChooser;
-import org.herac.tuxguitar.ui.chooser.UIColorChooserHandler;
-import org.herac.tuxguitar.ui.event.UIDisposeEvent;
-import org.herac.tuxguitar.ui.event.UIDisposeListener;
-import org.herac.tuxguitar.ui.event.UISelectionEvent;
-import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UIContainer;
-import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UILegendPanel;
@@ -160,74 +152,10 @@ public class TGPianoConfig {
 		label.setText(title);
 		layout.set(label, row, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, true, true);
 		
-		ButtonColor button = new ButtonColor(window, parent, TuxGuitar.getProperty("choose"));
-		button.loadColor(new UIColorModel(rgb.getRed(), rgb.getGreen(), rgb.getBlue()));
+		TGColorButton button = new TGColorButton(factory, window, parent, TuxGuitar.getProperty("choose"));
+		button.loadColor(new UIColorModel(rgb));
 		layout.set(button.getControl(), row, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
 		
 		return button.getValue();
-	}
-	
-	private class ButtonColor {
-		
-		private UIWindow window;
-		private UIButton button;
-		private UIColor color;
-		private UIColorModel value;
-		
-		public ButtonColor(UIWindow window, UIContainer parent, String text){
-			this.window = window;
-			this.value = new UIColorModel();
-			this.button = getUIFactory().createButton(parent);			
-			this.button.setText(text);
-			this.addListeners();
-		}
-		
-		public void loadColor(UIColorModel cm){
-			this.value.setRed(cm.getRed());
-			this.value.setGreen(cm.getGreen());
-			this.value.setBlue(cm.getBlue());
-			
-			UIColor color = getUIFactory().createColor(this.value);
-			this.button.setFgColor(color);
-			this.disposeColor();
-			this.color = color;
-		}
-		
-		public void disposeColor(){
-			if( this.color != null && !this.color.isDisposed()){
-				this.color.dispose();
-				this.color = null;
-			}
-		}
-		
-		public void addListeners(){
-			this.button.addSelectionListener(new UISelectionListener() {
-				public void onSelect(UISelectionEvent event) {
-					UIColorChooser dlg = getUIFactory().createColorChooser(ButtonColor.this.window);
-					dlg.setDefaultModel(ButtonColor.this.value);
-					dlg.setText(TuxGuitar.getProperty("choose-color"));
-					dlg.choose(new UIColorChooserHandler() {
-						public void onSelectColor(UIColorModel model) {
-							if( model != null) {
-								ButtonColor.this.loadColor(model);
-							}
-						}
-					});
-				}
-			});
-			this.button.addDisposeListener(new UIDisposeListener() {
-				public void onDispose(UIDisposeEvent event) {
-					ButtonColor.this.disposeColor();
-				}
-			});
-		}
-		
-		public UIControl getControl() {
-			return this.button;
-		}
-		
-		public UIColorModel getValue(){
-			return this.value;
-		}
 	}
 }

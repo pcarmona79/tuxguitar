@@ -2,6 +2,7 @@ package org.herac.tuxguitar.app.view.dialog.settings.items;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
+import org.herac.tuxguitar.app.view.component.TGColorButton;
 import org.herac.tuxguitar.app.view.dialog.settings.TGSettingsEditor;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.chooser.UIColorChooser;
@@ -49,10 +50,10 @@ public class StylesOption extends TGSettingsOption {
 	private UIButton printerTextFontButton;
 	private UIButton printerLyricFontButton;
 	
-	private UIColorButton scoreNoteColorButton;
-	private UIColorButton tabNoteColorButton;
-	private UIColorButton playNoteColorButton;
-	private UIColorButton linesColorButton;
+	private TGColorButton scoreNoteColorButton;
+	private TGColorButton tabNoteColorButton;
+	private TGColorButton playNoteColorButton;
+	private TGColorButton linesColorButton;
 	
 	public StylesOption(TGSettingsEditor configEditor, UIToolBar toolBar, UILayoutContainer parent){
 		super(configEditor,toolBar,parent,TuxGuitar.getProperty("settings.config.styles"));
@@ -127,8 +128,8 @@ public class StylesOption extends TGSettingsOption {
 		this.loadConfig();
 	}
 	
-	public UIColorButton createColorButton(UILayoutContainer parent, String text, int row, int col) {
-		UIColorButton button = new UIColorButton(getWindow(), parent, text);
+	public TGColorButton createColorButton(UILayoutContainer parent, String text, int row, int col) {
+		TGColorButton button = new TGColorButton(getUIFactory(), getWindow(), parent, text);
 		
 		UITableLayout uiLayout = (UITableLayout) parent.getLayout();
 		uiLayout.set(button.getControl(), row, col, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, BUTTON_WIDTH, null, null);
@@ -174,7 +175,7 @@ public class StylesOption extends TGSettingsOption {
 		setButtonFontData(button, dst);
 	}
 	
-	protected void loadColor(UIColorButton button, UIColorModel rgb){
+	protected void loadColor(TGColorButton button, UIColorModel rgb){
 		button.loadColor(rgb);
 	}
 	
@@ -267,70 +268,6 @@ public class StylesOption extends TGSettingsOption {
 			getConfig().setValue(TGConfigKeys.COLOR_TAB_NOTE, getDefaults().getValue(TGConfigKeys.COLOR_TAB_NOTE));
 			getConfig().setValue(TGConfigKeys.COLOR_PLAY_NOTE, getDefaults().getValue(TGConfigKeys.COLOR_PLAY_NOTE));
 			getConfig().setValue(TGConfigKeys.COLOR_LINE, getDefaults().getValue(TGConfigKeys.COLOR_LINE));
-		}
-	}
-	
-	private class UIColorButton {
-		
-		private UIWindow window;
-		private UIButton button;
-		private UIColor color;
-		private UIColorModel value;
-		
-		public UIColorButton(UIWindow window, UIContainer parent, String text){
-			this.window = window;
-			this.value = new UIColorModel();
-			this.button = getUIFactory().createButton(parent);			
-			this.button.setText(text);
-			this.addListeners();
-		}
-		
-		public void loadColor(UIColorModel cm){
-			this.value.setRed(cm.getRed());
-			this.value.setGreen(cm.getGreen());
-			this.value.setBlue(cm.getBlue());
-			
-			UIColor color = getUIFactory().createColor(this.value);
-			this.button.setFgColor(color);
-			this.disposeColor();
-			this.color = color;
-		}
-		
-		public void disposeColor(){
-			if( this.color != null && !this.color.isDisposed()){
-				this.color.dispose();
-				this.color = null;
-			}
-		}
-		
-		public void addListeners(){
-			this.button.addSelectionListener(new UISelectionListener() {
-				public void onSelect(UISelectionEvent event) {
-					UIColorChooser dlg = getUIFactory().createColorChooser(UIColorButton.this.window);
-					dlg.setDefaultModel(UIColorButton.this.value);
-					dlg.setText(TuxGuitar.getProperty("choose-color"));
-					dlg.choose(new UIColorChooserHandler() {
-						public void onSelectColor(UIColorModel model) {
-							if( model != null) {
-								UIColorButton.this.loadColor(model);
-							}
-						}
-					});
-				}
-			});
-			this.button.addDisposeListener(new UIDisposeListener() {
-				public void onDispose(UIDisposeEvent event) {
-					UIColorButton.this.disposeColor();
-				}
-			});
-		}
-		
-		public UIControl getControl() {
-			return this.button;
-		}
-		
-		public UIColorModel getValue(){
-			return this.value;
 		}
 	}
 }

@@ -8,6 +8,7 @@ import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackTuningDialogAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
+import org.herac.tuxguitar.app.view.component.TGColorButton;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.app.view.util.TGProcess;
@@ -26,8 +27,6 @@ import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.ui.UIFactory;
-import org.herac.tuxguitar.ui.chooser.UIColorChooser;
-import org.herac.tuxguitar.ui.chooser.UIColorChooserHandler;
 import org.herac.tuxguitar.ui.event.UICloseEvent;
 import org.herac.tuxguitar.ui.event.UICloseListener;
 import org.herac.tuxguitar.ui.event.UIDisposeEvent;
@@ -37,7 +36,6 @@ import org.herac.tuxguitar.ui.event.UIFocusLostListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
@@ -59,8 +57,7 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 	private TGViewContext context;
 	private UIWindow dialog;
 	private UITextField nameText;
-	private UIButton colorButton;
-	private UIColor colorButtonBg;
+	private TGColorButton colorButton;
 	private UIDropDownSelect<Integer> channelSelect;
 	private UIReadOnlyTextField tuningText;
 	private TGProcess updateItemsProcess;
@@ -138,34 +135,13 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		colorLabel.setText(TuxGuitar.getProperty("track.color") + ":");
 		legendLayout.set(colorLabel, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
 		
-		this.colorButton = factory.createButton(legendPanel);
-		this.colorButton.setText(TuxGuitar.getProperty("choose"));
-		this.colorButton.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				TGColor tgColor = findTrack().getColor();
-				UIColorModel colorModel = new UIColorModel();
-				colorModel.setRed(tgColor.getR());
-				colorModel.setGreen(tgColor.getG());
-				colorModel.setBlue(tgColor.getB());
-				
-				UIColorChooser colorChooser = factory.createColorChooser(TGTrackPropertiesDialog.this.dialog);
-				colorChooser.setDefaultModel(colorModel);
-				colorChooser.setText(TuxGuitar.getProperty("choose-color"));
-				colorChooser.choose(new UIColorChooserHandler() {
-					public void onSelectColor(UIColorModel selection) {
-						if( selection != null ) {
-							TGTrackPropertiesDialog.this.updateTrackColor(selection);
-						}
-					}
-				});
+		this.colorButton = new TGColorButton(factory, dialog, legendPanel, TuxGuitar.getProperty("choose"));
+		this.colorButton.addSelectionListener(new TGColorButton.SelectionListener() {
+			public void onSelect(UIColorModel colorModel) {
+				TGTrackPropertiesDialog.this.updateTrackColor(colorModel);
 			}
 		});
-		this.colorButton.addDisposeListener(new UIDisposeListener() {
-			public void onDispose(UIDisposeEvent event) {
-				TGTrackPropertiesDialog.this.disposeColorButtonBackground();
-			}
-		});
-		legendLayout.set(this.colorButton, 2, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_LEFT_CONTROLS_WIDTH, null, null);
+		legendLayout.set(this.colorButton.getControl(), 2, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_LEFT_CONTROLS_WIDTH, null, null);
 		
 		//------------Instrument Combo-------------------------------------
 		UILabel instrumentLabel = factory.createLabel(legendPanel);
@@ -238,18 +214,8 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 	
 	private void updateColorButton() {
 		TGColor tgColor = this.findTrack().getColor();
-		
-		this.colorButton.setFgColor(null);
-		this.disposeColorButtonBackground();
-		this.colorButtonBg = getUIFactory().createColor(tgColor.getR(), tgColor.getG(), tgColor.getB());
-		this.colorButton.setFgColor(this.colorButtonBg);
-	}
-	
-	private void disposeColorButtonBackground(){
-		if( this.colorButtonBg != null && !this.colorButtonBg.isDisposed()){
-			this.colorButtonBg.dispose();
-			this.colorButtonBg = null;
-		}
+
+		this.colorButton.loadColor(tgColor.toColorModel());
 	}
 	
 	private void updateTuningText() {

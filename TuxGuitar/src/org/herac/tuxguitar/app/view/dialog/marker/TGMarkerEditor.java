@@ -3,6 +3,7 @@ package org.herac.tuxguitar.app.view.dialog.marker;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.marker.TGModifyMarkerAction;
 import org.herac.tuxguitar.app.ui.TGApplication;
+import org.herac.tuxguitar.app.view.component.TGColorButton;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
@@ -11,14 +12,9 @@ import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGMarker;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.ui.UIFactory;
-import org.herac.tuxguitar.ui.chooser.UIColorChooser;
-import org.herac.tuxguitar.ui.chooser.UIColorChooserHandler;
-import org.herac.tuxguitar.ui.event.UIDisposeEvent;
-import org.herac.tuxguitar.ui.event.UIDisposeListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
@@ -39,10 +35,8 @@ public class TGMarkerEditor {
 	private UIWindow dialog;
 	private UISpinner measureSpinner;
 	private UITextField titleText;
-	private UIButton colorButton;
-	private UIColor colorButtonValue;
-	
-	public TGMarkerEditor(TGViewContext context) {
+
+	TGMarkerEditor(TGViewContext context) {
 		this.context = context;
 	}
 	
@@ -99,38 +93,17 @@ public class TGMarkerEditor {
 		UILabel colorLabel = uiFactory.createLabel(group);
 		colorLabel.setText(TuxGuitar.getProperty("color"));
 		groupLayout.set(colorLabel, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, true, true);
-		
-		this.colorButton = uiFactory.createButton(group);
-		this.colorButton.setText(TuxGuitar.getProperty("choose"));
-		this.colorButton.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				UIColorModel colorModel = new UIColorModel();
-				colorModel.setRed(TGMarkerEditor.this.marker.getColor().getR());
-				colorModel.setGreen(TGMarkerEditor.this.marker.getColor().getG());
-				colorModel.setBlue(TGMarkerEditor.this.marker.getColor().getB());
-				
-				UIColorChooser colorChooser = uiFactory.createColorChooser(TGMarkerEditor.this.dialog);
-				colorChooser.setDefaultModel(colorModel);
-				colorChooser.setText(TuxGuitar.getProperty("choose-color"));
-				colorChooser.choose(new UIColorChooserHandler() {
-					public void onSelectColor(UIColorModel selection) {
-						if( selection != null ) {
-							TGMarkerEditor.this.marker.getColor().setR(selection.getRed());
-							TGMarkerEditor.this.marker.getColor().setG(selection.getGreen());
-							TGMarkerEditor.this.marker.getColor().setB(selection.getBlue());
-							TGMarkerEditor.this.setButtonColor(uiFactory);
-						}
-					}
-				});
+
+		TGColorButton colorButton = new TGColorButton(uiFactory, dialog, group, TuxGuitar.getProperty("choose"));
+		colorButton.addSelectionListener(new TGColorButton.SelectionListener() {
+			public void onSelect(UIColorModel selection) {
+				TGMarkerEditor.this.marker.getColor().setR(selection.getRed());
+				TGMarkerEditor.this.marker.getColor().setG(selection.getGreen());
+				TGMarkerEditor.this.marker.getColor().setB(selection.getBlue());
 			}
 		});
-		this.colorButton.addDisposeListener(new UIDisposeListener() {
-			public void onDispose(UIDisposeEvent event) {
-				TGMarkerEditor.this.disposeButtonColor();
-			}
-		});
-		this.setButtonColor(uiFactory);
-		groupLayout.set(this.colorButton, 3, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
+		colorButton.loadColor(this.marker.getColor().toColorModel());
+		groupLayout.set(colorButton.getControl(), 3, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
 		
 		// ------------------BUTTONS--------------------------
 		UITableLayout buttonsLayout = new UITableLayout(0f);
@@ -160,21 +133,6 @@ public class TGMarkerEditor {
 		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
 		
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
-	}
-	
-	private void setButtonColor(UIFactory factory) {
-		this.colorButton.setFgColor(null);
-		this.disposeButtonColor();
-		this.colorButtonValue = factory.createColor(this.marker.getColor().getR(), this.marker.getColor().getG(), this.marker.getColor().getB());
-		this.colorButton.setFgColor(this.colorButtonValue);
-	}
-	
-	private void disposeButtonColor() {
-		if( this.colorButtonValue != null && !this.colorButtonValue.isDisposed()){
-			this.colorButton.setFgColor(null);
-			this.colorButtonValue.dispose();
-			this.colorButtonValue = null;
-		}
 	}
 	
 	private void updateMarker() {
