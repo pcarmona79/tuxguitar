@@ -13,9 +13,10 @@ for more information.
 ## What's Changed
 - Added tuning presets, grouped by instrument and number of strings
 - Removed VST2 instrument support due to the SDK being discontinued
+- Removed the Gervill synth due to the interface being hidden in JDK9 (see [JDK-8170518](https://bugs.openjdk.java.net/browse/JDK-8170518))
 - Various bugfixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
 - UI cleanup, MIDI track name support by [Alex Abdugafarov](https://github.com/frozenspider/tuxguitar)
+- Mouse selection support by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
 
 ## Build Instructions
 See [INSTALL.md](INSTALL.md)
-
