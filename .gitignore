@@ -8,3 +8,7 @@ local.properties
 *.o
 *.so
 **/jni/*.dll
+/.metadata/
+.project
+.classpath
+.settings/
