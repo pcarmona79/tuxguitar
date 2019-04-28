@@ -12,8 +12,8 @@
 	<shortcut keys="9" action="action.note.general.set-fret-number-9"/>
 	<shortcut keys="Del" action="action.beat.general.delete-note-or-rest"/>
 	<shortcut keys="Ins" action="action.beat.general.insert-rest"/>
-	<shortcut keys="+" action="action.note.duration.increment-duration"/>
-	<shortcut keys="-" action="action.note.duration.decrement-duration"/>
+	<shortcut keys="-" action="action.note.duration.increment-duration"/>
+	<shortcut keys="=" action="action.note.duration.decrement-duration"/>
 	<shortcut keys="Up" action="action.caret.go-up"/>
 	<shortcut keys="Down" action="action.caret.go-down"/>
 	<shortcut keys="Left" action="action.caret.go-left"/>
@@ -41,17 +41,28 @@
 	<shortcut keys="Command Right" action="action.measure.go-next"/>
 	<shortcut keys="Command Left" action="action.measure.go-previous"/>
 	<shortcut keys="Command v" action="action.gui.open-measure-paste-dialog"/>
-	<shortcut keys="*" action="action.note.duration.change-dotted"/>
+	<shortcut keys=";" action="action.note.effect.change-accentuated"/>
+	<shortcut keys="Shift ;" action="action.note.effect.change-heavy-accentuated"/>
+	<shortcut keys="." action="action.note.duration.change-dotted"/>
 	<shortcut keys="/" action="action.note.duration.change-division-type"/>
 	<shortcut keys="b" action="action.gui.open-bend-dialog"/>
+	<shortcut keys="g" action="action.gui.open-grace-dialog"/>
+	<shortcut keys="n" action="action.gui.open-trill-dialog"/>
+	<shortcut keys="y" action="action.gui.open-harmonic-dialog"/>
+	<shortcut keys="Shift '" action="action.gui.open-tremolo-picking-dialog"/>
+	<shortcut keys="Shift w" action="action.gui.open-tremolo-bar-dialog"/>
 	<shortcut keys="x" action="action.note.effect.change-dead"/>
 	<shortcut keys="f" action="action.note.effect.change-fade-in"/>
 	<shortcut keys="o" action="action.note.effect.change-ghost"/>
-	<shortcut keys="g" action="action.gui.open-grace-dialog"/>
 	<shortcut keys="h" action="action.note.effect.change-hammer"/>
+	<shortcut keys="i" action="action.note.effect.change-let-ring"/>
 	<shortcut keys="p" action="action.note.effect.change-palm-mute"/>
 	<shortcut keys="s" action="action.note.effect.change-slide"/>
 	<shortcut keys="v" action="action.note.effect.change-vibrato"/>
+	<shortcut keys="Shift 0" action="action.note.effect.change-tapping"/>
+	<shortcut keys="Shift 1" action="action.note.effect.change-staccato"/>
+	<shortcut keys="Shift 4" action="action.note.effect.change-popping"/>
+	<shortcut keys="Shift Command 4" action="action.note.effect.change-slapping"/>
 	<shortcut keys="Command Del" action="action.note.general.clean-beat"/>
 	<shortcut keys="Command Up" action="action.beat.general.voice-up"/>
 	<shortcut keys="Command Down" action="action.beat.general.voice-down"/>
@@ -69,6 +80,15 @@
 	<shortcut keys="Command Shift Del" action="action.track.remove"/>
 	<shortcut keys="F9" action="action.gui.open-transport-mode-dialog"/>
 	<shortcut keys="Space" action="action.transport.play"/>
+	<shortcut keys="ESC" action="action.transport.stop"/>
 	<shortcut keys="Command m" action="action.view.show-mixer"/>
-	<shortcut keys="Command t" action="action.gui.toggle-transport-dialog"/>
+	<shortcut keys="Command r" action="action.gui.toggle-transport-dialog"/>
+	<shortcut keys="Command i" action="action.gui.toggle-channels-dialog"/>
+	<shortcut keys="Command k" action="action.gui.open-key-signature-dialog"/>
+	<shortcut keys="Command t" action="action.gui.open-time-signature-dialog"/>
+	<shortcut keys="Command /" action="action.gui.open-triplet-feel-dialog"/>
+	<shortcut keys="Command d" action="action.gui.open-stroke-down-dialog"/>
+	<shortcut keys="Command u" action="action.gui.open-stroke-up-dialog"/>
+	<shortcut keys="F6" action="action.gui.toggle-fretboard-editor"/>
+	<shortcut keys="F7" action="action.gui.toggle-piano-editor"/>
 </shortcuts>
