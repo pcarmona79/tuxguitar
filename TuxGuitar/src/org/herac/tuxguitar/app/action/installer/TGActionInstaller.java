@@ -525,6 +525,8 @@ public class TGActionInstaller {
 		
 		installAction(new TGToggleFretBoardEditorAction(context));
 		installAction(new TGTogglePianoEditorAction(context));
+		installAction(new TGToggleDockingToTopAction(context));
+
 		installAction(new TGToggleMatrixEditorAction(context));
 		installAction(new TGToggleLyricEditorAction(context));
 		installAction(new TGToggleChannelsDialogAction(context));
@@ -533,8 +535,6 @@ public class TGActionInstaller {
 		installAction(new TGToggleMarkerListAction(context));
 		installAction(new TGToggleMainToolbarAction(context));
 		installAction(new TGToggleEditToolbarAction(context));
-		
-		installAction(new TGToggleDockingToTopAction(context));
 		
 		installAction(new TGOpenDocumentationDialogAction(context));
 		installAction(new TGOpenAboutDialogAction(context));

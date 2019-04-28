@@ -27,13 +27,13 @@ public abstract class TGDockedComponentEditor<T extends TGDockedComponent> imple
     return component;
   }
 
-  public void createComponent(UIPanel dock, int colIdx, boolean visible) {
+  public void createComponent(UIPanel dock, int rowIdx, boolean visible) {
     this.visible = visible;
     this.component = createComponentInstance(dock);
     this.component.getControl().setVisible(visible);
 
     UITableLayout uiLayout = (UITableLayout) dock.getLayout();
-    setLayoutControl(uiLayout, component.getControl(), colIdx);
+    setLayoutControl(uiLayout, component.getControl(), rowIdx);
 
     if (visible) {
       this.showComponent();
@@ -41,8 +41,8 @@ public abstract class TGDockedComponentEditor<T extends TGDockedComponent> imple
   }
 
   /** By default, fill both axes of the docking container with a control */
-  protected void setLayoutControl(UITableLayout layout, UIPanel control, int colIdx) {
-    layout.set(control, 1, colIdx, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null,
+  protected void setLayoutControl(UITableLayout layout, UIPanel control, int rowIdx) {
+    layout.set(control, rowIdx, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null,
         0f);
   }
 

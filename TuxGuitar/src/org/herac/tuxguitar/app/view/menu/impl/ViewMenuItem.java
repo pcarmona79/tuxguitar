@@ -79,7 +79,13 @@ public class ViewMenuItem extends TGMenuItem {
 		//--TRANSPORT--
 		this.showTransport = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showTransport.addSelectionListener(this.createActionProcessor(TGToggleTransportDialogAction.NAME));
-		
+
+		//--MATRIX--
+		this.showMatrix = this.layoutMenuItem.getMenu().createCheckItem();
+		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
+
+		this.layoutMenuItem.getMenu().createSeparator();
+
 		//--FRETBOARD--
 		this.showFretBoard = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showFretBoard.addSelectionListener(this.createActionProcessor(TGToggleFretBoardEditorAction.NAME));
@@ -87,13 +93,7 @@ public class ViewMenuItem extends TGMenuItem {
 		//--PIANO--
 		this.showPiano = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showPiano.addSelectionListener(this.createActionProcessor(TGTogglePianoEditorAction.NAME));
-		
-		//--MATRIX--
-		this.showMatrix = this.layoutMenuItem.getMenu().createCheckItem();
-		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
-		
-		this.layoutMenuItem.getMenu().createSeparator();
-		
+
 		//--DOCKING--
 		this.dockToTop = this.layoutMenuItem.getMenu().createCheckItem();
 		this.dockToTop.addSelectionListener(this.createActionProcessor(TGToggleDockingToTopAction.NAME));
