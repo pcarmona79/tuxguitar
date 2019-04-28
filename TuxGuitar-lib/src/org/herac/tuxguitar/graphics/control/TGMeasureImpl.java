@@ -80,7 +80,9 @@ public class TGMeasureImpl extends TGMeasure{
 		new int[] { 4, 1, 5, 2, 6, 3, 7 } ,
 		new int[] { 6, 3, 7, 4, 8, 5, 9 } ,
 	};
-	
+
+	private static final int SELECTION_ALPHA = 18;
+
 	/**
 	 * Espacio por defecto de la clave
 	 */
@@ -1408,9 +1410,12 @@ public class TGMeasureImpl extends TGMeasure{
 		float width = getBeatRightEdge(layout, (TGBeatImpl) to) - x;
 		float height = getBottomEdge(layout) - y;
 
-		initSelectionPath(layout, painter);
-		painter.addRectangle(x, y, width, height);
-		painter.closePath();
+		for (int style : new int[] {UIPainter.PATH_FILL, UIPainter.PATH_DRAW}) {
+			initSelectionPath(layout, painter, style);
+			painter.setAlpha(style == UIPainter.PATH_FILL ? SELECTION_ALPHA : 255);
+			painter.addRectangle(x, y, width, height);
+			painter.closePath();
+		}
 	}
 
 	public void paintSelectionStart(TGLayout layout, UIPainter painter, TGBeat from) {
@@ -1419,7 +1424,13 @@ public class TGMeasureImpl extends TGMeasure{
 		float y1 = getTopEdge(layout);
 		float y2 = getBottomEdge(layout);
 
-		initSelectionPath(layout, painter);
+		initSelectionPath(layout, painter, UIPainter.PATH_FILL);
+		painter.setAlpha(SELECTION_ALPHA);
+		painter.addRectangle(x1, y1, x2 - x1, y2 - y1);
+		painter.closePath();
+
+		initSelectionPath(layout, painter, UIPainter.PATH_DRAW);
+		painter.setAlpha(255);
 		painter.moveTo(x2, y2);
 		painter.lineTo(x1, y2);
 		painter.lineTo(x1, y1);
@@ -1437,7 +1448,13 @@ public class TGMeasureImpl extends TGMeasure{
 		float y1 = getTopEdge(layout);
 		float y2 = getBottomEdge(layout);
 
-		initSelectionPath(layout, painter);
+		initSelectionPath(layout, painter, UIPainter.PATH_FILL);
+		painter.setAlpha(SELECTION_ALPHA);
+		painter.addRectangle(x1, y1, x2 - x1, y2 - y1);
+		painter.closePath();
+
+		initSelectionPath(layout, painter, UIPainter.PATH_DRAW);
+		painter.setAlpha(255);
 		painter.moveTo(x1, y2);
 		painter.lineTo(x2, y2);
 		painter.lineTo(x2, y1);
@@ -1455,7 +1472,13 @@ public class TGMeasureImpl extends TGMeasure{
 		float y1 = getTopEdge(layout);
 		float y2 = getBottomEdge(layout);
 
-		initSelectionPath(layout, painter);
+		initSelectionPath(layout, painter, UIPainter.PATH_FILL);
+		painter.setAlpha(SELECTION_ALPHA);
+		painter.addRectangle(x1, y1, x2 - x1, y2 - y1);
+        painter.closePath();
+
+		initSelectionPath(layout, painter, UIPainter.PATH_DRAW);
+		painter.setAlpha(255);
 		painter.moveTo(x1, y1);
 		painter.lineTo(x2, y1);
 		painter.moveTo(x1, y2);
@@ -1463,11 +1486,11 @@ public class TGMeasureImpl extends TGMeasure{
 		painter.closePath();
 	}
 
-	private void initSelectionPath(TGLayout layout, UIPainter painter) {
+	private void initSelectionPath(TGLayout layout, UIPainter painter, int style) {
 		float scale = layout.getScale();
 		painter.setLineWidth(1f * scale);
 		painter.setForeground(layout.getResources().getSelectionColor());
-		painter.initPath();
+		painter.initPath(style);
 		painter.setAntialias(false);
 	}
 
