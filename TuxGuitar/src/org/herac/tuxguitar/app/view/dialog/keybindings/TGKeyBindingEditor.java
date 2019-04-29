@@ -21,6 +21,7 @@ import org.herac.tuxguitar.ui.resource.UIKeyCombination;
 import org.herac.tuxguitar.ui.widget.UITable;
 import org.herac.tuxguitar.ui.widget.UITableItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.util.TGKeyBindFormatter;
 
 public class TGKeyBindingEditor {
 	
@@ -123,10 +124,11 @@ public class TGKeyBindingEditor {
 		KeyBindingAction selection = this.table.getSelectedValue();
 		
 		this.table.removeItems();
+		TGKeyBindFormatter formatter = TGKeyBindFormatter.getInstance();
 		for(KeyBindingAction kbAction : this.kbActions) {
 			UITableItem<KeyBindingAction> item = new UITableItem<KeyBindingAction>(kbAction);
 			item.setText(0, TuxGuitar.getProperty(kbAction.getAction()));
-			item.setText(1, (kbAction.getCombination() != null ? kbAction.getCombination().toString() : ""));
+			item.setText(1, (kbAction.getCombination() != null ? formatter.format(kbAction.getCombination().getKeyStrings()) : ""));
 			
 			this.table.addItem(item);
 		}

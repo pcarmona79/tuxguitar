@@ -4,8 +4,10 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.herac.tuxguitar.ui.menu.UIMenuItem;
 import org.herac.tuxguitar.ui.resource.UIImage;
 import org.herac.tuxguitar.ui.resource.UIKeyCombination;
+import org.herac.tuxguitar.ui.swt.SWTEnvironment;
 import org.herac.tuxguitar.ui.swt.resource.SWTImage;
 import org.herac.tuxguitar.ui.swt.widget.SWTEventReceiver;
+import org.herac.tuxguitar.util.TGKeyBindFormatter;
 
 public class SWTMenuItem extends SWTEventReceiver<MenuItem> implements UIMenuItem {
 	
@@ -46,7 +48,8 @@ public class SWTMenuItem extends SWTEventReceiver<MenuItem> implements UIMenuIte
 	public void setText(String text) {
 		String textWithAccelerator = text;
 		if( this.getKeyCombination() != null ) {
-			textWithAccelerator += "\t" + this.getKeyCombination().toString() + "\u0000";
+			String accelerator = TGKeyBindFormatter.getInstance().format(this.getKeyCombination().getKeyStrings());
+			textWithAccelerator += "\t" + accelerator + "\u0000";
 		}
 		this.getControl().setText(textWithAccelerator);
 	}
@@ -72,6 +75,8 @@ public class SWTMenuItem extends SWTEventReceiver<MenuItem> implements UIMenuIte
 	
 	public void setImage(UIImage image) {
 		this.image = image;
-		this.getControl().setImage(this.image != null ? ((SWTImage) this.image).getHandle() : null);
+		if (SWTEnvironment.getInstance().allowsMenuIcons()) {
+			this.getControl().setImage(this.image != null ? ((SWTImage) this.image).getHandle() : null);
+		}
 	}
 }

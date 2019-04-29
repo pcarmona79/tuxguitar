@@ -66,6 +66,10 @@ public class SWTEnvironment {
 		}
 		return this.defaultFontName;
 	}
+
+	public boolean allowsMenuIcons() {
+		return !PLATFORM_COCOA.equals(SWT.getPlatform());
+	}
 	
 	public boolean isToolItemResizeAvailable() {
 		if( this.toolItemResizeAvailable == null ) {
