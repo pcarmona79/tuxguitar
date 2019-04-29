@@ -3,7 +3,7 @@ package org.herac.tuxguitar.app.action.impl.edit.tablature;
 import org.herac.tuxguitar.action.TGActionContext;
 import org.herac.tuxguitar.action.TGActionManager;
 import org.herac.tuxguitar.app.action.impl.caret.TGMoveToAction;
-import org.herac.tuxguitar.app.action.impl.selector.TGUpdateSelectionAction;
+import org.herac.tuxguitar.app.action.impl.selector.TGUpdateDragSelectionAction;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.component.tab.edit.EditorKit;
 import org.herac.tuxguitar.editor.action.TGActionBase;
@@ -24,7 +24,7 @@ public class TGMouseClickAction extends TGActionBase{
 		if( editorKit.fillSelection(context)) {
 			TGActionManager actionManager = TGActionManager.getInstance(getContext());
 
-			actionManager.execute(TGUpdateSelectionAction.NAME, context);
+			actionManager.execute(TGUpdateDragSelectionAction.NAME, context);
 			actionManager.execute(TGMoveToAction.NAME, context);
 			if( editorKit.isMouseEditionAvailable() && editorKit.fillAddOrRemoveBeat(context) ) {
 				

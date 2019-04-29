@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.app.action.impl.caret;
 
 import org.herac.tuxguitar.action.TGActionContext;
+import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionBase;
@@ -23,7 +24,9 @@ public class TGMoveToAction extends TGActionBase{
 		TGMeasureImpl measure = ((TGMeasureImpl) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_MEASURE));
 		TGBeat beat = ((TGBeat) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT));
 		TGString string = ((TGString) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_STRING));
-		
-		TablatureEditor.getInstance(getContext()).getTablature().getCaret().moveTo(track, measure, beat, string.getNumber());
+
+		Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
+		tablature.getCaret().moveTo(track, measure, beat, string.getNumber());
+		tablature.getSelector().clearSelection();
 	}
 }

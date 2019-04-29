@@ -66,11 +66,15 @@
 	<shortcut keys="Command Del" action="action.note.general.clean-beat"/>
 	<shortcut keys="Command Up" action="action.beat.general.voice-up"/>
 	<shortcut keys="Command Down" action="action.beat.general.voice-down"/>
-	<shortcut keys="Command a" action="action.beat.general.voice-auto"/>
-	<shortcut keys="Shift Left" action="action.note.general.decrement-semitone"/>
-	<shortcut keys="Shift Right" action="action.note.general.increment-semitone"/>
-	<shortcut keys="Shift Down" action="action.note.general.shift-down"/>
-	<shortcut keys="Shift Up" action="action.note.general.shift-up"/>
+	<shortcut keys="Command r" action="action.beat.general.voice-auto"/>
+	<shortcut keys="Command a" action="action.selection.select-all"/>
+	<shortcut keys="Command Shift a" action="action.selection.clear"/>
+	<shortcut keys="Shift Left" action="action.selection.extend-left"/>
+	<shortcut keys="Shift Right" action="action.selection.extend-right"/>
+	<shortcut keys="Shift =" action="action.note.general.increment-semitone"/>
+	<shortcut keys="Shift -" action="action.note.general.decrement-semitone"/>
+	<shortcut keys="Alt Down" action="action.note.general.shift-down"/>
+	<shortcut keys="Alt Up" action="action.note.general.shift-up"/>
 	<shortcut keys="l" action="action.note.general.tied"/>
 	<shortcut keys="F7" action="action.settings.configure"/>
 	<shortcut keys="Command b" action="action.gui.toggle-browser-dialog"/>
@@ -82,7 +86,7 @@
 	<shortcut keys="Space" action="action.transport.play"/>
 	<shortcut keys="ESC" action="action.transport.stop"/>
 	<shortcut keys="Command m" action="action.view.show-mixer"/>
-	<shortcut keys="Command r" action="action.gui.toggle-transport-dialog"/>
+	<shortcut keys="Command Shift t" action="action.gui.toggle-transport-dialog"/>
 	<shortcut keys="Command i" action="action.gui.toggle-channels-dialog"/>
 	<shortcut keys="Command k" action="action.gui.open-key-signature-dialog"/>
 	<shortcut keys="Command t" action="action.gui.open-time-signature-dialog"/>

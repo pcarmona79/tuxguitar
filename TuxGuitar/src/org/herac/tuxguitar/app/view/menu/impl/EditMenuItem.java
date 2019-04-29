@@ -6,6 +6,8 @@ import org.herac.tuxguitar.app.action.impl.edit.TGSetMouseModeSelectionAction;
 import org.herac.tuxguitar.app.action.impl.edit.TGSetNaturalKeyAction;
 import org.herac.tuxguitar.app.action.impl.edit.TGSetVoice1Action;
 import org.herac.tuxguitar.app.action.impl.edit.TGSetVoice2Action;
+import org.herac.tuxguitar.app.action.impl.selector.TGClearSelectionAction;
+import org.herac.tuxguitar.app.action.impl.selector.TGSelectAllAction;
 import org.herac.tuxguitar.app.view.component.tab.edit.EditorKit;
 import org.herac.tuxguitar.app.view.menu.TGMenuItem;
 import org.herac.tuxguitar.editor.action.edit.TGRedoAction;
@@ -20,6 +22,8 @@ public class EditMenuItem extends TGMenuItem{
 	private UIMenuSubMenuItem editMenuItem; 
 	private UIMenuActionItem undo;
 	private UIMenuActionItem redo;
+	private UIMenuActionItem selectAll;
+	private UIMenuActionItem selectNone;
 	private UIMenuCheckableItem modeSelection;
 	private UIMenuCheckableItem modeEdition;
 	private UIMenuCheckableItem notNaturalKey;
@@ -38,6 +42,14 @@ public class EditMenuItem extends TGMenuItem{
 		//--REDO--
 		this.redo = this.editMenuItem.getMenu().createActionItem();
 		this.redo.addSelectionListener(this.createActionProcessor(TGRedoAction.NAME));
+		//--SEPARATOR
+		this.editMenuItem.getMenu().createSeparator();
+		//--SELECT ALL--
+		this.selectAll = this.editMenuItem.getMenu().createActionItem();
+		this.selectAll.addSelectionListener(this.createActionProcessor(TGSelectAllAction.NAME));
+		//--SELECT NONE--
+		this.selectNone = this.editMenuItem.getMenu().createActionItem();
+		this.selectNone.addSelectionListener(this.createActionProcessor(TGClearSelectionAction.NAME));
 		//--SEPARATOR
 		this.editMenuItem.getMenu().createSeparator();
 		//--TABLATURE EDIT MODE
@@ -81,6 +93,8 @@ public class EditMenuItem extends TGMenuItem{
 		setMenuItemTextAndAccelerator(this.editMenuItem, "edit.menu", null);
 		setMenuItemTextAndAccelerator(this.undo, "edit.undo", TGUndoAction.NAME);
 		setMenuItemTextAndAccelerator(this.redo, "edit.redo", TGRedoAction.NAME);
+		setMenuItemTextAndAccelerator(this.selectAll, "edit.select-all", TGSelectAllAction.NAME);
+		setMenuItemTextAndAccelerator(this.selectNone, "edit.select-none", TGClearSelectionAction.NAME);
 		setMenuItemTextAndAccelerator(this.modeSelection, "edit.mouse-mode-selection", TGSetMouseModeSelectionAction.NAME);
 		setMenuItemTextAndAccelerator(this.modeEdition, "edit.mouse-mode-edition", TGSetMouseModeEditionAction.NAME);
 		setMenuItemTextAndAccelerator(this.notNaturalKey, "edit.not-natural-key", TGSetNaturalKeyAction.NAME);

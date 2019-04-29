@@ -66,11 +66,15 @@
 	<shortcut keys="Control Del" action="action.note.general.clean-beat"/>
 	<shortcut keys="Control Up" action="action.beat.general.voice-up"/>
 	<shortcut keys="Control Down" action="action.beat.general.voice-down"/>
-	<shortcut keys="Control a" action="action.beat.general.voice-auto"/>
-	<shortcut keys="Shift Left" action="action.note.general.decrement-semitone"/>
-	<shortcut keys="Shift Right" action="action.note.general.increment-semitone"/>
-	<shortcut keys="Shift Down" action="action.note.general.shift-down"/>
-	<shortcut keys="Shift Up" action="action.note.general.shift-up"/>
+	<shortcut keys="Control r" action="action.beat.general.voice-auto"/>
+	<shortcut keys="Control a" action="action.selection.select-all"/>
+	<shortcut keys="Control Shift a" action="action.selection.clear"/>
+	<shortcut keys="Shift Left" action="action.selection.extend-left"/>
+	<shortcut keys="Shift Right" action="action.selection.extend-right"/>
+	<shortcut keys="Shift =" action="action.note.general.increment-semitone"/>
+	<shortcut keys="Shift -" action="action.note.general.decrement-semitone"/>
+	<shortcut keys="Alt Down" action="action.note.general.shift-down"/>
+	<shortcut keys="Alt Up" action="action.note.general.shift-up"/>
 	<shortcut keys="l" action="action.note.general.tied"/>
 	<shortcut keys="F7" action="action.settings.configure"/>
 	<shortcut keys="Control b" action="action.gui.toggle-browser-dialog"/>
@@ -82,11 +86,11 @@
 	<shortcut keys="Space" action="action.transport.play"/>
 	<shortcut keys="ESC" action="action.transport.stop"/>
 	<shortcut keys="Control m" action="action.view.show-mixer"/>
-	<shortcut keys="Control r" action="action.gui.toggle-transport-dialog"/>
+	<shortcut keys="Control Shift t" action="action.gui.toggle-transport-dialog"/>
 	<shortcut keys="Control i" action="action.gui.toggle-channels-dialog"/>
-	<shortcut keys="Command k" action="action.gui.open-key-signature-dialog"/>
-	<shortcut keys="Command t" action="action.gui.open-time-signature-dialog"/>
-	<shortcut keys="Command /" action="action.gui.open-triplet-feel-dialog"/>
+	<shortcut keys="Control k" action="action.gui.open-key-signature-dialog"/>
+	<shortcut keys="Control t" action="action.gui.open-time-signature-dialog"/>
+	<shortcut keys="Control /" action="action.gui.open-triplet-feel-dialog"/>
 	<shortcut keys="Control d" action="action.gui.open-stroke-down-dialog"/>
 	<shortcut keys="Control u" action="action.gui.open-stroke-up-dialog"/>
 	<shortcut keys="F6" action="action.gui.toggle-fretboard-editor"/>

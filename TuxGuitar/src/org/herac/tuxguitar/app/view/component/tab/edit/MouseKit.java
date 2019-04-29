@@ -7,8 +7,8 @@ import org.herac.tuxguitar.app.action.impl.edit.tablature.TGMouseExitAction;
 import org.herac.tuxguitar.app.action.impl.edit.tablature.TGMouseMoveAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleDecrementAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleIncrementAction;
-import org.herac.tuxguitar.app.action.impl.selector.TGSetSelectionBeginingAction;
-import org.herac.tuxguitar.app.action.impl.selector.TGUpdateSelectionAction;
+import org.herac.tuxguitar.app.action.impl.selector.TGStartDragSelectionAction;
+import org.herac.tuxguitar.app.action.impl.selector.TGUpdateDragSelectionAction;
 import org.herac.tuxguitar.app.action.listener.gui.TGActionProcessingListener;
 import org.herac.tuxguitar.editor.TGEditorManager;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
@@ -22,7 +22,8 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 	private EditorKit kit;
 	private UIPosition position;
 	private boolean menuOpen;
-	
+	private UIPosition startPosition;
+
 	public MouseKit(EditorKit kit){
 		this.kit = kit;
 		this.position = new UIPosition();
@@ -44,17 +45,20 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 	
 	public void onMouseDown(UIMouseEvent event) {
 		this.position.set(event.getPosition());
-		this.executeAction(TGSetSelectionBeginingAction.NAME, event.getPosition(), false);
+		this.startPosition = this.position.clone();
+		this.executeAction(TGStartDragSelectionAction.NAME, event.getPosition(), false);
 	}
 
 	public void onMouseUp(UIMouseEvent event) {
 		this.position.set(event.getPosition());
+		this.startPosition = null;
 		this.executeAction(TGMouseClickAction.NAME, event.getPosition(), false);
 	}
 
 	public void onMouseDrag(UIMouseEvent event) {
-//		this.position.set(event.getPosition());
-//		this.executeAction(TGUpdateSelectionAction.NAME, event.getPosition(), false);
+		this.position.set(this.startPosition);
+		this.position.add(event.getPosition());
+		this.executeAction(TGUpdateDragSelectionAction.NAME, this.position.clone(), false);
 	}
 
 	public void onMouseMove(UIMouseEvent event) {

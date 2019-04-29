@@ -34,6 +34,15 @@ public class UIPosition {
 		this.x = position.getX();
 		this.y = position.getY();
 	}
+
+	public void add(UIPosition position) {
+		this.x += position.getX();
+		this.y += position.getY();
+	}
+
+	public UIPosition clone() {
+		return new UIPosition(x, y);
+	}
 	
 	@Override
 	public boolean equals(Object obj) {

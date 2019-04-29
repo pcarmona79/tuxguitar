@@ -1490,6 +1490,7 @@ public class TGMeasureImpl extends TGMeasure{
 		float scale = layout.getScale();
 		painter.setLineWidth(1f * scale);
 		painter.setForeground(layout.getResources().getSelectionColor());
+		painter.setBackground(layout.getResources().getSelectionColor());
 		painter.initPath(style);
 		painter.setAntialias(false);
 	}

@@ -24,14 +24,21 @@ public class Selector {
 	}
 
 	public void updateSelection(TGBeat beat) {
-
-		if (initial.getMeasure().getNumber() < beat.getMeasure().getNumber() || initialIsEarlierInTheSameMeasure(beat)) {
-			start = initial;
-			end = beat;
+	    if (initial == null) {
+	    	initializeSelection(beat);
 		} else {
-			start = beat;
-			end = initial;
+			if (initial.getMeasure().getNumber() < beat.getMeasure().getNumber() || initialIsEarlierInTheSameMeasure(beat)) {
+				start = initial;
+				end = beat;
+			} else {
+				start = beat;
+				end = initial;
+			}
 		}
+	}
+
+	public void clearSelection() {
+		initializeSelection(null);
 	}
 
 	private boolean initialIsEarlierInTheSameMeasure(TGBeat beat) {
@@ -47,7 +54,7 @@ public class Selector {
 	}
 
 	public boolean isActive() {
-		return start != end;
+		return start != null && start != end;
 	}
 
 	public void paintSelectedArea(TGLayout viewLayout, UIPainter painter) {
