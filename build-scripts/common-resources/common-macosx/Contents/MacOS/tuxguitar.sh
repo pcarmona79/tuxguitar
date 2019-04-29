@@ -41,4 +41,4 @@ VM_ARGS="-Xmx512m"
 ##SWT ARGUMENTS
 SWT_ARGS="-XstartOnFirstThread"
 ##LAUNCH
-exec "${JAVA}" ${VM_ARGS} ${SWT_ARGS} -cp :${CLASSPATH} -Dtuxguitar.home.path="${DIR_NAME}" -Djava.library.path="${LD_LIBRARY_PATH}" ${MAINCLASS} "$1" "$2"
+exec "${JAVA}" ${VM_ARGS} ${SWT_ARGS} -cp :${CLASSPATH} -Dtuxguitar.home.path="${DIR_NAME}" -Dorg.eclipse.swt.display.useSystemTheme=true -Djava.library.path="${LD_LIBRARY_PATH}" ${MAINCLASS} "$1" "$2"
