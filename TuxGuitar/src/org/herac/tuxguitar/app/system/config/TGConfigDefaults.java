@@ -64,10 +64,12 @@ public class TGConfigDefaults{
 		loadProperty(properties, TGConfigKeys.COLOR_LINE,"214,214,214");
 		loadProperty(properties, TGConfigKeys.COLOR_SCORE_NOTE,"64,64,64");
 		loadProperty(properties, TGConfigKeys.COLOR_TAB_NOTE,"64,64,64");
-		loadProperty(properties, TGConfigKeys.COLOR_PLAY_NOTE,"255,0,0");
-		loadProperty(properties, TGConfigKeys.COLOR_SELECTION,"0,0,200");
+		loadProperty(properties, TGConfigKeys.COLOR_PLAY_NOTE,"224,32,32");
+		loadProperty(properties, TGConfigKeys.COLOR_SELECTION,"116,152,208");
 		loadProperty(properties, TGConfigKeys.COLOR_CARET_1,"127,127,127");
+		loadProperty(properties, TGConfigKeys.COLOR_CARET_1_FILL,"255,255,127");
 		loadProperty(properties, TGConfigKeys.COLOR_CARET_2,"165,42,42");
+		loadProperty(properties, TGConfigKeys.COLOR_CARET_2_FILL,"165,42,42");
 		loadProperty(properties, TGConfigKeys.COLOR_LOOP_S_MARKER,"42,165,42");
 		loadProperty(properties, TGConfigKeys.COLOR_LOOP_E_MARKER,"165,42,42");
 		loadProperty(properties, TGConfigKeys.COLOR_MEASURE_NUMBER,"128,0,0");

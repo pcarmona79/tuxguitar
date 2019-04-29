@@ -157,7 +157,9 @@ public class Tablature implements TGController {
 		TGConfigManager config = TGConfigManager.getInstance(this.context);
 		
 		getCaret().setColor1(config.getColorModelConfigValue(TGConfigKeys.COLOR_CARET_1));
+		getCaret().setColor1Fill(config.getColorModelConfigValue(TGConfigKeys.COLOR_CARET_1_FILL));
 		getCaret().setColor2(config.getColorModelConfigValue(TGConfigKeys.COLOR_CARET_2));
+		getCaret().setColor2Fill(config.getColorModelConfigValue(TGConfigKeys.COLOR_CARET_2_FILL));
 	}
 	
 	public void scale(Float scale) {

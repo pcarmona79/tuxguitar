@@ -52,8 +52,12 @@ public class Caret {
 	private boolean changes;
 	
 	private UIColor color1;
+	private UIColor color1Fill;
 	private UIColor color2;
-	
+	private UIColor color2Fill;
+
+	private static final int FILL_ALPHA = 16;
+
 	public Caret(Tablature tablature) {
 		this.tablature = tablature;
 		this.selectedDuration = getSongManager().getFactory().newDuration();
@@ -155,11 +159,14 @@ public class Caret {
 					float x = (this.selectedMeasure.getPosX() + beat.getPosX() + beat.getSpacing(layout) + leftSpacing - xMargin);
 					float y = (this.selectedMeasure.getPosY() + this.selectedMeasure.getTs().getPosition(TGTrackSpacing.POSITION_TABLATURE) + ((this.string * stringSpacing) - stringSpacing) - yMargin);
 					this.setPaintStyle(painter, expectedVoice);
-					
-					painter.initPath();
+
 					painter.setAntialias(false);
-					painter.addRectangle(x, y, width, height);
-					painter.closePath();
+					for (int style : new int[] {UIPainter.PATH_FILL, UIPainter.PATH_DRAW}) {
+						painter.initPath(style);
+						painter.setAlpha(style == UIPainter.PATH_FILL ? FILL_ALPHA : 255);
+						painter.addRectangle(x, y, width, height);
+						painter.closePath();
+					}
 				}
 				else if( (layout.getStyle() & TGLayout.DISPLAY_SCORE) != 0){
 					float line = this.tablature.getViewLayout().getScoreLineSpacing();
@@ -170,15 +177,18 @@ public class Caret {
 					float y1 = this.selectedMeasure.getPosY() + this.selectedMeasure.getTs().getPosition(TGTrackSpacing.POSITION_TOP) - line;
 					float y2 = this.selectedMeasure.getPosY() + this.selectedMeasure.getTs().getPosition(TGTrackSpacing.POSITION_BOTTOM);
 					this.setPaintStyle(painter, true);
-					
-					painter.initPath();
-					painter.moveTo(x1, y1);
-					painter.lineTo(x1 + ((x2 - x1) / 2f), y1 + (line / 2f));
-					painter.lineTo(x2, y1);
-					painter.moveTo(x1, y2 + line);
-					painter.lineTo(x1 + ((x2 - x1) / 2f), y2 + (line / 2f));
-					painter.lineTo(x2, y2 + line);
-					painter.closePath();
+
+					for (int style : new int[] {UIPainter.PATH_FILL, UIPainter.PATH_DRAW}) {
+						painter.initPath(style);
+						painter.setAlpha(style == UIPainter.PATH_FILL ? FILL_ALPHA : 255);
+						painter.moveTo(x1, y1);
+						painter.lineTo(x1 + ((x2 - x1) / 2f), y1 + (line / 2f));
+						painter.lineTo(x2, y1);
+						painter.moveTo(x1, y2 + line);
+						painter.lineTo(x1 + ((x2 - x1) / 2f), y2 + (line / 2f));
+						painter.lineTo(x2, y2 + line);
+						painter.closePath();
+					}
 				}
 			}
 		}
@@ -186,8 +196,12 @@ public class Caret {
 	
 	public void setPaintStyle(UIPainter painter, boolean expectedVoice){
 		UIColor foreground = ( expectedVoice ? this.color1 : this.color2 );
-		if( foreground != null ){
-			painter.setForeground( foreground );
+		if (foreground != null) {
+			painter.setForeground(foreground);
+		}
+		UIColor background = ( expectedVoice ? this.color1Fill : this.color2Fill );
+		if (background != null) {
+			painter.setBackground(background);
 		}
 	}
 	
@@ -381,12 +395,22 @@ public class Caret {
 		this.disposeResource( this.color1 );
 		this.color1 = this.tablature.getResourceFactory().createColor(cm);
 	}
-	
+
+	public void setColor1Fill(UIColorModel cm) {
+		this.disposeResource( this.color1Fill );
+		this.color1Fill = this.tablature.getResourceFactory().createColor(cm);
+	}
+
 	public void setColor2(UIColorModel cm){
 		this.disposeResource( this.color2 );
 		this.color2 = this.tablature.getResourceFactory().createColor(cm);
 	}
-	
+
+	public void setColor2Fill(UIColorModel cm) {
+		this.disposeResource( this.color2Fill );
+		this.color2Fill = this.tablature.getResourceFactory().createColor(cm);
+	}
+
 	public void disposeResource(UIResource resource){
 		if( resource != null && !resource.isDisposed() ){
 			resource.dispose();
