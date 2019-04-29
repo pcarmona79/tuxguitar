@@ -4,6 +4,7 @@ import org.herac.tuxguitar.action.TGActionContext;
 import org.herac.tuxguitar.action.TGActionManager;
 import org.herac.tuxguitar.app.action.impl.caret.TGMoveToAction;
 import org.herac.tuxguitar.app.action.impl.selector.TGUpdateDragSelectionAction;
+import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.component.tab.edit.EditorKit;
 import org.herac.tuxguitar.editor.action.TGActionBase;
@@ -20,11 +21,16 @@ public class TGMouseClickAction extends TGActionBase{
 	}
 	
 	protected void processAction(TGActionContext context) {
-		EditorKit editorKit = TablatureEditor.getInstance(getContext()).getTablature().getEditorKit();
+		Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
+		EditorKit editorKit = tablature.getEditorKit();
 		if( editorKit.fillSelection(context)) {
 			TGActionManager actionManager = TGActionManager.getInstance(getContext());
 
 			actionManager.execute(TGUpdateDragSelectionAction.NAME, context);
+
+			if (tablature.getSelector().isActive()) {
+				context.setAttribute(TGMoveToAction.ATTRIBUTE_KEEP_SELECTION, true);
+			}
 			actionManager.execute(TGMoveToAction.NAME, context);
 			if( editorKit.isMouseEditionAvailable() && editorKit.fillAddOrRemoveBeat(context) ) {
 				

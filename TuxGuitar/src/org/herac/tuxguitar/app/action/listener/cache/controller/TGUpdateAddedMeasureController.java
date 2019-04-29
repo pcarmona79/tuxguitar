@@ -34,8 +34,7 @@ public class TGUpdateAddedMeasureController extends TGUpdateItemsController {
 				Tablature tablature = TuxGuitar.getInstance().getTablatureEditor().getTablature();
 				Caret caret = tablature.getCaret();
 				caret.update(caret.getTrack().getNumber(), start, caret.getStringNumber());
-				Boolean extendSelection = actionContext.getAttribute(ATTRIBUTE_EXTEND_SELECTION);
-				if (extendSelection != null && extendSelection) {
+				if (actionContext.hasAttribute(ATTRIBUTE_EXTEND_SELECTION) && (boolean) actionContext.getAttribute(ATTRIBUTE_EXTEND_SELECTION)) {
 					tablature.getSelector().updateSelection(caret.getSelectedBeat());
 				}
 			}
