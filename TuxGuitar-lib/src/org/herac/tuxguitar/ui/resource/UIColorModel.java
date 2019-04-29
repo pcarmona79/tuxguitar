@@ -37,6 +37,9 @@ public class UIColorModel {
 				(int) Math.round(brightness * lerp(1., clamp(coef(hue + 1./3.) - 1., 0., 1.), saturation) * 255.)
 		);
 	}
+	public UIColorModel(float[] color) {
+		this(color[0], color[1], color[2]);
+	}
 
 	public float[] getHSB() {
 		double[] p;
