@@ -1,6 +1,8 @@
 package org.herac.tuxguitar.app.action.impl.selector;
 
 import org.herac.tuxguitar.action.TGActionContext;
+import org.herac.tuxguitar.action.TGActionManager;
+import org.herac.tuxguitar.app.action.impl.caret.TGMoveToAction;
 import org.herac.tuxguitar.app.view.component.tab.Selector;
 import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
@@ -27,6 +29,7 @@ public class TGStartDragSelectionAction extends TGActionBase {
 		EditorKit editorKit = tablature.getEditorKit();
 
 		if (editorKit.fillSelection(context)) {
+			TGActionManager.getInstance(getContext()).execute(TGMoveToAction.NAME, context);
 			TGBeat beat = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT);
 			Selector selector = tablature.getSelector();
 			selector.initializeSelection(beat);

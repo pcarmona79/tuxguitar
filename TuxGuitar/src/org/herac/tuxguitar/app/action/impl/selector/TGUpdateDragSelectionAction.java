@@ -28,7 +28,9 @@ public class TGUpdateDragSelectionAction extends TGActionBase {
 		if (editorKit.fillSelection(context)) {
 			TGBeat beat = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT);
 			Selector selector = tablature.getSelector();
-			selector.updateSelection(beat);
+			if (selector.getStartBeat() != null && beat.getMeasure().getTrack() == selector.getStartBeat().getMeasure().getTrack()) {
+				selector.updateSelection(beat);
+			}
 		}
 	}
 }
