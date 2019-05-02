@@ -28,7 +28,9 @@
 	<shortcut keys="Command o" action="action.file.open"/>
 	<shortcut keys="Command p" action="action.file.print"/>
 	<shortcut keys="Command s" action="action.file.save"/>
-	<shortcut keys="F12" action="action.file.save-as"/>
+	<shortcut keys="Command Shift s" action="action.file.save-as"/>
+	<shortcut keys="Command w" action="action.file.close-current"/>
+	<shortcut keys="Command Shift w" action="action.file.close-others"/>
 	<shortcut keys="F1" action="action.gui.open-documentation-dialog"/>
 	<shortcut keys="a" action="action.gui.open-chord-dialog"/>
 	<shortcut keys="t" action="action.gui.open-text-dialog"/>

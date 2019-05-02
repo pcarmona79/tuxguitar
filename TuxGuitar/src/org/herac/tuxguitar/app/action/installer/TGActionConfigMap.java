@@ -298,8 +298,8 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGExportSongAction.NAME, LOCKABLE);
 		this.map(TGCloseDocumentsAction.NAME, LOCKABLE | SAVE_BEFORE, UPDATE_ITEMS_CTL);
 		this.map(TGCloseDocumentAction.NAME, LOCKABLE | STOP_TRANSPORT);
-		this.map(TGCloseCurrentDocumentAction.NAME, LOCKABLE | STOP_TRANSPORT);
-		this.map(TGCloseOtherDocumentsAction.NAME, LOCKABLE);
+		this.map(TGCloseCurrentDocumentAction.NAME, LOCKABLE | STOP_TRANSPORT | SHORTCUT);
+		this.map(TGCloseOtherDocumentsAction.NAME, LOCKABLE | SHORTCUT);
 		this.map(TGCloseAllDocumentsAction.NAME, LOCKABLE | STOP_TRANSPORT);
 		this.map(TGExitAction.NAME, LOCKABLE | SYNC_THREAD);
 		this.map(TGPrintAction.NAME, LOCKABLE | SHORTCUT);
