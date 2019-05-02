@@ -8,6 +8,7 @@ import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.action.measure.TGCopyMeasureAction;
+import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.song.models.TGTrack;
@@ -63,7 +64,12 @@ public class TGMeasureCopyDialog {
 		createOkButton(context.getContext());
 		createCancelButton();
 
-		setInitialFromToValues(selector);
+		if (selector.isActive()) {
+            setInitialFromToValues(selector.getStartBeat(), selector.getEndBeat());
+        } else {
+			final TGBeat beat = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT);
+			setInitialFromToValues(beat, beat);
+		}
 
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
@@ -178,9 +184,9 @@ public class TGMeasureCopyDialog {
 		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
 	}
 
-	private void setInitialFromToValues(Selector selector) {
-		fromSpinner.setValue(selector.getStartBeat().getMeasure().getNumber());
-		toSpinner.setValue(selector.getEndBeat().getMeasure().getNumber());
+	private void setInitialFromToValues(TGBeat start, TGBeat end) {
+		fromSpinner.setValue(start.getMeasure().getNumber());
+		toSpinner.setValue(end.getMeasure().getNumber());
 	}
 
 	public void processAction(TGContext context) {
