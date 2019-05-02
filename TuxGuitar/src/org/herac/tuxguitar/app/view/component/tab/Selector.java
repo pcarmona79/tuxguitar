@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.app.view.component.tab;
 
+import org.herac.tuxguitar.app.transport.TGTransport;
 import org.herac.tuxguitar.graphics.control.TGLayout;
 import org.herac.tuxguitar.graphics.control.TGTrackImpl;
 import org.herac.tuxguitar.song.models.*;
@@ -13,9 +14,14 @@ import java.util.*;
  */
 public class Selector {
 
+	private final Tablature tablature;
 	private TGBeat initial;
 	private TGBeat start;
 	private TGBeat end;
+
+	public Selector(Tablature tablature) {
+	    this.tablature = tablature;
+	}
 
 	public void initializeSelection(TGBeat beat) {
 		initial = beat;

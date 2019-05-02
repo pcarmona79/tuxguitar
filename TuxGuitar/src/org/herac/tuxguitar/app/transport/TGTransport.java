@@ -6,6 +6,7 @@ import org.herac.tuxguitar.document.TGDocumentManager;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGSong;
@@ -48,9 +49,14 @@ public class TGTransport {
 	
 	public void gotoPrevious(){
 		MidiPlayer player = TuxGuitar.getInstance().getPlayer();
-		TGMeasureHeader header = getSongManager().getMeasureHeaderAt(getSong(), MidiTickUtil.getStart(player.getTickPosition()));
+		long start = MidiTickUtil.getStart(player.getTickPosition());
+		TGMeasureHeader header = getSongManager().getMeasureHeaderAt(getSong(), start);
 		if(header != null){
-			gotoMeasure(getSongManager().getPrevMeasureHeader(getSong(), header),true);
+			if (start != header.getStart()) {
+				gotoMeasure(header, true);
+			} else {
+				gotoMeasure(getSongManager().getPrevMeasureHeader(getSong(), header), true);
+			}
 		}
 	}
 	
@@ -75,6 +81,19 @@ public class TGTransport {
 					TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().goToTickPosition();
 					TuxGuitar.getInstance().updateCache(true);
 				}
+			}
+		}
+	}
+
+	public void gotoBeat(TGBeat beat) {
+	    if (beat != null) {
+			TGBeat playingBeat = null;
+			if( TuxGuitar.getInstance().getPlayer().isRunning() ){
+				TuxGuitar.getInstance().getEditorCache().updatePlayMode();
+				playingBeat = TuxGuitar.getInstance().getEditorCache().getPlayBeat();
+			}
+			if( playingBeat == null || playingBeat != beat) {
+				TuxGuitar.getInstance().getPlayer().setTickPosition(beat.getStart());
 			}
 		}
 	}

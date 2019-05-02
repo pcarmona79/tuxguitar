@@ -77,6 +77,10 @@ public class MidiPlayer{
 	private long loopSPosition;
 	
 	private boolean anySolo;
+
+	private long selectionStartPosition;
+
+	private long selectionEndPosition;
 	
 	protected long tickLength;
 	
@@ -260,8 +264,12 @@ public class MidiPlayer{
 					}
 					this.getSequencer().start();
 				}
-				
-				this.tickLength = getSequencer().getTickLength();
+
+				if (this.selectionEndPosition != -1) {
+					this.tickLength = this.selectionEndPosition;
+				} else {
+					this.tickLength = getSequencer().getTickLength();
+				}
 				this.tickPosition = getSequencer().getTickPosition();
 			} finally {
 				this.unlock();
@@ -283,11 +291,15 @@ public class MidiPlayer{
 			}
 		});
 	}
+
+	private boolean insideSelection() {
+		return this.selectionEndPosition == -1 || this.tickPosition < this.selectionEndPosition;
+	}
 	
 	public boolean runPlayLoopProcess() {
 		try {
 			// Play loop
-			if( this.getSequencer().isRunning() && this.isRunning()) {
+			if( this.getSequencer().isRunning() && this.isRunning() && this.insideSelection()) {
 				try {
 					this.lock();
 					
@@ -318,7 +330,9 @@ public class MidiPlayer{
 			try {
 				this.lock();
 				if( this.isRunning()){
-					if( this.tickPosition >= (this.tickLength - (TGDuration.QUARTER_TIME / 2) )){
+				    if (this.selectionEndPosition != -1 && this.tickPosition >= this.selectionEndPosition - (TGDuration.QUARTER_TIME / 2)) {
+						this.finish();
+					} else if( this.tickPosition >= (this.tickLength - (TGDuration.QUARTER_TIME / 2) )) {
 						this.finish();
 					} else {
 						this.stop(isPaused());
@@ -433,7 +447,6 @@ public class MidiPlayer{
 	public boolean isRunning() {
 		try {
 			this.lock();
-			
 			return (this.running || this.getSequencer().isRunning());
 		} catch (MidiPlayerException e) {
 			e.printStackTrace();
@@ -503,13 +516,25 @@ public class MidiPlayer{
 			this.unlock();
 		}
 	}
-	
+
+	public void setSelection(long start, long end) {
+		try {
+			this.lock();
+			this.selectionStartPosition = start;
+			this.selectionEndPosition = end;
+		} finally {
+			this.unlock();
+		}
+	}
+
 	protected void changeTickPosition(){
 		try {
 			this.lock();
 			
 			if( this.isRunning()){
-				if( this.tickPosition < this.getLoopSPosition() ){
+			    if (this.selectionStartPosition != -1 && this.tickPosition < this.selectionStartPosition) {
+			    	this.tickPosition = this.selectionStartPosition;
+				} else if( this.tickPosition < this.getLoopSPosition() ){
 					this.tickPosition = this.getLoopSPosition();
 				}
 				this.getSequencer().setTickPosition(this.tickPosition);
@@ -1274,7 +1299,7 @@ public class MidiPlayer{
 	public long getLoopSPosition() {
 		return this.loopSPosition;
 	}
-	
+
 	public boolean isTryOpenFistDevice() {
 		return tryOpenFistDevice;
 	}

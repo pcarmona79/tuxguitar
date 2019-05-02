@@ -84,6 +84,7 @@
 	<shortcut keys="Control Shift Del" action="action.track.remove"/>
 	<shortcut keys="F9" action="action.gui.open-transport-mode-dialog"/>
 	<shortcut keys="Space" action="action.transport.play"/>
+	<shortcut keys="Shift Space" action="action.transport.play-selection"/>
 	<shortcut keys="ESC" action="action.transport.stop"/>
 	<shortcut keys="Control m" action="action.view.show-mixer"/>
 	<shortcut keys="Control Shift t" action="action.gui.toggle-transport-dialog"/>

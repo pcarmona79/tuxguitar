@@ -47,7 +47,7 @@ public class Tablature implements TGController {
 		TGConfigManager config = TGConfigManager.getInstance(this.context);
 		this.scale = config.getFloatValue(TGConfigKeys.LAYOUT_ZOOM, DEFAULT_SCALE);
 		this.caret = new Caret(this);
-		this.selector = new Selector();
+		this.selector = new Selector(this);
 		this.editorKit = new EditorKit(this);
 		this.createSyncProcesses();
 	}

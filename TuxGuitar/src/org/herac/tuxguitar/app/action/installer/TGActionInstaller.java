@@ -109,14 +109,7 @@ import org.herac.tuxguitar.app.action.impl.track.TGGoToTrackAction;
 import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackPropertiesDialogAction;
 import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackTuningDialogAction;
 import org.herac.tuxguitar.app.action.impl.track.TGToggleLyricEditorAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGOpenTransportModeDialogAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGTransportCountDownAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGTransportMetronomeAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGTransportModeAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGTransportPlayAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGTransportSetLoopEHeaderAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGTransportSetLoopSHeaderAction;
-import org.herac.tuxguitar.app.action.impl.transport.TGTransportStopAction;
+import org.herac.tuxguitar.app.action.impl.transport.*;
 import org.herac.tuxguitar.app.action.impl.view.TGHideExternalBeatAction;
 import org.herac.tuxguitar.app.action.impl.view.TGOpenViewAction;
 import org.herac.tuxguitar.app.action.impl.view.TGShowExternalBeatAction;
@@ -447,7 +440,8 @@ public class TGActionInstaller {
 		installAction(new TGTransportModeAction(context));
 		installAction(new TGTransportSetLoopSHeaderAction(context));
 		installAction(new TGTransportSetLoopEHeaderAction(context));
-		
+		installAction(new TGTransportPlaySelectionAction(context));
+
 		//marker actions
 		installAction(new TGUpdateMarkerAction(context));
 		installAction(new TGRemoveMarkerAction(context));
