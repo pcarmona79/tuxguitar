@@ -18,6 +18,7 @@ public class Selector {
 	private TGBeat initial;
 	private TGBeat start;
 	private TGBeat end;
+	private boolean active;
 
 	public Selector(Tablature tablature) {
 	    this.tablature = tablature;
@@ -27,12 +28,16 @@ public class Selector {
 		initial = beat;
 		start = beat;
 		end = beat;
+		active = false;
 	}
 
 	public void updateSelection(TGBeat beat) {
-	    if (initial == null) {
+	    if (initial == null || beat == null) {
 	    	initializeSelection(beat);
 		} else {
+	    	if (beat != initial) {
+	    		active = true;
+			}
 			if (initial.getMeasure().getNumber() < beat.getMeasure().getNumber() || initialIsEarlierInTheSameMeasure(beat)) {
 				start = initial;
 				end = beat;
@@ -60,7 +65,7 @@ public class Selector {
 	}
 
 	public boolean isActive() {
-		return start != null && start != end;
+		return active;
 	}
 
 	public void paintSelectedArea(TGLayout viewLayout, UIPainter painter) {
