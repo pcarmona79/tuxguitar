@@ -955,8 +955,7 @@ public class TGMeasureManager {
 	/**
 	 * Set the beat stroke
 	 */
-	public boolean setStroke(TGMeasure measure, long start, int value, int direction){
-		TGBeat beat = getBeat(measure, start);
+	public boolean setStroke(TGBeat beat, int value, int direction){
 		if( beat != null ){
 			beat.getStroke().setValue(value);
 			beat.getStroke().setDirection(direction);
@@ -1104,8 +1103,7 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un slide
 	 */
-	public void changeSlideNote(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
+	public void changeSlideNote(TGNote note){
 		if(note != null){
 			note.getEffect().setSlide(!note.getEffect().isSlide());
 		}
@@ -1114,8 +1112,7 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un hammer
 	 */
-	public void changeHammerNote(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
+	public void changeHammerNote(TGNote note){
 		if(note != null){
 			note.getEffect().setHammer(!note.getEffect().isHammer());
 		}
@@ -1138,8 +1135,7 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un let-ring
 	 */
-	public void changeLetRing(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
+	public void changeLetRing(TGNote note){
 		if(note != null){
 			note.getEffect().setLetRing(!note.getEffect().isLetRing());
 		}
@@ -1171,29 +1167,34 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un bend
 	 */
-	public void changeBendNote(TGMeasure measure,long start,int string,TGEffectBend bend){
-		TGNote note = getNote(measure,start,string);
+	public void changeBendNote(TGNote note,TGEffectBend effect){
 		if(note != null){
-			note.getEffect().setBend(bend);
+		    if (effect != null) {
+				note.getEffect().setBend(effect.clone(songManager.getFactory()));
+			} else {
+				note.getEffect().setBend(effect);
+			}
 		}
 	}
 	
 	/** 
 	 * Agrega un tremoloBar
 	 */
-	public void changeTremoloBar(TGMeasure measure,long start,int string,TGEffectTremoloBar tremoloBar){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){
-			note.getEffect().setTremoloBar(tremoloBar);
+	public void changeTremoloBar(TGNote note,TGEffectTremoloBar effect){
+		if(note != null) {
+			if (effect != null) {
+				note.getEffect().setTremoloBar(effect.clone(songManager.getFactory()));
+			} else {
+				note.getEffect().setTremoloBar(effect);
+			}
 		}
 	}
 	
 	/** 
 	 * Agrega un GhostNote
 	 */
-	public void changeGhostNote(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){ 
+	public void changeGhostNote(TGNote note){
+		if(note != null){
 			note.getEffect().setGhostNote(!note.getEffect().isGhostNote());
 		}
 	}
@@ -1201,9 +1202,8 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un AccentuatedNote
 	 */
-	public void changeAccentuatedNote(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
-		if(note != null){ 
+	public void changeAccentuatedNote(TGNote note){
+		if(note != null){
 			note.getEffect().setAccentuatedNote(!note.getEffect().isAccentuatedNote());
 		}
 	}
@@ -1211,8 +1211,7 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un GhostNote
 	 */
-	public void changeHeavyAccentuatedNote(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
+	public void changeHeavyAccentuatedNote(TGNote note){
 		if(note != null){
 			note.getEffect().setHeavyAccentuatedNote(!note.getEffect().isHeavyAccentuatedNote());
 		}
@@ -1221,18 +1220,20 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un harmonic
 	 */
-	public void changeHarmonicNote(TGMeasure measure,long start,int string,TGEffectHarmonic harmonic){
-		TGNote note = getNote(measure,start,string);
+	public void changeHarmonicNote(TGNote note,TGEffectHarmonic effect){
 		if(note != null){
-			note.getEffect().setHarmonic(harmonic);
+			if (effect != null) {
+				note.getEffect().setHarmonic(effect.clone(songManager.getFactory()));
+			} else {
+				note.getEffect().setHarmonic(effect);
+			}
 		}
 	}
 	
 	/** 
 	 * Agrega un grace
 	 */
-	public void changeGraceNote(TGMeasure measure,long start,int string,TGEffectGrace grace){
-		TGNote note = getNote(measure,start,string);
+	public void changeGraceNote(TGNote note,TGEffectGrace grace){
 		if(note != null){
 			note.getEffect().setGrace(grace);
 		}
@@ -1241,28 +1242,33 @@ public class TGMeasureManager {
 	/** 
 	 * Agrega un trill
 	 */
-	public void changeTrillNote(TGMeasure measure,long start,int string,TGEffectTrill trill){
-		TGNote note = getNote(measure,start,string);
+	public void changeTrillNote(TGNote note,TGEffectTrill effect){
 		if(note != null){
-			note.getEffect().setTrill(trill);
+			if (effect != null) {
+				note.getEffect().setTrill(effect.clone(songManager.getFactory()));
+			} else {
+				note.getEffect().setTrill(effect);
+			}
 		}
 	}
 	
 	/** 
 	 * Agrega un tremolo picking
 	 */
-	public void changeTremoloPicking(TGMeasure measure,long start,int string,TGEffectTremoloPicking tremoloPicking){
-		TGNote note = getNote(measure,start,string);
+	public void changeTremoloPicking(TGNote note,TGEffectTremoloPicking effect){
 		if(note != null){
-			note.getEffect().setTremoloPicking(tremoloPicking);
+			if (effect != null) {
+				note.getEffect().setTremoloPicking(effect.clone(songManager.getFactory()));
+			} else {
+				note.getEffect().setTremoloPicking(effect);
+			}
 		}
 	}
 	
 	/** 
 	 * Agrega un fadeIn
 	 */
-	public void changeFadeIn(TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
+	public void changeFadeIn(TGNote note){
 		if(note != null){
 			note.getEffect().setFadeIn(!note.getEffect().isFadeIn());
 		}
@@ -1271,8 +1277,7 @@ public class TGMeasureManager {
 	/** 
 	 * Cambia el Velocity
 	 */
-	public void changeVelocity(int velocity,TGMeasure measure,long start,int string){
-		TGNote note = getNote(measure,start,string);
+	public void changeVelocity(int velocity,TGNote note){
 		if(note != null){
 			note.setVelocity(velocity);
 		}

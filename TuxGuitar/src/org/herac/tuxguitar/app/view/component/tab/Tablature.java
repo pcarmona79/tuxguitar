@@ -15,15 +15,12 @@ import org.herac.tuxguitar.graphics.control.TGLayoutVertical;
 import org.herac.tuxguitar.graphics.control.TGResourceBuffer;
 import org.herac.tuxguitar.player.base.MidiPlayerMode;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGSong;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
 import org.herac.tuxguitar.ui.resource.UIResourceFactory;
 import org.herac.tuxguitar.util.TGContext;
+import org.herac.tuxguitar.util.TGNoteRange;
 
 public class Tablature implements TGController {
 
@@ -94,6 +91,18 @@ public class Tablature implements TGController {
 
 	public Selector getSelector() {
 		return selector;
+	}
+
+	public TGNoteRange getCurrentNoteRange() {
+		if (getSelector().isActive()) {
+			return getSelector().getNoteRange();
+		} else {
+			TGNote defaultNote = getCaret().getSelectedNote();
+			if (defaultNote != null) {
+				return TGNoteRange.single(defaultNote);
+			}
+		}
+		return TGNoteRange.empty();
 	}
 
 	public EditorKit getEditorKit() {

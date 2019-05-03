@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.util;
 
+import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGNote;
 
@@ -13,11 +14,14 @@ import java.util.List;
 public class TGNoteRange {
 	private List<TGNote> notes;
 	private LinkedHashSet<TGMeasure> measures = new LinkedHashSet<TGMeasure>();
+	private LinkedHashSet<TGBeat> beats = new LinkedHashSet<TGBeat>();
 
 	public TGNoteRange(List<TGNote> notes) {
 		this.notes = notes;
 		for (TGNote note : notes) {
-			measures.add(note.getVoice().getBeat().getMeasure());
+			TGBeat beat = note.getVoice().getBeat();
+			beats.add(beat);
+			measures.add(beat.getMeasure());
 		}
 	}
 
@@ -33,7 +37,15 @@ public class TGNoteRange {
 		return notes;
 	}
 
+	public boolean isEmpty() {
+		return notes.isEmpty();
+	}
+
 	public LinkedHashSet<TGMeasure> getMeasures() {
 		return measures;
+	}
+
+	public LinkedHashSet<TGBeat> getBeats() {
+		return beats;
 	}
 }
