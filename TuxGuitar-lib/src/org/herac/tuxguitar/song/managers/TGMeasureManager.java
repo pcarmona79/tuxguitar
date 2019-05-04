@@ -599,6 +599,38 @@ public class TGMeasureManager {
 			newMeasure.addBeat(beat);
 		}
 	}
+
+	public void deleteOutOfBoundsBeats(TGMeasure measure) {
+		List<TGBeat> beats = new ArrayList<TGBeat>();
+		long mStart = measure.getStart();
+		long mLength = measure.getLength();
+		TGFactory factory = getSongManager().getFactory();
+		for( int i = 0; i < measure.countBeats() ; i ++ ){
+			TGBeat beat = measure.getBeat( i );
+			if( beat.getStart() < mStart || beat.getStart() >= mStart + mLength ){
+				beats.add(beat);
+			}
+			else{
+				long bStart = beat.getStart();
+				for( int v = 0 ; v < beat.countVoices() ; v ++ ){
+					TGVoice voice = beat.getVoice( v );
+					long vDuration = voice.getDuration().getTime();
+					if(!voice.isEmpty() && (bStart + vDuration) > (mStart + mLength) ){
+                        voice.setDuration(TGDuration.fromTime(factory, mStart + mLength - bStart));
+					}
+				}
+			}
+		}
+		while( !beats.isEmpty() ){
+			TGBeat beat = beats.get( 0 );
+			if( beat.getMeasure() != null ){
+				beat.getMeasure().removeBeat(beat);
+				beat.setMeasure(null);
+			}
+
+			beats.remove(0);
+		}
+	}
 	
 	public void moveOutOfBoundsBeatsToNewMeasure(TGMeasure measure){
 		this.moveOutOfBoundsBeatsToNewMeasure(measure, true );

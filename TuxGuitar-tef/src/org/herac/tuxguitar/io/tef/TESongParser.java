@@ -72,7 +72,7 @@ public class TESongParser {
 			TETimeSignature ts = song.getTimeSignature(i);
 			timeSignature.setNumerator( ts.getNumerator() );
 			timeSignature.getDenominator().setValue( ts.getDenominator() );
-			this.manager.changeTimeSignature(tgSong, header, timeSignature,false);
+			this.manager.changeTimeSignature(tgSong, header, header, timeSignature,false);
 		}
 	}
 	

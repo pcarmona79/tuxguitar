@@ -13,8 +13,9 @@ public class TGChangeTimeSignatureAction extends TGActionBase {
 	
 	public static final String NAME = "action.composition.change-time-signature";
 	
-	public static final String ATTRIBUTE_APPLY_TO_END = "applyToEnd";
-	
+	public static final String ATTRIBUTE_HEADER_END = "measureHeaderEnd";
+	public static final String ATTRIBUTE_TRUNCATE_OR_EXTEND = "truncateOrExtend";
+
 	public TGChangeTimeSignatureAction(TGContext context) {
 		super(context, NAME);
 	}
@@ -22,10 +23,11 @@ public class TGChangeTimeSignatureAction extends TGActionBase {
 	protected void processAction(TGActionContext context){
 		TGSongManager songManager = getSongManager(context);
 		TGSong song = ((TGSong) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG));
-		TGMeasureHeader header = ((TGMeasureHeader) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER));		
+		TGMeasureHeader start = ((TGMeasureHeader) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER));
+		TGMeasureHeader end = ((TGMeasureHeader) context.getAttribute(ATTRIBUTE_HEADER_END));
 		TGTimeSignature timeSignature = ((TGTimeSignature) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TIME_SIGNATURE));
-		boolean applyToEnd = ((Boolean) context.getAttribute(ATTRIBUTE_APPLY_TO_END)).booleanValue();
-		
-		songManager.changeTimeSignature(song, header, timeSignature, applyToEnd);
+		boolean truncateOrExtend = ((Boolean) context.getAttribute(ATTRIBUTE_TRUNCATE_OR_EXTEND)).booleanValue();
+
+		songManager.changeTimeSignature(song, start, end, timeSignature, truncateOrExtend);
 	}
 }

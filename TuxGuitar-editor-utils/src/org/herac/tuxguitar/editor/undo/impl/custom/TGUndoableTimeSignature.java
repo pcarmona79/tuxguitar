@@ -18,8 +18,9 @@ public class TGUndoableTimeSignature extends TGUndoableEditBase {
 	
 	private int doAction;
 	private TGSong song;
-	private long tsStart;
-	private boolean tsToEnd;
+	private int tsStart;
+	private int tsEnd;
+	private boolean tsTruncateOrExtend;
 	private TGTimeSignature ts;
 	
 	private TGUndoableTimeSignature(TGContext context){
@@ -30,7 +31,7 @@ public class TGUndoableTimeSignature extends TGUndoableEditBase {
 		if(!canRedo()){
 			throw new TGCannotRedoException();
 		}
-		this.changeTimeSignature(actionContext, getSong(), this.getMeasureHeaderAt(this.tsStart), this.ts, this.tsToEnd);
+		this.changeTimeSignature(actionContext, getSong(), this.getMeasureHeader(this.tsStart), this.getMeasureHeader(this.tsEnd), this.ts, this.tsTruncateOrExtend);
 		this.doAction = UNDO_ACTION;
 	}
 	
@@ -59,23 +60,28 @@ public class TGUndoableTimeSignature extends TGUndoableEditBase {
 		return undoable;
 	}
 	
-	public TGUndoableTimeSignature endUndo(TGTimeSignature timeSignature,long start, boolean toEnd){
+	public TGUndoableTimeSignature endUndo(TGTimeSignature timeSignature,int start, int end, boolean truncateOrExtend){
 		this.ts = timeSignature;
 		this.tsStart = start;
-		this.tsToEnd = toEnd;
+		this.tsEnd = end;
+		this.tsTruncateOrExtend = truncateOrExtend;
 		return this;
 	}
 	
-	public TGMeasureHeader getMeasureHeaderAt(Long start) {
-		return getSongManager().getMeasureHeaderAt(getSong(), start);
+	public TGMeasureHeader getMeasureHeader(int number) {
+	    if (number == -1) {
+	    	return null;
+		}
+		return getSongManager().getMeasureHeader(getSong(), number);
 	}
 	
-	public void changeTimeSignature(TGActionContext context, TGSong song, TGMeasureHeader header, TGTimeSignature timeSignature, Boolean toEnd) {
+	public void changeTimeSignature(TGActionContext context, TGSong song, TGMeasureHeader start, TGMeasureHeader end, TGTimeSignature timeSignature, Boolean truncateOrExtend) {
 		TGActionProcessor tgActionProcessor = this.createByPassUndoableAction(TGChangeTimeSignatureAction.NAME);
 		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG, song);
-		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER, header);
 		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_TIME_SIGNATURE, timeSignature);
-		tgActionProcessor.setAttribute(TGChangeTimeSignatureAction.ATTRIBUTE_APPLY_TO_END, toEnd);
+		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER, start);
+		tgActionProcessor.setAttribute(TGChangeTimeSignatureAction.ATTRIBUTE_HEADER_END, end);
+		tgActionProcessor.setAttribute(TGChangeTimeSignatureAction.ATTRIBUTE_TRUNCATE_OR_EXTEND, truncateOrExtend);
 		this.processByPassUndoableAction(tgActionProcessor, context);
 	}
 	

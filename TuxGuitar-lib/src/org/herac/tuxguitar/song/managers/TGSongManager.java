@@ -425,31 +425,46 @@ public class TGSongManager {
 		return false;
 	}
 	
-	public void changeTimeSignature(TGSong song, long start,TGTimeSignature timeSignature,boolean toEnd){
-		changeTimeSignature(song, getMeasureHeaderAt(song, start),timeSignature,toEnd);
-	}
-	
-	public void changeTimeSignature(TGSong song, TGMeasureHeader header,TGTimeSignature timeSignature,boolean toEnd){
+	public void changeTimeSignature(TGSong song, TGMeasureHeader start, TGMeasureHeader end, TGTimeSignature timeSignature, boolean truncateOrExtend){
 		//asigno el nuevo ritmo
-		header.getTimeSignature().copyFrom(timeSignature);
-		
-		long nextStart = header.getStart() + header.getLength();
-		List<TGMeasureHeader> measures = getMeasureHeadersBeforeEnd(song, header.getStart() + 1);
+		start.getTimeSignature().copyFrom(timeSignature);
+		if (truncateOrExtend) {
+			deleteOutOfBoundsBeats(start);
+		}
+
+		long nextStart = start.getStart() + start.getLength();
+		List<TGMeasureHeader> measures = getMeasureHeadersBeforeEnd(song, start.getStart() + 1);
 		Iterator<TGMeasureHeader> it = measures.iterator();
 		while(it.hasNext()){
 			TGMeasureHeader nextHeader = it.next();
 			
 			long theMove = nextStart - nextHeader.getStart();
-			
-			//moveMeasureComponents(nextHeader,theMove);
+
+			if (truncateOrExtend) {
+				moveMeasureComponents(song, nextHeader, theMove);
+			}
 			moveMeasureHeader(nextHeader,theMove,0);
 			
-			if(toEnd){
+			if(end == null || nextHeader.getNumber() <= end.getNumber()){
 				nextHeader.getTimeSignature().copyFrom(timeSignature);
+				if (truncateOrExtend) {
+					deleteOutOfBoundsBeats(nextHeader);
+                }
 			}
 			nextStart = nextHeader.getStart() + nextHeader.getLength();
 		}
-		moveOutOfBoundsBeatsToNewMeasure(song, header.getStart());
+		if (!truncateOrExtend) {
+			moveOutOfBoundsBeatsToNewMeasure(song, start.getStart());
+		}
+	}
+
+	public void deleteOutOfBoundsBeats(TGMeasureHeader header) {
+		Iterator<TGTrack> it = header.getSong().getTracks();
+		while( it.hasNext() ) {
+			TGTrack track = it.next();
+
+			getMeasureManager().deleteOutOfBoundsBeats(track.getMeasure(header.getNumber() - 1));
+		}
 	}
 	
 	public void moveOutOfBoundsBeatsToNewMeasure(TGSong song, long start){
