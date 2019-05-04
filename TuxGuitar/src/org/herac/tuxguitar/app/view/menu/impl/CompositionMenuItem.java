@@ -67,7 +67,6 @@ public class CompositionMenuItem extends TGMenuItem {
 		this.properties = this.compositionMenuItem.getMenu().createActionItem();
 		this.properties.addSelectionListener(this.createActionProcessor(TGOpenSongInfoDialogAction.NAME));
 		
-		this.loadIcons();
 		this.loadProperties();
 	}
 	
@@ -95,13 +94,7 @@ public class CompositionMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.repeatAlternative, "repeat.alternative", TGOpenRepeatAlternativeDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.properties, "composition.properties", TGOpenSongInfoDialogAction.NAME);
 	}
-	
+
 	public void loadIcons() {
-		this.timeSignature.setImage(TuxGuitar.getInstance().getIconManager().getCompositionTimeSignature());
-		this.tempo.setImage(TuxGuitar.getInstance().getIconManager().getCompositionTempo());
-		this.repeatOpen.setImage(TuxGuitar.getInstance().getIconManager().getCompositionRepeatOpen());
-		this.repeatClose.setImage(TuxGuitar.getInstance().getIconManager().getCompositionRepeatClose());
-		this.repeatAlternative.setImage(TuxGuitar.getInstance().getIconManager().getCompositionRepeatAlternative());
-		this.properties.setImage(TuxGuitar.getInstance().getIconManager().getSongProperties());
 	}
 }

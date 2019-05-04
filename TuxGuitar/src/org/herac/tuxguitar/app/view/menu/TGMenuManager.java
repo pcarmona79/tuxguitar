@@ -147,6 +147,10 @@ public class TGMenuManager implements TGEventListener {
 			this.loadItems();
 		}
 	}
+
+	public UIMenuBar getMenu() {
+		return this.menu;
+	}
 	
 	public UIPopupMenu getPopupMenu() {
 		return this.popupMenu;
@@ -217,5 +221,15 @@ public class TGMenuManager implements TGEventListener {
 		else if( TGFileFormatAvailabilityEvent.EVENT_TYPE.equals(event.getEventType()) ) {
 			this.createMenuProcess.process();
 		}
+	}
+
+	public void toggleMainMenuVisibility() {
+		if (this.menu != null && !this.menu.isDisposed()) {
+			this.menu.setVisible(!this.isMainMenuVisible());
+		}
+	}
+
+	public boolean isMainMenuVisible() {
+		return this.menu != null && !this.menu.isDisposed() && this.menu.isVisible();
 	}
 }

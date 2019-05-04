@@ -23,9 +23,9 @@ public class TGTableRowCell {
 	
 	private void createLayout() {
 		this.layout = new UITableLayout();
-		this.layout.set(UITableLayout.MARGIN_TOP, 2f);
-		this.layout.set(UITableLayout.MARGIN_BOTTOM, 2f);
-		
+		this.layout.set(UITableLayout.MARGIN_TOP, 0f);
+		this.layout.set(UITableLayout.MARGIN_BOTTOM, 0f);
+
 		this.cell.setLayout(getLayout());
 	}
 	

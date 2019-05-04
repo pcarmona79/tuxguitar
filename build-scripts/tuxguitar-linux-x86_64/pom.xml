@@ -32,6 +32,7 @@
 		<module>../../TuxGuitar-compat</module>
 		<module>../../TuxGuitar-converter</module>
 		<module>../../TuxGuitar-gm-settings</module>
+		<module>../../TuxGuitar-gtk-integration</module>
 		<module>../../TuxGuitar-gtp</module>
 		<module>../../TuxGuitar-gtp-ui</module>
 		<module>../../TuxGuitar-gpx</module>
@@ -274,6 +275,12 @@
 									<groupId>${project.groupId}</groupId>
 									<artifactId>tuxguitar-image</artifactId>
 									<destFileName>tuxguitar-image.jar</destFileName>
+									<outputDirectory>${project.build.directory}/${project.finalName}/share/plugins</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>tuxguitar-gtk-integration</artifactId>
+									<destFileName>tuxguitar-gtk-integration.jar</destFileName>
 									<outputDirectory>${project.build.directory}/${project.finalName}/share/plugins</outputDirectory>
 								</artifactItem>
 								<artifactItem>

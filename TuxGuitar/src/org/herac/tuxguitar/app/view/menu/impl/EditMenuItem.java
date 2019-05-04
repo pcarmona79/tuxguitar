@@ -101,9 +101,7 @@ public class EditMenuItem extends TGMenuItem{
 		setMenuItemTextAndAccelerator(this.voice1, "edit.voice-1", TGSetVoice1Action.NAME);
 		setMenuItemTextAndAccelerator(this.voice2, "edit.voice-2", TGSetVoice2Action.NAME);
 	}
-	
+
 	public void loadIcons(){
-		this.undo.setImage(TuxGuitar.getInstance().getIconManager().getEditUndo());
-		this.redo.setImage(TuxGuitar.getInstance().getIconManager().getEditRedo());
 	}
 }

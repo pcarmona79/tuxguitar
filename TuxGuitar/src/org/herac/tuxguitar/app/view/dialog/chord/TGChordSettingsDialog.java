@@ -12,7 +12,6 @@ import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UISpinner;
@@ -48,9 +47,8 @@ public class TGChordSettingsDialog {
 		this.dialog.setText(TuxGuitar.getProperty("settings"));
 		
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("chord.settings.tip"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		initTypeCombo(uiFactory, group, 1);
@@ -127,13 +125,18 @@ public class TGChordSettingsDialog {
 	}
 	
 	private void initFretSearch(UIFactory factory, UILayoutContainer parent, int row) {
-		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = factory.createLegendPanel(parent);
-		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("chord.settings.search-frets"));
 		UITableLayout uiLayout = (UITableLayout) parent.getLayout();
-		uiLayout.set(group, row, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 2);
-		
+
+		UILabel label = factory.createLabel(parent);
+		label.setText(TuxGuitar.getProperty("chord.settings.search-frets"));
+		uiLayout.set(label, row, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 2);
+		uiLayout.set(label, UITableLayout.MARGIN_TOP, 8f);
+
+		UITableLayout groupLayout = new UITableLayout();
+		UIPanel group = factory.createPanel(parent, false);
+		group.setLayout(groupLayout);
+		uiLayout.set(group, row + 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 2, null, null, 0f);
+
 		UILabel minFretLabel = factory.createLabel(group);
 		minFretLabel.setText(TuxGuitar.getProperty("chord.settings.minimum-fret"));
 		

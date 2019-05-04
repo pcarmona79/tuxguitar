@@ -110,18 +110,7 @@ import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackPropertiesDialogActi
 import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackTuningDialogAction;
 import org.herac.tuxguitar.app.action.impl.track.TGToggleLyricEditorAction;
 import org.herac.tuxguitar.app.action.impl.transport.*;
-import org.herac.tuxguitar.app.action.impl.view.TGHideExternalBeatAction;
-import org.herac.tuxguitar.app.action.impl.view.TGOpenViewAction;
-import org.herac.tuxguitar.app.action.impl.view.TGShowExternalBeatAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleDockingToTopAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleEditToolbarAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleFretBoardEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleMainToolbarAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleMatrixEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGTogglePianoEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleTransportDialogAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleViewAction;
+import org.herac.tuxguitar.app.action.impl.view.*;
 import org.herac.tuxguitar.editor.action.TGActionBase;
 import org.herac.tuxguitar.editor.action.channel.TGAddChannelAction;
 import org.herac.tuxguitar.editor.action.channel.TGAddNewChannelAction;
@@ -530,6 +519,7 @@ public class TGActionInstaller {
 		installAction(new TGToggleBrowserAction(context));
 		installAction(new TGToggleTransportDialogAction(context));
 		installAction(new TGToggleMarkerListAction(context));
+		installAction(new TGToggleMenuBarAction(context));
 		installAction(new TGToggleMainToolbarAction(context));
 		installAction(new TGToggleEditToolbarAction(context));
 		

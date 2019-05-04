@@ -61,6 +61,7 @@
 				<include name="TuxGuitar-gm-settings/**"/>
 				<include name="TuxGuitar-gm-utils/**"/>
 				<include name="TuxGuitar-gpx/**"/>
+				<include name="TuxGuitar-gtk-integration/**"/>
 				<include name="TuxGuitar-gtp/**"/>
 				<include name="TuxGuitar-gtp-ui/**"/>
 				<include name="TuxGuitar-image/**"/>

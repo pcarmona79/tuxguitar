@@ -53,7 +53,7 @@ public class TGChordRecognizer {
 		final UIFactory uiFactory = this.dialog.getUIFactory();
 		UITableLayout layout = new UITableLayout(0f);
 		
-		this.control = uiFactory.createPanel(parent, true);
+		this.control = uiFactory.createPanel(parent, false);
 		this.control.setLayout(layout);
 		
 		UITableLayout compositeLayout = new UITableLayout();

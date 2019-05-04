@@ -82,7 +82,7 @@ public interface UIFactory extends UIResourceFactory {
 	UIButton createButton(UIContainer parent);
 	
 	UIToggleButton createToggleButton(UIContainer parent);
-	
+
 	UICheckBox createCheckBox(UIContainer parent);
 	
 	UIRadioButton createRadioButton(UIContainer parent);

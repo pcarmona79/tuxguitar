@@ -75,8 +75,6 @@ public class SWTMenuItem extends SWTEventReceiver<MenuItem> implements UIMenuIte
 	
 	public void setImage(UIImage image) {
 		this.image = image;
-		if (SWTEnvironment.getInstance().allowsMenuIcons()) {
-			this.getControl().setImage(this.image != null ? ((SWTImage) this.image).getHandle() : null);
-		}
+        this.getControl().setImage(this.image != null ? ((SWTImage) this.image).getHandle() : null);
 	}
 }

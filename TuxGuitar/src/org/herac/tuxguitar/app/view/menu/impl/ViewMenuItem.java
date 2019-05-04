@@ -12,14 +12,7 @@ import org.herac.tuxguitar.app.action.impl.layout.TGSetMultitrackViewAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetPageLayoutAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetScoreEnabledAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetTablatureEnabledAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleDockingToTopAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleEditToolbarAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleFretBoardEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleMainToolbarAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleMatrixEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGTogglePianoEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleTransportDialogAction;
+import org.herac.tuxguitar.app.action.impl.view.*;
 import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.dialog.transport.TGTransportDialog;
@@ -37,6 +30,7 @@ import org.herac.tuxguitar.ui.menu.UIMenuSubMenuItem;
 public class ViewMenuItem extends TGMenuItem {
 	
 	private UIMenuSubMenuItem layoutMenuItem;
+	private UIMenuCheckableItem showMenuBar;
 	private UIMenuCheckableItem showMainToolbar;
 	private UIMenuCheckableItem showEditToolbar;
 	private UIMenuCheckableItem showInstruments;
@@ -64,6 +58,10 @@ public class ViewMenuItem extends TGMenuItem {
 	}
 	
 	public void showItems(){
+		//--TOOLBARS--
+		this.showMenuBar = this.layoutMenuItem.getMenu().createCheckItem();
+		this.showMenuBar.addSelectionListener(this.createActionProcessor(TGToggleMenuBarAction.NAME));
+
 		//--TOOLBARS--
 		this.showMainToolbar = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showMainToolbar.addSelectionListener(this.createActionProcessor(TGToggleMainToolbarAction.NAME));
@@ -154,6 +152,7 @@ public class ViewMenuItem extends TGMenuItem {
 	public void update() {
 		Tablature tablature = TablatureEditor.getInstance(this.findContext()).getTablature();
 		int style = tablature.getViewLayout().getStyle();
+		this.showMenuBar.setChecked(TuxGuitar.getInstance().getItemManager().isMainMenuVisible());
 		this.showMainToolbar.setChecked(TGMainToolBar.getInstance(this.findContext()).isVisible());
 		this.showEditToolbar.setChecked(TGEditToolBar.getInstance(this.findContext()).isVisible());
 		this.showInstruments.setChecked(!TuxGuitar.getInstance().getChannelManager().isDisposed());
@@ -176,6 +175,7 @@ public class ViewMenuItem extends TGMenuItem {
 	
 	public void loadProperties(){
 		setMenuItemTextAndAccelerator(this.layoutMenuItem, "view", null);
+		setMenuItemTextAndAccelerator(this.showMenuBar, "view.show-menu-bar", TGToggleMenuBarAction.NAME);
 		setMenuItemTextAndAccelerator(this.showMainToolbar, "view.show-main-toolbar", TGToggleMainToolbarAction.NAME);
 		setMenuItemTextAndAccelerator(this.showEditToolbar, "view.show-edit-toolbar", TGToggleMainToolbarAction.NAME);
 		setMenuItemTextAndAccelerator(this.showInstruments, "view.show-instruments", TGToggleChannelsDialogAction.NAME);

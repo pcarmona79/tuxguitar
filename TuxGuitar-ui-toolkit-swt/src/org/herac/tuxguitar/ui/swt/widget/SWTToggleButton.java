@@ -16,7 +16,7 @@ public class SWTToggleButton extends SWTControl<Button> implements UIToggleButto
 	private UIImage image;
 	
 	public SWTToggleButton(SWTContainer<? extends Composite> parent) {
-		super(new Button(parent.getControl(), SWT.TOGGLE), parent);
+		super(new Button(parent.getControl(), SWT.TOGGLE | SWT.FLAT), parent);
 		
 		this.selectionListener = new SWTSelectionListenerManager(this);
 	}

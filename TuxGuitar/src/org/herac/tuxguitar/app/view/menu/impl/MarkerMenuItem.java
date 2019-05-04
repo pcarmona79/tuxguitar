@@ -73,11 +73,5 @@ public class MarkerMenuItem extends TGMenuItem {
 	}
 	
 	public void loadIcons(){
-		this.add.setImage(TuxGuitar.getInstance().getIconManager().getMarkerAdd());
-		this.list.setImage(TuxGuitar.getInstance().getIconManager().getMarkerList());
-		this.first.setImage(TuxGuitar.getInstance().getIconManager().getMarkerFirst());
-		this.previous.setImage(TuxGuitar.getInstance().getIconManager().getMarkerPrevious());
-		this.next.setImage(TuxGuitar.getInstance().getIconManager().getMarkerNext());
-		this.last.setImage(TuxGuitar.getInstance().getIconManager().getMarkerLast());
 	}
 }

@@ -58,6 +58,7 @@ public class TGWindowLayout extends UITableLayout {
 		this.set(this.divider, UITableLayout.PACKED_HEIGHT, 4f);
 		this.set(this.divider, UITableLayout.MARGIN, 0f);
 		this.set(this.bottomContainer, ++rowIdx, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
+		this.set(this.bottomContainer, UITableLayout.MARGIN_TOP, 1f);
 		this.set(this.dockingManager.getBottomDockingArea(), ++rowIdx, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
 	}
 }

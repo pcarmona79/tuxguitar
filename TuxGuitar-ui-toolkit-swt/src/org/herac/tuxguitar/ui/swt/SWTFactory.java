@@ -181,7 +181,7 @@ public class SWTFactory implements UIFactory {
 	public UIToggleButton createToggleButton(UIContainer parent) {
 		return new SWTToggleButton((SWTContainer<Composite>) parent);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public UICheckBox createCheckBox(UIContainer parent) {
 		return new SWTCheckBox((SWTContainer<Composite>) parent);

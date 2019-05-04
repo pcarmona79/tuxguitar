@@ -1,8 +1,7 @@
 package org.herac.tuxguitar.app.view.toolbar.edit;
 
 import org.herac.tuxguitar.app.TuxGuitar;
-import org.herac.tuxguitar.app.action.impl.composition.TGOpenTempoDialogAction;
-import org.herac.tuxguitar.app.action.impl.composition.TGOpenTimeSignatureDialogAction;
+import org.herac.tuxguitar.app.action.impl.composition.*;
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatAlternativeDialogAction;
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatCloseDialogAction;
 import org.herac.tuxguitar.editor.action.composition.TGRepeatOpenAction;
@@ -17,6 +16,9 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 	
 	private UIToolActionItem tempo;
 	private UIToolActionItem timeSignature;
+	private UIToolActionItem clef;
+	private UIToolActionItem keySignature;
+	private UIToolActionItem tripletFeel;
 	private UIToolCheckableItem repeatOpen;
 	private UIToolCheckableItem repeatClose;
 	private UIToolCheckableItem repeatAlternative;
@@ -26,23 +28,31 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 	}
 	
 	public void createSectionToolBars() {
-		UIToolBar toolBar = this.createToolBar();
-		
-		this.tempo = toolBar.createActionItem();
+		UIToolBar toolBar1 = this.createToolBar();
+		UIToolBar toolBar2 = this.createToolBar();
+
+		this.tempo = toolBar1.createActionItem();
 		this.tempo.addSelectionListener(this.createActionProcessor(TGOpenTempoDialogAction.NAME));
 		
-		this.timeSignature = toolBar.createActionItem();
+		this.timeSignature = toolBar1.createActionItem();
 		this.timeSignature.addSelectionListener(this.createActionProcessor(TGOpenTimeSignatureDialogAction.NAME));
-		
-		toolBar.createSeparator();
-		
-		this.repeatOpen = toolBar.createCheckItem();
+
+		this.clef = toolBar1.createActionItem();
+		this.clef.addSelectionListener(this.createActionProcessor(TGOpenClefDialogAction.NAME));
+
+		this.keySignature = toolBar1.createActionItem();
+		this.keySignature.addSelectionListener(this.createActionProcessor(TGOpenKeySignatureDialogAction.NAME));
+
+		this.tripletFeel = toolBar1.createActionItem();
+		this.tripletFeel.addSelectionListener(this.createActionProcessor(TGOpenTripletFeelDialogAction.NAME));
+
+		this.repeatOpen = toolBar2.createCheckItem();
 		this.repeatOpen.addSelectionListener(this.createActionProcessor(TGRepeatOpenAction.NAME));
 		
-		this.repeatClose = toolBar.createCheckItem();
+		this.repeatClose = toolBar2.createCheckItem();
 		this.repeatClose.addSelectionListener(this.createActionProcessor(TGOpenRepeatCloseDialogAction.NAME));
 		
-		this.repeatAlternative = toolBar.createCheckItem();
+		this.repeatAlternative = toolBar2.createCheckItem();
 		this.repeatAlternative.addSelectionListener(this.createActionProcessor(TGOpenRepeatAlternativeDialogAction.NAME));
 	}
 	
@@ -52,6 +62,8 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 		
 		this.tempo.setEnabled(!running);
 		this.timeSignature.setEnabled(!running);
+		this.clef.setEnabled(!running);
+		this.keySignature.setEnabled(!running);
 		this.repeatOpen.setEnabled( !running );
 		this.repeatOpen.setChecked(measure != null && measure.isRepeatOpen());
 		this.repeatClose.setEnabled( !running );
@@ -63,6 +75,9 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 	public void loadSectionProperties() {
 		this.tempo.setToolTipText(this.getText("composition.tempo"));
 		this.timeSignature.setToolTipText(this.getText("composition.timesignature"));
+		this.clef.setToolTipText(this.getText("composition.clef"));
+		this.keySignature.setToolTipText(this.getText("composition.keysignature"));
+		this.tripletFeel.setToolTipText(this.getText("composition.tripletfeel"));
 		this.repeatOpen.setToolTipText(this.getText("repeat.open"));
 		this.repeatClose.setToolTipText(this.getText("repeat.close"));
 		this.repeatAlternative.setToolTipText(this.getText("repeat.alternative"));
@@ -71,6 +86,9 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 	public void loadSectionIcons() {
 		this.tempo.setImage(this.getIconManager().getCompositionTempo());
 		this.timeSignature.setImage(this.getIconManager().getCompositionTimeSignature());
+		this.clef.setImage(this.getIconManager().getCompositionClef());
+		this.keySignature.setImage(this.getIconManager().getCompositionKeySignature());
+		this.tripletFeel.setImage(this.getIconManager().getCompositionTripletFeel());
 		this.repeatOpen.setImage(this.getIconManager().getCompositionRepeatOpen());
 		this.repeatClose.setImage(this.getIconManager().getCompositionRepeatClose());
 		this.repeatAlternative.setImage(this.getIconManager().getCompositionRepeatAlternative());

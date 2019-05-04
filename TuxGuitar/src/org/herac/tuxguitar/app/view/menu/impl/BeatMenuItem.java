@@ -231,6 +231,5 @@ public class BeatMenuItem extends TGMenuItem {
 	}
 	
 	public void loadIcons(){
-		this.tiedNote.setImage(TuxGuitar.getInstance().getIconManager().getNoteTied());
 	}
 }

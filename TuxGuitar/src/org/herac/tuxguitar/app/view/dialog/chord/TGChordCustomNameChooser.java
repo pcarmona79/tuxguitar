@@ -9,7 +9,6 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UITextField;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -34,9 +33,8 @@ public class TGChordCustomNameChooser {
 		dialog.setText(TuxGuitar.getProperty("chord.custom"));
 		
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("chord.custom"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel label = uiFactory.createLabel(group);

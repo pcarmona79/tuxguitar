@@ -18,7 +18,6 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISpinner;
 import org.herac.tuxguitar.ui.widget.UITextField;
@@ -53,9 +52,8 @@ public class TGMarkerEditor {
 		
 		// ----------------------------------------------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(this.dialog);
+		UIPanel group = uiFactory.createPanel(this.dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("marker"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		// Measure Number

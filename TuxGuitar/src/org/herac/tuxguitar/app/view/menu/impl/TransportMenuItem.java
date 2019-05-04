@@ -95,33 +95,8 @@ public class TransportMenuItem extends TGMenuItem {
 	}
 	
 	public void loadIcons(){
-		this.loadIcons(true);
-		this.mode.setImage(TuxGuitar.getInstance().getIconManager().getTransportMode());
-		this.metronome.setImage(TuxGuitar.getInstance().getIconManager().getTransportMetronome());
 	}
 	
 	public void loadIcons(boolean force){
-		int lastStatus = this.status;
-		
-		if(TuxGuitar.getInstance().getPlayer().isRunning()){
-			this.status = STATUS_RUNNING;
-		}else if(TuxGuitar.getInstance().getPlayer().isPaused()){
-			this.status = STATUS_PAUSED;
-		}else{
-			this.status = STATUS_STOPPED;
-		}
-		
-		if(force || lastStatus != this.status){
-			if(this.status == STATUS_RUNNING){
-				this.stop.setImage(TuxGuitar.getInstance().getIconManager().getTransportIconStop2());
-				this.play.setImage(TuxGuitar.getInstance().getIconManager().getTransportIconPause());
-			}else if(this.status == STATUS_PAUSED){
-				this.stop.setImage(TuxGuitar.getInstance().getIconManager().getTransportIconStop2());
-				this.play.setImage(TuxGuitar.getInstance().getIconManager().getTransportIconPlay2());
-			}else if(this.status == STATUS_STOPPED){
-				this.stop.setImage(TuxGuitar.getInstance().getIconManager().getTransportIconStop1());
-				this.play.setImage(TuxGuitar.getInstance().getIconManager().getTransportIconPlay1());
-			}
-		}
 	}
 }

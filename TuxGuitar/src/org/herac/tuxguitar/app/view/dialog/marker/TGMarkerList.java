@@ -7,6 +7,7 @@ import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.marker.TGGoToMarkerAction;
 import org.herac.tuxguitar.app.action.impl.marker.TGOpenMarkerEditorAction;
 import org.herac.tuxguitar.app.action.impl.marker.TGRemoveMarkerAction;
+import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.system.icons.TGSkinEvent;
 import org.herac.tuxguitar.app.system.language.TGLanguageEvent;
 import org.herac.tuxguitar.app.ui.TGApplication;
@@ -244,9 +245,10 @@ public class TGMarkerList implements TGEventListener {
 			this.dialog.setText(TuxGuitar.getProperty("marker.list"));
 			this.table.setColumnName(0, TuxGuitar.getProperty("measure"));
 			this.table.setColumnName(1, TuxGuitar.getProperty("title"));
-			this.buttonAdd.setText(TuxGuitar.getProperty("add"));
-			this.buttonEdit.setText(TuxGuitar.getProperty("edit"));
-			this.buttonDelete.setText(TuxGuitar.getProperty("remove"));
+			TGIconManager iconManager = TGIconManager.getInstance(context);
+			this.buttonAdd.setImage(iconManager.getListAdd());
+			this.buttonEdit.setImage(iconManager.getListEdit());
+			this.buttonDelete.setImage(iconManager.getListRemove());
 			this.buttonGo.setText(TuxGuitar.getProperty("go"));
 			this.buttonClose.setText(TuxGuitar.getProperty("close"));
 			

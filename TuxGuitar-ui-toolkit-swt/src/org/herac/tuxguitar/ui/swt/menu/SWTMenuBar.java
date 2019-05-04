@@ -5,10 +5,22 @@ import org.herac.tuxguitar.ui.menu.UIMenuBar;
 import org.herac.tuxguitar.ui.swt.widget.SWTWindow;
 
 public class SWTMenuBar extends SWTMenu implements UIMenuBar {
-	
+
+	private SWTWindow window;
 	public SWTMenuBar(SWTWindow window) {
 		super(window.getControl(), SWT.BAR);
-		
+
+		this.window = window;
 		window.setMenuBar(this);
+	}
+
+	@Override
+	public boolean isVisible() {
+        return this.window.getMenuBar() != null;
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		this.window.setMenuBar(visible ? this: null);
 	}
 }

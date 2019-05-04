@@ -14,15 +14,14 @@ import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
-import org.herac.tuxguitar.ui.widget.UIContainer;
-import org.herac.tuxguitar.ui.widget.UIControl;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+import org.herac.tuxguitar.ui.widget.*;
 
 public abstract class TGEditToolBarSection implements TGToolBarSection {
 	
 	private String sectionTitle;
 	private TGEditToolBar toolBar;
-	private UILegendPanel toolBarContainer;
+	private UIPanel toolBarContainer;
+	private UILabel toolBarHeader;
 	
 	public TGEditToolBarSection(TGEditToolBar toolBar, String sectionTitle) {
 		this.toolBar = toolBar;
@@ -40,10 +39,18 @@ public abstract class TGEditToolBarSection implements TGToolBarSection {
 	public UIControl createSection(UIContainer container) {
 		UIFactory uiFactory = TGApplication.getInstance(this.toolBar.getContext()).getFactory();
 		
+		UIPanel outerContainer = uiFactory.createPanel(container, false);
+		UITableLayout outerLayout = new UITableLayout();
+		outerContainer.setLayout(outerLayout);
+
+        this.toolBarHeader = uiFactory.createLabel(outerContainer);
+        outerLayout.set(this.toolBarHeader, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, null, null, 0f);
+
+        this.toolBarContainer = uiFactory.createPanel(outerContainer, false);
+		outerLayout.set(this.toolBarContainer, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, null, null, 0f);
 		UITableLayout layout = new UITableLayout();
-		this.toolBarContainer = uiFactory.createLegendPanel(container);
 		this.toolBarContainer.setLayout(layout);
-		
+
 		this.createSectionToolBars();
 		this.loadIcons();
 		this.loadProperties();
@@ -52,7 +59,7 @@ public abstract class TGEditToolBarSection implements TGToolBarSection {
 		for(int i = 0; i < toolBars.size(); i ++) {
 			layout.set(toolBars.get(i), (i + 1), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, null, null, 0f);
 		}
-		return this.toolBarContainer;
+		return outerContainer;
 	}
 	
 	public UIToolBar createToolBar() {
@@ -71,7 +78,7 @@ public abstract class TGEditToolBarSection implements TGToolBarSection {
 	}
 	
 	public void loadProperties() {
-		this.toolBarContainer.setText(this.getText(this.sectionTitle));
+		this.toolBarHeader.setText(this.getText(this.sectionTitle));
 		this.loadSectionProperties();
 	}
 	

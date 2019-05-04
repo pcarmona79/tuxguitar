@@ -14,7 +14,7 @@ import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGTable {
-	
+	private final TGTableViewer viewer;
 	private TGContext context;
 	private UIPanel table;
 	private UIPanel columnControl;
@@ -25,20 +25,23 @@ public class TGTable {
 	private TGTableColumn columnInstrument;
 	private TGTableColumn columnCanvas;
 	private List<TGTableRow> rows;
-	
-	public TGTable(TGContext context, UILayoutContainer parent){
+
+	public TGTable(TGContext context, TGTableViewer viewer, UILayoutContainer parent){
 		this.context = context;
+		this.viewer = viewer;
 		this.rows = new ArrayList<TGTableRow>();
 		this.newTable(parent);
 	}
 	
 	public void newTable(UILayoutContainer parent){
 		UIFactory uiFactory = this.getUIFactory();
-		
+
 		this.table = uiFactory.createPanel(parent, false);
-		
+		this.table.setBgColor(this.viewer.getBackgroundColor());
+
 		this.columnControl = uiFactory.createPanel(this.table, false);
-		
+		this.columnControl.setBgColor(this.viewer.getBackgroundColor());
+
 		this.columnNumber = new TGTableColumn(this);
 		this.columnSoloMute = new TGTableColumn(this);
 		this.columnName = new TGTableColumn(this);
@@ -51,16 +54,20 @@ public class TGTable {
 		this.createTableLayout();
 		this.createColumnLayout();
 	}
-	
+
 	public UIPanel getControl(){
 		return this.table;
-	}	
+	}
+
+	public TGTableViewer getViewer() {
+		return viewer;
+	}
 
 	public void createTableLayout() {
 		UITableLayout uiLayout = new UITableLayout(0f);
 		uiLayout.set(this.columnControl, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
 		uiLayout.set(this.rowControl, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false, 1, 1, null, null, 0f);
-		
+
 		this.table.setLayout(uiLayout);
 	}
 	
@@ -69,9 +76,9 @@ public class TGTable {
 		UITableLayout uiLayout = new UITableLayout(0f);
 		
 		int columnIndex = 0;
-		this.createColumnHeaderLayout(uiLayout, this.columnNumber, ++columnIndex, false, null);
+		this.createColumnHeaderLayout(uiLayout, this.columnNumber, ++columnIndex, false, 20f);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnNumber, this.columnSoloMute), ++columnIndex);
-		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, 42f);
+		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, 72f);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnSoloMute, this.columnName), ++columnIndex);
 		this.createColumnHeaderLayout(uiLayout, this.columnName, ++columnIndex, false, 250f);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnName, this.columnInstrument), ++columnIndex);

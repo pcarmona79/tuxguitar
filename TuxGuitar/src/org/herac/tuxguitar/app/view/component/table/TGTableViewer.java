@@ -76,7 +76,7 @@ public class TGTableViewer implements TGEventListener {
 	private boolean followScroll;
 	private boolean resetTexts;
 	private boolean resetColors;
-	
+
 	public TGTableViewer(TGContext context) {
 		this.context = context;
 		this.createSyncProcesses();
@@ -91,13 +91,13 @@ public class TGTableViewer implements TGEventListener {
 	}
 	
 	public void init(UIContainer parent){
-		this.composite = this.getUIFactory().createScrollBarPanel(parent, true, true, true);
+		this.composite = this.getUIFactory().createScrollBarPanel(parent, true, true, false);
 		this.addColorModel();
+		this.loadConfig();
 		this.addLayout();
 		this.addTable();
 		this.addHScroll();
 		this.addVScroll();
-		this.loadConfig();
 	}
 	
 	private void addLayout(){
@@ -124,7 +124,7 @@ public class TGTableViewer implements TGEventListener {
 	
 	private void addTable(){
 		UIMouseUpListener listener = mouseFocusListener();
-		this.table = new TGTable(this.context, getControl());
+		this.table = new TGTable(this.context, this, getControl());
 		this.table.getColumnNumber().getControl().addMouseUpListener(listener);
 		this.table.getColumnSoloMute().getControl().addMouseUpListener(listener);
 		this.table.getColumnName().getControl().addMouseUpListener(listener);
@@ -147,8 +147,6 @@ public class TGTableViewer implements TGEventListener {
 	}
 	
 	public void loadProperties() {
-		this.table.getColumnNumber().setTitle(TuxGuitar.getProperty("track.number"));
-		this.table.getColumnSoloMute().setTitle(TuxGuitar.getProperty("track.short-solo-mute"));
 		this.table.getColumnName().setTitle(TuxGuitar.getProperty("track.name"));
 		this.table.getColumnInstrument().setTitle(TuxGuitar.getProperty("track.instrument"));
 		this.loadMenuProperties();
@@ -400,6 +398,7 @@ public class TGTableViewer implements TGEventListener {
 			
 			this.backgrounds = this.colorModel.createBackgrounds(this.context);
 			this.foregrounds = this.colorModel.createForegrounds(this.context);
+			this.composite.setBgColor(this.backgrounds[4]);
 		}
 		return null;
 	}
@@ -480,6 +479,7 @@ public class TGTableViewer implements TGEventListener {
 		this.autoSizeEnabled = TuxGuitar.getInstance().getConfig().getBooleanValue(TGConfigKeys.TABLE_AUTO_SIZE);
 		this.colorModel.resetColors(this.context);
 		this.resetColors = true;
+		this.resetColors();
 		this.trackCount = 0;
 	}
 	
@@ -613,5 +613,9 @@ public class TGTableViewer implements TGEventListener {
 				return new TGTableViewer(context);
 			}
 		});
+	}
+
+	public UIColor getBackgroundColor() {
+	    return this.backgrounds[4];
 	}
 }

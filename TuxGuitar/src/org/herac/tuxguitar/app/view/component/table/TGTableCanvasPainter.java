@@ -11,8 +11,6 @@ import org.herac.tuxguitar.ui.resource.UIPainter;
 
 public class TGTableCanvasPainter {
 	
-	private static final UIColorModel COLOR_BLACK = new UIColorModel(0x00, 0x00, 0x00);
-	
 	private TGTableViewer viewer;
 	private TGTrack track;
 	
@@ -36,7 +34,7 @@ public class TGTableCanvasPainter {
 
 		UIFactory factory = this.viewer.getUIFactory();
 		UIColor colorBackground = this.viewer.getColorModel().createBackground(this.viewer.getContext(), 3);
-		UIColor borderColor = factory.createColor(TGColorUtil.darken(new UIColorModel(colorBackground)));
+		UIColor borderColor = this.viewer.getBackgroundColor();
 
 		painter.setLineWidth(UIPainter.THINNEST_LINE_WIDTH);
 		painter.setBackground(borderColor);
@@ -96,7 +94,6 @@ public class TGTableCanvasPainter {
 		
 		trackColor.dispose();
 		colorBackground.dispose();
-		borderColor.dispose();
 		if (caretColor != null) {
 			caretColor.dispose();
 		}

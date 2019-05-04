@@ -33,7 +33,6 @@ import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIScrollBar;
 import org.herac.tuxguitar.ui.widget.UIScrollBarPanel;
-import org.herac.tuxguitar.ui.widget.UISeparator;
 import org.herac.tuxguitar.ui.widget.UITextField;
 /**
  * @author julian
@@ -70,7 +69,7 @@ public class TGChordEditor {
 		final UIFactory uiFactory = this.dialog.getUIFactory();
 		UITableLayout layout = new UITableLayout(0f);
 		
-		this.control = uiFactory.createPanel(parent, true);
+		this.control = uiFactory.createPanel(parent, false);
 		this.control.setLayout(layout);
 		
 		this.fret = MIN_FRET;
@@ -114,9 +113,6 @@ public class TGChordEditor {
 		UIPanel nameComposite = uiFactory.createPanel(composite, false);
 		nameComposite.setLayout(nameLayout);
 		compositeLayout.set(nameComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true);
-		
-		UISeparator separator = uiFactory.createHorizontalSeparator(nameComposite);
-		nameLayout.set(separator, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true);
 		
 		UILabel chordNameLabel = uiFactory.createLabel(nameComposite);
 		chordNameLabel.setText(TuxGuitar.getProperty("chord.name"));

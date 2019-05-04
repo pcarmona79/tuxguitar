@@ -157,7 +157,7 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		legendLayout.set(this.channelSelect, 3, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false);
 		
 		UIButton settings = factory.createButton(legendPanel);
-		settings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
+		settings.setImage(TuxGuitar.getInstance().getIconManager().getListEdit());
 		settings.setToolTipText(TuxGuitar.getProperty("settings"));
 		settings.addSelectionListener(this.createOpenViewAction(TGToggleChannelsDialogAction.NAME));
 		legendLayout.set(settings, 3, 3, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);
@@ -171,7 +171,7 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		legendLayout.set(this.tuningText, 4, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false);
 		
 		UIButton tuningSettings = factory.createButton(legendPanel);
-		tuningSettings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
+		tuningSettings.setImage(TuxGuitar.getInstance().getIconManager().getListEdit());
 		tuningSettings.setToolTipText(TuxGuitar.getProperty("settings"));
 		tuningSettings.addSelectionListener(this.createOpenViewAction(TGOpenTrackTuningDialogAction.NAME));
 		legendLayout.set(tuningSettings, 4, 3, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);

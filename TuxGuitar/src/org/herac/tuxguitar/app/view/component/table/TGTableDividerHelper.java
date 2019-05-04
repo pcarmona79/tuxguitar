@@ -15,6 +15,7 @@ public class TGTableDividerHelper {
 	public UIDivider createDivider(TGTableColumn leftColumn, TGTableColumn rightColumn) {
 		UIFactory uiFactory = this.table.getUIFactory();
 		UIDivider uiDivider = uiFactory.createVerticalDivider(this.table.getColumnControl());
+		uiDivider.setBgColor(this.table.getViewer().getBackgroundColor());
 		uiDivider.addMouseDragListener(new TGTableDividerListener(this.table, leftColumn, rightColumn));
 		uiDivider.setCursor(UICursor.SIZEWE);
 		

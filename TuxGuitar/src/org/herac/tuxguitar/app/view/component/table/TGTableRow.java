@@ -7,6 +7,7 @@ import org.herac.tuxguitar.ui.event.UIMouseDoubleClickListener;
 import org.herac.tuxguitar.ui.event.UIMouseDownListener;
 import org.herac.tuxguitar.ui.event.UIMouseEvent;
 import org.herac.tuxguitar.ui.event.UIMouseUpListener;
+import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.widget.UICanvas;
@@ -43,6 +44,7 @@ public class TGTableRow {
 		MouseListenerCanvas mouseListenerCanvas = new MouseListenerCanvas();
 		
 		this.row = uiFactory.createPanel(this.table.getRowControl(), false);
+		this.row.setBgColor(this.table.getViewer().getBackgroundColor());
 		this.row.setLayout(new TGTableRowLayout(this));
 		
 		this.number = new TGTableRowTextCell(this);
@@ -54,7 +56,9 @@ public class TGTableRow {
 		this.soloMute.addMouseDownListener(mouseListenerLabel);
 		this.soloMute.addMouseUpListener(mouseListenerLabel);
 		this.soloMute.addMouseDoubleClickListener(mouseListenerLabel);
-		
+		this.soloMute.getLayout().set(UITableLayout.MARGIN_LEFT, 0f);
+		this.soloMute.getLayout().set(UITableLayout.MARGIN_RIGHT, 0f);
+
 		this.name = new TGTableRowTextCell(this);
 		this.name.addMouseDownListener(mouseListenerLabel);
 		this.name.addMouseUpListener(mouseListenerLabel);

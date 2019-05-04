@@ -32,7 +32,7 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 	public void createToolBar(UIContainer parent, boolean visible) {
 		UIFactory uiFactory = TGApplication.getInstance(this.getContext()).getFactory();
 		
-		this.control = uiFactory.createScrollBarPanel(parent, true, false, true);
+		this.control = uiFactory.createScrollBarPanel(parent, true, false, false);
 		this.control.setVisible(visible);
 		this.control.setLayout(new UIScrollBarPanelLayout(false, true, false, false, false, false));
 		this.control.addFocusGainedListener(this);
@@ -42,7 +42,7 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 				TGEditToolBar.this.getControl().layout();
 			}
 		});
-		
+
 		this.sectionContainer = uiFactory.createPanel(this.control, false);
 		this.sectionContainer.setLayout(new UITableLayout());
 		this.sectionContainer.addFocusGainedListener(this);

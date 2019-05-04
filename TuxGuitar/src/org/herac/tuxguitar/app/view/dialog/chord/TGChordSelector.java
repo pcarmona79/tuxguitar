@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.app.view.dialog.chord;
 
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.ui.UIFactory;
@@ -65,7 +66,7 @@ public class TGChordSelector {
 		UIFactory uiFactory = this.dialog.getUIFactory();
 		UITableLayout uiLayout = new UITableLayout();
 		
-		this.control = uiFactory.createPanel(parent, true);
+		this.control = uiFactory.createPanel(parent, false);
 		this.control.setLayout(uiLayout);
 		
 		UITableLayout tonicLayout = new UITableLayout(0f);
@@ -81,15 +82,16 @@ public class TGChordSelector {
 		UIPanel buttonsComposite = uiFactory.createPanel(tonicComposite, false);
 		buttonsComposite.setLayout(buttonsLayout);
 		tonicLayout.set(buttonsComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
-		
+
+		TGIconManager iconManager = TGIconManager.getInstance(this.getDialog().getContext().getContext());
 		this.sharpButton = uiFactory.createToggleButton(buttonsComposite);
-		this.sharpButton.setText("#");
+		this.sharpButton.setImage(iconManager.getSharp());
 		buttonsLayout.set(this.sharpButton, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		buttonsLayout.set(this.sharpButton, UITableLayout.PACKED_WIDTH, 28f);
 		buttonsLayout.set(this.sharpButton, UITableLayout.PACKED_HEIGHT, 28f);
 		
 		this.flatButton = uiFactory.createToggleButton(buttonsComposite);
-		this.flatButton.setText("b");
+		this.flatButton.setImage(iconManager.getFlat());
 		buttonsLayout.set(this.flatButton, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		buttonsLayout.set(this.flatButton, UITableLayout.PACKED_WIDTH, 28f);
 		buttonsLayout.set(this.flatButton, UITableLayout.PACKED_HEIGHT, 28f);
@@ -97,12 +99,9 @@ public class TGChordSelector {
 		this.chordList = uiFactory.createListBoxSelect(this.control);
 		uiLayout.set(this.chordList, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
-		UISeparator separator = uiFactory.createHorizontalSeparator(tonicComposite);
-		tonicLayout.set(separator, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true);
-		
 		UIButton customizeButton = uiFactory.createButton(tonicComposite);
 		customizeButton.setText(TuxGuitar.getProperty("settings"));
-		tonicLayout.set(customizeButton, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false);
+		tonicLayout.set(customizeButton, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false);
 		
 		customizeButton.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
@@ -320,15 +319,12 @@ public class TGChordSelector {
 		this.addCheck.setText("add");
 		bassLayout.set(this.addCheck, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true);
 		
-		UISeparator separator = uiFactory.createHorizontalSeparator(bassComposite);
-		bassLayout.set(separator, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true);
-		
 		UILabel bText = uiFactory.createLabel(bassComposite);
 		bText.setText(TuxGuitar.getProperty("chord.bass"));
-		bassLayout.set(bText, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false);
+		bassLayout.set(bText, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false);
 		
 		this.bassCombo = uiFactory.createDropDownSelect(bassComposite);
-		bassLayout.set(this.bassCombo, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false);
+		bassLayout.set(this.bassCombo, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false);
 	}
 	
 	protected void insertTonicNames(boolean sharp){

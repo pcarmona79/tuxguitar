@@ -65,14 +65,12 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 	private UIWindow dialog;
 	private UITable<TGBrowserElement> table;
 	private List<TGBrowserElement> elements;
-	private TGBrowserMenuBar menu;
 	private TGBrowserToolBar toolBar;
 	private TGCursorController cursorController;
 	
 	public TGBrowserDialog(TGContext context){
 		this.context = context;
 		this.connection = new TGBrowserConnection(context, this);
-		this.menu = new TGBrowserMenuBar(this);
 		this.toolBar = new TGBrowserToolBar(this);
 	}
 	
@@ -111,7 +109,6 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 		this.dialog = getUIFactory().createWindow(TGWindow.getInstance(this.context).getWindow(), false, true);
 		this.dialog.setImage(TuxGuitar.getInstance().getIconManager().getAppIcon());
 		
-		this.menu.createMenuBar(getWindow());
 		this.toolBar.createToolBar(getWindow());
 		this.initTable(this.dialog);
 		this.createLayout();
@@ -191,7 +188,6 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 	
 	public void updateBars(){
 		if(!isDisposed()){
-			this.menu.updateItems();
 			this.toolBar.updateItems();
 		}
 	}
@@ -211,7 +207,6 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 			TGSynchronizer.getInstance(this.context).executeLater(new Runnable() {
 				public void run() {
 					if(!isDisposed()){
-						TGBrowserDialog.this.menu.updateCollections(selection);
 						TGBrowserDialog.this.toolBar.updateCollections(selection);
 					}
 				}
@@ -411,7 +406,6 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 	public void loadProperties() {
 		if(!isDisposed()){
 			this.dialog.setText(TuxGuitar.getProperty("browser.dialog"));
-			this.menu.loadProperties();
 			this.toolBar.loadProperties();
 		}
 	}
@@ -457,7 +451,6 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 	
 	public void reload(){
 		if(!isDisposed()){
-			this.menu.reload(getWindow());
 			this.toolBar.reload();
 			this.updateTable();
 			this.updateCollections(getCollection());

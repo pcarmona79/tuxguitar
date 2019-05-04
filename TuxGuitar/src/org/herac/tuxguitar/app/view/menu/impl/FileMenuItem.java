@@ -343,11 +343,5 @@ public class FileMenuItem extends TGMenuItem {
 	}
 	
 	public void loadIcons(){
-		this.newSong.setImage(TuxGuitar.getInstance().getIconManager().getFileNew());
-		this.open.setImage(TuxGuitar.getInstance().getIconManager().getFileOpen());
-		this.save.setImage(TuxGuitar.getInstance().getIconManager().getFileSave());
-		this.saveAs.setImage(TuxGuitar.getInstance().getIconManager().getFileSaveAs());
-		this.printPreview.setImage(TuxGuitar.getInstance().getIconManager().getFilePrintPreview());
-		this.print.setImage(TuxGuitar.getInstance().getIconManager().getFilePrint());
 	}
 }

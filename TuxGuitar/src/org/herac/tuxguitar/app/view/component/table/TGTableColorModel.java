@@ -3,6 +3,7 @@ package org.herac.tuxguitar.app.view.component.table;
 import org.herac.tuxguitar.app.system.icons.TGSkinManager;
 import org.herac.tuxguitar.app.system.properties.TGPropertiesUIUtil;
 import org.herac.tuxguitar.app.ui.TGApplication;
+import org.herac.tuxguitar.app.util.TGColorUtil;
 import org.herac.tuxguitar.ui.appearance.UIAppearance;
 import org.herac.tuxguitar.ui.appearance.UIColorAppearance;
 import org.herac.tuxguitar.ui.resource.UIColor;
@@ -28,6 +29,7 @@ public class TGTableColorModel {
 			appearance.getColorModel(UIColorAppearance.WidgetHighlightForeground),
 			appearance.getColorModel(UIColorAppearance.WidgetSelectedForeground),
 			appearance.getColorModel(UIColorAppearance.WidgetSelectedForeground),
+            TGColorUtil.darken(appearance.getColorModel(UIColorAppearance.WidgetLightForeground)),
 		};
 		
 		UIColorModel[] defaultBackgrounds = new UIColorModel[] {
@@ -35,6 +37,7 @@ public class TGTableColorModel {
 			appearance.getColorModel(UIColorAppearance.WidgetHighlightBackground),
 			appearance.getColorModel(UIColorAppearance.WidgetSelectedBackground),
 			appearance.getColorModel(UIColorAppearance.WidgetSelectedBackground),
+            TGColorUtil.darken(appearance.getColorModel(UIColorAppearance.WidgetLightBackground)),
 		};
 		
 		this.foregrounds = new UIColorModel[defaultForegrounds.length];

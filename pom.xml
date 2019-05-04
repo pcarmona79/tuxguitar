@@ -258,6 +258,12 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
+				<artifactId>tuxguitar-gtk-integration</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>tuxguitar-audiounit</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
@@ -319,7 +325,7 @@
 			<dependency>
 				<groupId>${org.eclipse.swt.groupId}</groupId>
 				<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-				<version>4.11</version>
+				<version>4.12.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>${org.eclipse.swt.groupId}</groupId>

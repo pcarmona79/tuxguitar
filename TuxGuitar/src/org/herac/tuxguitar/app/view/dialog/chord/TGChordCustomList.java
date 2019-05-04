@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.app.view.dialog.chord;
 
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.util.TGMessageDialogUtil;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.ui.UIFactory;
@@ -30,7 +31,7 @@ public class TGChordCustomList {
 		final UIFactory uiFactory = this.dialog.getUIFactory();
 		UITableLayout layout = new UITableLayout(0f);
 		
-		this.control = uiFactory.createPanel(parent, true);
+		this.control = uiFactory.createPanel(parent, false);
 		this.control.setLayout(layout);
 		
 		UITableLayout compositeLayout = new UITableLayout();
@@ -55,9 +56,12 @@ public class TGChordCustomList {
 		UIPanel buttons = uiFactory.createPanel(this.control, false);
 		buttons.setLayout(buttonsLayout);
 		layout.set(buttons, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
-		
+
+		TGIconManager iconManager = TGIconManager.getInstance(this.getDialog().getContext().getContext());
+
 		UIButton add = uiFactory.createButton(buttons);
-		add.setText(TuxGuitar.getProperty("add"));
+		add.setToolTipText(TuxGuitar.getProperty("add"));
+		add.setImage(iconManager.getListAdd());
 		add.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				addCustomChord();
@@ -66,7 +70,8 @@ public class TGChordCustomList {
 		buttonsLayout.set(add, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		
 		UIButton rename = uiFactory.createButton(buttons);
-		rename.setText(TuxGuitar.getProperty("rename"));
+		rename.setToolTipText(TuxGuitar.getProperty("rename"));
+		rename.setImage(iconManager.getListEdit());
 		rename.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				Integer index = getChords().getSelectedValue();
@@ -76,9 +81,10 @@ public class TGChordCustomList {
 			}
 		});
 		buttonsLayout.set(rename, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
-		
+
 		UIButton remove = uiFactory.createButton(buttons);
-		remove.setText(TuxGuitar.getProperty("remove"));
+		remove.setToolTipText(TuxGuitar.getProperty("remove"));
+		remove.setImage(iconManager.getListRemove());
 		remove.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				Integer index = getChords().getSelectedValue();

@@ -92,6 +92,9 @@ public class TGIconManager {
 	private UIImage fretboardFret;
 	private UIImage compositionTimeSignature;
 	private UIImage compositionTempo;
+	private UIImage compositionClef;
+	private UIImage compositionKeySignature;
+	private UIImage compositionTripletFeel;
 	private UIImage compositionRepeatOpen;
 	private UIImage compositionRepeatClose;
 	private UIImage compositionRepeatAlternative;
@@ -159,7 +162,13 @@ public class TGIconManager {
 	private UIImage listAdd;
 	private UIImage listEdit;
 	private UIImage listRemove;
-	
+	private UIImage solo;
+	private UIImage soloDisabled;
+	private UIImage mute;
+	private UIImage muteDisabled;
+	private UIImage sharp;
+	private UIImage flat;
+
 	private TGIconManager(TGContext context){
 		this.context = context;
 		this.themeCache = new HashMap<String, TGIconTheme>();
@@ -228,6 +237,9 @@ public class TGIconManager {
 		this.optionToolbars = loadIcon("option_toolbars.png");
 		this.compositionTimeSignature = loadIcon("timesignature.png");
 		this.compositionTempo = loadIcon("tempoicon.png");
+		this.compositionClef = loadIcon("clef.png");
+		this.compositionKeySignature = loadIcon("keysignature.png");
+		this.compositionTripletFeel = loadIcon("tripletfeel.png");
 		this.compositionRepeatOpen = loadIcon("openrepeat.png");
 		this.compositionRepeatClose = loadIcon("closerepeat.png");
 		this.compositionRepeatAlternative = loadIcon("repeat_alternative.png");
@@ -330,6 +342,12 @@ public class TGIconManager {
 		this.listAdd = loadIcon("list_add.png");
 		this.listEdit = loadIcon("list_edit.png");
 		this.listRemove = loadIcon("list_remove.png");
+		this.solo = loadIcon("solo.png");
+		this.soloDisabled = loadIcon("solo-disabled.png");
+		this.mute = loadIcon("mute.png");
+		this.muteDisabled = loadIcon("mute-disabled.png");
+		this.sharp = loadIcon("sharp.png");
+		this.flat = loadIcon("flat.png");
 	}
 	
 	private UIImage loadIcon(String name) {
@@ -455,7 +473,19 @@ public class TGIconManager {
 	public UIImage getCompositionTimeSignature() {
 		return this.compositionTimeSignature;
 	}
-	
+
+	public UIImage getCompositionClef() {
+		return this.compositionClef;
+	}
+
+	public UIImage getCompositionKeySignature() {
+		return this.compositionKeySignature;
+	}
+
+	public UIImage getCompositionTripletFeel() {
+		return this.compositionTripletFeel;
+	}
+
 	public UIImage getDurationDotted() {
 		return this.durationDotted;
 	}
@@ -930,6 +960,29 @@ public class TGIconManager {
 
 	public UIImage getListRemove() {
 		return listRemove;
+	}
+
+	public UIImage getSolo() {
+		return solo;
+	}
+
+	public UIImage getSoloDisabled() {
+		return soloDisabled;
+	}
+
+	public UIImage getMute() {
+		return mute;
+	}
+
+	public UIImage getMuteDisabled() {
+		return muteDisabled;
+	}
+	public UIImage getSharp() {
+		return sharp;
+	}
+
+	public UIImage getFlat() {
+		return flat;
 	}
 
 	public UIImage getZoomIn() {

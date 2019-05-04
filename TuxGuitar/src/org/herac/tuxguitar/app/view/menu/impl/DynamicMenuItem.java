@@ -93,11 +93,18 @@ public class DynamicMenuItem extends TGMenuItem {
 		this.fortissimo.setText(TuxGuitar.getProperty("dynamic.fortissimo"));
 		this.forteFortissimo.setText(TuxGuitar.getProperty("dynamic.forte-fortissimo"));
 	}
-	
+
 	public void loadIcons(){
-		//Nothing to do
+		this.pianoPianissimo.setImage(TuxGuitar.getInstance().getIconManager().getDynamicPPP());
+		this.pianissimo.setImage(TuxGuitar.getInstance().getIconManager().getDynamicPP());
+		this.piano.setImage(TuxGuitar.getInstance().getIconManager().getDynamicP());
+		this.mezzoPiano.setImage(TuxGuitar.getInstance().getIconManager().getDynamicMP());
+		this.mezzoForte.setImage(TuxGuitar.getInstance().getIconManager().getDynamicMF());
+		this.forte.setImage(TuxGuitar.getInstance().getIconManager().getDynamicF());
+		this.fortissimo.setImage(TuxGuitar.getInstance().getIconManager().getDynamicFF());
+		this.forteFortissimo.setImage(TuxGuitar.getInstance().getIconManager().getDynamicFFF());
 	}
-	
+
 	public TGActionProcessorListener createChangeVelocityAction(Integer velocity) {
 		TGActionProcessorListener tgActionProcessor = this.createActionProcessor(TGChangeVelocityAction.NAME);
 		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_VELOCITY, velocity);

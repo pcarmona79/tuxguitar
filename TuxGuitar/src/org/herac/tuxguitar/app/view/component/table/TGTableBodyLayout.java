@@ -29,7 +29,7 @@ public class TGTableBodyLayout extends UITableLayout {
 			this.set(control, (++row), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			this.set(control, UITableLayout.PACKED_HEIGHT, this.rowHeight);
 			this.set(control, UITableLayout.MARGIN, 0f);
-			this.set(control, UITableLayout.MARGIN_TOP, 1f);
+			this.set(control, UITableLayout.MARGIN_TOP, 0f);
 			this.computeChildPackedSize(control);
 		}
 	}
