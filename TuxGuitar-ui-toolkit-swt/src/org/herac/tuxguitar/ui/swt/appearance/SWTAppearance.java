@@ -32,6 +32,7 @@ public class SWTAppearance implements UIAppearance {
 		this.colorMap.put(UIColorAppearance.WidgetSelectedForeground, this.createColorModel(SWT.COLOR_LIST_SELECTION_TEXT));
 		this.colorMap.put(UIColorAppearance.WidgetDarkBackground, this.createColorModel(SWT.COLOR_WIDGET_DARK_SHADOW));
 		this.colorMap.put(UIColorAppearance.WidgetDarkForeground, this.createColorModel(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		this.colorMap.put(UIColorAppearance.WidgetBorder, this.createColorModel(SWT.COLOR_WIDGET_BORDER));
 		this.colorMap.put(UIColorAppearance.InputBackground, this.createColorModel(SWT.COLOR_LIST_BACKGROUND));
 		this.colorMap.put(UIColorAppearance.InputForeground, this.createColorModel(SWT.COLOR_LIST_FOREGROUND));
 		this.colorMap.put(UIColorAppearance.InputSelectedBackground, this.createColorModel(SWT.COLOR_LIST_SELECTION));

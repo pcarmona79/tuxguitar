@@ -89,7 +89,9 @@ public class TGWindow implements TGEventListener {
 		
 		TGTableViewer tgTableViewer = TGTableViewer.getInstance(this.context);
 		tgTableViewer.init(this.window);
-		
+
+		tgWindowDivider.getControl().setBgColor(tgTableViewer.getBorderColor());
+
 		TGDockingManager dockingManager = TGDockingManager.getInstance(this.context);
 		dockingManager.init(uiFactory, window);
 		

@@ -16,10 +16,10 @@ public class TGMainToolBarSectionEdit extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.undo = this.getToolBar().getControl().createActionItem();
+		this.undo = this.getToolBar().getToolBar().createActionItem();
 		this.undo.addSelectionListener(this.createActionProcessor(TGUndoAction.NAME));
 		
-		this.redo = this.getToolBar().getControl().createActionItem();
+		this.redo = this.getToolBar().getToolBar().createActionItem();
 		this.redo.addSelectionListener(this.createActionProcessor(TGRedoAction.NAME));
 		
 		this.loadIcons();

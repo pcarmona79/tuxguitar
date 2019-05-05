@@ -26,7 +26,7 @@ public class TGMainToolBarSectionLayout extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.menuItem = this.getToolBar().getControl().createMenuItem();
+		this.menuItem = this.getToolBar().getToolBar().createMenuItem();
 		
 		this.pageLayout = this.menuItem.getMenu().createActionItem();
 		this.pageLayout.addSelectionListener(this.createActionProcessor(TGSetPageLayoutAction.NAME));

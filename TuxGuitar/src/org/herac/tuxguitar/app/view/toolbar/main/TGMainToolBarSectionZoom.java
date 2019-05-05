@@ -14,10 +14,10 @@ public class TGMainToolBarSectionZoom extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.zoomIn = this.getToolBar().getControl().createActionItem();
+		this.zoomIn = this.getToolBar().getToolBar().createActionItem();
 		this.zoomIn.addSelectionListener(this.createActionProcessor(TGSetLayoutScaleIncrementAction.NAME));
 
-		this.zoomOut = this.getToolBar().getControl().createActionItem();
+		this.zoomOut = this.getToolBar().getToolBar().createActionItem();
 		this.zoomOut.addSelectionListener(this.createActionProcessor(TGSetLayoutScaleDecrementAction.NAME));
 
 		this.loadIcons();

@@ -12,8 +12,9 @@ public enum UIColorAppearance {
 	WidgetSelectedForeground,
 	WidgetDarkBackground,
 	WidgetDarkForeground,
+	WidgetBorder,
 	InputBackground,
 	InputForeground,
 	InputSelectedBackground,
-	InputSelectedForeground,
+	InputSelectedForeground
 }

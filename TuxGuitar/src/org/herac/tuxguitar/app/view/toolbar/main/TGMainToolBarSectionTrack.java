@@ -15,10 +15,10 @@ public class TGMainToolBarSectionTrack extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.add = this.getToolBar().getControl().createActionItem();
+		this.add = this.getToolBar().getToolBar().createActionItem();
 		this.add.addSelectionListener(this.createActionProcessor(TGAddNewTrackAction.NAME));
 		
-		this.remove = this.getToolBar().getControl().createActionItem();
+		this.remove = this.getToolBar().getToolBar().createActionItem();
 		this.remove.addSelectionListener(this.createActionProcessor(TGRemoveTrackAction.NAME));
 		
 		this.loadIcons();

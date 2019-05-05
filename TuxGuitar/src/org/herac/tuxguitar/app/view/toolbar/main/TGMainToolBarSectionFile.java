@@ -22,22 +22,22 @@ public class TGMainToolBarSectionFile extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.newSong = this.getToolBar().getControl().createActionItem();
+		this.newSong = this.getToolBar().getToolBar().createActionItem();
 		this.newSong.addSelectionListener(this.createActionProcessor(TGLoadTemplateAction.NAME));
 		
-		this.openSong = this.getToolBar().getControl().createActionItem();
+		this.openSong = this.getToolBar().getToolBar().createActionItem();
 		this.openSong.addSelectionListener(this.createActionProcessor(TGOpenFileAction.NAME));
 		
-		this.saveSong = this.getToolBar().getControl().createActionItem();
+		this.saveSong = this.getToolBar().getToolBar().createActionItem();
 		this.saveSong.addSelectionListener(this.createActionProcessor(TGSaveFileAction.NAME));
 		
-		this.saveAsSong = this.getToolBar().getControl().createActionItem();
+		this.saveAsSong = this.getToolBar().getToolBar().createActionItem();
 		this.saveAsSong.addSelectionListener(this.createActionProcessor(TGSaveAsFileAction.NAME));
 		
-		this.printSong = this.getToolBar().getControl().createActionItem();
+		this.printSong = this.getToolBar().getToolBar().createActionItem();
 		this.printSong.addSelectionListener(this.createActionProcessor(TGPrintAction.NAME));
 		
-		this.printPreviewSong = this.getToolBar().getControl().createActionItem();
+		this.printPreviewSong = this.getToolBar().getToolBar().createActionItem();
 		this.printPreviewSong.addSelectionListener(this.createActionProcessor(TGPrintPreviewAction.NAME));
 		
 		this.loadIcons();

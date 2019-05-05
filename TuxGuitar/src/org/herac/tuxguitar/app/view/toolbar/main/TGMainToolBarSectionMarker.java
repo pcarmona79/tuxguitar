@@ -25,7 +25,7 @@ public class TGMainToolBarSectionMarker extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.menuItem = this.getToolBar().getControl().createMenuItem();
+		this.menuItem = this.getToolBar().getToolBar().createMenuItem();
 		
 		//--ADD--
 		this.add = this.menuItem.getMenu().createActionItem();

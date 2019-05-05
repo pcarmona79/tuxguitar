@@ -7,7 +7,7 @@ public class TGMainToolBarSectionDivider extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.getToolBar().getControl().createSeparator();
+		this.getToolBar().getToolBar().createSeparator();
 	}
 	
 	public void loadProperties(){

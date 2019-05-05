@@ -26,10 +26,10 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.showEditToolBar = this.getToolBar().getControl().createCheckItem();
+		this.showEditToolBar = this.getToolBar().getToolBar().createCheckItem();
 		this.showEditToolBar.addSelectionListener(this.createActionProcessor(TGToggleEditToolbarAction.NAME));
 		
-		this.menuItem = this.getToolBar().getControl().createMenuItem();
+		this.menuItem = this.getToolBar().getToolBar().createMenuItem();
 		
 		//--FRETBOARD--
 		this.showFretBoard = this.menuItem.getMenu().createActionItem();

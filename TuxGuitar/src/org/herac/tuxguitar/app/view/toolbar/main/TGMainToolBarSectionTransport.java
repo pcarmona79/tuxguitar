@@ -27,34 +27,34 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.first = this.getToolBar().getControl().createActionItem();
+		this.first = this.getToolBar().getToolBar().createActionItem();
 		this.first.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				TGTransport.getInstance(getToolBar().getContext()).gotoFirst();
 			}
 		});
 		
-		this.previous = this.getToolBar().getControl().createActionItem();
+		this.previous = this.getToolBar().getToolBar().createActionItem();
 		this.previous.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				TGTransport.getInstance(getToolBar().getContext()).gotoPrevious();
 			}
 		});
 		
-		this.stop = this.getToolBar().getControl().createActionItem();
+		this.stop = this.getToolBar().getToolBar().createActionItem();
 		this.stop.addSelectionListener(this.createActionProcessor(TGTransportStopAction.NAME));
 		
-		this.play = this.getToolBar().getControl().createActionItem();
+		this.play = this.getToolBar().getToolBar().createActionItem();
 		this.play.addSelectionListener(this.createActionProcessor(TGTransportPlayAction.NAME));
 		
-		this.next = this.getToolBar().getControl().createActionItem();
+		this.next = this.getToolBar().getToolBar().createActionItem();
 		this.next.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				TGTransport.getInstance(getToolBar().getContext()).gotoNext();
 			}
 		});
 		
-		this.last = this.getToolBar().getControl().createActionItem();
+		this.last = this.getToolBar().getToolBar().createActionItem();
 		this.last.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				TGTransport.getInstance(getToolBar().getContext()).gotoLast();

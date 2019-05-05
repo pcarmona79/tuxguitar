@@ -616,6 +616,10 @@ public class TGTableViewer implements TGEventListener {
 	}
 
 	public UIColor getBackgroundColor() {
-	    return this.backgrounds[4];
+		return this.backgrounds[4];
+	}
+
+	public UIColor getBorderColor() {
+	    return this.backgrounds[5];
 	}
 }

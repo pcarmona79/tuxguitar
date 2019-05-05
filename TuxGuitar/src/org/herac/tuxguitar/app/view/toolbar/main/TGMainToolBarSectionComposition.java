@@ -12,7 +12,7 @@ public class TGMainToolBarSectionComposition extends TGMainToolBarSection {
 	}
 	
 	public void createSection() {
-		this.properties = this.getToolBar().getControl().createActionItem();
+		this.properties = this.getToolBar().getToolBar().createActionItem();
 		this.properties.addSelectionListener(this.createActionProcessor(TGOpenSongInfoDialogAction.NAME));
 		
 		this.loadIcons();

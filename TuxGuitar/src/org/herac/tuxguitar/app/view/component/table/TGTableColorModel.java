@@ -37,6 +37,7 @@ public class TGTableColorModel {
 			appearance.getColorModel(UIColorAppearance.WidgetSelectedBackground),
 			appearance.getColorModel(UIColorAppearance.WidgetSelectedBackground),
             appearance.getColorModel(UIColorAppearance.WidgetDarkBackground),
+            appearance.getColorModel(UIColorAppearance.WidgetBorder)
 		};
 		
 		this.foregrounds = new UIColorModel[defaultForegrounds.length];
