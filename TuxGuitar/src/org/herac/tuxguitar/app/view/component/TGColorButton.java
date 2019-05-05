@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.app.view.component;
 
 import org.herac.tuxguitar.app.TuxGuitar;
-import org.herac.tuxguitar.app.util.TGColorUtil;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.chooser.UIColorChooser;
 import org.herac.tuxguitar.ui.chooser.UIColorChooserHandler;
@@ -47,7 +46,7 @@ public class TGColorButton {
         this.disposeColor();
         UIColor color = factory.createColor(this.value);
         this.button.setBgColor(color);
-        UIColor fg = factory.createColor(TGColorUtil.complementaryTextColor(this.value));
+        UIColor fg = factory.createColor(UIColorModel.complementaryTextColor(this.value));
         this.button.setFgColor(fg);
         this.color = color;
         this.fgColor = fg;

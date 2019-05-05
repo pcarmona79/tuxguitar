@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.app.view.component.table;
 
 import org.herac.tuxguitar.app.TuxGuitar;
-import org.herac.tuxguitar.app.util.TGColorUtil;
 import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.ui.UIFactory;
@@ -64,12 +63,12 @@ public class TGTableCanvasPainter {
 			if((playing && measure.isPlaying(this.viewer.getEditor().getTablature().getViewLayout())) || (!playing && hasCaret)){
 				if (!isRestMeasure) {
 					if (caretColor == null) {
-						caretColor = factory.createColor(TGColorUtil.complementaryTextColor(new UIColorModel(trackColor)));
+						caretColor = factory.createColor(UIColorModel.complementaryTextColor(new UIColorModel(trackColor)));
 					}
 					painter.setBackground(caretColor);
 				} else {
 					if (restCaretColor == null) {
-						restCaretColor = factory.createColor(TGColorUtil.complementaryTextColor(new UIColorModel(colorBackground)));
+						restCaretColor = factory.createColor(UIColorModel.complementaryTextColor(new UIColorModel(colorBackground)));
 					}
 					painter.setBackground(restCaretColor);
 				}
