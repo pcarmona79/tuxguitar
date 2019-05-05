@@ -17,7 +17,7 @@ public class TGBufferedPainterLocked {
 	private TGContext context;
 	private UIImage buffer;
 	private TGBufferedPainterHandle handle;
-	
+
 	public TGBufferedPainterLocked(TGContext context, TGBufferedPainterHandle handle) {
 		this.context = context;
 		this.handle = handle;
@@ -34,24 +34,26 @@ public class TGBufferedPainterLocked {
 			this.buffer = null;
 		}
 	}
-	
+
 	public void fillPaintBuffer() {
 		UIRectangle size = this.handle.getPaintableControl().getBounds();
-		float clientWidth = size.getWidth();
-		float clientHeight = size.getHeight();
-		
+		float zoom = this.handle.getPaintableControl().getDeviceZoom() / 100.f;
+		float clientWidth = size.getWidth() * zoom;
+		float clientHeight = size.getHeight() * zoom;
+
 		if( this.buffer == null || this.buffer.isDisposed() || this.buffer.getWidth() != clientWidth || this.buffer.getHeight() != clientHeight ) {
 			this.disposePaintBuffer();
 			this.buffer = this.getResourceFactory().createImage(clientWidth, clientHeight);
 		}
-		
+
 		UIPainter tgPainter = this.buffer.createPainter();
-		
+		tgPainter.setScale(zoom);
+
 		this.handle.paintControl(tgPainter);
-		
+
 		tgPainter.dispose();
 	}
-	
+
 	public void paintBufferLocked(UIPainter painter) {
 		TGEditorManager editor = TGEditorManager.getInstance(this.context);
 		if (editor.tryLock()) {
@@ -64,9 +66,12 @@ public class TGBufferedPainterLocked {
 			// try later
 			this.redrawLater();
 		}
-		
+
 		if( this.buffer != null && !this.buffer.isDisposed() ) {
-			painter.drawImage(this.buffer, 0, 0);
+			UIRectangle size = this.handle.getPaintableControl().getBounds();
+			float clientWidth = size.getWidth();
+			float clientHeight = size.getHeight();
+			painter.drawImage(this.buffer, 0, 0, this.buffer.getWidth(), this.buffer.getHeight(), 0, 0, clientWidth, clientHeight);
 		}
 	}
 	

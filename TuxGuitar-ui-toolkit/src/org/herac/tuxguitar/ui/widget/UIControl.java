@@ -42,6 +42,8 @@ public interface UIControl extends UIComponent {
 	UIRectangle getBounds();
 
 	void setBounds(UIRectangle bounds);
+
+	int getDeviceZoom();
 	
 	UIColor getBgColor();
 	

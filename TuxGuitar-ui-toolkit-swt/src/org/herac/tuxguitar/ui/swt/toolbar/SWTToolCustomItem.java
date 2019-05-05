@@ -177,6 +177,10 @@ public class SWTToolCustomItem extends SWTToolControl<ToolBar> implements SWTCon
 		}
 	}
 
+	public int getDeviceZoom() {
+        return this.item.getParent().getMonitor().getZoom();
+	}
+
 	public UIColor getBgColor() {
 		if( this.control != null ) {
 			return this.control.getBgColor();

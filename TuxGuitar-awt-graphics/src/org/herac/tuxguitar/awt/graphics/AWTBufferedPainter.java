@@ -184,7 +184,15 @@ public class AWTBufferedPainter extends AWTAbstractPainter {
 			}
 		});
 	}
-	
+
+	public void setScale(final float scale) {
+		this.commands.add(new GTKPainterCommand() {
+			public void process(UIPainter painter) {
+				painter.setScale(scale);
+			}
+		});
+	}
+
 	public void process(UIPainter painter) {
 		for (GTKPainterCommand command : this.commands) {
 			command.process(painter);

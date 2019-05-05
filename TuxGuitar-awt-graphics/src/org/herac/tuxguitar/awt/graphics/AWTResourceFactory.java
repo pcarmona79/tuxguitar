@@ -2,6 +2,7 @@ package org.herac.tuxguitar.awt.graphics;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
@@ -37,9 +38,9 @@ public class AWTResourceFactory implements UIResourceFactory {
 		return new AWTImage( width, height );
 	}
 
-	public UIImage createImage(InputStream inputStream) {
+	public UIImage createImage(Map<Integer, InputStream> inputStream) {
 		try {
-			return new AWTImage( inputStream );
+			return new AWTImage( inputStream.get(100) );
 		} catch (IOException e) {
 			throw new TGException();
 		}

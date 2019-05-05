@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.io.svg;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
@@ -31,7 +32,7 @@ public class SVGResourceFactory implements UIResourceFactory{
 		return new SVGFont(name, height, bold, italic);
 	}
 
-	public UIImage createImage(InputStream inputStream) {
+	public UIImage createImage(Map<Integer, InputStream> inputStream) {
 		return null;
 	}
 }

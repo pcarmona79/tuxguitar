@@ -107,7 +107,11 @@ public abstract class SWTControl<T extends Control> extends SWTEventReceiver<T> 
 	public UIRectangle getBounds() {
 		return this.getControlBounds();
 	}
-	
+
+	public int getDeviceZoom() {
+		return this.getControl().getMonitor().getZoom();
+	}
+
 	public void setPackedSize(UISize packedSize) {
 		this.packedSize.setWidth(packedSize.getWidth());
 		this.packedSize.setHeight(packedSize.getHeight());

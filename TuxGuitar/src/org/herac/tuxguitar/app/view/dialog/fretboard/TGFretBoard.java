@@ -318,20 +318,20 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 			this.lastSize.setHeight(clientHeight);
 		}
 	}
-	
-	private void paintFretBoard(UIPainter painter){
+
+	private void paintFretBoard(UIPainter painter, float zoom){
 		if(this.image == null || this.image.isDisposed()){
 			UIFactory factory = getUIFactory();
 			UIRectangle area = this.control.getChildArea();
-			
-			this.image = factory.createImage(area.getWidth(), ((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING);
+
+			this.image = factory.createImage(area.getWidth() * zoom, (((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING) * zoom);
 			
 			UIPainter painterBuffer = this.image.createPainter();
 			
 			//fondo
 			painterBuffer.setBackground(this.config.getColorBackground());
 			painterBuffer.initPath(UIPainter.PATH_FILL);
-			painterBuffer.addRectangle(area.getX(), area.getY(), area.getWidth(), area.getHeight());
+			painterBuffer.addRectangle(area.getX() * zoom, area.getY() * zoom, area.getWidth() * zoom, area.getHeight() * zoom);
 			painterBuffer.closePath();
 			
 			
@@ -340,12 +340,12 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 			UIImage fretImage = iconManager.getFretboardFret();
 			UIImage firstFretImage = iconManager.getFretboardFirstFret();
 			
-			painterBuffer.drawImage(firstFretImage, 0, 0, firstFretImage.getWidth(), firstFretImage.getHeight(), this.frets[0] - 5,this.strings[0] - 5, firstFretImage.getWidth(),this.strings[this.strings.length - 1] );
+			painterBuffer.drawImage(firstFretImage, 0, 0, firstFretImage.getWidth(), firstFretImage.getHeight(), (this.frets[0] - 5) * zoom, (this.strings[0] - 5) * zoom, firstFretImage.getWidth() * zoom,this.strings[this.strings.length - 1] * zoom);
 			
-			paintFretPoints(painterBuffer,0);
+			paintFretPoints(painterBuffer,0, zoom);
 			for (int i = 1; i < this.frets.length; i++) {
-				painterBuffer.drawImage(fretImage, 0, 0, fretImage.getWidth(), fretImage.getHeight(), this.frets[i], this.strings[0] - 5,fretImage.getWidth(),this.strings[this.strings.length - 1] );
-				paintFretPoints(painterBuffer, i);
+				painterBuffer.drawImage(fretImage, 0, 0, fretImage.getWidth(), fretImage.getHeight(), this.frets[i] * zoom, (this.strings[0] - 5) * zoom,fretImage.getWidth() * zoom, this.strings[this.strings.length - 1] * zoom);
+				paintFretPoints(painterBuffer, i, zoom);
 			}
 			
 			// pinto las cuerdas
@@ -356,37 +356,37 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 				}
 				painterBuffer.initPath();
 				painterBuffer.setAntialias(false);
-				painterBuffer.moveTo(this.frets[0], this.strings[i]);
-				painterBuffer.lineTo(this.frets[this.frets.length - 1], this.strings[i]);
+				painterBuffer.moveTo(this.frets[0] * zoom, this.strings[i] * zoom);
+				painterBuffer.lineTo(this.frets[this.frets.length - 1] * zoom, this.strings[i] * zoom);
 				painterBuffer.closePath();
 			}
 			
 			// pinto la escala
-			paintScale(painterBuffer);
+			paintScale(painterBuffer, zoom);
 			
 			painterBuffer.dispose();
 		}
 		painter.drawImage(this.image,0,0);
 	}
 	
-	private void paintFretPoints(UIPainter painter, int fretIndex) {
+	private void paintFretPoints(UIPainter painter, int fretIndex, float zoom) {
 		painter.setBackground(this.config.getColorFretPoint());
 		if ((fretIndex + 1) < this.frets.length) {
 			int fret = ((fretIndex + 1) % 12);
-			painter.setLineWidth(10);
+			painter.setLineWidth(10 * zoom);
 			if (fret == 0) {
-				int size = getOvalSize();
-				int x = this.frets[fretIndex] + ((this.frets[fretIndex + 1] - this.frets[fretIndex]) / 2);
-				int y1 = this.strings[0] + ((this.strings[this.strings.length - 1] - this.strings[0]) / 2) - STRING_SPACING;
-				int y2 = this.strings[0] + ((this.strings[this.strings.length - 1] - this.strings[0]) / 2) + STRING_SPACING;
+				int size = (int) (getOvalSize() * zoom);
+				int x = (int) ((this.frets[fretIndex] + ((this.frets[fretIndex + 1] - this.frets[fretIndex]) / 2)) * zoom);
+				int y1 = (int) ((this.strings[0] + ((this.strings[this.strings.length - 1] - this.strings[0]) / 2) - STRING_SPACING) * zoom);
+				int y2 = (int) ((this.strings[0] + ((this.strings[this.strings.length - 1] - this.strings[0]) / 2) + STRING_SPACING) * zoom);
 				painter.initPath(UIPainter.PATH_FILL);
 				painter.addCircle(x, y1, size);
 				painter.addCircle(x, y2, size);
 				painter.closePath();
 			} else if (fret == 3 || fret == 5 || fret == 7 || fret == 9) {
-				int size = getOvalSize();
-				int x = this.frets[fretIndex] + ((this.frets[fretIndex + 1] - this.frets[fretIndex]) / 2);
-				int y = this.strings[0] + ((this.strings[this.strings.length - 1] - this.strings[0]) / 2);
+				int size = (int) (getOvalSize() * zoom);
+				int x = (int) ((this.frets[fretIndex] + ((this.frets[fretIndex + 1] - this.frets[fretIndex]) / 2)) * zoom);
+				int y = (int) ((this.strings[0] + ((this.strings[this.strings.length - 1] - this.strings[0]) / 2)) * zoom);
 				painter.initPath(UIPainter.PATH_FILL);
 				painter.addCircle(x, y, size);
 				painter.closePath();
@@ -395,7 +395,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		}
 	}
 	
-	private void paintScale(UIPainter painter) {
+	private void paintScale(UIPainter painter, float zoom) {
 		TGTrack track = getTrack();
 		
 		for (int i = 0; i < this.strings.length; i++) {
@@ -409,12 +409,12 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 						x -= ((x - this.frets[j - 1]) / 2);
 					}
 					int y = this.strings[i];
-					
+
 					if( (this.config.getStyle() & TGFretBoardConfig.DISPLAY_TEXT_SCALE) != 0 ){
-						paintKeyText(painter,this.config.getColorScale(),x,y,NOTE_NAMES[noteIndex]);
+						paintKeyText(painter,this.config.getColorScale(),x,y,NOTE_NAMES[noteIndex], zoom);
 					}
 					else{
-						paintKeyOval(painter,this.config.getColorScale(),x,y);
+						paintKeyOval(painter,this.config.getColorScale(),x,y, zoom);
 					}
 				}
 			}
@@ -423,7 +423,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		painter.setForeground(this.config.getColorBackground());
 	}
 	
-	private void paintNotes(UIPainter painter) {
+	private void paintNotes(UIPainter painter, float zoom) {
 		if(this.beat != null){
 			TGTrack track = getTrack();
 			
@@ -440,13 +440,13 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 							x -= ((this.frets[fretIndex] - this.frets[fretIndex - 1]) / 2);
 						}
 						int y = this.strings[stringIndex];
-						
+
 						if( (this.config.getStyle() & TGFretBoardConfig.DISPLAY_TEXT_NOTE) != 0 ){
 							int realValue = track.getString(note.getString()).getValue() + note.getValue();
-							paintKeyText(painter,this.config.getColorNote(), x, y, NOTE_NAMES[ (realValue % 12) ]);
+							paintKeyText(painter,this.config.getColorNote(), x, y, NOTE_NAMES[ (realValue % 12) ], zoom);
 						}
 						else{
-							paintKeyOval(painter,this.config.getColorNote(), x, y);
+							paintKeyOval(painter,this.config.getColorNote(), x, y, zoom);
 						}
 					}
 				}
@@ -455,8 +455,10 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		}
 	}
 	
-	private void paintKeyOval(UIPainter painter, UIColor background,int x, int y) {
-		int size = getOvalSize();
+	private void paintKeyOval(UIPainter painter, UIColor background,int x, int y, float zoom) {
+		x *= zoom;
+		y *= zoom;
+		int size = (int) (getOvalSize() * zoom);
 		painter.setBackground(background);
 		painter.initPath(UIPainter.PATH_FILL);
 		painter.moveTo(x, y);
@@ -464,7 +466,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		painter.closePath();
 	}
 	
-	private void paintKeyText(UIPainter painter, UIColor foreground, int x, int y, String text) {
+	private void paintKeyText(UIPainter painter, UIColor foreground, int x, int y, String text, float zoom) {
 		painter.setBackground(this.config.getColorKeyTextBackground());
 		painter.setForeground(foreground);
 		painter.setFont(this.config.getFont());
@@ -473,16 +475,17 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		float fmHeight = painter.getFMHeight();
 		
 		painter.initPath(UIPainter.PATH_FILL);
-		painter.addRectangle(x - (fmWidth / 2f), y - (fmHeight / 2f), fmWidth, fmHeight);
+		painter.addRectangle((x - (fmWidth / 2f)) * zoom, (y - (fmHeight / 2f)) * zoom, fmWidth * zoom, fmHeight * zoom);
 		painter.closePath();
-		painter.drawString(text, x - (fmWidth / 2f),y + painter.getFMMiddleLine());
+		painter.drawString(text, (x - (fmWidth / 2f)) * zoom,(y + painter.getFMMiddleLine()) * zoom);
 	}
 	
 	protected void paintEditor(UIPainter painter) {
 		this.updateEditor();
 		if (this.frets.length > 0 && this.strings.length > 0) {
-			paintFretBoard(painter);
-			paintNotes(painter);
+			float zoom = this.control.getDeviceZoom() / 100f;
+			paintFretBoard(painter, zoom);
+			paintNotes(painter, zoom);
 		}
 	}
 	

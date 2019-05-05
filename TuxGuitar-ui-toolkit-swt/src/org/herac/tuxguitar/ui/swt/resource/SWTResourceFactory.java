@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.ui.swt.resource;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import org.eclipse.swt.graphics.Device;
 import org.herac.tuxguitar.ui.resource.UIColor;
@@ -38,7 +39,7 @@ public class SWTResourceFactory implements UIResourceFactory {
 		return new SWTImage(this.device, width, height);
 	}
 	
-	public UIImage createImage(InputStream inputStream) {
-		return new SWTImage(this.device, inputStream);
+	public UIImage createImage(Map<Integer, InputStream> inputStreams) {
+		return new SWTImage(this.device, inputStreams);
 	}
 }

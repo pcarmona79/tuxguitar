@@ -8,9 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.resource.TGResourceManager;
@@ -121,11 +119,19 @@ public class TGFileUtils {
 	public static UIImage loadImage(TGContext context, String skin, String name){
 		UIFactory uiFactory = TGApplication.getInstance(context).getFactory();
 		try{
-			InputStream stream = TGResourceManager.getInstance(context).getResourceAsStream("skins/" + skin + "/" + name);
-			if( stream != null ){
-				return uiFactory.createImage(stream);
+		    TGResourceManager resources = TGResourceManager.getInstance(context);
+			InputStream stream = resources.getResourceAsStream(String.format("skins/%s/%s.png", skin, name));
+			if (stream == null) {
+				System.err.println(name + ": not found");
+			} else {
+				Map<Integer, InputStream> streams = new HashMap<>();
+				streams.put(100, stream);
+				stream = resources.getResourceAsStream(String.format("skins/%s/%s@2x.png", skin, name));
+				if (stream != null) {
+					streams.put(200, stream);
+				}
+				return uiFactory.createImage(streams);
 			}
-			System.err.println(name + ": not found");
 		}catch(Throwable throwable){
 			throwable.printStackTrace();
 		}

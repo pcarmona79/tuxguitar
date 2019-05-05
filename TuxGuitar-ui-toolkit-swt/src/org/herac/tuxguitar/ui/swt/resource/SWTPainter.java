@@ -1,15 +1,7 @@
 package org.herac.tuxguitar.ui.swt.resource;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.LineAttributes;
-import org.eclipse.swt.graphics.Path;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.*;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIFont;
 import org.herac.tuxguitar.ui.resource.UIFontAlignment;
@@ -166,6 +158,12 @@ public class SWTPainter extends SWTComponent<GC> implements UIPainter {
 		if(!FORCE_OS_DEFAULTS){
 			this.getControl().setAntialias(enabled ? SWT.ON : SWT.OFF );
 		}
+	}
+
+	public void setScale(float scale) {
+		Transform transform = new Transform(getControl().getDevice());
+		transform.scale(scale, scale);
+		this.getControl().setTransform(transform);
 	}
 	
 	public void setAdvanced(boolean advanced){

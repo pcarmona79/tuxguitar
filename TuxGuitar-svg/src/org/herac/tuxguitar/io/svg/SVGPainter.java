@@ -201,4 +201,8 @@ public class SVGPainter extends SVGResourceFactory implements UIPainter {
 	public void setAlpha(int alpha) {
 		// Not Implemented
 	}
+
+	public void setScale(float scale) {
+		// Not Implemented
+	}
 }

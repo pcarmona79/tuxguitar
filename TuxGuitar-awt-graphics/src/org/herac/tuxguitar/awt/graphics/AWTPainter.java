@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
@@ -137,6 +138,12 @@ public class AWTPainter extends AWTAbstractPainter {
 	
 	public void setAntialias(boolean enabled){
 		this.gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING, (enabled ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF));
+	}
+
+	public void setScale(float scale) {
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		this.gc.setTransform(transform);
 	}
 	
 	public void drawString(String string, float x, float y) {

@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.ui.resource;
 
 import java.io.InputStream;
+import java.util.Map;
 
 public interface UIResourceFactory {
 	
@@ -14,5 +15,5 @@ public interface UIResourceFactory {
 	
 	UIImage createImage(float width, float height);
 	
-	UIImage createImage(InputStream inputStream);
+	UIImage createImage(Map<Integer, InputStream> inputStreams);
 }

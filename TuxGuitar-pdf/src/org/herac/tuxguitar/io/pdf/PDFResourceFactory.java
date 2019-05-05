@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.io.pdf;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
@@ -35,7 +36,7 @@ public class PDFResourceFactory implements UIResourceFactory {
 		throw new PDFUnsupportedOperationException();
 	}
 
-	public UIImage createImage(InputStream inputStream) {
+	public UIImage createImage(Map<Integer, InputStream> inputStream) {
 		throw new PDFUnsupportedOperationException();
 	}
 }

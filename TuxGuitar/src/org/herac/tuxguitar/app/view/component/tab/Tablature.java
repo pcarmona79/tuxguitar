@@ -5,6 +5,7 @@ import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tab.edit.EditorKit;
+import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGSyncProcess;
 import org.herac.tuxguitar.document.TGDocumentManager;
 import org.herac.tuxguitar.graphics.control.TGController;
@@ -135,7 +136,8 @@ public class Tablature implements TGController {
 	
 	public void reloadStyles() {
 		if( this.getViewLayout() != null ){
-			this.getViewLayout().loadStyles(this.scale);
+			float deviceScale = TGWindow.getInstance(context).getWindow().getDeviceZoom() / 100f;
+			this.getViewLayout().loadStyles(this.scale * deviceScale);
 		}
 		this.loadCaretStyles();
 	}

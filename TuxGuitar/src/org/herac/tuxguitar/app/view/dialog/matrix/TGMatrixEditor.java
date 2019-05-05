@@ -52,10 +52,7 @@ import org.herac.tuxguitar.ui.event.UIMouseUpListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.resource.UIImage;
-import org.herac.tuxguitar.ui.resource.UIPainter;
-import org.herac.tuxguitar.ui.resource.UIRectangle;
-import org.herac.tuxguitar.ui.resource.UISize;
+import org.herac.tuxguitar.ui.resource.*;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICanvas;
 import org.herac.tuxguitar.ui.widget.UIControl;
@@ -340,7 +337,8 @@ public class TGMatrixEditor implements TGEventListener {
 		this.clientArea = this.editor.getBounds();
 		
 		if( this.clientArea != null ){
-			UIImage buffer = getBuffer();
+			float zoom = this.dialog.getDeviceZoom() / 100f;
+			UIImage buffer = getBuffer(zoom);
 			
 			this.width = this.bufferWidth;
 			this.height = (this.bufferHeight + (BORDER_HEIGHT *2));
@@ -349,17 +347,17 @@ public class TGMatrixEditor implements TGEventListener {
 			int scrollX = this.canvasPanel.getHScroll().getValue();
 			int scrollY = this.canvasPanel.getVScroll().getValue();
 			
-			painter.drawImage(buffer,-scrollX,(BORDER_HEIGHT - scrollY));
-			this.paintMeasure(painter,(-scrollX), (BORDER_HEIGHT - scrollY) );
-			this.paintBorders(painter,(-scrollX),0);
-			this.paintPosition(painter,(-scrollX),0);
-			this.paintSelection(painter, (-scrollX), (BORDER_HEIGHT - scrollY) );
+			painter.drawImage(buffer, -scrollX * zoom,(BORDER_HEIGHT - scrollY) * zoom);
+			this.paintMeasure(painter,(-scrollX), (BORDER_HEIGHT - scrollY), zoom);
+			this.paintSelection(painter, (-scrollX), (BORDER_HEIGHT - scrollY), zoom);
+			this.paintBorders(painter,(-scrollX),0, zoom);
+			this.paintPosition(painter,(-scrollX),0, zoom);
 		}
 	}
 	
-	private UIImage getBuffer(){
+	private UIImage getBuffer(float zoom){
 		if( this.clientArea != null ){
-			this.bufferDisposer.update(this.clientArea.getWidth(), this.clientArea.getHeight());
+			this.bufferDisposer.update(this.clientArea.getWidth() * zoom, this.clientArea.getHeight() * zoom);
 			if(this.buffer == null || this.buffer.isDisposed()){
 				UIFactory uiFactory = getUIFactory();
 				
@@ -390,7 +388,9 @@ public class TGMatrixEditor implements TGEventListener {
 				float minimumNameHeight = 1;
 				UIImage auxImage = uiFactory.createImage(1f, 1f);
 				UIPainter auxPainter = auxImage.createPainter();
-				auxPainter.setFont(this.config.getFont());
+				UIFont font = this.config.getFont();
+				UIFont scaledFont = this.getUIFactory().createFont(font.getName(), font.getHeight() * zoom, font.isBold(), font.isItalic());
+				auxPainter.setFont(scaledFont);
 				for(int i = 0; i < names.length;i ++){
 					float fmWidth = auxPainter.getFMWidth(names[i]);
 					if( fmWidth > minimumNameWidth ){
@@ -412,19 +412,19 @@ public class TGMatrixEditor implements TGEventListener {
 				this.timeWidth = Math.max((10 * (TGDuration.SIXTY_FOURTH / measure.getTimeSignature().getDenominator().getValue())),( (this.clientArea.getWidth() - this.leftSpacing) / cols)  );
 				this.bufferWidth = this.leftSpacing + (this.timeWidth * cols);
 				this.bufferHeight = (this.lineHeight * (rows + 1));
-				this.buffer = uiFactory.createImage(this.bufferWidth, this.bufferHeight);
+				this.buffer = uiFactory.createImage(this.bufferWidth * zoom, this.bufferHeight * zoom);
 				
 				UIPainter painter = this.buffer.createPainter();
-				painter.setFont(this.config.getFont());
+				painter.setFont(scaledFont);
 				painter.setForeground(this.config.getColorForeground());
 				
 				for(int i = 0; i <= rows; i++){
 					painter.setBackground(this.config.getColorLine( i % 2 ));
 					painter.initPath(UIPainter.PATH_FILL);
 					painter.setAntialias(false);
-					painter.addRectangle(0 ,(i * this.lineHeight),this.bufferWidth ,this.lineHeight);
+					painter.addRectangle(0 ,(i * this.lineHeight) * zoom,this.bufferWidth * zoom, this.lineHeight * zoom);
 					painter.closePath();
-					painter.drawString(names[i],5, ((i * this.lineHeight) + (this.lineHeight / 2f) + painter.getFMMiddleLine()));
+					painter.drawString(names[i],5 * zoom, ((i * this.lineHeight) + (this.lineHeight / 2f) + painter.getFMMiddleLine()) * zoom);
 				}
 				for(int i = 0; i < cols; i ++){
 					float colX = this.leftSpacing + (i * this.timeWidth);
@@ -437,8 +437,8 @@ public class TGMatrixEditor implements TGEventListener {
 						}
 						painter.initPath();
 						painter.setAntialias(false);
-						painter.moveTo(Math.round( colX + (j * divisionWidth) ),0);
-						painter.lineTo(Math.round( colX + (j * divisionWidth) ),this.bufferHeight);
+						painter.moveTo((colX + (j * divisionWidth)) * zoom ,0);
+						painter.lineTo((colX + (j * divisionWidth)) * zoom ,this.bufferHeight * zoom);
 						painter.closePath();
 					}
 				}
@@ -448,20 +448,20 @@ public class TGMatrixEditor implements TGEventListener {
 		return this.buffer;
 	}
 	
-	private void paintMeasure(UIPainter painter,float fromX, float fromY){
+	private void paintMeasure(UIPainter painter,float fromX, float fromY, float zoom){
 		if( this.clientArea != null ){
 			TGMeasure measure = getMeasure();
 			if(measure != null){
 				Iterator<TGBeat> it = measure.getBeats().iterator();
 				while(it.hasNext()){
 					TGBeat beat = (TGBeat)it.next();
-					paintBeat(painter, measure, beat, fromX, fromY);
+					paintBeat(painter, measure, beat, fromX, fromY, zoom);
 				}
 			}
 		}
 	}
 	
-	private void paintBeat(UIPainter painter,TGMeasure measure,TGBeat beat,float fromX, float fromY){
+	private void paintBeat(UIPainter painter,TGMeasure measure,TGBeat beat,float fromX, float fromY, float zoom){
 		if( this.clientArea != null ){
 			float minimumY = BORDER_HEIGHT;
 			float maximumY = (this.clientArea.getHeight() - BORDER_HEIGHT);
@@ -486,7 +486,7 @@ public class TGMatrixEditor implements TGEventListener {
 						painter.setBackground( (note.getBeatImpl().isPlaying(TuxGuitar.getInstance().getTablatureEditor().getTablature().getViewLayout()) ? this.config.getColorPlay():this.config.getColorNote()));
 						painter.initPath(UIPainter.PATH_FILL);
 						painter.setAntialias(false);
-						painter.addRectangle(x1,y1, (x2 - x1), (y2 - y1));
+						painter.addRectangle(x1 * zoom, y1 * zoom, (x2 - x1) * zoom, (y2 - y1) * zoom);
 						painter.closePath();
 					}
 				}
@@ -494,51 +494,52 @@ public class TGMatrixEditor implements TGEventListener {
 		}
 	}
 	
-	private void paintBorders(UIPainter painter,float fromX, float fromY){
+	private void paintBorders(UIPainter painter,float fromX, float fromY, float zoom){
 		if( this.clientArea != null ){
 			painter.setBackground(this.config.getColorBorder());
 			painter.initPath(UIPainter.PATH_FILL);
 			painter.setAntialias(false);
-			painter.addRectangle(fromX,fromY,this.bufferWidth ,BORDER_HEIGHT);
-			painter.addRectangle(fromX,fromY + (this.clientArea.getHeight() - BORDER_HEIGHT),this.bufferWidth ,BORDER_HEIGHT);
+			painter.addRectangle(fromX * zoom, fromY * zoom, this.bufferWidth * zoom, BORDER_HEIGHT * zoom);
+			painter.addRectangle(fromX * zoom, (fromY + (this.clientArea.getHeight() - BORDER_HEIGHT)) * zoom, this.bufferWidth  * zoom, BORDER_HEIGHT * zoom);
 			painter.closePath();
 			
 			painter.initPath();
 			painter.setAntialias(false);
-			painter.addRectangle(fromX,fromY,this.width,this.clientArea.getHeight());
+			painter.addRectangle(fromX * zoom, fromY * zoom, this.width * zoom, this.clientArea.getHeight() * zoom);
 			painter.closePath();
 		}
 	}
 	
-	private void paintPosition(UIPainter painter,float fromX, float fromY){
+	private void paintPosition(UIPainter painter,float fromX, float fromY, float zoom){
 		if( this.clientArea != null && !TuxGuitar.getInstance().getPlayer().isRunning()){
 			Caret caret = getCaret();
 			TGMeasure measure = getMeasure();
 			TGBeat beat = caret.getSelectedBeat();
 			if(beat != null){
 				float x = (((beat.getStart() - measure.getStart()) * (this.timeWidth * measure.getTimeSignature().getNumerator())) / measure.getLength());
-				float width = ((beat.getVoice(caret.getVoice()).getDuration().getTime() * this.timeWidth) / measure.getTimeSignature().getDenominator().getTime());
+				float width = (beat.getVoice(caret.getVoice()).getDuration().getTime() * this.timeWidth) / measure.getTimeSignature().getDenominator().getTime();
+				float height = BORDER_HEIGHT * zoom;
 				painter.setBackground(this.config.getColorPosition());
 				painter.initPath(UIPainter.PATH_FILL);
 				painter.setAntialias(false);
-				painter.addRectangle(fromX + (this.leftSpacing + x),fromY , width,BORDER_HEIGHT);
+				painter.addRectangle((fromX + (this.leftSpacing + x)) * zoom,  fromY * zoom, width, height);
 				painter.closePath();
 				
 				painter.initPath(UIPainter.PATH_FILL);
 				painter.setAntialias(false);
-				painter.addRectangle(fromX + (this.leftSpacing + x),fromY + (this.clientArea.getHeight() - BORDER_HEIGHT), width,BORDER_HEIGHT);
+				painter.addRectangle((fromX + (this.leftSpacing + x)) * zoom, (fromY + (this.clientArea.getHeight() - BORDER_HEIGHT)) * zoom, width, height);
 				painter.closePath();
 			}
 		}
 	}
 	
-	private void paintSelection(UIPainter painter, float fromX, float fromY){
+	private void paintSelection(UIPainter painter, float fromX, float fromY, float zoom){
 		if( this.clientArea != null && !TuxGuitar.getInstance().getPlayer().isRunning()){
-			if( this.selection >= 0 ){
-				int x = Math.round( fromX );
-				int y = Math.round( fromY + ((this.maxNote - this.selection) * this.lineHeight)  );
-				int width = Math.round( this.bufferWidth );
-				int height = Math.round( this.lineHeight );
+			if( this.selection >= this.minNote && this.selection <= this.maxNote){
+				float x = fromX * zoom;
+				float y = (fromY + ((this.maxNote - this.selection) * this.lineHeight)) * zoom;
+				float width = this.bufferWidth * zoom;
+				float height = this.lineHeight * zoom;
 				
 				painter.setAlpha(100);
 				painter.setBackground(this.config.getColorLine(2));
@@ -546,6 +547,7 @@ public class TGMatrixEditor implements TGEventListener {
 				painter.setAntialias(false);
 				painter.addRectangle(x,y,width,height);
 				painter.closePath();
+				painter.setAlpha(255);
 			}
 		}
 	}

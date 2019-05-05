@@ -49,7 +49,9 @@ public interface UIPainter extends UIResource {
 	void setAlpha(int alpha);
 	
 	void setAntialias(boolean enabled);
-	
+
+	void setScale(float scale);
+
 	float getFontSize();
 	
 	float getFMBaseLine();

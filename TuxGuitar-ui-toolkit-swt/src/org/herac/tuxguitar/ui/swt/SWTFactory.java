@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.ui.swt;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -373,7 +374,7 @@ public class SWTFactory implements UIFactory {
 		return this.resourceFactory.createImage(width, height);
 	}
 
-	public UIImage createImage(InputStream inputStream) {
-		return this.resourceFactory.createImage(inputStream);
+	public UIImage createImage(Map<Integer, InputStream> inputStreams) {
+		return this.resourceFactory.createImage(inputStreams);
 	}
 }

@@ -215,14 +215,15 @@ public class TGPiano extends TGDockedPlayingComponent {
 	 */
 	private UIImage makePianoImage(){
 		UIFactory factory = getUIFactory();
-		UIImage image = factory.createImage((NATURAL_WIDTH * (MAX_OCTAVES * NATURAL_NOTES)), NATURAL_HEIGHT);
+		float zoom = this.getZoom();
+		UIImage image = factory.createImage((NATURAL_WIDTH * (MAX_OCTAVES * NATURAL_NOTES)) * zoom, NATURAL_HEIGHT * zoom);
 		UIPainter painter = image.createPainter();
-		
+
 		int x = 0;
 		int y = 0;
 		painter.setBackground(this.config.getColorNatural());
 		painter.initPath(UIPainter.PATH_FILL);
-		painter.addRectangle(x,y,(NATURAL_WIDTH * (MAX_OCTAVES * NATURAL_NOTES) ),NATURAL_HEIGHT);
+		painter.addRectangle(x * zoom,y * zoom,(NATURAL_WIDTH * (MAX_OCTAVES * NATURAL_NOTES) ) * zoom,NATURAL_HEIGHT * zoom);
 		painter.closePath();
 		for(int i = 0; i < (MAX_OCTAVES * TYPE_NOTES.length); i ++){
 			
@@ -230,18 +231,18 @@ public class TGPiano extends TGDockedPlayingComponent {
 				painter.setForeground(this.config.getColorNotNatural());
 				painter.initPath();
 				painter.setAntialias(false);
-				painter.addRectangle(x,y,NATURAL_WIDTH,NATURAL_HEIGHT);
+				painter.addRectangle(x * zoom,y * zoom,NATURAL_WIDTH * zoom,NATURAL_HEIGHT * zoom);
 				painter.closePath();
 				x += NATURAL_WIDTH;
 			}else{
 				painter.setBackground(this.config.getColorNotNatural());
 				painter.initPath(UIPainter.PATH_FILL);
 				painter.setAntialias(false);
-				painter.addRectangle(x - (SHARP_WIDTH / 2),y,SHARP_WIDTH,SHARP_HEIGHT);
+				painter.addRectangle((x - (SHARP_WIDTH / 2)) * zoom,y * zoom,SHARP_WIDTH * zoom,SHARP_HEIGHT * zoom);
 				painter.closePath();
 			}
 		}
-		paintScale(painter);
+		paintScale(painter, zoom);
 		
 		painter.dispose();
 		return image;
@@ -253,7 +254,7 @@ public class TGPiano extends TGDockedPlayingComponent {
 	 * @param gc
 	 * @param value
 	 */
-	private void paintScale(UIPainter painter){
+	private void paintScale(UIPainter painter, float zoom){
 		painter.setBackground(this.config.getColorScale());
 		painter.setForeground(this.config.getColorScale());
 		int posX = 0;
@@ -283,12 +284,12 @@ public class TGPiano extends TGDockedPlayingComponent {
 					int size = SHARP_WIDTH;
 					painter.initPath(UIPainter.PATH_FILL);
 					painter.setAntialias(false);
-					painter.addRectangle( (x + 1 + (((NATURAL_WIDTH - size) / 2))) ,(NATURAL_HEIGHT - size - (((NATURAL_WIDTH - size) / 2))),size,size);
+					painter.addRectangle( (x + 1 + (((NATURAL_WIDTH - size) / 2))) * zoom ,(NATURAL_HEIGHT - size - (((NATURAL_WIDTH - size) / 2))) * zoom,size * zoom,size * zoom);
 					painter.closePath();
 				}else{
 					painter.initPath(UIPainter.PATH_FILL);
 					painter.setAntialias(false);
-					painter.addRectangle(posX + 1, SHARP_HEIGHT - SHARP_WIDTH + 1,SHARP_WIDTH - 2,SHARP_WIDTH - 2);
+					painter.addRectangle((posX + 1) * zoom, (SHARP_HEIGHT - SHARP_WIDTH + 1) * zoom,(SHARP_WIDTH - 2) * zoom,(SHARP_WIDTH - 2) * zoom);
 					painter.closePath();
 				}
 			}
@@ -303,7 +304,7 @@ public class TGPiano extends TGDockedPlayingComponent {
 	 * @param gc
 	 * @param value
 	 */
-	protected void paintNote(UIPainter painter,int value){
+	protected void paintNote(UIPainter painter,int value, float zoom){
 		painter.setBackground(this.config.getColorNote());
 		int posX = 0;
 		int y = 0;
@@ -327,18 +328,18 @@ public class TGPiano extends TGDockedPlayingComponent {
 				if(TYPE_NOTES[i % TYPE_NOTES.length]){
 					painter.initPath(UIPainter.PATH_FILL);
 					painter.setAntialias(false);
-					painter.addRectangle(posX + 1,y + 1,width - 1,SHARP_HEIGHT);
+					painter.addRectangle((posX + 1) * zoom,(y + 1) * zoom,(width - 1) * zoom,SHARP_HEIGHT * zoom);
 					
 					int x = posX;
 					if(i > 0 && !TYPE_NOTES[(i - 1)  % TYPE_NOTES.length]){
 						x -= ((SHARP_WIDTH / 2));
 					}
-					painter.addRectangle(x + 1,(y + SHARP_HEIGHT) + 1,NATURAL_WIDTH - 1,(NATURAL_HEIGHT - SHARP_HEIGHT) - 1);
+					painter.addRectangle((x + 1) * zoom,(y + SHARP_HEIGHT + 1) * zoom,(NATURAL_WIDTH - 1) * zoom,(NATURAL_HEIGHT - SHARP_HEIGHT - 1) * zoom);
 					painter.closePath();
 				}else{
 					painter.initPath(UIPainter.PATH_FILL);
 					painter.setAntialias(false);
-					painter.addRectangle(posX + 1,y + 1,width - 1,SHARP_HEIGHT - 1);
+					painter.addRectangle((posX + 1) * zoom,(y + 1) * zoom,(width - 1) * zoom,(SHARP_HEIGHT - 1) * zoom);
 					painter.closePath();
 				}
 				
@@ -347,6 +348,11 @@ public class TGPiano extends TGDockedPlayingComponent {
 			posX += width;
 		}
 	}
+
+	private float getZoom() {
+		return this.control.getDeviceZoom() / 100f;
+	}
+
 	
 	protected void paintEditor(UIPainter painter) {
 		this.updateEditor();
@@ -355,11 +361,12 @@ public class TGPiano extends TGDockedPlayingComponent {
 		
 		// pinto notas
 		if( this.beat != null ){
+			float zoom = this.getZoom();
 			for(int v = 0; v < this.beat.countVoices(); v ++){
 				TGVoice voice = this.beat.getVoice( v );
 				Iterator<TGNote> it = voice.getNotes().iterator();
 				while(it.hasNext()){
-					this.paintNote(painter, getRealNoteValue( it.next() ));
+					this.paintNote(painter, getRealNoteValue( it.next() ), zoom);
 				}
 			}
 		}
