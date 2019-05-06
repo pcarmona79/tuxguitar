@@ -20,36 +20,36 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
 
   private UIToggleButton soloButton;
   private UIToggleButton muteButton;
+  private TGContext context;
 
   public TGTableRowSoloMuteCell(final TGTableRow row) {
     super(row);
+    this.context = row.getTable().getContext();
     TGTable table = row.getTable();
-    final TGIconManager iconManager = TGIconManager.getInstance(row.getTable().getContext());
 
     this.soloButton = table.getUIFactory().createToggleButton(getControl(), true);
-    this.soloButton.setImage(iconManager.getSolo());
     this.muteButton = table.getUIFactory().createToggleButton(getControl(), true);
-    this.muteButton.setImage(iconManager.getMute());
+    this.setSoloIcon();
+    this.setMuteIcon();
     table.appendListeners(this.soloButton);
     table.appendListeners(this.muteButton);
     TGContext context = row.getTable().getContext();
     this.soloButton.addSelectionListener(new TGActionProcessorListener(context, TGChangeTrackSoloAction.NAME));
     this.muteButton.addSelectionListener(new TGActionProcessorListener(context, TGChangeTrackMuteAction.NAME));
-    this.soloButton.addSelectionListener(new UISelectionListener() {
-      public void onSelect(UISelectionEvent event) {
-        UIToggleButton button = (UIToggleButton) event.getComponent();
-        button.setImage(button.isSelected() ? iconManager.getSolo() : iconManager.getSoloDisabled());
-      }
-    });
-    this.muteButton.addSelectionListener(new UISelectionListener() {
-      @Override
-      public void onSelect(UISelectionEvent event) {
-        UIToggleButton button = (UIToggleButton) event.getComponent();
-        button.setImage(button.isSelected() ? iconManager.getMute() : iconManager.getMuteDisabled());
-      }
-    });
+    this.soloButton.addSelectionListener(event -> TGTableRowSoloMuteCell.this.setSoloIcon());
+    this.muteButton.addSelectionListener(event -> TGTableRowSoloMuteCell.this.setMuteIcon());
     getLayout().set(this.soloButton, 1, 1, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, null, 0f);
     getLayout().set(this.muteButton, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, null, 0f);
+  }
+
+  private void setSoloIcon() {
+    TGIconManager iconManager = TGIconManager.getInstance(context);
+    this.soloButton.setImage(this.soloButton.isSelected() ? iconManager.getSolo() : iconManager.getSoloDisabled());
+  }
+
+  private void setMuteIcon() {
+    TGIconManager iconManager = TGIconManager.getInstance(context);
+    this.muteButton.setImage(this.muteButton.isSelected() ? iconManager.getMute() : iconManager.getMuteDisabled());
   }
 
   @Override
@@ -89,9 +89,11 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
 
   public void setSolo(boolean solo) {
     this.soloButton.setSelected(solo);
+    this.setSoloIcon();
   }
 
   public void setMute(boolean mute) {
     this.muteButton.setSelected(mute);
+    this.setMuteIcon();
   }
 }
