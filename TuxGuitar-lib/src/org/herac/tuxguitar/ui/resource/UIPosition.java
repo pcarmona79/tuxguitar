@@ -40,6 +40,11 @@ public class UIPosition {
 		this.y += position.getY();
 	}
 
+	public void mul(float v) {
+		this.x *= v;
+		this.y *= v;
+	}
+
 	public UIPosition clone() {
 		return new UIPosition(x, y);
 	}

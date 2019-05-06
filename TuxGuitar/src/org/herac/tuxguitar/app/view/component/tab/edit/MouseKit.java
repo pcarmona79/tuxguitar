@@ -15,6 +15,7 @@ import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.ui.event.*;
 import org.herac.tuxguitar.ui.resource.UIPosition;
+import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.util.TGContext;
 
 public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouseDragListener, UIMouseMoveListener, UIMouseExitListener, UIMenuShowListener, UIMenuHideListener, UIZoomListener {
@@ -35,47 +36,52 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 		return (TGEditorManager.getInstance(context).isLocked() || MidiPlayer.getInstance(context).isRunning());
 	}
 	
-	public void executeAction(String actionId, UIPosition position, boolean byPassProcessing) {
+	public void executeAction(String actionId, UIPosition position, UIEvent event, boolean byPassProcessing) {
+		if (event != null) {
+			// correct for screen DPI
+			position.mul(((UIControl) event.getComponent()).getDeviceZoom() / 100f);
+		}
+
 		TGActionProcessor tgActionProcessor = new TGActionProcessor(this.kit.getTablature().getContext(), actionId);
 		tgActionProcessor.setAttribute(EditorKit.ATTRIBUTE_X, position.getX());
 		tgActionProcessor.setAttribute(EditorKit.ATTRIBUTE_Y, position.getY());
 		tgActionProcessor.setAttribute(TGActionProcessingListener.ATTRIBUTE_BY_PASS, byPassProcessing);
 		tgActionProcessor.process();
 	}
-	
+
 	public void onMouseDown(UIMouseEvent event) {
 		this.position.set(event.getPosition());
 		this.startPosition = this.position.clone();
-		this.executeAction(TGStartDragSelectionAction.NAME, event.getPosition(), false);
+		this.executeAction(TGStartDragSelectionAction.NAME, this.position.clone(), event, false);
 	}
 
 	public void onMouseUp(UIMouseEvent event) {
 		this.position.set(event.getPosition());
 		this.startPosition = null;
-		this.executeAction(TGMouseClickAction.NAME, event.getPosition(), false);
+		this.executeAction(TGMouseClickAction.NAME, this.position.clone(), event, false);
 	}
 
 	public void onMouseDrag(UIMouseEvent event) {
 		this.position.set(this.startPosition);
 		this.position.add(event.getPosition());
-		this.executeAction(TGUpdateDragSelectionAction.NAME, this.position.clone(), false);
+		this.executeAction(TGUpdateDragSelectionAction.NAME, this.position.clone(), event, false);
 	}
 
 	public void onMouseMove(UIMouseEvent event) {
 		if(!this.menuOpen && this.kit.isMouseEditionAvailable() && !this.isBusy()){
-			this.executeAction(TGMouseMoveAction.NAME, event.getPosition(), true);
+			this.executeAction(TGMouseMoveAction.NAME, event.getPosition().clone(), event, true);
 		}
 	}
 
 	public void onMouseExit(UIMouseEvent event) {
 		if(!this.menuOpen && this.kit.isMouseEditionAvailable()) {
-			this.executeAction(TGMouseExitAction.NAME, event.getPosition(), true);
+			this.executeAction(TGMouseExitAction.NAME, event.getPosition().clone(), event, true);
 		}
 	}
 
 	public void onMenuShow(UIMenuEvent event) {
 		this.menuOpen = true;
-		this.executeAction(TGMenuShownAction.NAME, this.position, false);
+		this.executeAction(TGMenuShownAction.NAME, this.position.clone(), null, false);
 	}
 
 	public void onMenuHide(UIMenuEvent event) {
