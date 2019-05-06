@@ -31,6 +31,7 @@ public class TGIconManager {
 	private UIImage layoutLinear;
 	private UIImage layoutMultitrack;
 	private UIImage layoutScore;
+	private UIImage layoutTablature;
 	private UIImage layoutCompact;
 	private UIImage playMode;
 	private UIImage transportFirst;
@@ -67,6 +68,7 @@ public class TGIconManager {
 	private UIImage fretboardFret;
 	private UIImage piano;
 	private UIImage matrix;
+	private UIImage tuner;
 	private UIImage compositionTimeSignature;
 	private UIImage compositionTempo;
 	private UIImage compositionClef;
@@ -116,6 +118,7 @@ public class TGIconManager {
 	private UIImage effectSlapping;
 	private UIImage effectPopping;
 	private UIImage effectFadeIn;
+	private UIImage browser;
 	private UIImage browserNew;
 	private UIImage browserFile;
 	private UIImage browserFolder;
@@ -182,6 +185,7 @@ public class TGIconManager {
 		this.layoutLinear = loadIcon("layout_linear");
 		this.layoutMultitrack = loadIcon("layout_multitrack");
 		this.layoutScore = loadIcon("layout_score");
+		this.layoutTablature = loadIcon("layout_tablature");
 		this.layoutCompact = loadIcon("layout_compact");
 		this.fileNew = loadIcon("new");
 		this.fileOpen = loadIcon("open");
@@ -225,6 +229,7 @@ public class TGIconManager {
 		this.fretboardFret = loadIcon("fret");
 		this.piano = loadIcon("piano");
 		this.matrix = loadIcon("matrix");
+		this.tuner = loadIcon("tuner");
 		this.chord = loadIcon("chord");
 		this.text = loadIcon("text");
 		this.noteTied = loadIcon("tiednote");
@@ -274,6 +279,7 @@ public class TGIconManager {
 		this.effectSlapping = loadIcon("effect_slapping");
 		this.effectPopping = loadIcon("effect_popping");
 		this.effectFadeIn = loadIcon("effect_fade_in");
+		this.browser = loadIcon("browser");
 		this.browserNew = loadIcon("browser_new");
 		this.browserFile = loadIcon("browser_file");
 		this.browserFolder = loadIcon("browser_folder");
@@ -610,6 +616,10 @@ public class TGIconManager {
 		return this.matrix;
 	}
 
+	public UIImage getTuner() {
+		return this.tuner;
+	}
+
 	public UIImage getLayoutLinear() {
 		return this.layoutLinear;
 	}
@@ -625,7 +635,11 @@ public class TGIconManager {
 	public UIImage getLayoutScore() {
 		return this.layoutScore;
 	}
-	
+
+	public UIImage getLayoutTablature() {
+		return this.layoutTablature;
+	}
+
 	public UIImage getLayoutCompact() {
 		return this.layoutCompact;
 	}
@@ -817,7 +831,11 @@ public class TGIconManager {
 	public UIImage getTransportMode() {
 		return this.transportMode;
 	}
-	
+
+	public UIImage getBrowser() {
+		return this.browser;
+	}
+
 	public UIImage getBrowserBack() {
 		return this.browserBack;
 	}

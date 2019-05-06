@@ -1,15 +1,18 @@
 package org.herac.tuxguitar.app.view.toolbar.main;
 
-import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleFretBoardEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleMatrixEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGTogglePianoEditorAction;
+import org.herac.tuxguitar.app.action.impl.tools.TGToggleBrowserAction;
+import org.herac.tuxguitar.app.action.impl.view.*;
+import org.herac.tuxguitar.app.view.component.table.TGTableViewer;
+import org.herac.tuxguitar.app.view.dialog.browser.main.TGBrowserDialog;
 import org.herac.tuxguitar.app.view.dialog.channel.TGChannelManagerDialog;
 import org.herac.tuxguitar.app.view.dialog.fretboard.TGFretBoardEditor;
 import org.herac.tuxguitar.app.view.dialog.matrix.TGMatrixEditor;
 import org.herac.tuxguitar.app.view.dialog.piano.TGPianoEditor;
-import org.herac.tuxguitar.app.view.dialog.transport.TGTransportDialog;
+import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
+import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIToggleButton;
+
+import java.util.Iterator;
 
 public class TGMainToolBarSectionView extends TGMainToolBarSection {
 	
@@ -17,6 +20,9 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 	private UIToggleButton showPiano;
 	private UIToggleButton showInstruments;
 	private UIToggleButton showMatrix;
+	private UIToggleButton showEditToolBar;
+	private UIToggleButton showTrackTable;
+	private UIToggleButton showBrowser;
 
 	public TGMainToolBarSectionView(TGMainToolBar toolBar) {
 		super(toolBar);
@@ -35,9 +41,20 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.showInstruments = this.createToggleButton();
 		this.showInstruments.addSelectionListener(this.createActionProcessor(TGToggleChannelsDialogAction.NAME));
 		
-		//--TRANSPORT--
+		//--MATRIX--
 		this.showMatrix = this.createToggleButton();
 		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
+
+		//--BROWSER--
+		this.showBrowser = this.createToggleButton();
+		this.showBrowser.addSelectionListener(this.createActionProcessor(TGToggleBrowserAction.NAME));
+
+		this.showEditToolBar = this.createToggleButton();
+		this.showEditToolBar.addSelectionListener(this.createActionProcessor(TGToggleEditToolbarAction.NAME));
+		this.getLayout().set(this.showEditToolBar, UITableLayout.MARGIN_LEFT, 8f);
+
+		this.showTrackTable = this.createToggleButton();
+		this.showTrackTable.addSelectionListener(this.createActionProcessor(TGToggleTableViewerAction.NAME));
 
 		this.loadIcons();
 		this.loadProperties();
@@ -48,6 +65,9 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.showPiano.setToolTipText(this.getText("view.show-piano"));
 		this.showInstruments.setToolTipText(this.getText("view.show-instruments"));
 		this.showMatrix.setToolTipText(this.getText("view.show-matrix"));
+		this.showBrowser.setToolTipText(this.getText("tools.browser"));
+		this.showEditToolBar.setToolTipText(this.getText("view.show-edit-toolbar"));
+		this.showTrackTable.setToolTipText(this.getText("view.show-table-viewer"));
 	}
 	
 	public void loadIcons(){
@@ -55,6 +75,9 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.showPiano.setImage(this.getIconManager().getPiano());
 		this.showInstruments.setImage(this.getIconManager().getInstruments());
 		this.showMatrix.setImage(this.getIconManager().getMatrix());
+		this.showBrowser.setImage(this.getIconManager().getBrowser());
+		this.showEditToolBar.setImage(this.getIconManager().getToolbarEdit());
+		this.showTrackTable.setImage(this.getIconManager().getTableViewer());
 	}
 	
 	public void updateItems(){
@@ -62,5 +85,8 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.showPiano.setSelected(TGPianoEditor.getInstance(this.getToolBar().getContext()).isVisible());
 		this.showInstruments.setSelected(!TGChannelManagerDialog.getInstance(this.getToolBar().getContext()).isDisposed());
 		this.showMatrix.setSelected(!TGMatrixEditor.getInstance(this.getToolBar().getContext()).isDisposed());
+		this.showBrowser.setSelected(!TGBrowserDialog.getInstance(this.getToolBar().getContext()).isDisposed());
+		this.showEditToolBar.setSelected(TGEditToolBar.getInstance(this.getToolBar().getContext()).isVisible());
+		this.showTrackTable.setSelected(TGTableViewer.getInstance(this.getToolBar().getContext()).isVisible());
 	}
 }

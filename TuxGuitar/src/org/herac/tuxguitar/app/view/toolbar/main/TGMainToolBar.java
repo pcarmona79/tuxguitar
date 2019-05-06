@@ -6,7 +6,6 @@ import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.appearance.UIColorAppearance;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
-import org.herac.tuxguitar.ui.toolbar.UIToolBar;
 import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.util.TGContext;
@@ -47,7 +46,7 @@ public class TGMainToolBar extends TGToolBarModel {
 	public void createSections() {
 		this.clearSections();
 		//this.createSection(new TGMainToolBarSectionFile(this), UITableLayout.ALIGN_LEFT);
-		this.createSection(new TGMainToolBarSectionZoom(this), UITableLayout.ALIGN_LEFT);
+		this.createSection(new TGMainToolBarSectionLayout(this), UITableLayout.ALIGN_LEFT);
 		this.createSection(new TGMainToolBarSectionTransport(this), UITableLayout.ALIGN_CENTER);
 		this.createSection(new TGMainToolBarSectionView(this), UITableLayout.ALIGN_RIGHT);
 	}
