@@ -1,11 +1,14 @@
 package org.herac.tuxguitar.ui.swt.widget;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.herac.tuxguitar.ui.menu.UIPopupMenu;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
@@ -13,23 +16,20 @@ import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.ui.widget.UITabItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SWTTabItem extends SWTControl<TabFolder> implements SWTContainer<TabFolder>, UITabItem {
-
-	private SWTTabFolder parent;
-	private TabItem item;
+public class SWTCTabItem extends SWTControl<CTabFolder> implements SWTContainer<CTabFolder>, UITabItem {
+	
+	private SWTCTabFolder parent;
+	private CTabItem item;
 	private UIControl control;
-
-	public SWTTabItem(TabItem item, SWTTabFolder parent) {
+	
+	public SWTCTabItem(CTabItem item, SWTCTabFolder parent) {
 		super(parent.getControl(), null);
 		
 		this.parent = parent;
 		this.item = item;
 	}
 	
-	public TabItem getItem() {
+	public CTabItem getItem() {
 		return item;
 	}
 

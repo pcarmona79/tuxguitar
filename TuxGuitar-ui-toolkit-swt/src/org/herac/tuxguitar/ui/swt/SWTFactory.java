@@ -29,43 +29,7 @@ import org.herac.tuxguitar.ui.swt.menu.SWTMenuBar;
 import org.herac.tuxguitar.ui.swt.menu.SWTPopupMenu;
 import org.herac.tuxguitar.ui.swt.resource.SWTResourceFactory;
 import org.herac.tuxguitar.ui.swt.toolbar.SWTToolBar;
-import org.herac.tuxguitar.ui.swt.widget.SWTButton;
-import org.herac.tuxguitar.ui.swt.widget.SWTCanvas;
-import org.herac.tuxguitar.ui.swt.widget.SWTCheckBox;
-import org.herac.tuxguitar.ui.swt.widget.SWTCheckTable;
-import org.herac.tuxguitar.ui.swt.widget.SWTContainer;
-import org.herac.tuxguitar.ui.swt.widget.SWTCustomKnob;
-import org.herac.tuxguitar.ui.swt.widget.SWTCustomScale;
-import org.herac.tuxguitar.ui.swt.widget.SWTDivider;
-import org.herac.tuxguitar.ui.swt.widget.SWTDropDownSelect;
-import org.herac.tuxguitar.ui.swt.widget.SWTDropDownSelectCCombo;
-import org.herac.tuxguitar.ui.swt.widget.SWTDropDownSelectLight;
-import org.herac.tuxguitar.ui.swt.widget.SWTImageView;
-import org.herac.tuxguitar.ui.swt.widget.SWTIndeterminateProgressBar;
-import org.herac.tuxguitar.ui.swt.widget.SWTLabel;
-import org.herac.tuxguitar.ui.swt.widget.SWTLegendPanel;
-import org.herac.tuxguitar.ui.swt.widget.SWTLinkLabel;
-import org.herac.tuxguitar.ui.swt.widget.SWTListBoxSelect;
-import org.herac.tuxguitar.ui.swt.widget.SWTPanel;
-import org.herac.tuxguitar.ui.swt.widget.SWTPasswordField;
-import org.herac.tuxguitar.ui.swt.widget.SWTProgressBar;
-import org.herac.tuxguitar.ui.swt.widget.SWTRadioButton;
-import org.herac.tuxguitar.ui.swt.widget.SWTReadOnlyTextBox;
-import org.herac.tuxguitar.ui.swt.widget.SWTReadOnlyTextField;
-import org.herac.tuxguitar.ui.swt.widget.SWTScale;
-import org.herac.tuxguitar.ui.swt.widget.SWTScaleKnob;
-import org.herac.tuxguitar.ui.swt.widget.SWTScrollBarPanel;
-import org.herac.tuxguitar.ui.swt.widget.SWTSeparator;
-import org.herac.tuxguitar.ui.swt.widget.SWTSlider;
-import org.herac.tuxguitar.ui.swt.widget.SWTSpinner;
-import org.herac.tuxguitar.ui.swt.widget.SWTSplashWindow;
-import org.herac.tuxguitar.ui.swt.widget.SWTTabFolder;
-import org.herac.tuxguitar.ui.swt.widget.SWTTable;
-import org.herac.tuxguitar.ui.swt.widget.SWTTextArea;
-import org.herac.tuxguitar.ui.swt.widget.SWTTextField;
-import org.herac.tuxguitar.ui.swt.widget.SWTToggleButton;
-import org.herac.tuxguitar.ui.swt.widget.SWTWindow;
-import org.herac.tuxguitar.ui.swt.widget.SWTWrapLabel;
+import org.herac.tuxguitar.ui.swt.widget.*;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICanvas;
@@ -122,189 +86,159 @@ public class SWTFactory implements UIFactory {
 	public UISplashWindow createSplashWindow() {
 		return new SWTSplashWindow(this.display);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public UIPanel createPanel(UIContainer parent, boolean bordered) {
-		return new SWTPanel((SWTContainer<Composite>) parent, bordered);
+		return new SWTPanel((SWTContainer<? extends Composite>) parent, bordered);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIScrollBarPanel createScrollBarPanel(UIContainer parent, boolean vScroll, boolean hScroll, boolean bordered) {
-		return new SWTScrollBarPanel((SWTContainer<Composite>) parent, vScroll, hScroll, bordered);
+		return new SWTScrollBarPanel((SWTContainer<? extends Composite>) parent, vScroll, hScroll, bordered);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UILegendPanel createLegendPanel(UIContainer parent) {
-		return new SWTLegendPanel((SWTContainer<Composite>) parent);
+		return new SWTLegendPanel((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UICanvas createCanvas(UIContainer parent, boolean bordered) {
-		return new SWTCanvas((SWTContainer<Composite>) parent, bordered);
+		return new SWTCanvas((SWTContainer<? extends Composite>) parent, bordered);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UILabel createLabel(UIContainer parent) {
-		return new SWTLabel((SWTContainer<Composite>) parent);
+		return new SWTLabel((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIWrapLabel createWrapLabel(UIContainer parent) {
-		return new SWTWrapLabel((SWTContainer<Composite>) parent);
+		return new SWTWrapLabel((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UILinkLabel createLinkLabel(UIContainer parent) {
-		return new SWTLinkLabel((SWTContainer<Composite>) parent);
+		return new SWTLinkLabel((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIImageView createImageView(UIContainer parent) {
-		return new SWTImageView((SWTContainer<Composite>) parent);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public UISeparator createVerticalSeparator(UIContainer parent) {
-		return new SWTSeparator((SWTContainer<Composite>) parent, SWT.VERTICAL);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public UISeparator createHorizontalSeparator(UIContainer parent) {
-		return new SWTSeparator((SWTContainer<Composite>) parent, SWT.HORIZONTAL);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public UIButton createButton(UIContainer parent) {
-		return new SWTButton((SWTContainer<Composite>) parent);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public UIToggleButton createToggleButton(UIContainer parent) {
-		return new SWTToggleButton((SWTContainer<Composite>) parent);
+		return new SWTImageView((SWTContainer<? extends Composite>) parent);
 	}
 
-	@SuppressWarnings("unchecked")
+	public UISeparator createVerticalSeparator(UIContainer parent) {
+		return new SWTSeparator((SWTContainer<? extends Composite>) parent, SWT.VERTICAL);
+	}
+	
+	public UISeparator createHorizontalSeparator(UIContainer parent) {
+		return new SWTSeparator((SWTContainer<? extends Composite>) parent, SWT.HORIZONTAL);
+	}
+
+	public UIButton createButton(UIContainer parent) {
+		return new SWTButton((SWTContainer<? extends Composite>) parent);
+	}
+	
+	public UIToggleButton createToggleButton(UIContainer parent) {
+		return new SWTToggleButton((SWTContainer<? extends Composite>) parent);
+	}
+
 	public UICheckBox createCheckBox(UIContainer parent) {
-		return new SWTCheckBox((SWTContainer<Composite>) parent);
+		return new SWTCheckBox((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIRadioButton createRadioButton(UIContainer parent) {
-		return new SWTRadioButton((SWTContainer<Composite>) parent);
+		return new SWTRadioButton((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UITextField createTextField(UIContainer parent) {
-		return new SWTTextField((SWTContainer<Composite>) parent);
+		return new SWTTextField((SWTContainer<? extends Composite>) parent);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public UIPasswordField createPasswordField(UIContainer parent) {
-		return new SWTPasswordField((SWTContainer<Composite>) parent);
+		return new SWTPasswordField((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIReadOnlyTextField createReadOnlyTextField(UIContainer parent) {
-		return new SWTReadOnlyTextField((SWTContainer<Composite>) parent);
+		return new SWTReadOnlyTextField((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UITextArea createTextArea(UIContainer parent, boolean vScroll, boolean hScroll) {
-		return new SWTTextArea((SWTContainer<Composite>) parent, vScroll, hScroll);
+		return new SWTTextArea((SWTContainer<? extends Composite>) parent, vScroll, hScroll);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIReadOnlyTextBox createReadOnlyTextBox(UIContainer parent, boolean vScroll, boolean hScroll) {
-		return new SWTReadOnlyTextBox((SWTContainer<Composite>) parent, vScroll, hScroll);
+		return new SWTReadOnlyTextBox((SWTContainer<? extends Composite>) parent, vScroll, hScroll);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public UISpinner createSpinner(UIContainer parent) {
-		return new SWTSpinner((SWTContainer<Composite>) parent);
+		return new SWTSpinner((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UISlider createHorizontalSlider(UIContainer parent) {
-		return new SWTSlider((SWTContainer<Composite>) parent, SWT.HORIZONTAL);
+		return new SWTSlider((SWTContainer<? extends Composite>) parent, SWT.HORIZONTAL);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UISlider createVerticalSlider(UIContainer parent) {
-		return new SWTSlider((SWTContainer<Composite>) parent, SWT.VERTICAL);
+		return new SWTSlider((SWTContainer<? extends Composite>) parent, SWT.VERTICAL);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public UIScale createHorizontalScale(UIContainer parent) {
 		String alternative = SWTEnvironment.getInstance().getHorizontalScaleAlternative();
 		if( SWTCustomScale.class.getName().equals(alternative) ) {
-			return new SWTCustomScale((SWTContainer<Composite>) parent, true);
+			return new SWTCustomScale((SWTContainer<? extends Composite>) parent, true);
 		}
-		return new SWTScale((SWTContainer<Composite>) parent, SWT.HORIZONTAL);
+		return new SWTScale((SWTContainer<? extends Composite>) parent, SWT.HORIZONTAL);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIScale createVerticalScale(UIContainer parent) {
 		String alternative = SWTEnvironment.getInstance().getVerticalScaleAlternative();
 		if( SWTCustomScale.class.getName().equals(alternative) ) {
-			return new SWTCustomScale((SWTContainer<Composite>) parent, false);
+			return new SWTCustomScale((SWTContainer<? extends Composite>) parent, false);
 		}
-		return new SWTScale((SWTContainer<Composite>) parent, SWT.VERTICAL);
+		return new SWTScale((SWTContainer<? extends Composite>) parent, SWT.VERTICAL);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public UIKnob createKnob(UIContainer parent) {
 		String alternative = SWTEnvironment.getInstance().getKnobAlternative();
 		if( SWTCustomScale.class.getName().equals(alternative) ) {
-			return new SWTScaleKnob((SWTContainer<Composite>) parent);
+			return new SWTScaleKnob((SWTContainer<? extends Composite>) parent);
 		}
-		return new SWTCustomKnob((SWTContainer<Composite>) parent);
+		return new SWTCustomKnob((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIProgressBar createProgressBar(UIContainer parent) {
-		return new SWTProgressBar((SWTContainer<Composite>) parent);
+		return new SWTProgressBar((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	public UIIndeterminateProgressBar createIndeterminateProgressBar(UIContainer parent) {
-		return new SWTIndeterminateProgressBar((SWTContainer<Composite>) parent);
+		return new SWTIndeterminateProgressBar((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	public <T> UITable<T> createTable(UIContainer parent, boolean headerVisible) {
-		return new SWTTable<T>((SWTContainer<Composite>) parent, headerVisible);
+		return new SWTTable<>((SWTContainer<? extends Composite>) parent, headerVisible);
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	public <T> UICheckTable<T> createCheckTable(UIContainer parent, boolean headerVisible) {
-		return new SWTCheckTable<T>((SWTContainer<Composite>) parent, headerVisible);
+		return new SWTCheckTable<>((SWTContainer<? extends Composite>) parent, headerVisible);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public <T> UIDropDownSelect<T> createDropDownSelect(UIContainer parent) {
 		String alternative = SWTEnvironment.getInstance().getDropDownSelectAlternative();
 		if( SWTDropDownSelectLight.class.getName().equals(alternative) ) {
-			return new SWTDropDownSelectLight<T>((SWTContainer<Composite>) parent);
+			return new SWTDropDownSelectLight<>((SWTContainer<? extends Composite>) parent);
 		}
 		if( SWTDropDownSelectCCombo.class.getName().equals(alternative) ) {
-			return new SWTDropDownSelectCCombo<T>((SWTContainer<Composite>) parent);
+			return new SWTDropDownSelectCCombo<>((SWTContainer<? extends Composite>) parent);
 		}
-		return new SWTDropDownSelect<T>((SWTContainer<Composite>) parent);
+		return new SWTDropDownSelect<>((SWTContainer<? extends Composite>) parent);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public <T> UIListBoxSelect<T> createListBoxSelect(UIContainer parent) {
-		return new SWTListBoxSelect<T>((SWTContainer<Composite>) parent);
+		return new SWTListBoxSelect<>((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIToolBar createHorizontalToolBar(UIContainer parent) {
-		return new SWTToolBar((SWTContainer<Composite>) parent, SWT.HORIZONTAL);
+		return new SWTToolBar((SWTContainer<? extends Composite>) parent, SWT.HORIZONTAL);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIToolBar createVerticalToolBar(UIContainer parent) {
-		return new SWTToolBar((SWTContainer<Composite>) parent, SWT.VERTICAL);
+		return new SWTToolBar((SWTContainer<? extends Composite>) parent, SWT.VERTICAL);
 	}
 	
 	public UIMenuBar createMenuBar(UIWindow parent) {
@@ -315,19 +249,19 @@ public class SWTFactory implements UIFactory {
 		return new SWTPopupMenu((SWTWindow) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UITabFolder createTabFolder(UIContainer parent, boolean showClose) {
-		return new SWTTabFolder((SWTContainer<Composite>) parent, showClose);
+		if (showClose) {
+			return new SWTCTabFolder((SWTContainer<? extends Composite>) parent, showClose);
+		}
+		return new SWTTabFolder((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIDivider createHorizontalDivider(UIContainer parent) {
-		return new SWTDivider((SWTContainer<Composite>) parent);
+		return new SWTDivider((SWTContainer<? extends Composite>) parent);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public UIDivider createVerticalDivider(UIContainer parent) {
-		return new SWTDivider((SWTContainer<Composite>) parent);
+		return new SWTDivider((SWTContainer<? extends Composite>) parent);
 	}
 	
 	public UIFontChooser createFontChooser(UIWindow parent) {

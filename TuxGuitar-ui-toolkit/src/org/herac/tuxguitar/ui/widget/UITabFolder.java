@@ -5,7 +5,7 @@ import java.util.List;
 import org.herac.tuxguitar.ui.event.UICloseListener;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 
-public interface UITabFolder extends UIControl {
+public interface UITabFolder extends UIContainer {
 	
 	UITabItem createTab();
 	
@@ -26,4 +26,6 @@ public interface UITabFolder extends UIControl {
 	void addTabCloseListener(UICloseListener listener);
 	
 	void removeTabCloseListener(UICloseListener listener);
+
+	void setTopRight(UIControl control);
 }
