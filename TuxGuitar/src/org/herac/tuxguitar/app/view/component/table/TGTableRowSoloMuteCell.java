@@ -26,9 +26,9 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
     TGTable table = row.getTable();
     final TGIconManager iconManager = TGIconManager.getInstance(row.getTable().getContext());
 
-    this.soloButton = table.getUIFactory().createToggleButton(getControl());
+    this.soloButton = table.getUIFactory().createToggleButton(getControl(), true);
     this.soloButton.setImage(iconManager.getSolo());
-    this.muteButton = table.getUIFactory().createToggleButton(getControl());
+    this.muteButton = table.getUIFactory().createToggleButton(getControl(), true);
     this.muteButton.setImage(iconManager.getMute());
     table.appendListeners(this.soloButton);
     table.appendListeners(this.muteButton);

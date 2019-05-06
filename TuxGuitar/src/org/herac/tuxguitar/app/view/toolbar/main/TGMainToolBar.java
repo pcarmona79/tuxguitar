@@ -16,8 +16,7 @@ import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
 public class TGMainToolBar extends TGToolBarModel {
 
 	private UIPanel container;
-	private UIToolBar toolBar;
-	
+
 	private TGMainToolBar(TGContext context) {
 		super(context);
 	}
@@ -29,48 +28,32 @@ public class TGMainToolBar extends TGToolBarModel {
 		this.container.setLayout(layout);
 		layout.set(UITableLayout.MARGIN, 0f);
 
-		this.toolBar = uiFactory.createHorizontalToolBar(this.container);
-		this.toolBar.setVisible(visible);
 		this.createSections();
 
-		layout.set(this.toolBar, 1, 1, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 4f);
 		UIPanel border = uiFactory.createPanel(this.container, false);
 		UIColorModel borderColor = TGApplication.getInstance(getContext()).getAppearance().getColorModel(UIColorAppearance.WidgetBorder);
 		border.setBgColor(uiFactory.createColor(borderColor));
-		layout.set(border, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, 1f, 0f);
+		layout.set(border, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, this.getSections().size(), null, 1f, 0f);
 	}
 	
-	public void createSection(TGMainToolBarSection section) {
+	public void createSection(TGMainToolBarSection section, int align) {
 		section.createSection();
-		
 		this.addSection(section);
+
+		UITableLayout layout = (UITableLayout) this.container.getLayout();
+		layout.set(section.getControl(), 1, this.getSections().size(), align, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, 1f, 0f);
 	}
 	
 	public void createSections() {
 		this.clearSections();
-		this.createSection(new TGMainToolBarSectionFile(this));
-		this.createSection(new TGMainToolBarSectionDivider(this));
-		this.createSection(new TGMainToolBarSectionEdit(this));
-		this.createSection(new TGMainToolBarSectionDivider(this));
-		this.createSection(new TGMainToolBarSectionComposition(this));
-		this.createSection(new TGMainToolBarSectionDivider(this));
-		this.createSection(new TGMainToolBarSectionTrack(this));
-		this.createSection(new TGMainToolBarSectionDivider(this));
-		this.createSection(new TGMainToolBarSectionLayout(this));
-		this.createSection(new TGMainToolBarSectionView(this));
-		this.createSection(new TGMainToolBarSectionMarker(this));
-		this.createSection(new TGMainToolBarSectionDivider(this));
-		this.createSection(new TGMainToolBarSectionZoom(this));
-		this.createSection(new TGMainToolBarSectionDivider(this));
-		this.createSection(new TGMainToolBarSectionTransport(this));
+		//this.createSection(new TGMainToolBarSectionFile(this), UITableLayout.ALIGN_LEFT);
+		this.createSection(new TGMainToolBarSectionZoom(this), UITableLayout.ALIGN_LEFT);
+		this.createSection(new TGMainToolBarSectionTransport(this), UITableLayout.ALIGN_CENTER);
+		this.createSection(new TGMainToolBarSectionView(this), UITableLayout.ALIGN_RIGHT);
 	}
 	
 	public UIPanel getControl() {
 		return container;
-	}
-
-	public UIToolBar getToolBar() {
-		return toolBar;
 	}
 
 	public static TGMainToolBar getInstance(TGContext context) {

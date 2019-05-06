@@ -42,6 +42,10 @@ public class TGWindowDivider implements UIMouseDragListener {
 		return Math.max((control.getBounds().getHeight() - move), 0f);
 	}
 
+	public void setVisible(boolean visible) {
+		this.divider.setVisible(visible);
+	}
+
 	public UIDivider getControl() {
 		return divider;
 	}

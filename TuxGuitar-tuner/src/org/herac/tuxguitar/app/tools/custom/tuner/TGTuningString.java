@@ -25,7 +25,7 @@ public class TGTuningString {
 		this.string = string;
 		this.listener = listener;
 		
-		this.stringButton = factory.createToggleButton(parent);
+		this.stringButton = factory.createToggleButton(parent, false);
 		this.stringButton.setText("--------- "+TGTunerRoughWidget.TONESSTRING[string%12]+(int)Math.floor(string/12)+" ---------");
 	}
 

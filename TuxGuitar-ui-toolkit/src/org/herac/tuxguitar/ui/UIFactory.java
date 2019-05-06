@@ -81,7 +81,7 @@ public interface UIFactory extends UIResourceFactory {
 	
 	UIButton createButton(UIContainer parent);
 	
-	UIToggleButton createToggleButton(UIContainer parent);
+	UIToggleButton createToggleButton(UIContainer parent, boolean flat);
 
 	UICheckBox createCheckBox(UIContainer parent);
 	

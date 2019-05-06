@@ -4,22 +4,22 @@ import org.herac.tuxguitar.editor.action.edit.TGRedoAction;
 import org.herac.tuxguitar.editor.action.edit.TGUndoAction;
 import org.herac.tuxguitar.editor.undo.TGUndoableManager;
 import org.herac.tuxguitar.player.base.MidiPlayer;
-import org.herac.tuxguitar.ui.toolbar.UIToolActionItem;
+import org.herac.tuxguitar.ui.widget.UIButton;
 
 public class TGMainToolBarSectionEdit extends TGMainToolBarSection {
 	
-	private UIToolActionItem undo;
-	private UIToolActionItem redo;
+	private UIButton undo;
+	private UIButton redo;
 	
 	public TGMainToolBarSectionEdit(TGMainToolBar toolBar) {
 		super(toolBar);
 	}
 	
 	public void createSection() {
-		this.undo = this.getToolBar().getToolBar().createActionItem();
+		this.undo = this.createButton();
 		this.undo.addSelectionListener(this.createActionProcessor(TGUndoAction.NAME));
 		
-		this.redo = this.getToolBar().getToolBar().createActionItem();
+		this.redo = this.createButton();
 		this.redo.addSelectionListener(this.createActionProcessor(TGRedoAction.NAME));
 		
 		this.loadIcons();

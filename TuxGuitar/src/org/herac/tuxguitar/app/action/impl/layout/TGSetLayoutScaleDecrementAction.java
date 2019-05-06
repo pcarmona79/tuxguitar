@@ -11,7 +11,7 @@ public class TGSetLayoutScaleDecrementAction extends TGActionBase{
 	
 	public static final String NAME = "action.view.layout-decrement-scale";
 	
-	private static final Float MINIMUM_VALUE = 0.5f;
+	public static final Float MINIMUM_VALUE = 0.5f;
 	private static final Float DECREMENT_VALUE = 0.1f;
 	
 	public TGSetLayoutScaleDecrementAction(TGContext context) {

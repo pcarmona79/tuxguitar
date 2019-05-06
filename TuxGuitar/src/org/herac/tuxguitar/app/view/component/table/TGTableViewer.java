@@ -622,4 +622,15 @@ public class TGTableViewer implements TGEventListener {
 	public UIColor getBorderColor() {
 	    return this.backgrounds[5];
 	}
+
+    public void toggleVisibility() {
+		this.composite.setVisible(!this.isVisible());
+		TGWindow window = TGWindow.getInstance(context);
+		window.getTableDivider().setVisible(this.isVisible());
+		window.getWindow().layout();
+    }
+
+    public boolean isVisible() {
+		return this.composite.isVisible();
+	}
 }

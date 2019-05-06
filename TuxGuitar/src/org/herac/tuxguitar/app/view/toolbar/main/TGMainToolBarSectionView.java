@@ -1,72 +1,66 @@
 package org.herac.tuxguitar.app.view.toolbar.main;
 
 import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleEditToolbarAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleFretBoardEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleTransportDialogAction;
+import org.herac.tuxguitar.app.action.impl.view.TGToggleMatrixEditorAction;
+import org.herac.tuxguitar.app.action.impl.view.TGTogglePianoEditorAction;
 import org.herac.tuxguitar.app.view.dialog.channel.TGChannelManagerDialog;
 import org.herac.tuxguitar.app.view.dialog.fretboard.TGFretBoardEditor;
+import org.herac.tuxguitar.app.view.dialog.matrix.TGMatrixEditor;
+import org.herac.tuxguitar.app.view.dialog.piano.TGPianoEditor;
 import org.herac.tuxguitar.app.view.dialog.transport.TGTransportDialog;
-import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
-import org.herac.tuxguitar.ui.menu.UIMenuActionItem;
-import org.herac.tuxguitar.ui.toolbar.UIToolCheckableItem;
-import org.herac.tuxguitar.ui.toolbar.UIToolMenuItem;
+import org.herac.tuxguitar.ui.widget.UIToggleButton;
 
 public class TGMainToolBarSectionView extends TGMainToolBarSection {
 	
-	private UIToolCheckableItem showEditToolBar;
-	private UIToolMenuItem menuItem;
-	
-	private UIMenuActionItem showFretBoard;
-	private UIMenuActionItem showInstruments;
-	private UIMenuActionItem showTransport;
-	
+	private UIToggleButton showFretBoard;
+	private UIToggleButton showPiano;
+	private UIToggleButton showInstruments;
+	private UIToggleButton showMatrix;
+
 	public TGMainToolBarSectionView(TGMainToolBar toolBar) {
 		super(toolBar);
 	}
 	
 	public void createSection() {
-		this.showEditToolBar = this.getToolBar().getToolBar().createCheckItem();
-		this.showEditToolBar.addSelectionListener(this.createActionProcessor(TGToggleEditToolbarAction.NAME));
-		
-		this.menuItem = this.getToolBar().getToolBar().createMenuItem();
-		
 		//--FRETBOARD--
-		this.showFretBoard = this.menuItem.getMenu().createActionItem();
+		this.showFretBoard = this.createToggleButton();
 		this.showFretBoard.addSelectionListener(this.createActionProcessor(TGToggleFretBoardEditorAction.NAME));
-		
+
+		//--PIANO--
+		this.showPiano = this.createToggleButton();
+		this.showPiano.addSelectionListener(this.createActionProcessor(TGTogglePianoEditorAction.NAME));
+
 		//--INSTRUMENTS--
-		this.showInstruments = this.menuItem.getMenu().createActionItem();
+		this.showInstruments = this.createToggleButton();
 		this.showInstruments.addSelectionListener(this.createActionProcessor(TGToggleChannelsDialogAction.NAME));
 		
 		//--TRANSPORT--
-		this.showTransport = this.menuItem.getMenu().createActionItem();
-		this.showTransport.addSelectionListener(this.createActionProcessor(TGToggleTransportDialogAction.NAME));
-		
+		this.showMatrix = this.createToggleButton();
+		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
+
 		this.loadIcons();
 		this.loadProperties();
 	}
 	
 	public void loadProperties(){
-		this.showEditToolBar.setToolTipText(this.getText("view.show-edit-toolbar"));
-		this.menuItem.setToolTipText(this.getText("view"));
-		this.showFretBoard.setText(this.getText("view.show-fretboard", TGFretBoardEditor.getInstance(this.getToolBar().getContext()).isVisible()));
-		this.showInstruments.setText(this.getText("view.show-instruments", (!TGChannelManagerDialog.getInstance(this.getToolBar().getContext()).isDisposed())));
-		this.showTransport.setText(this.getText("view.show-transport", (!TGTransportDialog.getInstance(this.getToolBar().getContext()).isDisposed())));
+		this.showFretBoard.setToolTipText(this.getText("view.show-fretboard"));
+		this.showPiano.setToolTipText(this.getText("view.show-piano"));
+		this.showInstruments.setToolTipText(this.getText("view.show-instruments"));
+		this.showMatrix.setToolTipText(this.getText("view.show-matrix"));
 	}
 	
 	public void loadIcons(){
-		this.showEditToolBar.setImage(this.getIconManager().getToolbarEdit());
-		this.menuItem.setImage(this.getIconManager().getFretboard());
 		this.showFretBoard.setImage(this.getIconManager().getFretboard());
+		this.showPiano.setImage(this.getIconManager().getPiano());
 		this.showInstruments.setImage(this.getIconManager().getInstruments());
-		this.showTransport.setImage(this.getIconManager().getTransport());
+		this.showMatrix.setImage(this.getIconManager().getMatrix());
 	}
 	
 	public void updateItems(){
-		this.showEditToolBar.setChecked(TGEditToolBar.getInstance(this.getToolBar().getContext()).isVisible());
-		this.showFretBoard.setText(this.getText("view.show-fretboard", TGFretBoardEditor.getInstance(this.getToolBar().getContext()).isVisible()));
-		this.showInstruments.setText(this.getText("view.show-instruments", (!TGChannelManagerDialog.getInstance(this.getToolBar().getContext()).isDisposed())));
-		this.showTransport.setText(this.getText("view.show-transport", (!TGTransportDialog.getInstance(this.getToolBar().getContext()).isDisposed())));
+		this.showFretBoard.setSelected(TGFretBoardEditor.getInstance(this.getToolBar().getContext()).isVisible());
+		this.showPiano.setSelected(TGPianoEditor.getInstance(this.getToolBar().getContext()).isVisible());
+		this.showInstruments.setSelected(!TGChannelManagerDialog.getInstance(this.getToolBar().getContext()).isDisposed());
+		this.showMatrix.setSelected(!TGMatrixEditor.getInstance(this.getToolBar().getContext()).isDisposed());
 	}
 }

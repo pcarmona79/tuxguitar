@@ -84,13 +84,13 @@ public class TGChordSelector {
 		tonicLayout.set(buttonsComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 
 		TGIconManager iconManager = TGIconManager.getInstance(this.getDialog().getContext().getContext());
-		this.sharpButton = uiFactory.createToggleButton(buttonsComposite);
+		this.sharpButton = uiFactory.createToggleButton(buttonsComposite, false);
 		this.sharpButton.setImage(iconManager.getSharp());
 		buttonsLayout.set(this.sharpButton, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		buttonsLayout.set(this.sharpButton, UITableLayout.PACKED_WIDTH, 28f);
 		buttonsLayout.set(this.sharpButton, UITableLayout.PACKED_HEIGHT, 28f);
 		
-		this.flatButton = uiFactory.createToggleButton(buttonsComposite);
+		this.flatButton = uiFactory.createToggleButton(buttonsComposite, false);
 		this.flatButton.setImage(iconManager.getFlat());
 		buttonsLayout.set(this.flatButton, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		buttonsLayout.set(this.flatButton, UITableLayout.PACKED_WIDTH, 28f);

@@ -64,6 +64,8 @@ public class TGIconManager {
 	private UIImage fretboard;
 	private UIImage fretboardFirstFret;
 	private UIImage fretboardFret;
+	private UIImage piano;
+	private UIImage matrix;
 	private UIImage compositionTimeSignature;
 	private UIImage compositionTempo;
 	private UIImage compositionClef;
@@ -131,6 +133,7 @@ public class TGIconManager {
 	private UIImage strokeDown;
 	private UIImage settings;
 	private UIImage toolbarEdit;
+	private UIImage tableViewer;
 	private UIImage zoomIn;
 	private UIImage zoomOut;
 	private UIImage listAdd;
@@ -219,6 +222,8 @@ public class TGIconManager {
 		this.fretboard = loadIcon("fretboard");
 		this.fretboardFirstFret = loadIcon("firstfret");
 		this.fretboardFret = loadIcon("fret");
+		this.piano = loadIcon("piano");
+		this.matrix = loadIcon("matrix");
 		this.chord = loadIcon("chord");
 		this.text = loadIcon("text");
 		this.noteTied = loadIcon("tiednote");
@@ -285,6 +290,7 @@ public class TGIconManager {
 		this.strokeDown = loadIcon("stroke_down");
 		this.settings = loadIcon("settings");
 		this.toolbarEdit = loadIcon("toolbar_edit");
+		this.tableViewer = loadIcon("table_viewer");
 		this.zoomIn = loadIcon("zoom_in");
 		this.zoomOut = loadIcon("zoom_out");
 		this.listAdd = loadIcon("list_add");
@@ -585,7 +591,7 @@ public class TGIconManager {
 	public UIImage getFretboard() {
 		return this.fretboard;
 	}
-	
+
 	public UIImage getFretboardFirstFret() {
 		return this.fretboardFirstFret;
 	}
@@ -593,7 +599,15 @@ public class TGIconManager {
 	public UIImage getFretboardFret() {
 		return this.fretboardFret;
 	}
-	
+
+	public UIImage getPiano() {
+		return this.piano;
+	}
+
+	public UIImage getMatrix() {
+		return this.matrix;
+	}
+
 	public UIImage getLayoutLinear() {
 		return this.layoutLinear;
 	}
@@ -837,7 +851,11 @@ public class TGIconManager {
 	public UIImage getToolbarEdit() {
 		return this.toolbarEdit;
 	}
-	
+
+	public UIImage getTableViewer() {
+		return this.tableViewer;
+	}
+
 	public UIImage getArrowUp() {
 		return this.arrowUp;
 	}

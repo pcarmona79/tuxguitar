@@ -131,8 +131,8 @@ public class SWTFactory implements UIFactory {
 		return new SWTButton((SWTContainer<? extends Composite>) parent);
 	}
 	
-	public UIToggleButton createToggleButton(UIContainer parent) {
-		return new SWTToggleButton((SWTContainer<? extends Composite>) parent);
+	public UIToggleButton createToggleButton(UIContainer parent, boolean flat) {
+		return new SWTToggleButton((SWTContainer<? extends Composite>) parent, flat);
 	}
 
 	public UICheckBox createCheckBox(UIContainer parent) {
@@ -287,7 +287,7 @@ public class SWTFactory implements UIFactory {
 	public UIPrinterChooser createPrinterChooser(UIWindow parent) {
 		return new SWTPrinterChooser((SWTWindow) parent);
 	}
-	
+
 	public UIColor createColor(int red, int green, int blue) {
 		return this.resourceFactory.createColor(red, green, blue);
 	}

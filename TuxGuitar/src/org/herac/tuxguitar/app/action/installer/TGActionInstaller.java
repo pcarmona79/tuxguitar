@@ -429,6 +429,7 @@ public class TGActionInstaller {
 		installAction(new TGTransportModeAction(context));
 		installAction(new TGTransportSetLoopSHeaderAction(context));
 		installAction(new TGTransportSetLoopEHeaderAction(context));
+		installAction(new TGTransportSetLoopAction(context));
 		installAction(new TGTransportPlaySelectionAction(context));
 
 		//marker actions
@@ -522,7 +523,8 @@ public class TGActionInstaller {
 		installAction(new TGToggleMenuBarAction(context));
 		installAction(new TGToggleMainToolbarAction(context));
 		installAction(new TGToggleEditToolbarAction(context));
-		
+		installAction(new TGToggleTableViewerAction(context));
+
 		installAction(new TGOpenDocumentationDialogAction(context));
 		installAction(new TGOpenAboutDialogAction(context));
 	}

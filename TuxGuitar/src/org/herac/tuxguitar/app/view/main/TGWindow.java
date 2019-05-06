@@ -36,6 +36,7 @@ public class TGWindow implements TGEventListener {
 	private TGContext context;
 	private TGSyncProcess loadTitleProcess;
 	private TGCursorController cursorController;
+	private TGWindowDivider tableDivider;
 	
 	private UIWindow window;
 	
@@ -62,7 +63,11 @@ public class TGWindow implements TGEventListener {
 		this.loadIcons();
 		this.loadInitialBounds();
 	}
-	
+
+	public TGWindowDivider getTableDivider() {
+		return tableDivider;
+	}
+
 	private void createShellComposites(UIFactory uiFactory) {
 		TGConfigManager tgConfig = TGConfigManager.getInstance(this.context);
 		
@@ -84,19 +89,19 @@ public class TGWindow implements TGEventListener {
 		topContainerLayout.set(tgTabFolder.getControl(), 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 		topContainerLayout.set(tgTabFolder.getControl(), UITableLayout.PACKED_HEIGHT, 0f);
 		
-		TGWindowDivider tgWindowDivider = new TGWindowDivider(this.context);
-		tgWindowDivider.createDivider(this.window);
+		this.tableDivider = new TGWindowDivider(this.context);
+		this.tableDivider.createDivider(this.window);
 		
 		TGTableViewer tgTableViewer = TGTableViewer.getInstance(this.context);
 		tgTableViewer.init(this.window);
 
-		tgWindowDivider.getControl().setBgColor(tgTableViewer.getBorderColor());
+		this.tableDivider.getControl().setBgColor(tgTableViewer.getBorderColor());
 
 		TGDockingManager dockingManager = TGDockingManager.getInstance(this.context);
 		dockingManager.init(uiFactory, window);
 		
 		// Layout
-		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topContainer, tgWindowDivider.getControl(), tgTableViewer.getControl(), dockingManager));
+		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topContainer, this.tableDivider.getControl(), tgTableViewer.getControl(), dockingManager));
 		dockingManager.dock(tgConfig.getBooleanValue(TGConfigKeys.LAYOUT_DOCK_TO_TOP));
 	}
 	

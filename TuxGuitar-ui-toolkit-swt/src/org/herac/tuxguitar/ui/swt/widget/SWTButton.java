@@ -16,7 +16,7 @@ public class SWTButton extends SWTControl<Button> implements UIButton {
 	private UIImage image;
 	
 	public SWTButton(SWTContainer<? extends Composite> parent) {
-		super(new Button(parent.getControl(), SWT.PUSH), parent);
+		super(new Button(parent.getControl(), SWT.PUSH| SWT.WRAP), parent);
 		
 		this.selectionListener = new SWTSelectionListenerManager(this);
 	}

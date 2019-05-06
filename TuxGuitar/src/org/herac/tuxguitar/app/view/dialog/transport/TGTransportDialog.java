@@ -153,7 +153,7 @@ public class TGTransportDialog implements TGEventListener {
 		composite.setLayout(compositeLayout);
 		parentLayout.set(composite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, null, null, null, null, 0f);
 		
-		this.metronome = factory.createToggleButton(composite);
+		this.metronome = factory.createToggleButton(composite, false);
 		this.metronome.addSelectionListener(new TGActionProcessorListener(this.context , TGTransportMetronomeAction.NAME));
 		compositeLayout.set(this.metronome, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
 		
