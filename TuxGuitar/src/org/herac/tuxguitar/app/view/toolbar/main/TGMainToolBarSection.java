@@ -84,7 +84,7 @@ public abstract class TGMainToolBarSection implements TGToolBarSection {
 		UIFactory uiFactory = TGApplication.getInstance(this.getToolBar().getContext()).getFactory();
 		UIButton button = uiFactory.createButton(this.container);
 		this.items.add(button);
-		this.layout.set(button, 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, 1f, -2f);
+		this.layout.set(button, 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, 1f, 0f);
 		return button;
 	}
 
@@ -92,7 +92,7 @@ public abstract class TGMainToolBarSection implements TGToolBarSection {
 		UIFactory uiFactory = TGApplication.getInstance(this.getToolBar().getContext()).getFactory();
 		UIToggleButton button = uiFactory.createToggleButton(this.container, false);
 		this.items.add(button);
-		this.layout.set(button, 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, 1f, -2f);
+		this.layout.set(button, 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, 1f, 0f);
 		return button;
 	}
 }

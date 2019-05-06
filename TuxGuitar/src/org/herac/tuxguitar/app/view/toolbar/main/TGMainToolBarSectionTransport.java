@@ -64,8 +64,8 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection {
 	public void loadIcons(){
 		this.loop.setImage(this.getIconManager().getTransportMode());
 		this.metronome.setImage(this.getIconManager().getTransportMetronome());
-		this.countDown.setImage(this.getIconManager().getCompositionTempo());
-		this.playMode.setImage(this.getIconManager().getTransport());
+		this.countDown.setImage(this.getIconManager().getTransportCountDown());
+		this.playMode.setImage(this.getIconManager().getPlayMode());
 		this.loadIcons(true);
 	}
 	

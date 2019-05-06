@@ -32,7 +32,7 @@ public class TGIconManager {
 	private UIImage layoutMultitrack;
 	private UIImage layoutScore;
 	private UIImage layoutCompact;
-	private UIImage transport;
+	private UIImage playMode;
 	private UIImage transportFirst;
 	private UIImage transportLast;
 	private UIImage transportPrevious;
@@ -40,6 +40,7 @@ public class TGIconManager {
 	private UIImage transportStop;
 	private UIImage transportPlay;
 	private UIImage transportPause;
+	private UIImage transportCountDown;
 	private UIImage transportMetronome;
 	private UIImage transportMode;
 	private UIImage markerList;
@@ -227,7 +228,7 @@ public class TGIconManager {
 		this.chord = loadIcon("chord");
 		this.text = loadIcon("text");
 		this.noteTied = loadIcon("tiednote");
-		this.transport = loadIcon("transport");
+		this.playMode = loadIcon("play_mode");
 		this.transportFirst = loadIcon("transport_first");
 		this.transportLast = loadIcon("transport_last");
 		this.transportPrevious = loadIcon("transport_previous");
@@ -235,6 +236,7 @@ public class TGIconManager {
 		this.transportStop = loadIcon("transport_stop");
 		this.transportPlay = loadIcon("transport_play");
 		this.transportPause = loadIcon("transport_pause");
+		this.transportCountDown = loadIcon("transport_count_down");
 		this.transportMetronome = loadIcon("transport_metronome");
 		this.transportMode = loadIcon("transport_mode");
 		this.markerList = loadIcon("marker_list");
@@ -696,10 +698,10 @@ public class TGIconManager {
 		return this.trackRemove;
 	}
 	
-	public UIImage getTransport() {
-		return this.transport;
+	public UIImage getPlayMode() {
+		return this.playMode;
 	}
-	
+
 	public UIImage getTransportFirst1() {
 		return this.transportFirst;
 	}
@@ -803,7 +805,11 @@ public class TGIconManager {
 	public UIImage getTransportStop2() {
 		return this.transportStop;
 	}
-	
+
+	public UIImage getTransportCountDown() {
+		return this.transportCountDown;
+	}
+
 	public UIImage getTransportMetronome() {
 		return this.transportMetronome;
 	}
