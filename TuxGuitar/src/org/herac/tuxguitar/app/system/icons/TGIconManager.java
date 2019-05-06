@@ -33,32 +33,13 @@ public class TGIconManager {
 	private UIImage layoutScore;
 	private UIImage layoutCompact;
 	private UIImage transport;
-	private UIImage transportFirst1;
-	private UIImage transportFirst2;
-	private UIImage transportLast1;
-	private UIImage transportLast2;
-	private UIImage transportPrevious1;
-	private UIImage transportPrevious2;
-	private UIImage transportNext1;
-	private UIImage transportNext2;
-	private UIImage transportStop1;
-	private UIImage transportStop2;
-	private UIImage transportPlay1;
-	private UIImage transportPlay2;
+	private UIImage transportFirst;
+	private UIImage transportLast;
+	private UIImage transportPrevious;
+	private UIImage transportNext;
+	private UIImage transportStop;
+	private UIImage transportPlay;
 	private UIImage transportPause;
-	private UIImage transportIconFirst1;
-	private UIImage transportIconFirst2;
-	private UIImage transportIconLast1;
-	private UIImage transportIconLast2;
-	private UIImage transportIconPrevious1;
-	private UIImage transportIconPrevious2;
-	private UIImage transportIconNext1;
-	private UIImage transportIconNext2;
-	private UIImage transportIconStop1;
-	private UIImage transportIconStop2;
-	private UIImage transportIconPlay1;
-	private UIImage transportIconPlay2;
-	private UIImage transportIconPause;
 	private UIImage transportMetronome;
 	private UIImage transportMode;
 	private UIImage markerList;
@@ -72,18 +53,11 @@ public class TGIconManager {
 	private UIImage aboutLicense;
 	private UIImage aboutAuthors;
 	private UIImage appIcon;
-	private UIImage appIcon16;
-	private UIImage appIcon24;
-	private UIImage appIcon32;
-	private UIImage appIcon48;
-	private UIImage appIcon64;
-	private UIImage appIcon96;
 	private UIImage appSplash;
 	private UIImage optionMain;
 	private UIImage optionStyle;
 	private UIImage optionSound;
 	private UIImage optionLanguage;
-	private UIImage optionToolbars;
 	private UIImage optionSkin;
 	private UIImage trackAdd;
 	private UIImage trackRemove;
@@ -219,12 +193,6 @@ public class TGIconManager {
 		this.editModeEdition = loadIcon("edit_mode_edition");
 		this.editModeEditionNotNatural = loadIcon("edit_mode_edition_no_natural");
 		this.appIcon = loadIcon("icon");
-		this.appIcon16 = loadIcon("icon-16x16");
-		this.appIcon24 = loadIcon("icon-24x24");
-		this.appIcon32 = loadIcon("icon-32x32");
-		this.appIcon48 = loadIcon("icon-48x48");
-		this.appIcon64 = loadIcon("icon-64x64");
-		this.appIcon96 = loadIcon("icon-96x96");
 		this.appSplash = loadIcon("splash");
 		this.aboutDescription = loadIcon("about_description");
 		this.aboutLicense = loadIcon("about_license");
@@ -234,7 +202,6 @@ public class TGIconManager {
 		this.optionSound = loadIcon("option_sound");
 		this.optionSkin = loadIcon("option_skin");
 		this.optionLanguage= loadIcon("option_language");
-		this.optionToolbars = loadIcon("option_toolbars");
 		this.compositionTimeSignature = loadIcon("timesignature");
 		this.compositionTempo = loadIcon("tempoicon");
 		this.compositionClef = loadIcon("clef");
@@ -256,32 +223,13 @@ public class TGIconManager {
 		this.text = loadIcon("text");
 		this.noteTied = loadIcon("tiednote");
 		this.transport = loadIcon("transport");
-		this.transportFirst1 = loadIcon("transport_first_1");
-		this.transportFirst2 = loadIcon("transport_first_2");
-		this.transportLast1 = loadIcon("transport_last_1");
-		this.transportLast2 = loadIcon("transport_last_2");
-		this.transportPrevious1 = loadIcon("transport_previous_1");
-		this.transportPrevious2 = loadIcon("transport_previous_2");
-		this.transportNext1 = loadIcon("transport_next_1");
-		this.transportNext2 = loadIcon("transport_next_2");
-		this.transportStop1 = loadIcon("transport_stop_1");
-		this.transportStop2 = loadIcon("transport_stop_2");
-		this.transportPlay1 = loadIcon("transport_play_1");
-		this.transportPlay2 = loadIcon("transport_play_2");
+		this.transportFirst = loadIcon("transport_first");
+		this.transportLast = loadIcon("transport_last");
+		this.transportPrevious = loadIcon("transport_previous");
+		this.transportNext = loadIcon("transport_next");
+		this.transportStop = loadIcon("transport_stop");
+		this.transportPlay = loadIcon("transport_play");
 		this.transportPause = loadIcon("transport_pause");
-		this.transportIconFirst1 = loadIcon("transport_icon_first_1");
-		this.transportIconFirst2 = loadIcon("transport_icon_first_2");
-		this.transportIconLast1 = loadIcon("transport_icon_last_1");
-		this.transportIconLast2 = loadIcon("transport_icon_last_2");
-		this.transportIconPrevious1 = loadIcon("transport_icon_previous_1");
-		this.transportIconPrevious2 = loadIcon("transport_icon_previous_2");
-		this.transportIconNext1 = loadIcon("transport_icon_next_1");
-		this.transportIconNext2 = loadIcon("transport_icon_next_2");
-		this.transportIconStop1 = loadIcon("transport_icon_stop_1");
-		this.transportIconStop2 = loadIcon("transport_icon_stop_2");
-		this.transportIconPlay1 = loadIcon("transport_icon_play_1");
-		this.transportIconPlay2 = loadIcon("transport_icon_play_2");
-		this.transportIconPause = loadIcon("transport_icon_pause");
 		this.transportMetronome = loadIcon("transport_metronome");
 		this.transportMode = loadIcon("transport_mode");
 		this.markerList = loadIcon("marker_list");
@@ -417,31 +365,7 @@ public class TGIconManager {
 	public UIImage getAppIcon() {
 		return this.appIcon;
 	}
-	
-	public UIImage getAppIcon16() {
-		return this.appIcon16;
-	}
-	
-	public UIImage getAppIcon24() {
-		return this.appIcon24;
-	}
-	
-	public UIImage getAppIcon32() {
-		return this.appIcon32;
-	}
-	
-	public UIImage getAppIcon48() {
-		return this.appIcon48;
-	}
-	
-	public UIImage getAppIcon64() {
-		return this.appIcon64;
-	}
-	
-	public UIImage getAppIcon96() {
-		return this.appIcon96;
-	}
-	
+
 	public UIImage getAppSplash() {
 		return this.appSplash;
 	}
@@ -742,10 +666,6 @@ public class TGIconManager {
 		return this.optionStyle;
 	}
 	
-	public UIImage getOptionToolbars() {
-		return this.optionToolbars;
-	}
-	
 	public UIImage getOptionSkin() {
 		return this.optionSkin;
 	}
@@ -767,79 +687,79 @@ public class TGIconManager {
 	}
 	
 	public UIImage getTransportFirst1() {
-		return this.transportFirst1;
+		return this.transportFirst;
 	}
 	
 	public UIImage getTransportFirst2() {
-		return this.transportFirst2;
+		return this.transportFirst;
 	}
 	
 	public UIImage getTransportIconFirst1() {
-		return this.transportIconFirst1;
+		return this.transportFirst;
 	}
 	
 	public UIImage getTransportIconFirst2() {
-		return this.transportIconFirst2;
+		return this.transportFirst;
 	}
 	
 	public UIImage getTransportIconLast1() {
-		return this.transportIconLast1;
+		return this.transportLast;
 	}
 	
 	public UIImage getTransportIconLast2() {
-		return this.transportIconLast2;
+		return this.transportLast;
 	}
 	
 	public UIImage getTransportIconNext1() {
-		return this.transportIconNext1;
+		return this.transportNext;
 	}
 	
 	public UIImage getTransportIconNext2() {
-		return this.transportIconNext2;
+		return this.transportNext;
 	}
 	
 	public UIImage getTransportIconPause() {
-		return this.transportIconPause;
+		return this.transportPause;
 	}
 	
 	public UIImage getTransportIconPlay1() {
-		return this.transportIconPlay1;
+		return this.transportPlay;
 	}
 	
 	public UIImage getTransportIconPlay2() {
-		return this.transportIconPlay2;
+		return this.transportPlay;
 	}
 	
 	public UIImage getTransportIconPrevious1() {
-		return this.transportIconPrevious1;
+		return this.transportPrevious;
 	}
 	
 	public UIImage getTransportIconPrevious2() {
-		return this.transportIconPrevious2;
+		return this.transportPrevious;
 	}
 	
 	public UIImage getTransportIconStop1() {
-		return this.transportIconStop1;
+		return this.transportStop;
 	}
 	
 	public UIImage getTransportIconStop2() {
-		return this.transportIconStop2;
+		return this.transportStop;
 	}
 	
 	public UIImage getTransportLast1() {
-		return this.transportLast1;
+		return this.transportLast;
 	}
 	
 	public UIImage getTransportLast2() {
-		return this.transportLast2;
+		return this.transportLast;
 	}
 	
 	public UIImage getTransportNext1() {
-		return this.transportNext1;
+		return this.transportNext;
 	}
 	
 	public UIImage getTransportNext2() {
-		return this.transportNext2;
+		return this.transportNext;
 	}
 	
 	public UIImage getTransportPause() {
@@ -847,27 +767,27 @@ public class TGIconManager {
 	}
 	
 	public UIImage getTransportPlay1() {
-		return this.transportPlay1;
+		return this.transportPlay;
 	}
 	
 	public UIImage getTransportPlay2() {
-		return this.transportPlay2;
+		return this.transportPlay;
 	}
 	
 	public UIImage getTransportPrevious1() {
-		return this.transportPrevious1;
+		return this.transportPrevious;
 	}
 	
 	public UIImage getTransportPrevious2() {
-		return this.transportPrevious2;
+		return this.transportPrevious;
 	}
 	
 	public UIImage getTransportStop1() {
-		return this.transportStop1;
+		return this.transportStop;
 	}
 	
 	public UIImage getTransportStop2() {
-		return this.transportStop2;
+		return this.transportStop;
 	}
 	
 	public UIImage getTransportMetronome() {

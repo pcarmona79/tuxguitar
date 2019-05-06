@@ -91,12 +91,12 @@ public class TGSettingsEditor{
 		UIFactory uiFactory = this.getUIFactory();
 		UITableLayout parentLayout = (UITableLayout) parent.getLayout();
 		
-		UIToolBar toolBar = uiFactory.createVerticalToolBar(parent);
-		parentLayout.set(toolBar, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
+		UIToolBar toolBar = uiFactory.createHorizontalToolBar(parent);
+		parentLayout.set(toolBar, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 		
 		UIPanel option = uiFactory.createPanel(parent, false);
 		option.setLayout(new UITableLayout(0f));
-		parentLayout.set(option, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		parentLayout.set(option, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		initOptions(toolBar, option);
 		
