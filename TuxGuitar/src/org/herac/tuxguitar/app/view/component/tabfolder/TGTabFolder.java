@@ -105,10 +105,11 @@ public class TGTabFolder implements TGEventListener {
 			if( tgControl != null && !tgControl.isDisposed()) {
 				tgControl.resetScroll();
 				tgControl.getTablature().resetCaret();
+				tgControl.getTablature().getSelector().initializeSelection(null);
 			}
 		}
 	}
-	
+
 	public void updateDocument() {
 		this.updateTabItems();
 		this.updateFocus();
