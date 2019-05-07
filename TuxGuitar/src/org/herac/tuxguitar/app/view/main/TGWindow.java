@@ -118,8 +118,7 @@ public class TGWindow implements TGEventListener {
 			if( width > 0 && height > 0 ){
 				UIRectangle uiRectangle = new UIRectangle();
 				uiRectangle.setSize(new UISize(width, height));
-				
-				this.window.setBounds(uiRectangle);
+
 			}
 		}
 	}
