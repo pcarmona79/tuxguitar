@@ -7,8 +7,10 @@ import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionBase;
 import org.herac.tuxguitar.graphics.control.TGBeatGroup;
 import org.herac.tuxguitar.graphics.control.TGVoiceImpl;
+import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.util.TGContext;
+import org.herac.tuxguitar.util.TGNoteRange;
 
 public class TGSetVoiceDownAction extends TGActionBase {
 	
@@ -19,14 +21,17 @@ public class TGSetVoiceDownAction extends TGActionBase {
 	}
 	
 	protected void processAction(TGActionContext context){
-		TGVoiceImpl voice = (TGVoiceImpl) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_VOICE);
-		if( voice != null ){
-			TGBeatGroup group = voice.getBeatGroup();
-			if(!voice.isEmpty() && !voice.isRestVoice() && group != null ){
-				Iterator<?> it = group.getVoices().iterator();
-				while( it.hasNext() ){
-					TGVoice current = (TGVoice)it.next();
-					getSongManager(context).getMeasureManager().changeVoiceDirection(current, TGVoice.DIRECTION_DOWN);
+		TGNoteRange noteRange = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_NOTE_RANGE);
+		for (TGNote note : noteRange.getNotes()) {
+			TGVoiceImpl voice = (TGVoiceImpl) note.getVoice();
+			if (voice != null) {
+				TGBeatGroup group = voice.getBeatGroup();
+				if (!voice.isEmpty() && !voice.isRestVoice() && group != null) {
+					Iterator<?> it = group.getVoices().iterator();
+					while (it.hasNext()) {
+						TGVoice current = (TGVoice) it.next();
+						getSongManager(context).getMeasureManager().changeVoiceDirection(current, TGVoice.DIRECTION_DOWN);
+					}
 				}
 			}
 		}
