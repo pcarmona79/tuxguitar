@@ -17,6 +17,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
+import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.UICanvas;
 import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UIScrollBar;
@@ -108,16 +109,19 @@ public class TGControl {
 			
 			int oldWidth = this.width;
 			int oldHeight = this.height;
-			
+
+			float scale = this.canvas.getDeviceZoom() / 100f;
 			UIRectangle area = createRectangle(this.canvas.getBounds());
+			UIRectangle scaledArea = createRectangle(area);
+			scaledArea.setSize(new UISize(area.getWidth() * scale, area.getHeight() * scale));
 			
 			this.scrollX = this.hScroll.getValue();
 			this.scrollY = this.vScroll.getValue();
 			
-			this.tablature.paintTablature(painter, area, -this.scrollX, -this.scrollY);
+			this.tablature.paintTablature(painter, scaledArea, -this.scrollX * scale, -this.scrollY * scale);
 			
-			this.width = Math.round(this.tablature.getViewLayout().getWidth());
-			this.height = Math.round(this.tablature.getViewLayout().getHeight());
+			this.width = Math.round(this.tablature.getViewLayout().getWidth() / scale);
+			this.height = Math.round(this.tablature.getViewLayout().getHeight() / scale);
 			
 			this.updateScroll();
 			
@@ -169,7 +173,7 @@ public class TGControl {
 	
 	public void updateScroll(){
 		UIRectangle bounds = this.canvas.getBounds();
-		
+
 		this.hScroll.setMaximum(Math.max(Math.round(this.width - bounds.getWidth()), 0));
 		this.vScroll.setMaximum(Math.max(Math.round(this.height - bounds.getHeight()), 0));
 		this.hScroll.setThumb(Math.round(bounds.getWidth()));
@@ -182,12 +186,13 @@ public class TGControl {
 	
 	public void moveScrollTo(TGMeasureImpl measure, UIRectangle area) {
 		if( measure != null && measure.getTs() != null ){
-			int mX = Math.round(measure.getPosX());
-			int mY = Math.round(measure.getPosY());
-			int mWidth = Math.round(measure.getWidth(this.tablature.getViewLayout()));
-			int mHeight = Math.round(measure.getTs().getSize());
-			int marginWidth = Math.round(this.tablature.getViewLayout().getFirstMeasureSpacing());
-			int marginHeight = Math.round(this.tablature.getViewLayout().getFirstTrackSpacing());
+			float scale = this.canvas.getDeviceZoom() / 100f;
+			int mX = Math.round(measure.getPosX() / scale);
+			int mY = Math.round(measure.getPosY() / scale);
+			int mWidth = Math.round(measure.getWidth(this.tablature.getViewLayout()) / scale);
+			int mHeight = Math.round(measure.getTs().getSize() / scale);
+			int marginWidth = Math.round(this.tablature.getViewLayout().getFirstMeasureSpacing() / scale);
+			int marginHeight = Math.round(this.tablature.getViewLayout().getFirstTrackSpacing() / scale);
 			boolean playMode = MidiPlayer.getInstance(this.context).isRunning();
 			
 			//Solo se ajusta si es necesario
