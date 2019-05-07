@@ -12,6 +12,8 @@ import org.herac.tuxguitar.ui.event.UIMouseUpListenerManager;
 import org.herac.tuxguitar.ui.resource.UIPosition;
 import org.herac.tuxguitar.ui.swt.widget.SWTEventReceiver;
 
+import static org.herac.tuxguitar.ui.resource.UIKeyLabel.MOD_MASK;
+
 public class SWTMouseListenerManager implements MouseListener {
 	
 	private SWTEventReceiver<?> control;
@@ -56,19 +58,20 @@ public class SWTMouseListenerManager implements MouseListener {
 
 	public void mouseDoubleClick(MouseEvent e) {
 		if(!this.control.isIgnoreEvents()) {
-			this.mouseDoubleClickListener.onMouseDoubleClick(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button));
+			int state = e.stateMask;
+			this.mouseDoubleClickListener.onMouseDoubleClick(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask & MOD_MASK));
 		}
 	}
 
 	public void mouseDown(MouseEvent e) {
 		if(!this.control.isIgnoreEvents()) {
-			this.mouseDownListener.onMouseDown(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button));
+			this.mouseDownListener.onMouseDown(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask & MOD_MASK));
 		}
 	}
 
 	public void mouseUp(MouseEvent e) {
 		if(!this.control.isIgnoreEvents()) {
-			this.mouseUpListener.onMouseUp(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button));
+			this.mouseUpListener.onMouseUp(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask & MOD_MASK));
 		}
 	}
 }

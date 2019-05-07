@@ -8,8 +8,10 @@ import org.herac.tuxguitar.ui.event.UIMouseEvent;
 import org.herac.tuxguitar.ui.resource.UIPosition;
 import org.herac.tuxguitar.ui.swt.widget.SWTEventReceiver;
 
+import static org.herac.tuxguitar.ui.resource.UIKeyLabel.MOD_MASK;
+
 public class SWTMouseDragListenerManager extends UIMouseDragListenerManager implements MouseListener, MouseMoveListener {
-	
+
 	private SWTEventReceiver<?> control;
 	private UIPosition startPosition;
 	
@@ -19,7 +21,7 @@ public class SWTMouseDragListenerManager extends UIMouseDragListenerManager impl
 	
 	public void mouseMove(MouseEvent e) {
 		if(!this.control.isIgnoreEvents() && this.startPosition != null ) {
-			this.onMouseDrag(new UIMouseEvent(this.control, new UIPosition(e.x - this.startPosition.getX(), e.y - this.startPosition.getY()), e.button));
+			this.onMouseDrag(new UIMouseEvent(this.control, new UIPosition(e.x - this.startPosition.getX(), e.y - this.startPosition.getY()), e.button, e.stateMask & MOD_MASK));
 		}
 	}
 	

@@ -27,11 +27,6 @@ public class TGMouseClickAction extends TGActionBase{
 			TGActionManager actionManager = TGActionManager.getInstance(getContext());
 
 			actionManager.execute(TGUpdateDragSelectionAction.NAME, context);
-
-			if (tablature.getSelector().isActive()) {
-				context.setAttribute(TGMoveToAction.ATTRIBUTE_KEEP_SELECTION, true);
-			}
-			actionManager.execute(TGMoveToAction.NAME, context);
 			if( editorKit.isMouseEditionAvailable() && editorKit.fillAddOrRemoveBeat(context) ) {
 				
 				if( editorKit.fillRemoveNoteContext(context) ) {

@@ -7,8 +7,8 @@ public class UIMouseWheelEvent extends UIMouseEvent {
 	
 	private Integer value;
 	
-	public UIMouseWheelEvent(UIComponent control, UIPosition position, Integer button, Integer value) {
-		super(control, position, button);
+	public UIMouseWheelEvent(UIComponent control, UIPosition position, Integer button, Integer state, Integer value) {
+		super(control, position, button, state);
 		
 		this.value = value;
 	}
