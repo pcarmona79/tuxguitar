@@ -15,7 +15,9 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection {
 	private static final int STATUS_RUNNING = 3;
 
 	private UIButton first;
+	private UIButton previous;
 	private UIButton play;
+	private UIButton next;
 	private UIButton last;
 	private UIToggleButton countDown;
 	private UIToggleButton metronome;
@@ -31,8 +33,14 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection {
 		this.first = this.createButton();
 		this.first.addSelectionListener(event -> TGTransport.getInstance(getToolBar().getContext()).gotoFirst());
 
+		this.previous = this.createButton();
+		this.previous.addSelectionListener(event -> TGTransport.getInstance(getToolBar().getContext()).gotoPrevious());
+
 		this.play = this.createButton();
 		this.play.addSelectionListener(this.createActionProcessor(TGTransportPlayAction.NAME));
+
+		this.next = this.createButton();
+		this.next.addSelectionListener(event -> TGTransport.getInstance(getToolBar().getContext()).gotoNext());
 
 		this.last = this.createButton();
 		this.last.addSelectionListener(event -> TGTransport.getInstance(getToolBar().getContext()).gotoLast());
@@ -64,7 +72,9 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection {
 	
 	public void loadProperties(){
 		this.first.setToolTipText(this.getText("transport.first"));
+		this.previous.setToolTipText(this.getText("transport.previous"));
 		this.play.setToolTipText(this.getText("transport.start"));
+		this.next.setToolTipText(this.getText("transport.next"));
 		this.last.setToolTipText(this.getText("transport.last"));
 		this.metronome.setToolTipText(this.getText("transport.metronome"));
 		this.countDown.setToolTipText(this.getText("transport.count-down"));
@@ -95,16 +105,22 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection {
 		if(force || lastStatus != this.status){
 			if( this.status == STATUS_RUNNING ){
 				this.first.setImage(this.getIconManager().getTransportIconFirst2());
+				this.previous.setImage(this.getIconManager().getTransportIconPrevious2());
+				this.next.setImage(this.getIconManager().getTransportIconNext2());
 				this.last.setImage(this.getIconManager().getTransportIconLast2());
 				this.play.setImage(this.getIconManager().getTransportIconPause());
 				this.play.setToolTipText(this.getText("transport.pause"));
 			}else if( this.status == STATUS_PAUSED ){
 				this.first.setImage(this.getIconManager().getTransportIconFirst2());
+				this.previous.setImage(this.getIconManager().getTransportIconPrevious2());
+				this.next.setImage(this.getIconManager().getTransportIconNext2());
 				this.last.setImage(this.getIconManager().getTransportIconLast2());
 				this.play.setImage(this.getIconManager().getTransportIconPlay2());
 				this.play.setToolTipText(this.getText("transport.start"));
 			}else if( this.status == STATUS_STOPPED ){
 				this.first.setImage(this.getIconManager().getTransportIconFirst1());
+				this.previous.setImage(this.getIconManager().getTransportIconPrevious1());
+				this.next.setImage(this.getIconManager().getTransportIconNext1());
 				this.last.setImage(this.getIconManager().getTransportIconLast1());
 				this.play.setImage(this.getIconManager().getTransportIconPlay1());
 				this.play.setToolTipText(this.getText("transport.start"));
