@@ -56,6 +56,7 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection {
 	
 	public void updateItems(){
 		MidiPlayer player = MidiPlayer.getInstance(this.getToolBar().getContext());
+		this.loop.setSelected(player.getMode().isLoop());
 	    this.metronome.setSelected(player.isMetronomeEnabled());
 		this.countDown.setSelected(player.getCountDown().isEnabled());
 		this.loadIcons(false);
