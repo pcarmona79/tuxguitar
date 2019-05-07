@@ -35,11 +35,7 @@ import org.herac.tuxguitar.ui.event.UIMouseUpListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.resource.UIColor;
-import org.herac.tuxguitar.ui.resource.UIImage;
-import org.herac.tuxguitar.ui.resource.UIPainter;
-import org.herac.tuxguitar.ui.resource.UIRectangle;
-import org.herac.tuxguitar.ui.resource.UISize;
+import org.herac.tuxguitar.ui.resource.*;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICanvas;
 import org.herac.tuxguitar.ui.widget.UIContainer;
@@ -85,7 +81,8 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	private int duration;
 	protected UIDropDownSelect<Integer> handSelector;
 	protected UICanvas canvas;
-	
+	private UIFont scaledFont;
+
 	public TGFretBoard(TGContext context, UIContainer parent) {
 		this.context = context;
 		this.config = new TGFretBoardConfig(context);
@@ -469,23 +466,27 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	private void paintKeyText(UIPainter painter, UIColor foreground, int x, int y, String text, float zoom) {
 		painter.setBackground(this.config.getColorKeyTextBackground());
 		painter.setForeground(foreground);
-		painter.setFont(this.config.getFont());
+		painter.setFont(this.scaledFont);
 		
-		float fmWidth = painter.getFMWidth(text);
-		float fmHeight = painter.getFMHeight();
+		float fmWidth = painter.getFMWidth(text) / zoom;
+		float fmHeight = painter.getFMHeight() / zoom;
 		
 		painter.initPath(UIPainter.PATH_FILL);
 		painter.addRectangle((x - (fmWidth / 2f)) * zoom, (y - (fmHeight / 2f)) * zoom, fmWidth * zoom, fmHeight * zoom);
 		painter.closePath();
-		painter.drawString(text, (x - (fmWidth / 2f)) * zoom,(y + painter.getFMMiddleLine()) * zoom);
+		painter.drawString(text, (x - (fmWidth / 2f)) * zoom,(y + painter.getFMMiddleLine() / zoom) * zoom);
 	}
 	
 	protected void paintEditor(UIPainter painter) {
 		this.updateEditor();
 		if (this.frets.length > 0 && this.strings.length > 0) {
 			float zoom = this.control.getDeviceZoom() / 100f;
+
+			UIFont font = this.config.getFont();
+			this.scaledFont = this.getUIFactory().createFont(font.getName(), font.getHeight() * zoom, font.isBold(), font.isItalic());
 			paintFretBoard(painter, zoom);
 			paintNotes(painter, zoom);
+			this.scaledFont.dispose();
 		}
 	}
 	

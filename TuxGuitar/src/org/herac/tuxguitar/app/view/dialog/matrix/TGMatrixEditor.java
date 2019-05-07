@@ -392,11 +392,11 @@ public class TGMatrixEditor implements TGEventListener {
 				UIFont scaledFont = this.getUIFactory().createFont(font.getName(), font.getHeight() * zoom, font.isBold(), font.isItalic());
 				auxPainter.setFont(scaledFont);
 				for(int i = 0; i < names.length;i ++){
-					float fmWidth = auxPainter.getFMWidth(names[i]);
+					float fmWidth = auxPainter.getFMWidth(names[i]) / zoom;
 					if( fmWidth > minimumNameWidth ){
 						minimumNameWidth = fmWidth;
 					}
-					float fmHeight = auxPainter.getFMHeight();
+					float fmHeight = auxPainter.getFMHeight() / zoom;
 					if( fmHeight > minimumNameHeight ){
 						minimumNameHeight = fmHeight;
 					}
@@ -424,7 +424,7 @@ public class TGMatrixEditor implements TGEventListener {
 					painter.setAntialias(false);
 					painter.addRectangle(0 ,(i * this.lineHeight) * zoom,this.bufferWidth * zoom, this.lineHeight * zoom);
 					painter.closePath();
-					painter.drawString(names[i],5 * zoom, ((i * this.lineHeight) + (this.lineHeight / 2f) + painter.getFMMiddleLine()) * zoom);
+					painter.drawString(names[i],5 * zoom, ((i * this.lineHeight) + (this.lineHeight / 2f) + painter.getFMMiddleLine() / zoom) * zoom);
 				}
 				for(int i = 0; i < cols; i ++){
 					float colX = this.leftSpacing + (i * this.timeWidth);
@@ -442,6 +442,7 @@ public class TGMatrixEditor implements TGEventListener {
 						painter.closePath();
 					}
 				}
+				scaledFont.dispose();
 				painter.dispose();
 			}
 		}
