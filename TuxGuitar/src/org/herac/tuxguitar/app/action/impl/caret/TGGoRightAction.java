@@ -27,7 +27,9 @@ public class TGGoRightAction extends TGActionBase{
 		}
 		else{
 			Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
-			tablature.getSelector().clearSelection();
+			if (!context.hasAttributeEqualsTrue(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION)) {
+				tablature.getSelector().clearSelection();
+			}
 			Caret caret = tablature.getCaret();
 			if(!caret.moveRight()){
 				TGSong song = ((TGSong) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG));

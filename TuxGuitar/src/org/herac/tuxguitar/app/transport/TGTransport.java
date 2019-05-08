@@ -52,7 +52,7 @@ public class TGTransport {
 		long start = MidiTickUtil.getStart(player.getTickPosition());
 		TGMeasureHeader header = getSongManager().getMeasureHeaderAt(getSong(), start);
 		if(header != null){
-			if (start != header.getStart()) {
+			if (!player.isRunning() && start != header.getStart()) {
 				gotoMeasure(header, true);
 			} else {
 				gotoMeasure(getSongManager().getPrevMeasureHeader(getSong(), header), true);

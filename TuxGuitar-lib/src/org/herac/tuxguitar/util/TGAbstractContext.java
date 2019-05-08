@@ -44,6 +44,10 @@ public abstract class TGAbstractContext {
 	public boolean hasAttribute(String key){
 		return this.attributes.containsKey(key);
 	}
+
+	public boolean hasAttributeEqualsTrue(String key) {
+		return this.hasAttribute(key) && (boolean) this.getAttribute(key);
+	}
 	
 	public void clear() {
 		this.attributes.clear();

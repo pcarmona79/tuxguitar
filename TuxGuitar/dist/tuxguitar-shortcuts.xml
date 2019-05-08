@@ -37,11 +37,11 @@
 	<shortcut keys="Shift Ins" action="action.gui.open-marker-editor-dialog"/>
 	<shortcut keys="Alt Right" action="action.marker.go-next"/>
 	<shortcut keys="Alt Left" action="action.marker.go-previous"/>
-	<shortcut keys="Control c" action="action.gui.open-measure-copy-dialog"/>
-	<shortcut keys="Control Shift Left" action="action.measure.go-first"/>
-	<shortcut keys="Control Shift Right" action="action.measure.go-last"/>
+	<shortcut keys="Control Alt Left" action="action.measure.go-first"/>
+	<shortcut keys="Control Alt Right" action="action.measure.go-last"/>
 	<shortcut keys="Control Right" action="action.measure.go-next"/>
 	<shortcut keys="Control Left" action="action.measure.go-previous"/>
+	<shortcut keys="Control c" action="action.gui.open-measure-copy-dialog"/>
 	<shortcut keys="Control v" action="action.gui.open-measure-paste-dialog"/>
 	<shortcut keys=";" action="action.note.effect.change-accentuated"/>
 	<shortcut keys="Shift ;" action="action.note.effect.change-heavy-accentuated"/>
@@ -73,6 +73,10 @@
 	<shortcut keys="Control Shift a" action="action.selection.clear"/>
 	<shortcut keys="Shift Left" action="action.selection.extend-left"/>
 	<shortcut keys="Shift Right" action="action.selection.extend-right"/>
+	<shortcut keys="Control Shift Left" action="action.selection.extend-previous"/>
+	<shortcut keys="Control Shift Right" action="action.selection.extend-next"/>
+	<shortcut keys="Control Alt Shift Left" action="action.selection.extend-first"/>
+	<shortcut keys="Control Alt Shift Right" action="action.selection.extend-last"/>
 	<shortcut keys="Shift =" action="action.note.general.increment-semitone"/>
 	<shortcut keys="Shift -" action="action.note.general.decrement-semitone"/>
 	<shortcut keys="Alt Down" action="action.note.general.shift-down"/>

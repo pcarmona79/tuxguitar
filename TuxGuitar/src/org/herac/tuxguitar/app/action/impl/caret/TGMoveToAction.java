@@ -14,7 +14,6 @@ import org.herac.tuxguitar.util.TGContext;
 public class TGMoveToAction extends TGActionBase{
 	
 	public static final String NAME = "action.caret.move-to";
-	public static final String ATTRIBUTE_KEEP_SELECTION = "keepSelection";
 
 	public TGMoveToAction(TGContext context) {
 		super(context, NAME);
@@ -28,7 +27,7 @@ public class TGMoveToAction extends TGActionBase{
 
 		Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
 		tablature.getCaret().moveTo(track, measure, beat, string.getNumber());
-		if (!context.hasAttribute(ATTRIBUTE_KEEP_SELECTION) || !(boolean) context.getAttribute(ATTRIBUTE_KEEP_SELECTION)) {
+		if (!context.hasAttributeEqualsTrue(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION)) {
 			tablature.getSelector().clearSelection();
 		}
 	}

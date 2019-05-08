@@ -5,6 +5,7 @@ import org.herac.tuxguitar.app.transport.TGTransport;
 import org.herac.tuxguitar.app.view.component.tab.Caret;
 import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
+import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionBase;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.song.models.TGMeasure;
@@ -25,7 +26,9 @@ public class TGGoFirstMeasureAction extends TGActionBase{
 		}
 		else{
 			Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
-			tablature.getSelector().clearSelection();
+			if (!context.hasAttributeEqualsTrue(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION)) {
+				tablature.getSelector().clearSelection();
+			}
 			Caret caret = tablature.getCaret();
 			TGTrack track = caret.getTrack();
 			TGMeasure measure = getSongManager(context).getTrackManager().getFirstMeasure(track);

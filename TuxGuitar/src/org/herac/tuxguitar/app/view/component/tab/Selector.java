@@ -56,6 +56,10 @@ public class Selector {
 		return initial.getMeasure().getNumber() == beat.getMeasure().getNumber() && initial.getStart() < beat.getStart();
 	}
 
+	public TGBeat getInitialBeat() {
+		return initial;
+	}
+
 	public TGBeat getStartBeat() {
 		return start;
 	}
