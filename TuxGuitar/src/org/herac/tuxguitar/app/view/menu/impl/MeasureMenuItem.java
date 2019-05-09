@@ -27,9 +27,7 @@ public class MeasureMenuItem extends TGMenuItem {
 	private UIMenuActionItem addMeasure;
 	private UIMenuActionItem cleanMeasure;
 	private UIMenuActionItem removeMeasure;
-	private UIMenuActionItem copyMeasure;
-	private UIMenuActionItem pasteMeasure;
-	
+
 	public MeasureMenuItem(UIMenu parent) {
 		this.measureMenuItem = parent.createSubMenuItem();
 	}
@@ -68,16 +66,7 @@ public class MeasureMenuItem extends TGMenuItem {
 		
 		//--SEPARATOR
 		this.measureMenuItem.getMenu().createSeparator();
-		
-		//--copy--
-		this.copyMeasure = this.measureMenuItem.getMenu().createActionItem();
-		this.copyMeasure.addSelectionListener(this.createActionProcessor(TGOpenMeasureCopyDialogAction.NAME));
-		
-		//--paste--
-		this.pasteMeasure = this.measureMenuItem.getMenu().createActionItem();
-		
-		this.pasteMeasure.addSelectionListener(this.createActionProcessor(TGOpenMeasurePasteDialogAction.NAME));
-		
+
 		this.loadIcons();
 		this.loadProperties();
 	}
@@ -94,8 +83,6 @@ public class MeasureMenuItem extends TGMenuItem {
 		this.addMeasure.setEnabled(!running);
 		this.cleanMeasure.setEnabled(!running);
 		this.removeMeasure.setEnabled(!running);
-		this.copyMeasure.setEnabled(!running);
-		this.pasteMeasure.setEnabled(!running && TGClipboard.getInstance(findContext()).getData() != null);
 	}
 	
 	public void loadProperties(){
@@ -107,8 +94,6 @@ public class MeasureMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.addMeasure, "measure.add", TGOpenMeasureAddDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.cleanMeasure, "measure.clean", TGOpenMeasureCleanDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.removeMeasure, "measure.remove", TGOpenMeasureRemoveDialogAction.NAME);
-		setMenuItemTextAndAccelerator(this.copyMeasure, "measure.copy", TGOpenMeasureCopyDialogAction.NAME);
-		setMenuItemTextAndAccelerator(this.pasteMeasure, "measure.paste", TGOpenMeasurePasteDialogAction.NAME);
 	}
 	
 	public void loadIcons(){

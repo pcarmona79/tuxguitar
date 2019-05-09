@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.util;
 
+import org.herac.tuxguitar.song.helpers.TGBeatRangeNoteIterator;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -21,6 +22,10 @@ public class TGNoteRange {
 			beats.add(beat);
 			measures.add(beat.getMeasure());
 		}
+	}
+
+	public TGNoteRange(TGBeat start, TGBeat end, Collection<Integer> voices) {
+		this(new TGBeatRangeNoteIterator(start, end, voices).toList());
 	}
 
 	public static TGNoteRange single(TGNote note) {

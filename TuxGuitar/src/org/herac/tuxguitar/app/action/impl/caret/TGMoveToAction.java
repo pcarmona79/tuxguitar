@@ -27,7 +27,7 @@ public class TGMoveToAction extends TGActionBase{
 
 		Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
 		tablature.getCaret().moveTo(track, measure, beat, string.getNumber());
-		if (!context.hasAttributeEqualsTrue(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION)) {
+		if (!Boolean.TRUE.equals(context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION))) {
 			tablature.getSelector().clearSelection();
 		}
 	}

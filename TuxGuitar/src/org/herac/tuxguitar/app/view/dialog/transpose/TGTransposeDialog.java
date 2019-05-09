@@ -1,7 +1,7 @@
 package org.herac.tuxguitar.app.view.dialog.transpose;
 
 import org.herac.tuxguitar.app.TuxGuitar;
-import org.herac.tuxguitar.app.action.impl.tools.TGTransposeAction;
+import org.herac.tuxguitar.editor.action.tools.TGTransposeAction;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;

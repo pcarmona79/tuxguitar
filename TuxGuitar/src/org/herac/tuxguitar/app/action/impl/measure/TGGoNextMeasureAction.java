@@ -29,7 +29,7 @@ public class TGGoNextMeasureAction extends TGActionBase{
 		}
 		else{
 			Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
-			if (!context.hasAttributeEqualsTrue(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION)) {
+			if (!Boolean.TRUE.equals(context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION))) {
 				tablature.getSelector().clearSelection();
 			}
 			Caret caret = tablature.getCaret();

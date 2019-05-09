@@ -26,7 +26,7 @@ public class TGChangeTimeSignatureAction extends TGActionBase {
 		TGMeasureHeader start = ((TGMeasureHeader) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER));
 		TGMeasureHeader end = ((TGMeasureHeader) context.getAttribute(ATTRIBUTE_HEADER_END));
 		TGTimeSignature timeSignature = ((TGTimeSignature) context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TIME_SIGNATURE));
-		boolean truncateOrExtend = ((Boolean) context.getAttribute(ATTRIBUTE_TRUNCATE_OR_EXTEND)).booleanValue();
+		boolean truncateOrExtend = Boolean.TRUE.equals(context.getAttribute(ATTRIBUTE_TRUNCATE_OR_EXTEND));
 
 		songManager.changeTimeSignature(song, start, end, timeSignature, truncateOrExtend);
 	}

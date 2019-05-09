@@ -1,7 +1,8 @@
-package org.herac.tuxguitar.app.view.dialog.measure;
+package org.herac.tuxguitar.app.view.dialog.clipboard;
 
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.controller.TGOpenViewController;
+import org.herac.tuxguitar.app.view.dialog.clipboard.TGMeasurePasteDialog;
 
 public class TGMeasurePasteDialogController implements TGOpenViewController {
 

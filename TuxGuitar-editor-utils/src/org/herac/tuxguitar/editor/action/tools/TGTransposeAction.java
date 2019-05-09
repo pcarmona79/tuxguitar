@@ -1,4 +1,4 @@
-package org.herac.tuxguitar.app.action.impl.tools;
+package org.herac.tuxguitar.editor.action.tools;
 
 import org.herac.tuxguitar.action.TGActionContext;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;

@@ -100,7 +100,7 @@ import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenTransposeDialogAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGSelectScaleAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGToggleBrowserAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGTransposeAction;
+import org.herac.tuxguitar.editor.action.tools.TGTransposeAction;
 import org.herac.tuxguitar.app.action.impl.track.TGGoFirstTrackAction;
 import org.herac.tuxguitar.app.action.impl.track.TGGoLastTrackAction;
 import org.herac.tuxguitar.app.action.impl.track.TGGoNextTrackAction;
@@ -323,6 +323,9 @@ public class TGActionInstaller {
 		installAction(new TGChangeVelocityAction(context));
 		installAction(new TGCleanBeatAction(context));
 		installAction(new TGDecrementNoteSemitoneAction(context));
+		installAction(new TGCutNoteAction(context));
+		installAction(new TGCopyNoteAction(context));
+		installAction(new TGPasteNoteAction(context));
 		installAction(new TGDeleteNoteAction(context));
 		installAction(new TGDeleteNoteOrRestAction(context));
 		installAction(new TGIncrementNoteSemitoneAction(context));

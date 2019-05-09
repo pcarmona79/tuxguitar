@@ -18,7 +18,7 @@ public class TGGoUpAction extends TGActionBase{
 	protected void processAction(TGActionContext context){
 		Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
 		tablature.getCaret().moveUp();
-		if (!context.hasAttributeEqualsTrue(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION)) {
+		if (!Boolean.TRUE.equals(context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION))) {
 			tablature.getSelector().clearSelection();
 		}
 	}

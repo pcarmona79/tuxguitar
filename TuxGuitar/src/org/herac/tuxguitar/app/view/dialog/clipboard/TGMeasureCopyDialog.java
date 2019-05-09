@@ -1,4 +1,4 @@
-package org.herac.tuxguitar.app.view.dialog.measure;
+package org.herac.tuxguitar.app.view.dialog.clipboard;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.ui.TGApplication;

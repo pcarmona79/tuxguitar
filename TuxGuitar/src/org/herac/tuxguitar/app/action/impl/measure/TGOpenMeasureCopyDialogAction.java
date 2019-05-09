@@ -5,7 +5,7 @@ import org.herac.tuxguitar.action.TGActionManager;
 import org.herac.tuxguitar.app.action.impl.view.TGOpenViewAction;
 import org.herac.tuxguitar.app.view.component.tab.Selector;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
-import org.herac.tuxguitar.app.view.dialog.measure.TGMeasureCopyDialogController;
+import org.herac.tuxguitar.app.view.dialog.clipboard.TGMeasureCopyDialogController;
 import org.herac.tuxguitar.editor.action.TGActionBase;
 import org.herac.tuxguitar.util.TGContext;
 

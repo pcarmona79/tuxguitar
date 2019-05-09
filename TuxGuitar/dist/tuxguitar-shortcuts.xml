@@ -41,8 +41,11 @@
 	<shortcut keys="Control Alt Right" action="action.measure.go-last"/>
 	<shortcut keys="Control Right" action="action.measure.go-next"/>
 	<shortcut keys="Control Left" action="action.measure.go-previous"/>
-	<shortcut keys="Control c" action="action.gui.open-measure-copy-dialog"/>
-	<shortcut keys="Control v" action="action.gui.open-measure-paste-dialog"/>
+	<shortcut keys="Control x" action="action.note.cut"/>
+	<shortcut keys="Control c" action="action.note.copy"/>
+	<shortcut keys="Control v" action="action.note.paste"/>
+	<shortcut keys="Control Shift c" action="action.gui.open-measure-copy-dialog"/>
+	<shortcut keys="Control Shift v" action="action.gui.open-measure-paste-dialog"/>
 	<shortcut keys=";" action="action.note.effect.change-accentuated"/>
 	<shortcut keys="Shift ;" action="action.note.effect.change-heavy-accentuated"/>
 	<shortcut keys="." action="action.note.duration.change-dotted"/>

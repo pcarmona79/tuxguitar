@@ -20,8 +20,13 @@ import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
 import org.herac.tuxguitar.ui.resource.UIResourceFactory;
+import org.herac.tuxguitar.util.TGBeatRange;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.TGNoteRange;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Tablature implements TGController {
 
@@ -94,12 +99,24 @@ public class Tablature implements TGController {
 		return selector;
 	}
 
-	public TGNoteRange getCurrentNoteRange() {
+	public TGBeatRange getCurrentBeatRange() {
 		if (getSelector().isActive()) {
-			return getSelector().getNoteRange();
+			return getSelector().getBeatRange();
+		}
+        TGBeat beat = getCaret().getSelectedBeat();
+        if (beat != null) {
+            return TGBeatRange.single(beat);
+        }
+		return TGBeatRange.empty();
+	}
+
+	public TGNoteRange getCurrentNoteRange() {
+	    int voice = getCaret().getVoice();
+		if (getSelector().isActive()) {
+			return getSelector().getNoteRange(Collections.singletonList(voice));
 		} else {
 			TGNote defaultNote = getCaret().getSelectedNote();
-			if (defaultNote != null) {
+			if (defaultNote != null && defaultNote.getVoice().getIndex() == voice) {
 				return TGNoteRange.single(defaultNote);
 			}
 		}
