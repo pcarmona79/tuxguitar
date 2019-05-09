@@ -20,9 +20,9 @@ public class MacToolbarPlugin implements TGPlugin {
 			if( this.macToolbar != null ){
 				this.macToolbar.setEnabled(true);
 			 }else {
-				this.macToolbar = new MacToolbar();
+				this.macToolbar = new MacToolbar(context);
 				this.macToolbar.setEnabled(true);
-				this.macToolbar.init(((SWTWindow) TGWindow.getInstance(context).getWindow()).getControl());
+				this.macToolbar.init();
 			}
 		} catch( Throwable throwable ){
 			throw new TGPluginException( throwable );
