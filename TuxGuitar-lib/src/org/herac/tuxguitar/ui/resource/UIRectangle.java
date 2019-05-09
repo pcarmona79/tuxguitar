@@ -63,4 +63,12 @@ public class UIRectangle {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public String toString() {
+		return "UIRectangle{" +
+				"position=" + position +
+				", size=" + size +
+				'}';
+	}
 }

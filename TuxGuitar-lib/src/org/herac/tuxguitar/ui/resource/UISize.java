@@ -39,4 +39,12 @@ public class UISize {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public String toString() {
+		return "UISize{" +
+				"width=" + width +
+				", height=" + height +
+				'}';
+	}
 }

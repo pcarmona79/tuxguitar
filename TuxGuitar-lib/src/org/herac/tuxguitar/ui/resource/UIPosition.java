@@ -58,4 +58,12 @@ public class UIPosition {
 		}
 		return super.equals(obj);
 	}
+
+	@Override
+	public String toString() {
+		return "UIPosition{" +
+				"x=" + x +
+				", y=" + y +
+				'}';
+	}
 }
