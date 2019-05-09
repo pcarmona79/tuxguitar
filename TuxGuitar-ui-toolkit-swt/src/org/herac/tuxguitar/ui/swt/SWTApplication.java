@@ -54,8 +54,12 @@ public class SWTApplication extends SWTComponent<Display> implements UIApplicati
 		Thread currentThread = Thread.currentThread();
 		return (currentThread == uiThread);
 	}
-	
-	public void start(Runnable runnable) {
+
+    public boolean allowsMenubarHiding() {
+		return SWTEnvironment.getInstance().allowsMenuBarHiding();
+    }
+
+    public void start(Runnable runnable) {
 		SWTEnvironment.getInstance().start(this.getDisplay());
 		
 		this.runInUiThread(runnable);

@@ -97,6 +97,7 @@ public class TGMenuManager implements TGEventListener {
 			}
 			
 			this.loadedPopupMenuItems.clear();
+			this.loadedPopupMenuItems.add(new ViewMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new EditMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new CompositionMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new TrackMenuItem(this.popupMenu));
@@ -223,10 +224,15 @@ public class TGMenuManager implements TGEventListener {
 		}
 	}
 
-	public void toggleMainMenuVisibility() {
-		if (this.menu != null && !this.menu.isDisposed()) {
-			this.menu.setVisible(!this.isMainMenuVisible());
+	public void updateMainMenuVisibility(boolean visible) {
+		boolean allowed = TGApplication.getInstance(this.context).getApplication().allowsMenubarHiding();
+		if (allowed && this.menu != null && !this.menu.isDisposed()) {
+			this.menu.setVisible(visible);
 		}
+	}
+
+	public void toggleMainMenuVisibility() {
+	    updateMainMenuVisibility(!this.isMainMenuVisible());
 	}
 
 	public boolean isMainMenuVisible() {

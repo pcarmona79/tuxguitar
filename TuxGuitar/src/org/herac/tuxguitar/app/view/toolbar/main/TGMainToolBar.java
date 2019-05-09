@@ -33,6 +33,7 @@ public class TGMainToolBar extends TGToolBarModel {
 		UIColorModel borderColor = TGApplication.getInstance(getContext()).getAppearance().getColorModel(UIColorAppearance.WidgetBorder);
 		border.setBgColor(uiFactory.createColor(borderColor));
 		layout.set(border, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, this.getSections().size(), null, 1f, 0f);
+		this.updateVisibility(visible);
 	}
 	
 	public void createSection(TGMainToolBarSection section, int align) {

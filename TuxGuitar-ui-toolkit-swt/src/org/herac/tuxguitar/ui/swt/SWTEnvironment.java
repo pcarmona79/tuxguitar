@@ -67,6 +67,10 @@ public class SWTEnvironment {
 		return this.defaultFontName;
 	}
 
+	public boolean allowsMenuBarHiding() {
+		return !PLATFORM_COCOA.equals(SWT.getPlatform());
+	}
+
 	public boolean isToolItemResizeAvailable() {
 		if( this.toolItemResizeAvailable == null ) {
 			this.toolItemResizeAvailable = (PLATFORM_WIN32.equals(SWT.getPlatform()) || PLATFORM_COCOA.equals(SWT.getPlatform()));

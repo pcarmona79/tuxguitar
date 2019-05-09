@@ -17,4 +17,6 @@ public interface UIApplication extends UIComponent {
 	void runInUiThread(Runnable runnable);
 	
 	boolean isInUiThread();
+
+	boolean allowsMenubarHiding();
 }

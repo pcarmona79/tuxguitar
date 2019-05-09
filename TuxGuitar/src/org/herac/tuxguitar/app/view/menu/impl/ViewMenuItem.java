@@ -13,6 +13,7 @@ import org.herac.tuxguitar.app.action.impl.layout.TGSetPageLayoutAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetScoreEnabledAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetTablatureEnabledAction;
 import org.herac.tuxguitar.app.action.impl.view.*;
+import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.component.table.TGTableViewer;
@@ -60,9 +61,11 @@ public class ViewMenuItem extends TGMenuItem {
 	}
 	
 	public void showItems(){
-		//--TOOLBARS--
-		this.showMenuBar = this.layoutMenuItem.getMenu().createCheckItem();
-		this.showMenuBar.addSelectionListener(this.createActionProcessor(TGToggleMenuBarAction.NAME));
+		if (TGApplication.getInstance(findContext()).getApplication().allowsMenubarHiding()) {
+			//--MENU--
+			this.showMenuBar = this.layoutMenuItem.getMenu().createCheckItem();
+			this.showMenuBar.addSelectionListener(this.createActionProcessor(TGToggleMenuBarAction.NAME));
+		}
 
 		//--TOOLBARS--
 		this.showMainToolbar = this.layoutMenuItem.getMenu().createCheckItem();
@@ -158,7 +161,9 @@ public class ViewMenuItem extends TGMenuItem {
 	public void update() {
 		Tablature tablature = TablatureEditor.getInstance(this.findContext()).getTablature();
 		int style = tablature.getViewLayout().getStyle();
-		this.showMenuBar.setChecked(TuxGuitar.getInstance().getItemManager().isMainMenuVisible());
+		if (this.showMenuBar != null) {
+			this.showMenuBar.setChecked(TuxGuitar.getInstance().getItemManager().isMainMenuVisible());
+		}
 		this.showMainToolbar.setChecked(TGMainToolBar.getInstance(this.findContext()).isVisible());
 		this.showEditToolbar.setChecked(TGEditToolBar.getInstance(this.findContext()).isVisible());
 		this.showTableViewer.setChecked(TGTableViewer.getInstance(this.findContext()).isVisible());
@@ -182,7 +187,9 @@ public class ViewMenuItem extends TGMenuItem {
 	
 	public void loadProperties(){
 		setMenuItemTextAndAccelerator(this.layoutMenuItem, "view", null);
-		setMenuItemTextAndAccelerator(this.showMenuBar, "view.show-menu-bar", TGToggleMenuBarAction.NAME);
+		if (this.showMenuBar != null) {
+			setMenuItemTextAndAccelerator(this.showMenuBar, "view.show-menu-bar", TGToggleMenuBarAction.NAME);
+		}
 		setMenuItemTextAndAccelerator(this.showMainToolbar, "view.show-main-toolbar", TGToggleMainToolbarAction.NAME);
 		setMenuItemTextAndAccelerator(this.showEditToolbar, "view.show-edit-toolbar", TGToggleEditToolbarAction.NAME);
 		setMenuItemTextAndAccelerator(this.showTableViewer, "view.show-table-viewer", TGToggleTableViewerAction.NAME);

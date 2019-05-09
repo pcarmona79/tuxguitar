@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.app.view.main;
 
+import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.TGActionProcessorListener;
 import org.herac.tuxguitar.app.action.impl.system.TGDisposeAction;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
@@ -71,7 +72,8 @@ public class TGWindow implements TGEventListener {
 
 	private void createShellComposites(UIFactory uiFactory) {
 		TGConfigManager tgConfig = TGConfigManager.getInstance(this.context);
-		
+
+		TuxGuitar.getInstance().getItemManager().updateMainMenuVisibility(tgConfig.getBooleanValue(TGConfigKeys.SHOW_MENU_BAR));
 		TGMainToolBar tgToolBar = TGMainToolBar.getInstance(this.context);
 		tgToolBar.createToolBar(this.window, tgConfig.getBooleanValue(TGConfigKeys.SHOW_MAIN_TOOLBAR));
 		
