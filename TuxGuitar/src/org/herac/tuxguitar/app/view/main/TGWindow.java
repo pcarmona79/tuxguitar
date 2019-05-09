@@ -49,6 +49,7 @@ public class TGWindow implements TGEventListener {
 		if( this.window != null ) {
 			this.window.open();
 			this.window.layout();
+			updateMinimumSize();
 		}
 	}
 	
@@ -86,14 +87,15 @@ public class TGWindow implements TGEventListener {
 
 		TGTabFolder tgTabFolder = TGTabFolder.getInstance(this.context);
 		tgTabFolder.init(topContainer);
-		topContainerLayout.set(tgTabFolder.getControl(), 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
-		topContainerLayout.set(tgTabFolder.getControl(), UITableLayout.PACKED_HEIGHT, 0f);
-		
+		tgTabFolder.getControl().computePackedSize(null, null);
+		topContainerLayout.set(tgTabFolder.getControl(), 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 1f, 1f, 0f);
+		topContainerLayout.set(tgTabFolder.getControl(), UITableLayout.IGNORE_INVISIBLE, false);
+
 		this.tableDivider = new TGWindowDivider(this.context);
 		this.tableDivider.createDivider(this.window);
 		
 		TGTableViewer tgTableViewer = TGTableViewer.getInstance(this.context);
-		tgTableViewer.init(this.window);
+		tgTableViewer.init(this.window, tgConfig.getBooleanValue(TGConfigKeys.SHOW_TRACKS));
 
 		this.tableDivider.getControl().setBgColor(tgTableViewer.getBorderColor());
 
@@ -103,6 +105,11 @@ public class TGWindow implements TGEventListener {
 		// Layout
 		this.window.setLayout(new TGWindowLayout(tgToolBar.getControl(), topContainer, this.tableDivider.getControl(), tgTableViewer.getControl(), dockingManager));
 		dockingManager.dock(tgConfig.getBooleanValue(TGConfigKeys.LAYOUT_DOCK_TO_TOP));
+	}
+
+	public void updateMinimumSize() {
+		this.window.computePackedSize(null, null);
+		this.window.setMinimumSize(this.window.getPackedSize());
 	}
 	
 	private void loadInitialBounds() {
@@ -119,6 +126,7 @@ public class TGWindow implements TGEventListener {
 				UIRectangle uiRectangle = new UIRectangle();
 				uiRectangle.setSize(new UISize(width, height));
 
+				this.window.setBounds(uiRectangle);
 			}
 		}
 	}

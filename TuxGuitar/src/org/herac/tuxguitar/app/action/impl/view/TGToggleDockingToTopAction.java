@@ -3,6 +3,7 @@ package org.herac.tuxguitar.app.action.impl.view;
 import org.herac.tuxguitar.action.TGActionContext;
 import org.herac.tuxguitar.action.TGActionManager;
 import org.herac.tuxguitar.app.view.docking.TGDockingManagerController;
+import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.editor.action.TGActionBase;
 import org.herac.tuxguitar.util.TGContext;
 
@@ -17,5 +18,6 @@ public class TGToggleDockingToTopAction extends TGActionBase{
 	protected void processAction(TGActionContext tgActionContext){
 		tgActionContext.setAttribute(TGToggleViewAction.ATTRIBUTE_CONTROLLER, new TGDockingManagerController());
 		TGActionManager.getInstance(getContext()).execute(TGToggleViewAction.NAME, tgActionContext);
+		TGWindow.getInstance(getContext()).updateMinimumSize();
 	}
 }
