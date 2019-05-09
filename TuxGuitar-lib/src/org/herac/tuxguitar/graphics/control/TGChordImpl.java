@@ -29,6 +29,7 @@ public class TGChordImpl extends TGChord {
 	private float width;
 	private float height;
 	private int tonic;
+	private float diagramScale;
 	private float diagramWidth;
 	private float diagramHeight;
 	private float nameWidth;
@@ -75,11 +76,11 @@ public class TGChordImpl extends TGChord {
 	}
 	
 	public float getWidth(){
-		return this.width;
+		return this.width / this.diagramScale;
 	}
 	
 	public float getHeight(){
-		return this.height;
+		return this.height / this.diagramScale;
 	}
 	
 	public void setStyle(int style) {
@@ -92,7 +93,11 @@ public class TGChordImpl extends TGChord {
 		}
 		this.tonic = tonic;
 	}
-	
+
+	public void setDiagramScale(float diagramScale) {
+		this.diagramScale = diagramScale;
+	}
+
 	public UIColor getForegroundColor() {
 		return this.foregroundColor;
 	}
@@ -238,7 +243,11 @@ public class TGChordImpl extends TGChord {
 		float y = (fromY + getPosY());
 		if( (this.style & TGLayout.DISPLAY_CHORD_DIAGRAM) != 0 ){
 			if(this.diagram != null){
-				painter.drawImage(this.diagram,x - ( (this.diagramWidth - getFirstFretSpacing()) / 2) - getFirstFretSpacing() ,y);
+				painter.drawImage(this.diagram,
+						0, 0,
+						this.diagramWidth, this.diagramHeight,
+						x - ( (this.diagramWidth / this.diagramScale - getFirstFretSpacing()) / 2) - getFirstFretSpacing(), y,
+						this.diagramWidth / this.diagramScale, this.diagramHeight / this.diagramScale);
 			}else{
 				paintDiagram(painter,x - ( (this.diagramWidth - getFirstFretSpacing()) / 2) - getFirstFretSpacing() ,y);
 			}
@@ -283,8 +292,8 @@ public class TGChordImpl extends TGChord {
 	
 	protected void updateDiagram(UIResourceFactory bufferFactory, TGResourceBuffer resourceBuffer){
 		UIFont font = getFirstFretFont();
-		this.diagramWidth = getStringSpacing() + (getStringSpacing() * countStrings()) + ((font != null)?getFirstFretSpacing():0);
-		this.diagramHeight = getFretSpacing() + (getFretSpacing() * MAX_FRETS);
+		this.diagramWidth = (getStringSpacing() + (getStringSpacing() * countStrings()) + ((font != null)?getFirstFretSpacing():0));
+		this.diagramHeight = (getFretSpacing() + (getFretSpacing() * MAX_FRETS));
 		if( bufferFactory != null && (this.diagram == null || this.diagram.isDisposed())){
 			this.diagram = bufferFactory.createImage(this.diagramWidth, this.diagramHeight);
 			UIPainter painterBuffer = this.diagram.createPainter();

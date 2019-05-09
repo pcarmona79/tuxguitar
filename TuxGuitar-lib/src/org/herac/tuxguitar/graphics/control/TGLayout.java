@@ -503,6 +503,7 @@ public abstract class TGLayout {
 		chord.setLineWidth(getChordLineWidth());
 		chord.setFirstFretSpacing(getChordFretIndexSpacing());
 		chord.setFirstFretFont(getResources().getChordFretFont());
+		chord.setDiagramScale(1f);
 	}
 	
 	public void setLoopSMarkerStyle(UIPainter painter){

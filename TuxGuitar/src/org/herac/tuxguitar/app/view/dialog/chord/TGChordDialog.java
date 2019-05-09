@@ -60,7 +60,7 @@ public class TGChordDialog {
 		
 		TGChordStyleAdapter.appendColors(this.context.getContext());
 		
-		this.dialog = uiFactory.createWindow(uiParent, true, false);
+		this.dialog = uiFactory.createWindow(uiParent, true, true);
 		this.dialog.setLayout(dialogLayout);
 		this.dialog.setText(TuxGuitar.getProperty("chord.editor"));
 		this.dialog.addDisposeListener(new UIDisposeListener() {
@@ -106,7 +106,7 @@ public class TGChordDialog {
 		UITableLayout buttonsLayout = new UITableLayout();
 		UIPanel buttons = uiFactory.createPanel(this.dialog, false);
 		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(buttons, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
 		final UIButton buttonOK = uiFactory.createButton(buttons);
 		buttonOK.setText(TuxGuitar.getProperty("ok"));
@@ -143,6 +143,7 @@ public class TGChordDialog {
 		this.editor.setChord(findCurrentChord(measure, beat.getStart()));
 		
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
+		this.dialog.setMinimumSize(this.dialog.getBounds().getSize());
 	}
 	
 	public TGChordEditor getEditor() {

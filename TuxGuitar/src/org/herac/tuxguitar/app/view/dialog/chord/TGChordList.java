@@ -136,6 +136,7 @@ public class TGChordList {
 		float fromX = 15;
 		float fromY = 10;
 		float vScroll = this.control.getVScroll().getValue();
+		float scale = this.canvas.getDeviceZoom() / 100f;
 		Iterator<TGChord> it = this.graphicChords.iterator();
 		while (it.hasNext()) {
 			TGChordImpl chord = (TGChordImpl) it.next();
@@ -146,13 +147,14 @@ public class TGChordList {
 			chord.setColor(color);
 			chord.setNoteColor(color);
 			chord.setTonicColor(this.dialog.getColor(TGChordStyleAdapter.COLOR_TONIC));
-			chord.setFirstFretSpacing(CHORD_FIRST_FRET_SPACING);
-			chord.setStringSpacing(CHORD_STRING_SPACING);
-			chord.setFretSpacing(CHORD_FRET_SPACING);
-			chord.setNoteSize(CHORD_NOTE_SIZE);
-			chord.setLineWidth(CHORD_LINE_WIDTH);
-			chord.setFirstFretFont(getFont());
+			chord.setFirstFretSpacing(CHORD_FIRST_FRET_SPACING * scale);
+			chord.setStringSpacing(CHORD_STRING_SPACING * scale);
+			chord.setFretSpacing(CHORD_FRET_SPACING * scale);
+			chord.setNoteSize(CHORD_NOTE_SIZE * scale);
+			chord.setLineWidth(CHORD_LINE_WIDTH * scale);
+			chord.setFirstFretFont(getFont(scale));
 			chord.setStyle(TGLayout.DISPLAY_CHORD_DIAGRAM);
+			chord.setDiagramScale(scale);
 			chord.update(painter, this.getDialog().getUIFactory(), this.resourceBuffer);
 			if( fromX + chord.getWidth() >= ((this.control.getBounds().getX() + this.control.getBounds().getWidth()) - 20)){
 				fromX = 15;
@@ -185,10 +187,12 @@ public class TGChordList {
 		uiScrollBar.setThumb(Math.round(bounds.getHeight()));
 	}
 	
-	private UIFont getFont(){
-		if( this.font == null || this.font.isDisposed() ){
+	private UIFont getFont(float scale){
+		float newHeight = 7 * scale;
+		if( this.font == null || this.font.isDisposed() || this.font.getHeight() != newHeight){
+			this.disposeFont();
 			UIFont font = this.control.getFont();
-			UIFontModel model = new UIFontModel((font != null ? font.getName() : null), 7, true, false);
+			UIFontModel model = new UIFontModel((font != null ? font.getName() : null), newHeight, true, false);
 			
 			this.font = this.dialog.getUIFactory().createFont(model);
 		}
