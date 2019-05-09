@@ -10,6 +10,7 @@ import org.herac.tuxguitar.ui.event.UICloseListener;
 import org.herac.tuxguitar.ui.menu.UIMenuBar;
 import org.herac.tuxguitar.ui.resource.UIImage;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
+import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.swt.event.SWTCloseListenerManager;
 import org.herac.tuxguitar.ui.swt.menu.SWTMenu;
 import org.herac.tuxguitar.ui.swt.resource.SWTImage;
@@ -76,6 +77,10 @@ public class SWTWindow extends SWTLayoutContainer<Shell> implements UIWindow {
 	public void setBounds(UIRectangle bounds) {
 		this.resizeListener.setBounds(bounds);
 		super.setBounds(bounds);
+	}
+
+	public void setMinimumSize(UISize size) {
+		this.getControl().setMinimumSize(Math.round(size.getWidth()), Math.round(size.getHeight()));
 	}
 	
 	public void join() {

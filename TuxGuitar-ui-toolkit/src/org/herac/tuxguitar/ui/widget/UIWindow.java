@@ -2,6 +2,7 @@ package org.herac.tuxguitar.ui.widget;
 
 import org.herac.tuxguitar.ui.event.UICloseListener;
 import org.herac.tuxguitar.ui.resource.UIImage;
+import org.herac.tuxguitar.ui.resource.UISize;
 
 public interface UIWindow extends UILayoutContainer {
 	
@@ -24,7 +25,9 @@ public interface UIWindow extends UILayoutContainer {
 	void maximize();
 	
 	boolean isMaximized();
-	
+
+	void setMinimumSize(UISize size);
+
 	void moveToTop();
 	
 	void addCloseListener(UICloseListener listener);
