@@ -1,16 +1,16 @@
 package org.herac.tuxguitar.app.tools.scale;
 
 public class ScaleInfo {
-	
+
 	private String name;
-	private String keys;
+	private int keys;
 	
-	public ScaleInfo(String name,String keys){
+	public ScaleInfo(String name, int keys) {
 		this.name = name;
 		this.keys = keys;
 	}
 	
-	public String getKeys() {
+	public int getKeys() {
 		return this.keys;
 	}
 	

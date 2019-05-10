@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.herac.tuxguitar.app.tools.scale.ScaleInfo;
+import org.herac.tuxguitar.song.models.TGScale;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -19,7 +20,8 @@ public class ScaleReader {
 	private static final String SCALE_TAG = "scale";
 	private static final String NAME_ATTRIBUTE = "name";
 	private static final String KEYS_ATTRIBUTE = "keys";
-	
+	private static final String KEY_SEPARATOR = ",";
+
 	public void loadScales(List<ScaleInfo> scales,InputStream stream){
 		try{
 			if ( stream != null ){
@@ -56,8 +58,15 @@ public class ScaleReader {
 				if (name == null || keys == null || name.trim().equals("") || keys.trim().equals("")){
 					throw new RuntimeException("Invalid Scale file format.");
 				}
-				
-				scales.add(new ScaleInfo(name,keys));
+
+				int keyFlags = 0;
+                for (String keyString : keys.split(KEY_SEPARATOR)) {
+					int note = (Integer.parseInt(keyString) - 1);
+					if( note >= 0 && note < TGScale.NOTE_COUNT) {
+						keyFlags |= (1 << note);
+					}
+				}
+				scales.add(new ScaleInfo(name, keyFlags));
 			}
 		}
 	}
