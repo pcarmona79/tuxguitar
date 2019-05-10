@@ -54,7 +54,7 @@ public class TGScaleDialog {
 		scales.setSelectedValue(scaleManager.getSelectionIndex());
 		
 		compositeLayout.set(scales, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		compositeLayout.set(scales, UITableLayout.MINIMUM_PACKED_HEIGHT, 200f);
+		compositeLayout.set(scales, UITableLayout.PACKED_HEIGHT, 200f);
 		
 		//------------------BUTTONS--------------------------
 		UITableLayout buttonsLayout = new UITableLayout();
