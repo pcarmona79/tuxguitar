@@ -4,7 +4,9 @@ import java.io.InputStream;
 import java.util.Map;
 
 public interface UIResourceFactory {
-	
+
+	void loadFont(String font);
+
 	UIColor createColor(int red, int green, int blue);
 	
 	UIColor createColor(UIColorModel model);

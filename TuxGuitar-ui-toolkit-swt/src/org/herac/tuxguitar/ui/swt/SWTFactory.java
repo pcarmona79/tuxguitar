@@ -288,6 +288,10 @@ public class SWTFactory implements UIFactory {
 		return new SWTPrinterChooser((SWTWindow) parent);
 	}
 
+	public void loadFont(String font) {
+		this.resourceFactory.loadFont(font);
+	}
+
 	public UIColor createColor(int red, int green, int blue) {
 		return this.resourceFactory.createColor(red, green, blue);
 	}

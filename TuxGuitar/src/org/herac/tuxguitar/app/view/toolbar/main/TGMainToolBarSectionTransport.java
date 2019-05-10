@@ -3,6 +3,8 @@ package org.herac.tuxguitar.app.view.toolbar.main;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.caret.TGMoveToAction;
 import org.herac.tuxguitar.app.action.impl.transport.*;
+import org.herac.tuxguitar.app.system.config.TGConfigKeys;
+import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.system.icons.TGColorManager;
 import org.herac.tuxguitar.app.system.icons.TGColorManager.TGSkinnableColor;
 import org.herac.tuxguitar.app.transport.TGTransport;
@@ -37,8 +39,6 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 	private static final int STATUS_PAUSED = 2;
 	private static final int STATUS_RUNNING = 3;
 
-	private static final int PLAY_MODE_DELAY = 250;
-
 	private static final String COLOR_BACKGROUND = "widget.transport.backgroundColor";
 	private static final String COLOR_FOREGROUND = "widget.transport.foregroundColor";
 
@@ -47,8 +47,7 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 			new TGSkinnableColor(COLOR_FOREGROUND, new UIColorModel(0xf0, 0xf0, 0xf0)),
 	};
 
-	final float FONT_SIZE = 14f;
-	final float DISPLAY_MARGIN = 2f;
+	private static final float DISPLAY_MARGIN = 2f;
 
 	private TGProcess redrawProcess;
 
@@ -90,7 +89,6 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		this.last.addSelectionListener(event -> TGTransport.getInstance(getToolBar().getContext()).gotoLast());
 
 
-		this.displayFont = getFactory().createFont("Monospace", FONT_SIZE, false, false);
 		TGColorManager tgColorManager = TGColorManager.getInstance(getToolBar().getContext());
 		tgColorManager.appendSkinnableColors(SKINNABLE_COLORS);
 		backgroundColor = tgColorManager.getColor(COLOR_BACKGROUND);
@@ -120,7 +118,9 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		});
 		this.display.addDisposeListener(new UIDisposeListener() {
 			public void onDispose(UIDisposeEvent event) {
-                displayFont.dispose();
+				if (displayFont != null) {
+					displayFont.dispose();
+				}
                 backgroundColor.dispose();
                 foregroundColor.dispose();
 			}
@@ -222,11 +222,9 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		float realTextHeight = painter.getFMTopLine() - painter.getFMBaseLine();
 		painter.drawString(time, DISPLAY_MARGIN, painter.getFMTopLine() + (size.getHeight() - realTextHeight) / 2f);
 
-		float textWidth = painter.getFMWidth(time);
-		float currentPackedWidth = getLayout().get(this.display, UITableLayout.PACKED_WIDTH, size.getWidth());
-		float newPackedWidth = Math.max(currentPackedWidth, textWidth + DISPLAY_MARGIN * 2f);
-		if (newPackedWidth != currentPackedWidth) {
-			getLayout().set(this.display, UITableLayout.PACKED_WIDTH, newPackedWidth);
+		float newWidth = painter.getFMWidth(time) + DISPLAY_MARGIN * 2f;
+		if (newWidth > size.getWidth()) {
+			getLayout().set(this.display, UITableLayout.PACKED_WIDTH, newWidth);
 			getControl().layout();
 		}
 	}
@@ -250,6 +248,22 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		this.countDown.setToolTipText(this.getText("transport.count-down"));
 		this.loop.setToolTipText(this.getText("transport.simple.play-looped"));
 		this.playMode.setToolTipText(this.getText("transport.mode"));
+		if (this.displayFont != null) {
+			this.displayFont.dispose();
+		}
+		UIFontModel fontModel = TGConfigManager.getInstance(getContext()).getFontModelConfigValue(TGConfigKeys.FONT_TRANSPORT);
+		this.displayFont = getFactory().createFont(fontModel);
+
+		UIImage dummyImage = getFactory().createImage(1f, 1f);
+		UIPainter painter = dummyImage.createPainter();
+
+		painter.setFont(this.displayFont);
+		getLayout().set(this.display, UITableLayout.PACKED_WIDTH, painter.getFMWidth("000:00:00.000") + DISPLAY_MARGIN * 2f);
+		getLayout().set(this.display, UITableLayout.PACKED_HEIGHT, this.displayFont.getHeight() + DISPLAY_MARGIN * 2f);
+		getControl().layout();
+
+		painter.dispose();
+		dummyImage.dispose();
 	}
 	
 	public void loadIcons(){

@@ -18,6 +18,10 @@ public class SWTResourceFactory implements UIResourceFactory {
 	public SWTResourceFactory(Device device){
 		this.device = device;
 	}
+
+	public void loadFont(String font) {
+		this.device.loadFont(font);
+	}
 	
 	public UIColor createColor(int red, int green, int blue) {
 		return new SWTColor(this.device , red, green , blue);

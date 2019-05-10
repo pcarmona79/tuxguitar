@@ -66,7 +66,11 @@ import org.herac.tuxguitar.util.plugin.TGPluginManager;
 import org.herac.tuxguitar.util.properties.TGPropertiesManager;
 
 public class TuxGuitar {
-	
+
+	private static final String[] DEFAULT_FONTS = new String[] {
+		"LCD14.otf"
+	};
+
 	private static TuxGuitar instance;
 	
 	private boolean initialized;
@@ -88,7 +92,7 @@ public class TuxGuitar {
 		this.lock = new TGLock(this.context);
 		this.initialized = false;
 	}
-	
+
 	public static TuxGuitar getInstance() {
 		if (instance == null) {
 			synchronized (TuxGuitar.class) {
@@ -132,9 +136,10 @@ public class TuxGuitar {
 		});
 	}
 	
-	private void startUIContext(URL url) {		
+	private void startUIContext(URL url) {
+		this.loadFonts();
 		TGWindow.getInstance(TuxGuitar.this.context).createWindow();
-		
+
 		// Priority 3 ----------------------------------------------//
 		this.initMidiPlayer();
 		this.getEditorManager().setLockControl(TuxGuitar.this.lock);
@@ -148,6 +153,12 @@ public class TuxGuitar {
 		
 		this.startSong(url);
 		this.setInitialized(true);
+	}
+
+	private void loadFonts() {
+		for (String font : DEFAULT_FONTS) {
+			TGFileUtils.loadFont(TuxGuitar.this.context, font);
+		}
 	}
 	
 	private void startSong(URL url){

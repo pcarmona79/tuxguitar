@@ -116,6 +116,10 @@ public class TGFileUtils {
 		return null;
 	}
 
+	public static void loadFont(TGContext context, String name) {
+		TGApplication.getInstance(context).getFactory().loadFont(getResourcePath(context, "fonts") + name);
+	}
+
 	public static UIImage loadImage(TGContext context, String skin, String name){
 		UIFactory uiFactory = TGApplication.getInstance(context).getFactory();
 		try{

@@ -19,7 +19,10 @@ public class SVGResourceFactory implements UIResourceFactory{
 	public UIColor createColor(UIColorModel colorModel) {
 		return this.createColor(colorModel.getRed(), colorModel.getGreen(), colorModel.getBlue());
 	}
-	
+
+	public void loadFont(String font) {
+	}
+
 	public UIColor createColor(int red, int green, int blue) {
 		return new SVGColor(red, green, blue);
 	}

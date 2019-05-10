@@ -3,7 +3,8 @@ package org.herac.tuxguitar.ui.resource;
 public class UIFontModel {
 	
 	public static final String DEFAULT_NAME = "Default";
-	
+	public static final String DEFAULT_MONOSPACE_NAME = "LCD";
+
 	private String name;
 	private float height;
 	private boolean bold;

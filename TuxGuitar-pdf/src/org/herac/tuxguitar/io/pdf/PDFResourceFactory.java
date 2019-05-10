@@ -15,8 +15,10 @@ public class PDFResourceFactory implements UIResourceFactory {
 	public PDFResourceFactory(){
 		super();
 	}
-	
-	public UIColor createColor( int red, int green, int blue ){
+
+	public void loadFont(String font) {}
+
+	public UIColor createColor(int red, int green, int blue ){
 		return new PDFColor( red, green , blue );
 	}
 	

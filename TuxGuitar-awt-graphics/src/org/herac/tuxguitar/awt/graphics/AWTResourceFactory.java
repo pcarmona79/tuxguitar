@@ -17,8 +17,11 @@ public class AWTResourceFactory implements UIResourceFactory {
 	public AWTResourceFactory(){
 		super();
 	}
-	
-	public UIColor createColor( int red, int green, int blue ){
+
+	public void loadFont(String font) {
+	}
+
+	public UIColor createColor(int red, int green, int blue ){
 		return new AWTColor( red, green , blue );
 	}
 	
