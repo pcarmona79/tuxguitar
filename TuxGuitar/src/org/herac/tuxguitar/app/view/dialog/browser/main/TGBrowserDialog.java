@@ -42,6 +42,7 @@ import org.herac.tuxguitar.ui.event.UIMouseEvent;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UICursor;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
+import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UITable;
 import org.herac.tuxguitar.ui.widget.UITableItem;
@@ -58,7 +59,9 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 	
 	private static final int SHELL_WIDTH = 500;
 	private static final int SHELL_HEIGHT = 350;
-	
+	private static final int SHELL_MINIMUM_WIDTH = 200;
+	private static final int SHELL_MINIMUM_HEIGHT = 100;
+
 	private TGContext context;
 	private TGBrowserCollection collection;
 	private TGBrowserConnection connection;
@@ -117,6 +120,7 @@ public class TGBrowserDialog implements TGBrowserFactoryListener, TGBrowserConne
 		this.updateTable();
 		
 		this.dialog.setBounds(new UIRectangle(0, 0, SHELL_WIDTH,SHELL_HEIGHT));
+		this.dialog.setMinimumSize(new UISize(SHELL_MINIMUM_WIDTH, SHELL_MINIMUM_HEIGHT));
 		this.dialog.addDisposeListener(new UIDisposeListener() {
 			public void onDispose(UIDisposeEvent event) {
 				exit();

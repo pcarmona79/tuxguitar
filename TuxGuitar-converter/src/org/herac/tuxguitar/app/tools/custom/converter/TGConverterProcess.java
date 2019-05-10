@@ -18,6 +18,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UICursor;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
+import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIReadOnlyTextBox;
@@ -30,7 +31,10 @@ public class TGConverterProcess implements TGConverterListener, TGEventListener{
 	
 	private static final float SHELL_WIDTH = 650f;
 	private static final float SHELL_HEIGHT = 350f;
-	
+
+	private static final float SHELL_MINIMUM_WIDTH = 200f;
+	private static final float SHELL_MINIMUM_HEIGHT = 150f;
+
 	private static final String EOL = ("\n");
 	
 	private TGContext context;
@@ -69,6 +73,7 @@ public class TGConverterProcess implements TGConverterListener, TGEventListener{
 		this.dialog = uiFactory.createWindow(uiParent, false, true);
 		this.dialog.setLayout(dialogLayout);
 		this.dialog.setBounds(new UIRectangle(0, 0, SHELL_WIDTH, SHELL_HEIGHT));
+		this.dialog.setMinimumSize(new UISize(SHELL_MINIMUM_WIDTH, SHELL_MINIMUM_HEIGHT));
 		this.dialog.addDisposeListener(new UIDisposeListener() {
 			public void onDispose(UIDisposeEvent event) {
 				TuxGuitar.getInstance().getSkinManager().removeLoader( TGConverterProcess.this );

@@ -37,7 +37,7 @@ public class TGPluginListDialog {
 		final UIFactory uiFactory = TGApplication.getInstance(context.getContext()).getFactory();
 		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
-		final UIWindow dialog = uiFactory.createWindow(uiParent, true, false);
+		final UIWindow dialog = uiFactory.createWindow(uiParent, true, true);
 		
 		dialog.setLayout(dialogLayout);
 		dialog.setText(TuxGuitar.getProperty("plugins"));
@@ -71,7 +71,7 @@ public class TGPluginListDialog {
 		UITableLayout buttonsLayout = new UITableLayout(0f);
 		UIPanel buttons = uiFactory.createPanel(dialog, false);
 		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
 		final UIButton buttonSetup = uiFactory.createButton(buttons);
 		buttonSetup.setText(TuxGuitar.getProperty("configure"));
@@ -131,7 +131,9 @@ public class TGPluginListDialog {
 				}
 			}
 		});
-		
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

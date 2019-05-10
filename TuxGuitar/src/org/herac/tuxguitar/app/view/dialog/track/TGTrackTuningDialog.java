@@ -78,7 +78,7 @@ public class TGTrackTuningDialog {
 			UIWindow parent = this.context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 			UITableLayout dialogLayout = new UITableLayout();
 			
-			this.dialog = factory.createWindow(parent, true, false);
+			this.dialog = factory.createWindow(parent, true, true);
 			this.dialog.setLayout(dialogLayout);
 			this.dialog.setText(TuxGuitar.getProperty("tuning"));
 			
@@ -92,12 +92,12 @@ public class TGTrackTuningDialog {
 			UILegendPanel rightPanel = factory.createLegendPanel(this.dialog);
 			rightPanel.setLayout(rightPanelLayout);
 			rightPanel.setText(TuxGuitar.getProperty("options"));
-			dialogLayout.set(rightPanel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+			dialogLayout.set(rightPanel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
 			
 			UITableLayout bottomPanelLayout = new UITableLayout(0f);
 			UIPanel bottomPanel = factory.createPanel(this.dialog, false);
 			bottomPanel.setLayout(bottomPanelLayout);
-			dialogLayout.set(bottomPanel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true, 1, 2);
+			dialogLayout.set(bottomPanel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false, 1, 2);
 			
 			this.initTuningTable(leftPanel);
 			
@@ -216,14 +216,14 @@ public class TGTrackTuningDialog {
 				TGTrackTuningDialog.this.onEditTuningModel();
 			}
 		});
-		panelLayout.set(this.tuningTable, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, true);
+		panelLayout.set(this.tuningTable, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		panelLayout.set(this.tuningTable, UITableLayout.PACKED_WIDTH, 250f);
 		panelLayout.set(this.tuningTable, UITableLayout.PACKED_HEIGHT, 200f);
 
 		UITableLayout buttonsLayout = new UITableLayout(0f);
 		UIPanel buttonsPanel = factory.createPanel(panel, false);
 		buttonsPanel.setLayout(buttonsLayout);
-		panelLayout.set(buttonsPanel, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+		panelLayout.set(buttonsPanel, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
 		
 		UIButton buttonAdd = factory.createButton(buttonsPanel);
 		buttonAdd.setImage(TGIconManager.getInstance(this.context.getContext()).getListAdd());

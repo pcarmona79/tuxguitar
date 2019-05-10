@@ -51,7 +51,7 @@ public class TGAboutDialog {
 		final UIFactory uiFactory = TGApplication.getInstance(context.getContext()).getFactory();
 		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
-		final UIWindow dialog = uiFactory.createWindow(uiParent, true, false);
+		final UIWindow dialog = uiFactory.createWindow(uiParent, true, true);
 		
 		dialog.setLayout(dialogLayout);
 		dialog.setText(TuxGuitar.getProperty("help.about"));
@@ -60,7 +60,7 @@ public class TGAboutDialog {
 		UITableLayout headerLayout = new UITableLayout();
 		UIPanel header = uiFactory.createPanel(dialog, false);
 		header.setLayout(headerLayout);
-		dialogLayout.set(header, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(header, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 		
 		this.image = TuxGuitar.getInstance().getIconManager().getAboutDescription();
 		
@@ -123,7 +123,7 @@ public class TGAboutDialog {
 		UITableLayout buttonsLayout = new UITableLayout();
 		UIPanel buttons = uiFactory.createPanel(dialog, false);
 		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(buttons, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
 		UIButton buttonClose = uiFactory.createButton(buttons);
 		buttonClose.setDefaultButton();
@@ -136,7 +136,9 @@ public class TGAboutDialog {
 		buttonsLayout.set(buttonClose, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
 		
 		tabFolder.setSelectedIndex(0);
-		
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

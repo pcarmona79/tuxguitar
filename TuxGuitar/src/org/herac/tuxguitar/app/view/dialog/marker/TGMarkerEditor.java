@@ -46,7 +46,7 @@ public class TGMarkerEditor {
 		final UIWindow uiParent = this.context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
 		
-		this.dialog = uiFactory.createWindow(uiParent, true, false);
+		this.dialog = uiFactory.createWindow(uiParent, true, true);
 		this.dialog.setLayout(dialogLayout);
 		this.dialog.setText(TuxGuitar.getProperty("marker"));
 		
@@ -54,13 +54,13 @@ public class TGMarkerEditor {
 		UITableLayout groupLayout = new UITableLayout();
 		UIPanel group = uiFactory.createPanel(this.dialog, false);
 		group.setLayout(groupLayout);
-		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, true);
 		
 		// Measure Number
 		final int measureCount = TuxGuitar.getInstance().getDocumentManager().getSong().countMeasureHeaders();
 		UILabel measureLabel = uiFactory.createLabel(group);
 		measureLabel.setText(TuxGuitar.getProperty("measure"));
-		groupLayout.set(measureLabel, 1, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, true, true);
+		groupLayout.set(measureLabel, 1, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);
 		
 		this.measureSpinner = uiFactory.createSpinner(group);
 		this.measureSpinner.setMinimum(1);
@@ -76,21 +76,21 @@ public class TGMarkerEditor {
 				}
 			}
 		});
-		groupLayout.set(this.measureSpinner, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
+		groupLayout.set(this.measureSpinner, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
 		
 		// Title
 		UILabel titleLabel = uiFactory.createLabel(group);
 		titleLabel.setText(TuxGuitar.getProperty("title"));
-		groupLayout.set(titleLabel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, true, true);
+		groupLayout.set(titleLabel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);
 		
 		this.titleText = uiFactory.createTextField(group);
 		this.titleText.setText(this.marker.getTitle());
-		groupLayout.set(this.titleText, 2, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
+		groupLayout.set(this.titleText, 2, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
 		
 		// Color
 		UILabel colorLabel = uiFactory.createLabel(group);
 		colorLabel.setText(TuxGuitar.getProperty("color"));
-		groupLayout.set(colorLabel, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, true, true);
+		groupLayout.set(colorLabel, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);
 
 		TGColorButton colorButton = new TGColorButton(uiFactory, dialog, group, TuxGuitar.getProperty("choose"));
 		colorButton.addSelectionListener(new TGColorButton.SelectionListener() {
@@ -101,13 +101,13 @@ public class TGMarkerEditor {
 			}
 		});
 		colorButton.loadColor(this.marker.getColor().toColorModel());
-		groupLayout.set(colorButton.getControl(), 3, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
+		groupLayout.set(colorButton.getControl(), 3, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, true, 1, 1, MINIMUM_CONTROL_WIDTH, null, null);
 		
 		// ------------------BUTTONS--------------------------
 		UITableLayout buttonsLayout = new UITableLayout(0f);
 		UIPanel buttons = uiFactory.createPanel(this.dialog, false);
 		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
 		final UIButton buttonOK = uiFactory.createButton(buttons);
 		buttonOK.setText(TuxGuitar.getProperty("ok"));
@@ -129,7 +129,9 @@ public class TGMarkerEditor {
 		});
 		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
 		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
-		
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

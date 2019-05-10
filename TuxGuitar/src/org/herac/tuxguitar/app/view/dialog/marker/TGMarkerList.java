@@ -69,7 +69,7 @@ public class TGMarkerList implements TGEventListener {
 		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
 		
-		this.dialog = uiFactory.createWindow(uiParent, false, false);
+		this.dialog = uiFactory.createWindow(uiParent, false, true);
 		this.dialog.setLayout(dialogLayout);
 		// ----------------------------------------------------------------------
 		
@@ -86,8 +86,8 @@ public class TGMarkerList implements TGEventListener {
 			}
 		});
 		tableLayout.set(this.table, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		tableLayout.set(this.table, UITableLayout.PACKED_WIDTH, 250f);
-		tableLayout.set(this.table, UITableLayout.PACKED_HEIGHT, 200f);
+		tableLayout.set(this.table, UITableLayout.MINIMUM_PACKED_WIDTH, 250f);
+		tableLayout.set(this.table, UITableLayout.MINIMUM_PACKED_HEIGHT, 200f);
 		
 		this.loadTableItems();
 		
@@ -95,7 +95,7 @@ public class TGMarkerList implements TGEventListener {
 		UITableLayout buttonsLayout = new UITableLayout();
 		this.compositeButtons = uiFactory.createPanel(this.dialog, false);
 		this.compositeButtons.setLayout(buttonsLayout);
-		dialogLayout.set(this.compositeButtons, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(this.compositeButtons, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
 		
 		this.buttonAdd = uiFactory.createButton(this.compositeButtons);
 		this.buttonAdd.addSelectionListener(new UISelectionListener() {
@@ -148,7 +148,9 @@ public class TGMarkerList implements TGEventListener {
 				removeListeners();
 			}
 		});
-		
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

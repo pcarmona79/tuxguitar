@@ -25,7 +25,7 @@ public class TGScaleDialog {
 		final UIFactory uiFactory = TGApplication.getInstance(context.getContext()).getFactory();
 		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
-		final UIWindow dialog = uiFactory.createWindow(uiParent, true, false);
+		final UIWindow dialog = uiFactory.createWindow(uiParent, true, true);
 		
 		dialog.setLayout(dialogLayout);
 		dialog.setText(TuxGuitar.getProperty("scale.list"));
@@ -42,7 +42,7 @@ public class TGScaleDialog {
 			keys.addItem(new UISelectItem<Integer>(keyNames[i], i));
 		}
 		keys.setSelectedValue(scaleManager.getSelectionKey());
-		compositeLayout.set(keys, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
+		compositeLayout.set(keys, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
 		compositeLayout.set(keys, UITableLayout.PACKED_HEIGHT, 200f);
 		
 		final UIListBoxSelect<Integer> scales = uiFactory.createListBoxSelect(composite);
@@ -53,14 +53,14 @@ public class TGScaleDialog {
 		}
 		scales.setSelectedValue(scaleManager.getSelectionIndex());
 		
-		compositeLayout.set(scales, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
-		compositeLayout.set(scales, UITableLayout.PACKED_HEIGHT, 200f);
+		compositeLayout.set(scales, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		compositeLayout.set(scales, UITableLayout.MINIMUM_PACKED_HEIGHT, 200f);
 		
 		//------------------BUTTONS--------------------------
 		UITableLayout buttonsLayout = new UITableLayout();
 		UIPanel buttons = uiFactory.createPanel(dialog, false);
 		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
 		UIButton buttonOK = uiFactory.createButton(buttons);
 		buttonOK.setText(TuxGuitar.getProperty("ok"));
@@ -81,7 +81,9 @@ public class TGScaleDialog {
 			}
 		});
 		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

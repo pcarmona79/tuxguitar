@@ -33,6 +33,7 @@ import org.herac.tuxguitar.ui.event.UIKeyPressedListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIKeyCombination;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
+import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
@@ -98,6 +99,7 @@ public class TGLyricEditor implements TGEventListener {
 		this.dialog = uiFactory.createWindow(TGWindow.getInstance(this.context).getWindow(), false, true);
 		this.dialog.setLayout(new UITableLayout(0f));
 		this.dialog.setBounds(new UIRectangle(0, 0, EDITOR_WIDTH, EDITOR_HEIGHT));
+		this.dialog.setMinimumSize(new UISize(EDITOR_WIDTH, EDITOR_HEIGHT));
 		this.dialog.addDisposeListener(new UIDisposeListener() {
 			public void onDispose(UIDisposeEvent event) {
 				TGLyricEditor.this.onDispose();

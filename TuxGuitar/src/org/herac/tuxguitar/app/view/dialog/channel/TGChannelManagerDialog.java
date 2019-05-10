@@ -38,7 +38,7 @@ import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
 
 public class TGChannelManagerDialog implements TGEventListener {
 	
-	private static final float MINIMUN_HEIGHT = 450f;
+	private static final float MINIMUM_HEIGHT = 600f;
 	
 	private UIWindow dialog;
 	
@@ -96,8 +96,9 @@ public class TGChannelManagerDialog implements TGEventListener {
 				TuxGuitar.getInstance().updateCache(true);
 			}
 		});
-		
-		this.dialog.computePackedSize(null, null);
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		this.dialog.layout(new UIRectangle(this.createPreferredSize(this.dialog.getPackedSize())));
 		
 		TGDialogUtil.openDialog(this.dialog, TGDialogUtil.OPEN_STYLE_CENTER);
@@ -139,8 +140,8 @@ public class TGChannelManagerDialog implements TGEventListener {
 	
 	private UISize createPreferredSize(UISize size) {
 		UISize preferredSize = new UISize(size.getWidth(), size.getHeight());
-		if( preferredSize.getHeight() < MINIMUN_HEIGHT ) {
-			preferredSize.setHeight(MINIMUN_HEIGHT);
+		if( preferredSize.getHeight() < MINIMUM_HEIGHT) {
+			preferredSize.setHeight(MINIMUM_HEIGHT);
 		}
 		return preferredSize;
 	}

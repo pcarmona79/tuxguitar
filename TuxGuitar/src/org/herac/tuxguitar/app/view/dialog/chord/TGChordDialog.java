@@ -141,9 +141,10 @@ public class TGChordDialog {
 		
 		// load the current chord
 		this.editor.setChord(findCurrentChord(measure, beat.getStart()));
-		
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
-		this.dialog.setMinimumSize(this.dialog.getBounds().getSize());
 	}
 	
 	public TGChordEditor getEditor() {

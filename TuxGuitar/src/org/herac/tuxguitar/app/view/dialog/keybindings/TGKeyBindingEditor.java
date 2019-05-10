@@ -40,7 +40,7 @@ public class TGKeyBindingEditor {
 		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
 		
-		this.dialog = uiFactory.createWindow(uiParent, true, false);
+		this.dialog = uiFactory.createWindow(uiParent, true, true);
 		this.dialog.setLayout(dialogLayout);
 		this.dialog.setText(TuxGuitar.getProperty("key-bindings-editor"));
 		
@@ -87,8 +87,10 @@ public class TGKeyBindingEditor {
 						TGKeyBindingEditor.this.loadDefaultKeyBindingActions();
 					}
 				});
-		dialogLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		
+		dialogLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

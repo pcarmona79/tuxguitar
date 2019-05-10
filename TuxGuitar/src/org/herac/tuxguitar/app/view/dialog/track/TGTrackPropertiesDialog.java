@@ -48,12 +48,12 @@ import org.herac.tuxguitar.ui.widget.UITextField;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 
 public class TGTrackPropertiesDialog implements TGEventListener {
-	
+
 	private static final String[] NOTE_NAMES = TGMusicKeyUtils.getSharpKeyNames(TGMusicKeyUtils.PREFIX_TUNING);
 	private static final float MINIMUM_LEFT_CONTROLS_WIDTH = 180;
 	private static final float MINIMUM_BUTTON_WIDTH = 80;
 	private static final float MINIMUM_BUTTON_HEIGHT = 25;
-	
+
 	private TGViewContext context;
 	private UIWindow dialog;
 	private UITextField nameText;
@@ -61,32 +61,34 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 	private UIDropDownSelect<Integer> channelSelect;
 	private UIReadOnlyTextField tuningText;
 	private TGProcess updateItemsProcess;
-	
+
 	public TGTrackPropertiesDialog(TGViewContext context) {
 		this.context = context;
 		this.createSyncProcesses();
 	}
-	
+
 	public void show() {
 		TGTrack track = this.findTrack();
-		
+
 		UIFactory factory = this.getUIFactory();
 		UIWindow parent = this.context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		UITableLayout dialogLayout = new UITableLayout();
-		
-		this.dialog = factory.createWindow(parent, true, false);
+
+		this.dialog = factory.createWindow(parent, true, true);
 		this.dialog.setLayout(dialogLayout);
 		this.dialog.setText(TuxGuitar.getProperty("track.properties"));
-		
+
 		//GENERAL
 		this.initTrackInfo(track);
-		
+
 		//BUTTONS
 		this.initButtons();
-		
+
 		//LISTENERS
 		this.initListeners();
-		
+
+		dialog.computePackedSize(null, null);
+		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	
@@ -118,7 +120,7 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		//-----------------------NAME---------------------------------
 		UILabel nameLabel = factory.createLabel(legendPanel);
 		nameLabel.setText(TuxGuitar.getProperty("track.name") + ":");
-		legendLayout.set(nameLabel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		legendLayout.set(nameLabel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
 		
 		this.nameText = factory.createTextField(legendPanel);
 		this.nameText.setText(track.getName());
@@ -128,12 +130,12 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 			}
 		});
 		
-		legendLayout.set(this.nameText, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_LEFT_CONTROLS_WIDTH, null, null);
+		legendLayout.set(this.nameText, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false, 1, 1, MINIMUM_LEFT_CONTROLS_WIDTH, null, null);
 		
 		//-----------------------COLOR---------------------------------
 		UILabel colorLabel = factory.createLabel(legendPanel);
 		colorLabel.setText(TuxGuitar.getProperty("track.color") + ":");
-		legendLayout.set(colorLabel, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		legendLayout.set(colorLabel, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
 		
 		this.colorButton = new TGColorButton(factory, dialog, legendPanel, TuxGuitar.getProperty("choose"));
 		this.colorButton.addSelectionListener(new TGColorButton.SelectionListener() {
@@ -141,12 +143,12 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 				TGTrackPropertiesDialog.this.updateTrackColor(colorModel);
 			}
 		});
-		legendLayout.set(this.colorButton.getControl(), 2, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, MINIMUM_LEFT_CONTROLS_WIDTH, null, null);
+		legendLayout.set(this.colorButton.getControl(), 2, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false, 1, 1, MINIMUM_LEFT_CONTROLS_WIDTH, null, null);
 		
 		//------------Instrument Combo-------------------------------------
 		UILabel instrumentLabel = factory.createLabel(legendPanel);
 		instrumentLabel.setText(TuxGuitar.getProperty("instrument") + ":");
-		legendLayout.set(instrumentLabel, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		legendLayout.set(instrumentLabel, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
 		
 		this.channelSelect = factory.createDropDownSelect(legendPanel);
 		this.channelSelect.addSelectionListener(new UISelectionListener() {
@@ -165,7 +167,7 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		//------------Tuning -------------------------------------
 		UILabel tuningLabel = factory.createLabel(legendPanel);
 		tuningLabel.setText(TuxGuitar.getProperty("tuning") + ":");
-		legendLayout.set(tuningLabel, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		legendLayout.set(tuningLabel, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
 		
 		this.tuningText = factory.createReadOnlyTextField(legendPanel);
 		legendLayout.set(this.tuningText, 4, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false);
@@ -190,7 +192,7 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		UITableLayout buttonsLayout = new UITableLayout(0f);
 		UIPanel buttons = factory.createPanel(this.dialog, false);
 		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
 		UIButton buttonClose = factory.createButton(buttons);
 		buttonClose.setText(TuxGuitar.getProperty("close"));

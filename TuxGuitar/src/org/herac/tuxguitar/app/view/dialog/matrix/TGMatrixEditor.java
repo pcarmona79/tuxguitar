@@ -74,7 +74,8 @@ public class TGMatrixEditor implements TGEventListener {
 	
 	private static final float DEFAULT_WIDTH = 640f;
 	private static final float DEFAULT_HEIGHT = 480f;
-	
+	private static final float MINIMUM_HEIGHT = 200f;
+
 	private static final int BORDER_HEIGHT = 20;
 	private static final int SCROLL_INCREMENT = 50;
 	private static final String[] NOTE_NAMES = TGMusicKeyUtils.getSharpKeyNames(TGMusicKeyUtils.PREFIX_MATRIX);
@@ -135,7 +136,11 @@ public class TGMatrixEditor implements TGEventListener {
 		this.createControlLayout();
 		this.loadIcons();
 		this.addListeners();
-		
+
+		this.dialog.computePackedSize(null, null);
+		UISize minimumSize = this.dialog.getPackedSize();
+		minimumSize.setHeight(MINIMUM_HEIGHT);
+		this.dialog.setMinimumSize(minimumSize);
 		TGDialogUtil.openDialog(this.dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_LAYOUT);
 	}
 	
