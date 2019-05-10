@@ -17,21 +17,21 @@ import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.document.TGDocumentManager;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.event.TGRedrawEvent;
+import org.herac.tuxguitar.editor.event.TGUpdateEvent;
 import org.herac.tuxguitar.event.TGEvent;
 import org.herac.tuxguitar.event.TGEventException;
 import org.herac.tuxguitar.event.TGEventListener;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGTrack;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.event.*;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.*;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICanvas;
 import org.herac.tuxguitar.ui.widget.UIToggleButton;
+
+import java.util.*;
 
 public class TGMainToolBarSectionTransport extends TGMainToolBarSection implements TGEventListener {
 	
@@ -50,6 +50,10 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 	private static final float DISPLAY_MARGIN = 2f;
 
 	private TGProcess redrawProcess;
+	private TGProcess updateProcess;
+
+	private TreeMap<Long, TGMeasureHeader> headerMap;
+	private HashMap<Integer, Double> tempoMap;
 
 	private UIButton first;
 	private UIButton previous;
@@ -70,6 +74,10 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 	public TGMainToolBarSectionTransport(TGMainToolBar toolBar) {
 		super(toolBar);
 		this.redrawProcess = new TGSyncProcessLocked(getContext(), () -> display.redraw());
+		this.updateProcess = new TGSyncProcessLocked(getContext(), this::updateTempoMap);
+
+		this.headerMap = new TreeMap<>();
+		this.tempoMap = new HashMap<>();
 	}
 	
 	public void createSection() {
@@ -144,10 +152,12 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 
 		final TuxGuitar tg = TuxGuitar.getInstance();
 		tg.getEditorManager().addRedrawListener(this);
+		tg.getEditorManager().addUpdateListener(this);
 
 		getControl().addDisposeListener(new UIDisposeListener() {
 			public void onDispose(UIDisposeEvent event) {
 				tg.getEditorManager().removeRedrawListener(TGMainToolBarSectionTransport.this);
+				tg.getEditorManager().removeUpdateListener(TGMainToolBarSectionTransport.this);
 				tg.updateCache(true);
 			}
 		});
@@ -183,6 +193,26 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		}
 	}
 
+	private void updateTempoMap() {
+		final TGDocumentManager documentManager = TGDocumentManager.getInstance(getContext());
+		final TGSong song = documentManager.getSong();
+
+		headerMap.clear();
+        tempoMap.clear();
+
+        SortedSet<TGMeasureHeader> headers = new TreeSet<>(Comparator.comparingLong(TGMeasureHeader::getStart));
+        for (int i = 0; i < song.countMeasureHeaders(); i++) {
+        	headers.add(song.getMeasureHeader(i));
+		}
+		double totalSeconds = 0.;
+        for (TGMeasureHeader header : headers) {
+			headerMap.put(header.getStart(), header);
+			tempoMap.put(header.getNumber(), totalSeconds);
+			totalSeconds += header.getLength() / ((double) TGDuration.QUARTER_TIME) * header.getTempo().getInSeconds();
+		}
+        display.redraw();
+	}
+
 	private void paintDisplay(UIPainter painter) {
 
 		final MidiPlayer player = MidiPlayer.getInstance(getContext());
@@ -216,7 +246,18 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		painter.closePath();
 		painter.setAlpha(255);
 
-		String time = Long.toString(position);
+		Map.Entry<Long, TGMeasureHeader> entry = headerMap.floorEntry(position);
+		TGMeasureHeader current = entry != null ? entry.getValue() : first;
+		Double seconds = tempoMap.get(current.getNumber());
+		if (seconds == null) {
+			seconds = 0.;
+		}
+		seconds += (position - current.getStart()) / ((double) TGDuration.QUARTER_TIME) * current.getTempo().getInSeconds();
+
+		long s = (long) Math.floor(seconds);
+		long ms = (long) Math.floor((seconds - s) * 1000);
+		String time = String.format("% 3d:%02d:%02d.%03d", s / 3600, (s % 3600) / 60, (s % 60), ms);
+
 		painter.setFont(this.displayFont);
 		painter.setForeground(foregroundColor);
 		float realTextHeight = painter.getFMTopLine() - painter.getFMBaseLine();
@@ -318,6 +359,11 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 			int type = event.getAttribute(TGRedrawEvent.PROPERTY_REDRAW_MODE);
 			if( type == TGRedrawEvent.PLAYING_THREAD || type == TGRedrawEvent.PLAYING_NEW_BEAT ) {
 				this.redrawProcess.process();
+			}
+		} else if (TGUpdateEvent.EVENT_TYPE.equals(event.getEventType())) {
+			int type = event.getAttribute(TGUpdateEvent.PROPERTY_UPDATE_MODE);
+			if (type == TGUpdateEvent.SONG_UPDATED || type == TGUpdateEvent.MEASURE_UPDATED) {
+				this.updateProcess.process();
 			}
 		}
 	}
