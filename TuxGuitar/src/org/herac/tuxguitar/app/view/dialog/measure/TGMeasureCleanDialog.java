@@ -16,7 +16,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISpinner;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -39,9 +39,8 @@ public class TGMeasureCleanDialog {
 		
 		//----------------------------------------------------------------------
 		UITableLayout rangeLayout = new UITableLayout();
-		UILegendPanel range = uiFactory.createLegendPanel(dialog);
+		UIPanel range = uiFactory.createPanel(dialog, false);
 		range.setLayout(rangeLayout);
-		range.setText(TuxGuitar.getProperty("measure.clean"));
 		dialogLayout.set(range, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		int measureCount = song.countMeasureHeaders();

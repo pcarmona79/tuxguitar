@@ -16,7 +16,7 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -65,9 +65,8 @@ public class TGStrokeDialog {
 		//------------------DURATION-------------------------
 		//---------------------------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("duration"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.duration64 = uiFactory.createRadioButton(group);

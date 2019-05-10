@@ -19,7 +19,7 @@ import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.ui.widget.UIImageView;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.properties.TGProperties;
@@ -31,7 +31,7 @@ public abstract class TGSettingsOption implements UISelectionListener {
 	private TGSettingsEditor configEditor;
 	private UIToolBar toolBar;
 	private UIToolCheckableItem toolItem;
-	private UILegendPanel group;
+	private UIPanel group;
 	private UIPanel composite;
 	
 	public TGSettingsOption(TGSettingsEditor configEditor, UIToolBar toolBar, UILayoutContainer parent, String text, int horizontalAlignment,int verticalAlignment){
@@ -42,9 +42,8 @@ public abstract class TGSettingsOption implements UISelectionListener {
 		this.configEditor = configEditor;
 		this.toolBar = toolBar;
 		this.toolItem = this.toolBar.createCheckItem();
-		this.group = uiFactory.createLegendPanel(parent);
+		this.group = uiFactory.createPanel(parent, false);
 		this.group.setLayout(groupLayout);
-		this.group.setText(text);
 		this.composite = uiFactory.createPanel(this.group, false);
 		this.composite.setLayout(new UITableLayout());
 		

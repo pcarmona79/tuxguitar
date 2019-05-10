@@ -18,11 +18,8 @@ import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
+
 import org.herac.tuxguitar.util.TGContext;
 
 public class GMChannelSettingsDialog implements TGChannelSettingsDialog{
@@ -56,9 +53,8 @@ public class GMChannelSettingsDialog implements TGChannelSettingsDialog{
 		
 		// ----------------------------------------------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(this.dialog);
+		UIPanel group = uiFactory.createPanel(this.dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("gm.settings.dialog.tip"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel gmChannel1Label = uiFactory.createLabel(group);

@@ -40,7 +40,7 @@ import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIReadOnlyTextField;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
@@ -112,9 +112,8 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		UITableLayout dialogLayout = (UITableLayout) this.dialog.getLayout();
 		
 		UITableLayout legendLayout = new UITableLayout();
-		UILegendPanel legendPanel = factory.createLegendPanel(this.dialog);
+		UIPanel legendPanel = factory.createPanel(this.dialog, false);
 		legendPanel.setLayout(legendLayout);
-		legendPanel.setText(TuxGuitar.getProperty("track.properties.general"));
 		dialogLayout.set(legendPanel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//-----------------------NAME---------------------------------

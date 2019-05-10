@@ -23,7 +23,7 @@ import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
@@ -73,9 +73,8 @@ public class TGTransportModeDialog {
 		RadioSelectionAdapter simpleAdapter = new RadioSelectionAdapter(this.simple);
 		
 		UITableLayout simpleLayout = new UITableLayout();
-		UILegendPanel simpleGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel simpleGroup = uiFactory.createPanel(dialog, false);
 		simpleGroup.setLayout(simpleLayout);
-		simpleGroup.setText(TuxGuitar.getProperty("transport.mode.simple"));
 		simpleAdapter.addControl(simpleGroup);
 		dialogLayout.set(simpleGroup, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
@@ -106,9 +105,8 @@ public class TGTransportModeDialog {
 		RadioSelectionAdapter customAdapter = new RadioSelectionAdapter(this.custom);
 		
 		UITableLayout customLayout = new UITableLayout();
-		UILegendPanel customGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel customGroup = uiFactory.createPanel(dialog, false);
 		customGroup.setLayout(customLayout);
-		customGroup.setText(TuxGuitar.getProperty("transport.mode.trainer"));
 		customAdapter.addControl(customGroup);
 		dialogLayout.set(customGroup, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
@@ -172,9 +170,8 @@ public class TGTransportModeDialog {
 		MHeaderRangeStatus mHeaderRangeStatus = new MHeaderRangeStatus(this.simple, this.simpleLoop, this.custom);
 		
 		UITableLayout rangeLayout = new UITableLayout();
-		UILegendPanel rangeGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel rangeGroup = uiFactory.createPanel(dialog, false);
 		rangeGroup.setLayout(rangeLayout);
-		rangeGroup.setText(TuxGuitar.getProperty("transport.mode.loop-range"));
 		dialogLayout.set(rangeGroup, 5, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		mHeaderRangeStatus.addControl(rangeGroup);
 		

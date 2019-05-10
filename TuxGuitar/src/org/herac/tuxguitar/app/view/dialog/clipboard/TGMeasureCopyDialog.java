@@ -9,7 +9,6 @@ import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.action.measure.TGCopyMeasureAction;
 import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.ui.UIFactory;
@@ -19,7 +18,6 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISpinner;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -36,7 +34,7 @@ public class TGMeasureCopyDialog {
 	private UISpinner fromSpinner;
 	private UISpinner toSpinner;
 	private UICheckBox allTracksCheckBox = null;
-	private UILegendPanel range;
+	private UIPanel range;
 	private UITableLayout rangeLayout;
 	private UIPanel buttons;
 	private UITableLayout buttonsLayout;
@@ -83,9 +81,8 @@ public class TGMeasureCopyDialog {
 
 	private void createRangePanel() {
 		rangeLayout = new UITableLayout();
-		range = uiFactory.createLegendPanel(dialog);
+		range = uiFactory.createPanel(dialog, false);
 		range.setLayout(rangeLayout);
-		range.setText(TuxGuitar.getProperty("edit.copy"));
 		dialogLayout.set(range, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 	}
 
@@ -142,9 +139,8 @@ public class TGMeasureCopyDialog {
 
 	private void createOptionsPanel() {
 		UITableLayout optionsLayout = new UITableLayout();
-		UILegendPanel options = uiFactory.createLegendPanel(dialog);
+		UIPanel options = uiFactory.createPanel(dialog, false);
 		options.setLayout(optionsLayout);
-		options.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(options, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 
 		allTracksCheckBox = uiFactory.createCheckBox(options);

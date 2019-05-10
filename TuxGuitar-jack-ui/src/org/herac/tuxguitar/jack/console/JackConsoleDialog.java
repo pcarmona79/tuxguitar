@@ -18,7 +18,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
@@ -30,7 +30,7 @@ public class JackConsoleDialog implements TGEventListener {
 	private JackConnectionManager jackConnectionManager;
 	
 	private UIWindow dialog;
-	private UILegendPanel groupOptions;
+	private UIPanel groupOptions;
 
 	private UICheckBox buttonAutoConnectPorts;
 	private UIButton buttonStoreConnections;
@@ -57,7 +57,7 @@ public class JackConsoleDialog implements TGEventListener {
 		
 		// Options
 		UITableLayout groupLayout = new UITableLayout();
-		this.groupOptions = uiFactory.createLegendPanel(this.dialog);
+		this.groupOptions = uiFactory.createPanel(this.dialog, false);
 		this.groupOptions.setLayout(groupLayout);
 		dialogLayout.set(this.groupOptions, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 350f, null, null);
 		
@@ -125,7 +125,6 @@ public class JackConsoleDialog implements TGEventListener {
 	public void loadProperties(boolean layout){
 		if(!isDisposed()){
 			this.dialog.setText(TuxGuitar.getProperty("jack.console.title"));
-			this.groupOptions.setText(TuxGuitar.getProperty("jack.console.options"));
 			this.buttonAutoConnectPorts.setText(TuxGuitar.getProperty("jack.console.autoconnect.ports"));
 			this.buttonStoreConnections.setText(TuxGuitar.getProperty("jack.console.store.connections"));
 			this.buttonRestoreConnections.setText(TuxGuitar.getProperty("jack.console.restore.connections"));

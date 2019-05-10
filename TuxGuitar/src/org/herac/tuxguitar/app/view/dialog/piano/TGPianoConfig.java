@@ -14,7 +14,8 @@ import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
+import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.properties.TGProperties;
@@ -100,9 +101,8 @@ public class TGPianoConfig {
 		
 		// ----------------------------------------------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = factory.createLegendPanel(window);
+		UIPanel group = factory.createPanel(window, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("piano.settings"));
 		windowLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		int groupRow = 0;

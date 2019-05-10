@@ -26,7 +26,6 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UITextField;
@@ -38,7 +37,7 @@ public class TGConverterDialog implements TGEventListener{
 	private TGContext context;
 	
 	private UIWindow dialog;
-	private UILegendPanel group;
+	private UIPanel group;
 	private UILabel outputFormatLabel;
 	private UILabel outputFolderLabel;
 	private UILabel inputFolderLabel;
@@ -75,7 +74,7 @@ public class TGConverterDialog implements TGEventListener{
 		
 		// Settings
 		UITableLayout groupLayout = new UITableLayout();
-		this.group = uiFactory.createLegendPanel(this.dialog);
+		this.group = uiFactory.createPanel(this.dialog, false);
 		this.group.setLayout(groupLayout);
 		dialogLayout.set(this.group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 500f, null, null);
 		
@@ -223,7 +222,6 @@ public class TGConverterDialog implements TGEventListener{
 	public void loadProperties(boolean layout){
 		if(!isDisposed()){
 			this.dialog.setText(TuxGuitar.getProperty("batch.converter"));
-			this.group.setText(TuxGuitar.getProperty("batch.converter.settings"));
 			this.inputFolderLabel.setText(TuxGuitar.getProperty("batch.converter.input.folder"));
 			this.outputFolderLabel.setText(TuxGuitar.getProperty("batch.converter.output.folder"));
 			this.outputFormatLabel.setText(TuxGuitar.getProperty("batch.converter.output.format"));

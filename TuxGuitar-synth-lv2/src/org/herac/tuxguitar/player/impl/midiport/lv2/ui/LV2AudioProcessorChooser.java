@@ -15,7 +15,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -43,9 +43,8 @@ public class LV2AudioProcessorChooser {
 		
 		// ----------------------------------------------------------------------
 		UITableLayout typeGroupLayout = new UITableLayout();
-		UILegendPanel typeGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel typeGroup = uiFactory.createPanel(dialog, false);
 		typeGroup.setLayout(typeGroupLayout);
-		typeGroup.setText(TuxGuitar.getProperty("tuxguitar-synth-lv2.chooser.tip"));
 		dialogLayout.set(typeGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel pluginLabel = uiFactory.createLabel(typeGroup);

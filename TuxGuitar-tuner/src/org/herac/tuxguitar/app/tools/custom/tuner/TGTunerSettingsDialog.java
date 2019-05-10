@@ -10,7 +10,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIScale;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
@@ -50,9 +50,8 @@ public class TGTunerSettingsDialog {
 		
 		// ---------------------------------------------------------------------------
 		UITableLayout sampleLayout = new UITableLayout();
-		UILegendPanel sampleComposite = uiFactory.createLegendPanel(dialog);
+		UIPanel sampleComposite = uiFactory.createPanel(dialog, false);
 		sampleComposite.setLayout(sampleLayout);
-		sampleComposite.setText(TuxGuitar.getProperty("tuner.sound-format"));
 		dialogLayout.set(sampleComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel sampleRateLabel = uiFactory.createLabel(sampleComposite);
@@ -80,9 +79,8 @@ public class TGTunerSettingsDialog {
 
 		// ---------------------------------------------------------------------------
 		UITableLayout analyzeLayout = new UITableLayout();
-		UILegendPanel analyzeComposite = uiFactory.createLegendPanel(dialog);
+		UIPanel analyzeComposite = uiFactory.createPanel(dialog, false);
 		analyzeComposite.setLayout(analyzeLayout);
-		analyzeComposite.setText(TuxGuitar.getProperty("tuner.sampling-and-analyze"));
 		dialogLayout.set(analyzeComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		// buffer size
@@ -117,9 +115,8 @@ public class TGTunerSettingsDialog {
 		
 		// ---------------------------------------------------------------------------
 		UITableLayout noiseGateLayout = new UITableLayout();
-		final UILegendPanel noiseGateComposite = uiFactory.createLegendPanel(dialog);
+		final UIPanel noiseGateComposite = uiFactory.createPanel(dialog, false);
 		noiseGateComposite.setLayout(noiseGateLayout);
-		noiseGateComposite.setText(TuxGuitar.getProperty("tuner.noise-gate"));
 		dialogLayout.set(noiseGateComposite, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.noiseGate = uiFactory.createHorizontalScale(noiseGateComposite);
@@ -140,9 +137,8 @@ public class TGTunerSettingsDialog {
 		
 		// ---------------------------------------------------------------------------
 		UITableLayout infoLayout = new UITableLayout();
-		UILegendPanel infoComposite = uiFactory.createLegendPanel(dialog);
+		UIPanel infoComposite = uiFactory.createPanel(dialog, false);
 		infoComposite.setLayout(infoLayout);
-		infoComposite.setText(TuxGuitar.getProperty("tuner.info"));
 		dialogLayout.set(infoComposite, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.settingsInfo = uiFactory.createTextArea(infoComposite, true, false);

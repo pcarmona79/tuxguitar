@@ -45,9 +45,8 @@ public class TGTimeSignatureDialog {
 		
 		//-------------TIME SIGNATURE-----------------------------------------------
 		UITableLayout timeSignatureLayout = new UITableLayout();
-		UILegendPanel timeSignature = uiFactory.createLegendPanel(dialog);
+		UIPanel timeSignature = uiFactory.createPanel(dialog, false);
 		timeSignature.setLayout(timeSignatureLayout);
-		timeSignature.setText(TuxGuitar.getProperty("composition.timesignature"));
 		dialogLayout.set(timeSignature, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		TGTimeSignature currentTimeSignature = start.getTimeSignature();
@@ -77,9 +76,8 @@ public class TGTimeSignatureDialog {
 		
 		//--------------------To End Checkbox-------------------------------
 		UITableLayout checkLayout = new UITableLayout();
-		UILegendPanel check = uiFactory.createLegendPanel(dialog);
+		UIPanel check = uiFactory.createPanel(dialog, false);
 		check.setLayout(checkLayout);
-		check.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(check, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 
         final UICheckBox toEnd = uiFactory.createCheckBox(check);

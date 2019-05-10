@@ -17,7 +17,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
@@ -55,9 +55,8 @@ public class TGTunerDialog implements TGTunerListener {
 		this.dialog.setText(TuxGuitar.getProperty("tuner.instrument-tuner"));
 		
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(this.dialog);
+		UIPanel group = uiFactory.createPanel(this.dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("tuner.tuner"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 400f, null, null);
 		
 		UITableLayout specialLayout = new UITableLayout(0f);

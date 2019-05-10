@@ -13,7 +13,7 @@ import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UISpinner;
@@ -53,9 +53,8 @@ public class LilypondSettingsDialog {
 		
 		//------------------TRACK SELECTION------------------
 		UITableLayout trackLayout = new UITableLayout();
-		UILegendPanel trackGroup = uiFactory.createLegendPanel(columnLeft);
+		UIPanel trackGroup = uiFactory.createPanel(columnLeft, false);
 		trackGroup.setLayout(trackLayout);
-		trackGroup.setText(TuxGuitar.getProperty("lilypond.options.select-track.tip"));
 		columnLeftLayout.set(trackGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UILabel trackLabel = uiFactory.createLabel(trackGroup);
@@ -77,9 +76,8 @@ public class LilypondSettingsDialog {
 		
 		//------------------MEASURE RANGE------------------
 		UITableLayout measureRangeLayout = new UITableLayout();
-		UILegendPanel measureRange = uiFactory.createLegendPanel(columnLeft);
+		UIPanel measureRange = uiFactory.createPanel(columnLeft, false);
 		measureRange.setLayout(measureRangeLayout);
-		measureRange.setText(TuxGuitar.getProperty("lilypond.options.measure-range.tip"));
 		columnLeftLayout.set(measureRange, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final int minSelection = 1;
@@ -131,9 +129,8 @@ public class LilypondSettingsDialog {
 		
 		//------------------VERSION OPTIONS------------------
 		UITableLayout versionLayout = new UITableLayout();
-		UILegendPanel versionGroup = uiFactory.createLegendPanel(columnRight);
+		UIPanel versionGroup = uiFactory.createPanel(columnRight, false);
 		versionGroup.setLayout(versionLayout);
-		versionGroup.setText(TuxGuitar.getProperty("lilypond.options.format-version"));
 		columnRightLayout.set(versionGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UITextField lilyVersion = uiFactory.createTextField(versionGroup);
@@ -143,9 +140,8 @@ public class LilypondSettingsDialog {
 		//------------------LAYOUT OPTIONS------------------
 		
 		UITableLayout layoutGroupLayout = new UITableLayout();
-		UILegendPanel layoutGroup = uiFactory.createLegendPanel(columnRight);
+		UIPanel layoutGroup = uiFactory.createPanel(columnRight, false);
 		layoutGroup.setLayout(layoutGroupLayout);
-		layoutGroup.setText(TuxGuitar.getProperty("lilypond.options.layout.tip"));
 		columnRightLayout.set(layoutGroup, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UICheckBox scoreCheck = uiFactory.createCheckBox(layoutGroup);

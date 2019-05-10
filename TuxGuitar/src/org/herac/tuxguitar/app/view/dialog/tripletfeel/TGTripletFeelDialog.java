@@ -15,7 +15,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -37,9 +37,8 @@ public class TGTripletFeelDialog {
 		
 		//-------------TRIPLET FEEL-----------------------------------------------
 		UITableLayout tripletFeelLayout = new UITableLayout();
-		UILegendPanel tripletFeel = uiFactory.createLegendPanel(dialog);
+		UIPanel tripletFeel = uiFactory.createPanel(dialog, false);
 		tripletFeel.setLayout(tripletFeelLayout);
-		tripletFeel.setText(TuxGuitar.getProperty("composition.tripletfeel"));
 		dialogLayout.set(tripletFeel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 250f, null, null);
 		
 		//none
@@ -60,9 +59,8 @@ public class TGTripletFeelDialog {
 		
 		//--------------------To End Checkbox-------------------------------
 		UITableLayout checkLayout = new UITableLayout();
-		UILegendPanel check = uiFactory.createLegendPanel(dialog);
+		UIPanel check = uiFactory.createPanel(dialog, false);
 		check.setLayout(checkLayout);
-		check.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(check, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UICheckBox toEnd = uiFactory.createCheckBox(check);

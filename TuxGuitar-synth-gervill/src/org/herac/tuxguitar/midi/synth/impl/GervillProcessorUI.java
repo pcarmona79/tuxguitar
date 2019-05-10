@@ -22,7 +22,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UIReadOnlyTextField;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
@@ -67,9 +67,8 @@ public class GervillProcessorUI implements TGAudioProcessorUI, UIModifyListener,
 		
 		//-------------------------------------------------------------------------
 		UITableLayout soundbankLayout = new UITableLayout();
-		UILegendPanel soundbankGroup = uiFactory.createLegendPanel(this.dialog);
+		UIPanel soundbankGroup = uiFactory.createPanel(this.dialog, false);
 		soundbankGroup.setLayout(soundbankLayout);
-		soundbankGroup.setText(TuxGuitar.getProperty("tuxguitar-synth-gervill.ui.soundbank.tip"));
 		dialogLayout.set(soundbankGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.customSoundbankName = uiFactory.createReadOnlyTextField(soundbankGroup);
@@ -95,9 +94,8 @@ public class GervillProcessorUI implements TGAudioProcessorUI, UIModifyListener,
 		
 		//-------------------------------------------------------------------------
 		UITableLayout programLayout = new UITableLayout();
-		UILegendPanel programGroup = uiFactory.createLegendPanel(this.dialog);
+		UIPanel programGroup = uiFactory.createPanel(this.dialog, false);
 		programGroup.setLayout(programLayout);
-		programGroup.setText(TuxGuitar.getProperty("tuxguitar-synth-gervill.ui.program.tip"));
 		dialogLayout.set(programGroup, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel bankLabel = uiFactory.createLabel(programGroup);
@@ -128,9 +126,8 @@ public class GervillProcessorUI implements TGAudioProcessorUI, UIModifyListener,
 		
 		//-------------------------------------------------------------------------
 		UITableLayout channelLayout = new UITableLayout();
-		UILegendPanel channelGroup = uiFactory.createLegendPanel(this.dialog);
+		UIPanel channelGroup = uiFactory.createPanel(this.dialog, false);
 		channelGroup.setLayout(channelLayout);
-		channelGroup.setText(TuxGuitar.getProperty("tuxguitar-synth-gervill.ui.channel.mode.tip"));
 		dialogLayout.set(channelGroup, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.channelModeSingle = uiFactory.createRadioButton(channelGroup);

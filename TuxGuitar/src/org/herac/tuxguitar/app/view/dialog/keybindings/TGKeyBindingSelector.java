@@ -22,7 +22,7 @@ import org.herac.tuxguitar.ui.resource.UIKeyCombination;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIImageView;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 
@@ -50,9 +50,8 @@ public class TGKeyBindingSelector {
 		dialog.setText(TuxGuitar.getProperty("key-bindings-editor"));
 		
 		UITableLayout legendLayout = new UITableLayout();
-		UILegendPanel legend = uiFactory.createLegendPanel(dialog);
+		UIPanel legend = uiFactory.createPanel(dialog, false);
 		legend.setLayout(legendLayout);
-		legend.setText(TuxGuitar.getProperty(this.keyBindingAction.getAction()));
 		dialogLayout.set(legend, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UITableLayout panelLayout = new UITableLayout();

@@ -14,7 +14,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UITextArea;
 import org.herac.tuxguitar.ui.widget.UITextField;
@@ -36,8 +36,7 @@ public class TGSongInfoDialog {
 		dialog.setText(TuxGuitar.getProperty("composition.properties"));
 		
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
-		group.setText(TuxGuitar.getProperty("composition.properties"));
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, GROUP_WIDTH, null, null);
 

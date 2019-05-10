@@ -14,7 +14,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UILinkLabel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIPasswordField;
@@ -51,9 +51,8 @@ public class TGCommunityAuthDialog {
 		dialog.setText(TuxGuitar.getProperty("tuxguitar-community.auth-dialog.title"));
 		
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("tuxguitar-community.auth-dialog.signin"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//-------USERNAME------------------------------------
@@ -76,9 +75,8 @@ public class TGCommunityAuthDialog {
 		
 		//-------JOIN------------------------------------
 		UITableLayout joinLayout = new UITableLayout();
-		UILegendPanel join = uiFactory.createLegendPanel(dialog);
+		UIPanel join = uiFactory.createPanel(dialog, false);
 		join.setLayout(joinLayout);
-		join.setText(TuxGuitar.getProperty("tuxguitar-community.auth-dialog.signup"));
 		dialogLayout.set(join, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UILinkLabel joinLink = uiFactory.createLinkLabel(join);

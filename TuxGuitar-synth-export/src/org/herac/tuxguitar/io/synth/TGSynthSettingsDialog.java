@@ -19,7 +19,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -46,9 +46,8 @@ public class TGSynthSettingsDialog {
 		
 		//------------------AUDIO FORMAT------------------
 		UITableLayout audioFormatLayout = new UITableLayout();
-		UILegendPanel audioFormatGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel audioFormatGroup = uiFactory.createPanel(dialog, false);
 		audioFormatGroup.setLayout(audioFormatLayout);
-		audioFormatGroup.setText(TuxGuitar.getProperty("tuxguitar-synth-export.options.audio-format"));
 		dialogLayout.set(audioFormatGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 400f, null, null);
 		
 		UILabel eLabel = uiFactory.createLabel(audioFormatGroup);

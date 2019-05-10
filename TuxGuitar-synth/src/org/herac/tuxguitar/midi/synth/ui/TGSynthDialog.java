@@ -46,7 +46,6 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIReadOnlyTextField;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
@@ -204,9 +203,8 @@ public class TGSynthDialog implements TGChannelSettingsDialog, TGEventListener {
 		
 		// ----------------------------------------------------------------------
 		UITableLayout typeGroupLayout = new UITableLayout();
-		UILegendPanel typeGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel typeGroup = uiFactory.createPanel(dialog, false);
 		typeGroup.setLayout(typeGroupLayout);
-		typeGroup.setText(TuxGuitar.getProperty("synth-host.ui.midi.processor.tip"));
 		dialogLayout.set(typeGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel typeLabel = uiFactory.createLabel(typeGroup);
@@ -265,9 +263,8 @@ public class TGSynthDialog implements TGChannelSettingsDialog, TGEventListener {
 		
 		// ----------------------------------------------------------------------
 		UITableLayout typeGroupLayout = new UITableLayout();
-		UILegendPanel typeGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel typeGroup = uiFactory.createPanel(dialog, false);
 		typeGroup.setLayout(typeGroupLayout);
-		typeGroup.setText(TuxGuitar.getProperty("synth-host.ui.audio.processor.tip"));
 		dialogLayout.set(typeGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel typeLabel = uiFactory.createLabel(typeGroup);

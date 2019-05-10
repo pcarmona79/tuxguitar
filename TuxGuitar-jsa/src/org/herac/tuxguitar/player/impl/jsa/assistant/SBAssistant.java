@@ -17,7 +17,6 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -68,9 +67,8 @@ public class SBAssistant {
 		
 		//------------------------------------------------------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("jsa.soundbank-assistant.select"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 250f, null, null);
         
         final UIRadioButton urls[] = new UIRadioButton[URLS.length];

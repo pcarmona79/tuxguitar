@@ -10,7 +10,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
@@ -71,9 +71,8 @@ class MiPanel
 
 			// MODE
 			UITableLayout groupModeLayout = new UITableLayout();
-			UILegendPanel groupMode = uiFactory.createLegendPanel(f_Dialog);
+			UIPanel groupMode = uiFactory.createPanel(f_Dialog, false);
 			groupMode.setLayout(groupModeLayout);
-			groupMode.setText(TuxGuitar.getProperty("midiinput.panel.label.group.mode"));
 			dialogLayout.set(groupMode, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			// MODE combo
@@ -117,9 +116,8 @@ class MiPanel
 		///* RECORDING
 			// Recording
 			UITableLayout groupRecLayout = new UITableLayout();
-			UILegendPanel groupRec = uiFactory.createLegendPanel(f_Dialog);
+			UIPanel groupRec = uiFactory.createPanel(f_Dialog, false);
 			groupRec.setLayout(groupRecLayout);
-			groupRec.setText(TuxGuitar.getProperty("midiinput.panel.label.group.rec"));
 			dialogLayout.set(groupRec, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			// START button

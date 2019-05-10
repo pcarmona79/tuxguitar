@@ -31,7 +31,7 @@ import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UITable;
@@ -87,15 +87,13 @@ public class TGTrackTuningDialog {
 			this.dialog.setText(TuxGuitar.getProperty("tuning"));
 			
 			UITableLayout leftPanelLayout = new UITableLayout();
-			UILegendPanel leftPanel = factory.createLegendPanel(this.dialog);
+			UIPanel leftPanel = factory.createPanel(this.dialog, false);
 			leftPanel.setLayout(leftPanelLayout);
-			leftPanel.setText(TuxGuitar.getProperty("tuning.strings"));
 			dialogLayout.set(leftPanel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			UITableLayout rightPanelLayout = new UITableLayout();
-			UILegendPanel rightPanel = factory.createLegendPanel(this.dialog);
+			UIPanel rightPanel = factory.createPanel(this.dialog, false);
 			rightPanel.setLayout(rightPanelLayout);
-			rightPanel.setText(TuxGuitar.getProperty("options"));
 			dialogLayout.set(rightPanel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
 			
 			UITableLayout bottomPanelLayout = new UITableLayout(0f);

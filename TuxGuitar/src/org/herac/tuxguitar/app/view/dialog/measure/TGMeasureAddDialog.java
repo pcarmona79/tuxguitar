@@ -15,7 +15,7 @@ import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UISpinner;
@@ -38,9 +38,8 @@ public class TGMeasureAddDialog {
 		
 		//-----------------COUNT------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("measure.add"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel countLabel = uiFactory.createLabel(group);
@@ -55,9 +54,8 @@ public class TGMeasureAddDialog {
 		
 		//----------------------------------------------------------------------
 		UITableLayout optionsLayout = new UITableLayout();
-		UILegendPanel options = uiFactory.createLegendPanel(dialog);
+		UIPanel options = uiFactory.createPanel(dialog, false);
 		options.setLayout(optionsLayout);
-		options.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(options, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UIRadioButton beforePosition = uiFactory.createRadioButton(options);

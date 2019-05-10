@@ -25,7 +25,6 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UITextField;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -84,9 +83,8 @@ class TGBrowserDataDialog{
 		
 		//-------------LIBRARY DATA-----------------------------------------------
 		UITableLayout serverLayout = new UITableLayout();
-		UILegendPanel server = uiFactory.createLegendPanel(dialog);
+		UIPanel server = uiFactory.createPanel(dialog, false);
 		server.setLayout(serverLayout);
-		server.setText(TuxGuitar.getProperty("tuxguitar-browser-ftp.browser-dialog.server.settings"));
 		dialogLayout.set(server, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_LEGEND_WIDTH, null, null);
 		
 		//name
@@ -131,9 +129,8 @@ class TGBrowserDataDialog{
 		
 		
 		UITableLayout proxyLayout = new UITableLayout();
-		UILegendPanel proxy = uiFactory.createLegendPanel(dialog);
+		UIPanel proxy = uiFactory.createPanel(dialog, false);
 		proxy.setLayout(proxyLayout);
-		proxy.setText(TuxGuitar.getProperty("tuxguitar-browser-ftp.browser-dialog.proxy.settings"));
 		dialogLayout.set(proxy, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_LEGEND_WIDTH, null, null);
 		
 		// Proxy

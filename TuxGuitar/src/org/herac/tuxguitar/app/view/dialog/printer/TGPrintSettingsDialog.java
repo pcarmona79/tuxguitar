@@ -16,7 +16,7 @@ import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UISpinner;
@@ -40,9 +40,8 @@ public class TGPrintSettingsDialog {
 		
 		//------------------TRACK SELECTION------------------
 		UITableLayout trackLayout = new UITableLayout();
-		UILegendPanel track = uiFactory.createLegendPanel(dialog);
+		UIPanel track = uiFactory.createPanel(dialog, false);
 		track.setLayout(trackLayout);
-		track.setText(TuxGuitar.getProperty("track"));
 		dialogLayout.set(track, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 300f, null, null);
 		
 		final UILabel trackLabel = uiFactory.createLabel(track);
@@ -69,9 +68,8 @@ public class TGPrintSettingsDialog {
 		
 		//------------------MEASURE RANGE------------------
 		UITableLayout rangeLayout = new UITableLayout();
-		UILegendPanel range = uiFactory.createLegendPanel(dialog);
+		UIPanel range = uiFactory.createPanel(dialog, false);
 		range.setLayout(rangeLayout);
-		range.setText(TuxGuitar.getProperty("print.range"));
 		dialogLayout.set(range, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 300f, null, null);
 		
 		final int minSelection = 1;
@@ -123,9 +121,8 @@ public class TGPrintSettingsDialog {
 		
 		//------------------CHECK OPTIONS--------------------
 		UITableLayout optionsLayout = new UITableLayout();
-		UILegendPanel options = uiFactory.createLegendPanel(dialog);
+		UIPanel options = uiFactory.createPanel(dialog, false);
 		options.setLayout(optionsLayout);
-		options.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(options, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 300f, null, null);
 		
 		final UICheckBox tablatureEnabled = uiFactory.createCheckBox(options);

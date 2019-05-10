@@ -31,9 +31,8 @@ public class TGTrackTuningChooserDialog {
 		
 		//-------------MAIN PANEL-----------------------------------------------
 		UITableLayout panelLayout = new UITableLayout();
-		UILegendPanel panel = uiFactory.createLegendPanel(dialog);
+		UIPanel panel = uiFactory.createPanel(dialog, false);
 		panel.setLayout(panelLayout);
-		panel.setText(TuxGuitar.getProperty("tuning"));
 		dialogLayout.set(panel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		// value

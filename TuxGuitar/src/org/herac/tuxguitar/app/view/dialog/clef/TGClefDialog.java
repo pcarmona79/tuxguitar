@@ -18,7 +18,7 @@ import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
@@ -41,9 +41,8 @@ public class TGClefDialog {
 		
 		//-------clef-------------------------------------
 		UITableLayout clefLayout = new UITableLayout();
-		UILegendPanel clef = uiFactory.createLegendPanel(dialog);
+		UIPanel clef = uiFactory.createPanel(dialog, false);
 		clef.setLayout(clefLayout);
-		clef.setText(TuxGuitar.getProperty("composition.clef"));
 		dialogLayout.set(clef, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel numeratorLabel = uiFactory.createLabel(clef);
@@ -60,9 +59,8 @@ public class TGClefDialog {
 		
 		//--------------------To End Checkbox-------------------------------
 		UITableLayout checkLayout = new UITableLayout();
-		UILegendPanel check = uiFactory.createLegendPanel(dialog);
+		UIPanel check = uiFactory.createPanel(dialog, false);
 		check.setLayout(checkLayout);
-		check.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(check, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UICheckBox toEnd = uiFactory.createCheckBox(check);

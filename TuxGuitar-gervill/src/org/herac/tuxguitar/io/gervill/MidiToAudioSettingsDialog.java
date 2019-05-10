@@ -23,7 +23,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
@@ -53,9 +53,8 @@ public class MidiToAudioSettingsDialog {
 		
 		//------------------AUDIO FORMAT------------------
 		UITableLayout audioFormatLayout = new UITableLayout();
-		UILegendPanel audioFormatGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel audioFormatGroup = uiFactory.createPanel(dialog, false);
 		audioFormatGroup.setLayout(audioFormatLayout);
-		audioFormatGroup.setText(TuxGuitar.getProperty("gervill.options.audio-format"));
 		dialogLayout.set(audioFormatGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 400f, null, null);
 		
 		UILabel eLabel = uiFactory.createLabel(audioFormatGroup);
@@ -93,9 +92,8 @@ public class MidiToAudioSettingsDialog {
 		
 		//------------------SOUNDBANK-----------------------
 		UITableLayout soundbankLayout = new UITableLayout();
-		UILegendPanel soundbankGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel soundbankGroup = uiFactory.createPanel(dialog, false);
 		soundbankGroup.setLayout(soundbankLayout);
-		soundbankGroup.setText(TuxGuitar.getProperty("gervill.options.soundbank.tip"));
 		dialogLayout.set(soundbankGroup, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 400f, null, null);
 		
 		final UIRadioButton sbDefault = uiFactory.createRadioButton(soundbankGroup);

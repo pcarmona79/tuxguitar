@@ -28,9 +28,8 @@ public class TGTransposeDialog {
 		
 		//-----------------TEMPO------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(dialog);
+		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("tools.transpose"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel transpositionLabel = uiFactory.createLabel(group);
@@ -45,9 +44,8 @@ public class TGTransposeDialog {
 		
 		//------------------OPTIONS--------------------------
 		UITableLayout optionsLayout = new UITableLayout();
-		UILegendPanel options = uiFactory.createLegendPanel(dialog);
+		UIPanel options = uiFactory.createPanel(dialog, false);
 		options.setLayout(optionsLayout);
-		options.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(options, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UIRadioButton applyToAllMeasuresButton = uiFactory.createRadioButton(options);

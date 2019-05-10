@@ -18,14 +18,8 @@ import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIFont;
 import org.herac.tuxguitar.ui.resource.UIFontModel;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
+
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.properties.TGProperties;
 
@@ -162,9 +156,8 @@ public class TGFretBoardConfig {
 		
 		// ----------------------------------------------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = factory.createLegendPanel(window);
+		UIPanel group = factory.createPanel(window, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("fretboard.settings"));
 		windowLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		int groupRow = 0;
@@ -191,9 +184,8 @@ public class TGFretBoardConfig {
 		
 		// ----------------------------------------------------------------------
 		groupLayout = new UITableLayout();
-		group = factory.createLegendPanel(window);
+		group = factory.createPanel(window, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("fretboard.settings.options"));
 		windowLayout.set(group, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		final UICheckBox displayTextNote = factory.createCheckBox(group);

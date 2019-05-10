@@ -24,7 +24,6 @@ import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UISpinner;
@@ -52,9 +51,8 @@ public class TGBeatMoveDialog {
 		
 		//-------direction-------------------------------------
 		UITableLayout directionLayout = new UITableLayout();
-		UILegendPanel direction = uiFactory.createLegendPanel(dialog);
+		UIPanel direction = uiFactory.createPanel(dialog, false);
 		direction.setLayout(directionLayout);
-		direction.setText(TuxGuitar.getProperty("beat.move-custom.dialog.direction-tip"));
 		dialogLayout.set(direction, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel directionLabel = uiFactory.createLabel(direction);
@@ -73,9 +71,8 @@ public class TGBeatMoveDialog {
 		final List<UIControl> move1Controls = new ArrayList<UIControl>();
 		
 		UITableLayout move1Layout = new UITableLayout();
-		UILegendPanel move1 = uiFactory.createLegendPanel(dialog);
+		UIPanel move1 = uiFactory.createPanel(dialog, false);
 		move1.setLayout(move1Layout);
-		move1.setText(TuxGuitar.getProperty("beat.move-custom.dialog.move-1.tip"));
 		dialogLayout.set(move1, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel count1Label = uiFactory.createLabel(move1);
@@ -114,9 +111,8 @@ public class TGBeatMoveDialog {
 		final List<UIControl> move2Controls = new ArrayList<UIControl>();
 		
 		UITableLayout move2Layout = new UITableLayout();
-		UILegendPanel move2 = uiFactory.createLegendPanel(dialog);
+		UIPanel move2 = uiFactory.createPanel(dialog, false);
 		move2.setLayout(move2Layout);
-		move2.setText(TuxGuitar.getProperty("beat.move-custom.dialog.move-2.tip"));
 		dialogLayout.set(move2, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel count2Label = uiFactory.createLabel(move2);

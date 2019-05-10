@@ -21,7 +21,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckBox;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UISpinner;
@@ -88,9 +88,8 @@ public class TGGraceDialog {
 			//------------------NOTE-----------------------------
 			//---------------------------------------------------
 			UITableLayout noteLayout = new UITableLayout();
-			UILegendPanel noteGroup = uiFactory.createLegendPanel(dialog);
+			UIPanel noteGroup = uiFactory.createPanel(dialog, false);
 			noteGroup.setLayout(noteLayout);
-			noteGroup.setText(TuxGuitar.getProperty("note"));
 			dialogLayout.set(noteGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 2, 350f, null, null);
 			
 			UILabel fretLabel = uiFactory.createLabel(noteGroup);
@@ -110,9 +109,8 @@ public class TGGraceDialog {
 			//------------------POSITION-------------------------
 			//---------------------------------------------------
 			UITableLayout positionLayout = new UITableLayout();
-			UILegendPanel positionGroup = uiFactory.createLegendPanel(dialog);
+			UIPanel positionGroup = uiFactory.createPanel(dialog, false);
 			positionGroup.setLayout(positionLayout);
-			positionGroup.setText(TuxGuitar.getProperty("position"));
 			dialogLayout.set(positionGroup, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 2);
 			
 			this.beforeBeatButton = uiFactory.createRadioButton(positionGroup);
@@ -129,9 +127,8 @@ public class TGGraceDialog {
 			//------------------DURATION-------------------------
 			//---------------------------------------------------
 			UITableLayout durationLayout = new UITableLayout();
-			UILegendPanel durationGroup = uiFactory.createLegendPanel(dialog);
+			UIPanel durationGroup = uiFactory.createPanel(dialog, false);
 			durationGroup.setLayout(durationLayout);
-			durationGroup.setText(TuxGuitar.getProperty("duration"));
 			dialogLayout.set(durationGroup, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 2);
 			
 			this.durationButton1 = uiFactory.createRadioButton(durationGroup);
@@ -153,9 +150,8 @@ public class TGGraceDialog {
 			//------------------DYNAMIC--------------------------
 			//---------------------------------------------------
 			UITableLayout dynamicLayout = new UITableLayout();
-			UILegendPanel dynamicGroup = uiFactory.createLegendPanel(dialog);
+			UIPanel dynamicGroup = uiFactory.createPanel(dialog, false);
 			dynamicGroup.setLayout(dynamicLayout);
-			dynamicGroup.setText(TuxGuitar.getProperty("dynamic"));
 			dialogLayout.set(dynamicGroup, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			this.pppButton = uiFactory.createRadioButton(dynamicGroup);
@@ -202,9 +198,8 @@ public class TGGraceDialog {
 			//------------------TRANSITION-----------------------
 			//---------------------------------------------------
 			UITableLayout transitionLayout = new UITableLayout();
-			UILegendPanel transitionGroup = uiFactory.createLegendPanel(dialog);
+			UIPanel transitionGroup = uiFactory.createPanel(dialog, false);
 			transitionGroup.setLayout(transitionLayout);
-			transitionGroup.setText(TuxGuitar.getProperty("effects.grace.transition"));
 			dialogLayout.set(transitionGroup, 4, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			this.noneButton = uiFactory.createRadioButton(transitionGroup);

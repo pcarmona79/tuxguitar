@@ -11,7 +11,7 @@ import org.herac.tuxguitar.ui.layout.UIScrollBarPanelLayout;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIScale;
 import org.herac.tuxguitar.ui.widget.UIScrollBarPanel;
@@ -46,9 +46,8 @@ public class VSTEffectEditor {
 		
 		//-------------------------------------------------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(this.dialog);
+		UIPanel group = uiFactory.createPanel(this.dialog, false);
 		group.setLayout(groupLayout);
-		group.setText("VST Effect Parameters");
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//-------------------------------------------------------------------------

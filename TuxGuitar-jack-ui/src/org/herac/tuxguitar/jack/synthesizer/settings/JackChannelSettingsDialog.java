@@ -23,12 +23,8 @@ import org.herac.tuxguitar.ui.event.UIDisposeListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
+
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.error.TGErrorManager;
 
@@ -71,9 +67,8 @@ public class JackChannelSettingsDialog implements TGChannelSettingsDialog{
 		
 		//-------------------- GM Channels -------------------------------
 		UITableLayout groupLayout = new UITableLayout();
-		UILegendPanel group = uiFactory.createLegendPanel(this.dialog);
+		UIPanel group = uiFactory.createPanel(this.dialog, false);
 		group.setLayout(groupLayout);
-		group.setText(TuxGuitar.getProperty("jack.settings.channel.gm.tip"));
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UILabel gmChannel1Label = uiFactory.createLabel(group);
@@ -102,9 +97,8 @@ public class JackChannelSettingsDialog implements TGChannelSettingsDialog{
 		
 		//-------------------- Jack Options-------------------------------
 		UITableLayout optionsLayout = new UITableLayout();
-		UILegendPanel optionsGroup = uiFactory.createLegendPanel(this.dialog);
+		UIPanel optionsGroup = uiFactory.createPanel(this.dialog, false);
 		optionsGroup.setLayout(optionsLayout);
-		optionsGroup.setText(TuxGuitar.getProperty("options"));
 		dialogLayout.set(optionsGroup, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.exclusiveButton = uiFactory.createCheckBox(optionsGroup);

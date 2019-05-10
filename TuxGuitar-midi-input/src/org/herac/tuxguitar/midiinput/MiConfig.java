@@ -12,7 +12,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UISelectItem;
 import org.herac.tuxguitar.ui.widget.UISpinner;
@@ -124,10 +124,9 @@ class MiConfig
 
 		// MIDI
 		UITableLayout groupMidiLayout = new UITableLayout();
-		UILegendPanel groupMidi = uiFactory.createLegendPanel(dialog);
+		UIPanel groupMidi = uiFactory.createPanel(dialog, false);
 		groupMidi.setLayout(groupMidiLayout);
-		groupMidi.setText(TuxGuitar.getProperty("midiinput.config.label.group.midi"));
-		dialogLayout.set(groupMidi, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+	       	dialogLayout.set(groupMidi, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//------------------MIDI INPUT PORT------------------
 		UILabel	lblPort = uiFactory.createLabel(groupMidi);
@@ -158,9 +157,8 @@ class MiConfig
 		
 		// General input
 		UITableLayout groupInputLayout = new UITableLayout();
-		UILegendPanel groupInput = uiFactory.createLegendPanel(dialog);
+		UIPanel groupInput = uiFactory.createPanel(dialog, false);
 		groupInput.setLayout(groupInputLayout);
-		groupInput.setText(TuxGuitar.getProperty("midiinput.config.label.group.input"));
 		dialogLayout.set(groupInput, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//------------------MIN VELOCITY THRESHOLD------------------
@@ -187,9 +185,8 @@ class MiConfig
 		
 		// Echo/Chords/Scales
 		UITableLayout groupEchoLayout = new UITableLayout();
-		UILegendPanel groupEcho = uiFactory.createLegendPanel(dialog);
+		UIPanel groupEcho = uiFactory.createPanel(dialog, false);
 		groupEcho.setLayout(groupEchoLayout);
-		groupEcho.setText(TuxGuitar.getProperty("midiinput.config.label.group.echo"));
 		dialogLayout.set(groupEcho, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 
 		//------------------ECHO TIME OUT------------------
@@ -232,9 +229,8 @@ class MiConfig
 	///* RECORDING
 		// Recording
 //		UITableLayout groupRecLayout = new UITableLayout();
-//		UILegendPanel groupRec = uiFactory.createLegendPanel(dialog);
+//		UIPanel groupRec = uiFactory.createPanel(dialog, false);
 //		groupRec.setLayout(groupRecLayout);
-//		groupRec.setText(TuxGuitar.getProperty("midiinput.config.label.group.rec"));
 //		dialogLayout.set(groupRec, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//------------------REC COUNTDOWN BARS------------------

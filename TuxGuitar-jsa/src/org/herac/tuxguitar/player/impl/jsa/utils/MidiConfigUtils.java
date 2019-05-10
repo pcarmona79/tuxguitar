@@ -12,7 +12,7 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
+
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIRadioButton;
 import org.herac.tuxguitar.ui.widget.UITextField;
@@ -52,9 +52,8 @@ public class MidiConfigUtils {
 		
 		//------------------SOUNDBANK-----------------------
 		UITableLayout soundbankLayout = new UITableLayout();
-		UILegendPanel soundbankGroup = uiFactory.createLegendPanel(dialog);
+		UIPanel soundbankGroup = uiFactory.createPanel(dialog, false);
 		soundbankGroup.setLayout(soundbankLayout);
-		soundbankGroup.setText(TuxGuitar.getProperty("jsa.settings.soundbank.tip"));
 		dialogLayout.set(soundbankGroup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 400f, null, null);
 		
 		final UIRadioButton sbDefault = uiFactory.createRadioButton(soundbankGroup);
