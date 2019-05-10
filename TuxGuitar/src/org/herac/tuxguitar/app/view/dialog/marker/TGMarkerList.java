@@ -138,7 +138,14 @@ public class TGMarkerList implements TGEventListener {
 		buttonsLayout.set(this.buttonDelete, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, 80f, 25f, null);
 		buttonsLayout.set(this.buttonGo, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true, 1, 1, 80f, 25f, null);
 		buttonsLayout.set(this.buttonClose, 5, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false, 1, 1, 80f, 25f, null);
-		
+
+		this.table.addSelectionListener(new UISelectionListener() {
+			public void onSelect(UISelectionEvent event) {
+				TGMarkerList.this.updateButtons();
+			}
+		});
+		updateButtons();
+
 		this.loadIcons();
 		this.loadProperties(false);
 		
@@ -152,6 +159,13 @@ public class TGMarkerList implements TGEventListener {
 		dialog.computePackedSize(null, null);
 		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
+	}
+
+	public void updateButtons() {
+		TGMarker model = this.table.getSelectedValue();
+		buttonEdit.setEnabled(model != null);
+		buttonDelete.setEnabled(model != null);
+		buttonGo.setEnabled(model != null);
 	}
 	
 	public void addListeners(){
