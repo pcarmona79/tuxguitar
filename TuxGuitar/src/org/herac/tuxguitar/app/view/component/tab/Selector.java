@@ -86,6 +86,9 @@ public class Selector {
 	}
 
 	public TGBeatRange getBeatRange() {
+		if (!isActive()) {
+			return TGBeatRange.empty();
+		}
 		List<TGBeat> beats = new ArrayList<>();
 		for (TGBeatRangeIterator it = new TGBeatRangeIterator(start, end); it.hasNext(); ) {
 			beats.add(it.next());
