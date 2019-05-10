@@ -40,6 +40,11 @@ public class UIPosition {
 		this.y += position.getY();
 	}
 
+	public void sub(UIPosition position) {
+		this.x -= position.getX();
+		this.y -= position.getY();
+	}
+
 	public void mul(float v) {
 		this.x *= v;
 		this.y *= v;

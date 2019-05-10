@@ -7,8 +7,6 @@ import org.herac.tuxguitar.ui.event.UIMouseMoveListenerManager;
 import org.herac.tuxguitar.ui.resource.UIPosition;
 import org.herac.tuxguitar.ui.swt.widget.SWTEventReceiver;
 
-import static org.herac.tuxguitar.ui.resource.UIKeyLabel.MOD_MASK;
-
 public class SWTMouseMoveListenerManager extends UIMouseMoveListenerManager implements MouseMoveListener {
 	
 	private SWTEventReceiver<?> control;
@@ -19,7 +17,7 @@ public class SWTMouseMoveListenerManager extends UIMouseMoveListenerManager impl
 	
 	public void mouseMove(MouseEvent e) {
 		if(!this.control.isIgnoreEvents()) {
-			this.onMouseMove(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask & MOD_MASK));
+			this.onMouseMove(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask));
 		}
 	}
 }

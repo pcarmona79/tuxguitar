@@ -16,6 +16,7 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIPainter;
+import org.herac.tuxguitar.ui.resource.UIPosition;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
 import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.UICanvas;
@@ -212,6 +213,12 @@ public class TGControl {
 				redraw();
 			}
 		}
+	}
+
+	public void scrollBy(UIPosition delta) {
+		this.hScroll.setValue(Math.round(hScroll.getValue() + delta.getX()));
+		this.vScroll.setValue(Math.round(vScroll.getValue() + delta.getY()));
+		redraw();
 	}
 	
 	public Integer computeScrollValue(int scrollPos, int mPos, int mSize, int mMargin, int areaSize, int fullSize, boolean playMode) {

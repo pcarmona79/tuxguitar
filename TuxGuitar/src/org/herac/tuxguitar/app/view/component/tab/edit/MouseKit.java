@@ -10,6 +10,7 @@ import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleIncrementActio
 import org.herac.tuxguitar.app.action.impl.selector.TGStartDragSelectionAction;
 import org.herac.tuxguitar.app.action.impl.selector.TGUpdateDragSelectionAction;
 import org.herac.tuxguitar.app.action.listener.gui.TGActionProcessingListener;
+import org.herac.tuxguitar.app.view.component.tabfolder.TGTabFolder;
 import org.herac.tuxguitar.editor.TGEditorManager;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.player.base.MidiPlayer;
@@ -22,13 +23,18 @@ import org.herac.tuxguitar.util.TGContext;
 public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouseDragListener, UIMouseMoveListener, UIMouseExitListener, UIMenuShowListener, UIMenuHideListener, UIZoomListener {
 	
 	private EditorKit kit;
-	private UIPosition position;
 	private boolean menuOpen;
+
+	private UIPosition position;
 	private UIPosition startPosition;
+
+	private UIPosition scrollPosition;
+	private UIPosition scrollStartPosition;
 
 	public MouseKit(EditorKit kit){
 		this.kit = kit;
 		this.position = new UIPosition();
+		this.scrollPosition = new UIPosition();
 		this.menuOpen = false;
 	}
 	
@@ -59,6 +65,9 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 			} else {
 				this.executeAction(TGStartDragSelectionAction.NAME, this.position.clone(), event, false);
 			}
+		} else if (event.getButton() == 2) {
+			this.scrollPosition.set(event.getPosition());
+			this.scrollStartPosition = this.scrollPosition.clone();
 		}
 	}
 
@@ -67,15 +76,25 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 			this.position.set(event.getPosition());
 			this.startPosition = null;
 			this.executeAction(TGMouseClickAction.NAME, this.position.clone(), event, false);
-		}
+		} else if (event.getButton() == 2) {
+			this.scrollPosition.set(event.getPosition());
+			this.scrollStartPosition = null;
+        }
 	}
 
 	public void onMouseDrag(UIMouseEvent event) {
-		if (event.getButton() == 1) {
+		if ((event.getState() & UIMouseEvent.BUTTON1) != 0) {
 			this.position.set(this.startPosition);
 			this.position.add(event.getPosition());
 			this.executeAction(TGUpdateDragSelectionAction.NAME, this.position.clone(), event, false);
-		}
+		} else if ((event.getState() & UIMouseEvent.BUTTON2) != 0) {
+			UIPosition delta = this.scrollStartPosition.clone();
+			delta.add(event.getPosition());
+			delta.sub(this.scrollPosition);
+			delta.mul(-1f);
+			TGTabFolder.getInstance(this.kit.getTablature().getContext()).findSelectedControl().scrollBy(delta);
+			this.scrollPosition.sub(delta);
+        }
 	}
 
 	public void onMouseMove(UIMouseEvent event) {

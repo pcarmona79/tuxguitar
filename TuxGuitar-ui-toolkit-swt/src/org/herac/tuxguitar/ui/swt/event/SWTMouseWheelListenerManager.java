@@ -7,8 +7,6 @@ import org.herac.tuxguitar.ui.event.UIMouseWheelListenerManager;
 import org.herac.tuxguitar.ui.resource.UIPosition;
 import org.herac.tuxguitar.ui.swt.widget.SWTEventReceiver;
 
-import static org.herac.tuxguitar.ui.resource.UIKeyLabel.MOD_MASK;
-
 public class SWTMouseWheelListenerManager extends UIMouseWheelListenerManager implements MouseWheelListener {
 	
 	private SWTEventReceiver<?> control;
@@ -19,7 +17,7 @@ public class SWTMouseWheelListenerManager extends UIMouseWheelListenerManager im
 	
 	public void mouseScrolled(MouseEvent e) {
 		if(!this.control.isIgnoreEvents()) {
-			this.onMouseWheel(new UIMouseWheelEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask & MOD_MASK, e.count));
+			this.onMouseWheel(new UIMouseWheelEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask, e.count));
 		}
 	}
 }

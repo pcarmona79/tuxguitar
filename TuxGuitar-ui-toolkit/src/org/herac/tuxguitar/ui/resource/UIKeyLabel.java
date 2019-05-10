@@ -36,8 +36,6 @@ public class UIKeyLabel {
 	public static final int LEFT = (0x1000003);
 	public static final int RIGHT = (0x1000004);
 
-	public static final int MOD_MASK = ALT | SHIFT | CONTROL | COMMAND;
-	
 	public static final UIKeyLabel[] LABELS = new UIKeyLabel[] {
 		new UIKeyLabel(F1, "F1"),
 		new UIKeyLabel(F2, "F2"),

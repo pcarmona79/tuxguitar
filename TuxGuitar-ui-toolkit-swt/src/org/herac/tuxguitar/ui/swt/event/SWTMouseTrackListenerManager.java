@@ -10,8 +10,6 @@ import org.herac.tuxguitar.ui.event.UIMouseExitListenerManager;
 import org.herac.tuxguitar.ui.resource.UIPosition;
 import org.herac.tuxguitar.ui.swt.widget.SWTEventReceiver;
 
-import static org.herac.tuxguitar.ui.resource.UIKeyLabel.MOD_MASK;
-
 public class SWTMouseTrackListenerManager implements MouseTrackListener {
 	
 	private SWTEventReceiver<?> control;
@@ -46,13 +44,13 @@ public class SWTMouseTrackListenerManager implements MouseTrackListener {
 	
 	public void mouseEnter(MouseEvent e) {
 		if(!this.control.isIgnoreEvents()) {
-			this.mouseEnterListener.onMouseEnter(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask & MOD_MASK));
+			this.mouseEnterListener.onMouseEnter(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask));
 		}
 	}
 
 	public void mouseExit(MouseEvent e) {
 		if(!this.control.isIgnoreEvents()) {
-			this.mouseExitListener.onMouseExit(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask & MOD_MASK));
+			this.mouseExitListener.onMouseExit(new UIMouseEvent(this.control, new UIPosition(e.x, e.y), e.button, e.stateMask));
 		}
 	}
 
