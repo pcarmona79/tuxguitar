@@ -10,7 +10,6 @@ import org.herac.tuxguitar.app.view.component.table.TGTableViewer;
 import org.herac.tuxguitar.app.view.dialog.fretboard.TGFretBoardEditor;
 import org.herac.tuxguitar.app.view.dialog.marker.TGMarkerList;
 import org.herac.tuxguitar.app.view.dialog.piano.TGPianoEditor;
-import org.herac.tuxguitar.app.view.dialog.transport.TGTransportDialog;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
 import org.herac.tuxguitar.app.view.toolbar.main.TGMainToolBar;
@@ -46,7 +45,6 @@ public class TGDisposeAction extends TGActionBase {
 		config.setValue(TGConfigKeys.SHOW_MATRIX,!TuxGuitar.getInstance().getMatrixEditor().isDisposed());
 		config.setValue(TGConfigKeys.SHOW_FRETBOARD,TuxGuitar.getInstance().getFretBoardEditor().isVisible());
 		config.setValue(TGConfigKeys.SHOW_INSTRUMENTS,!TuxGuitar.getInstance().getChannelManager().isDisposed());
-		config.setValue(TGConfigKeys.SHOW_TRANSPORT,!TGTransportDialog.getInstance(getContext()).isDisposed());
 		config.setValue(TGConfigKeys.SHOW_MARKERS,!TGMarkerList.getInstance(getContext()).isDisposed());
 		config.setValue(TGConfigKeys.SHOW_MENU_BAR, TuxGuitar.getInstance().getItemManager().isMainMenuVisible());
 		config.setValue(TGConfigKeys.SHOW_MAIN_TOOLBAR, TGMainToolBar.getInstance(getContext()).isVisible());

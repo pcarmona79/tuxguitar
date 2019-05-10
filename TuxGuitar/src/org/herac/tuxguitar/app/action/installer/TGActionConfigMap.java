@@ -534,7 +534,6 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGToggleLyricEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleChannelsDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleBrowserAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
-		this.map(TGToggleTransportDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleMarkerListAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleMenuBarAction.NAME, LOCKABLE | SYNC_THREAD);
 		this.map(TGToggleMainToolbarAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);

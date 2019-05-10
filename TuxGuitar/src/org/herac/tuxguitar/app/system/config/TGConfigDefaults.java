@@ -36,7 +36,6 @@ public class TGConfigDefaults{
 		loadProperty(properties, TGConfigKeys.SHOW_EDIT_TOOLBAR, true);
 		loadProperty(properties, TGConfigKeys.SHOW_TRACKS, true);
 		loadProperty(properties, TGConfigKeys.SHOW_INSTRUMENTS, false);
-		loadProperty(properties, TGConfigKeys.SHOW_TRANSPORT, false);
 		loadProperty(properties, TGConfigKeys.SHOW_FRETBOARD, false);
 		loadProperty(properties, TGConfigKeys.SHOW_PIANO, false);
 		loadProperty(properties, TGConfigKeys.SHOW_MARKERS, false);

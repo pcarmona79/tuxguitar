@@ -502,7 +502,6 @@ public class TGActionInstaller {
 		installAction(new TGToggleLyricEditorAction(context));
 		installAction(new TGToggleChannelsDialogAction(context));
 		installAction(new TGToggleBrowserAction(context));
-		installAction(new TGToggleTransportDialogAction(context));
 		installAction(new TGToggleMarkerListAction(context));
 		installAction(new TGToggleMenuBarAction(context));
 		installAction(new TGToggleMainToolbarAction(context));

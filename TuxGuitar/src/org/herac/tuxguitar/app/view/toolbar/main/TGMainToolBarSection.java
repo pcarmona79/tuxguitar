@@ -12,6 +12,7 @@ import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.*;
+import org.herac.tuxguitar.util.TGContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,18 +81,28 @@ public abstract class TGMainToolBarSection implements TGToolBarSection {
 		return layout;
 	}
 
+	public TGContext getContext() {
+		return this.getToolBar().getContext();
+	}
+
+	public UIFactory getFactory() {
+		return TGApplication.getInstance(getContext()).getFactory();
+	}
+
+	protected void addItem(UIControl item) {
+		this.items.add(item);
+	}
+
 	public UIButton createButton() {
-		UIFactory uiFactory = TGApplication.getInstance(this.getToolBar().getContext()).getFactory();
-		UIButton button = uiFactory.createButton(this.container);
-		this.items.add(button);
+		UIButton button = getFactory().createButton(this.container);
+		addItem(button);
 		this.layout.set(button, 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, 1f, 0f);
 		return button;
 	}
 
 	public UIToggleButton createToggleButton() {
-		UIFactory uiFactory = TGApplication.getInstance(this.getToolBar().getContext()).getFactory();
-		UIToggleButton button = uiFactory.createToggleButton(this.container, false);
-		this.items.add(button);
+		UIToggleButton button = getFactory().createToggleButton(this.container, false);
+		addItem(button);
 		this.layout.set(button, 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, 1f, 0f);
 		return button;
 	}

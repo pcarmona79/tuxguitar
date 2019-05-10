@@ -408,7 +408,7 @@ public class TGMeasureManager {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Retorna las Nota en la posicion y cuerda
 	 */

@@ -17,7 +17,6 @@ import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.component.table.TGTableViewer;
-import org.herac.tuxguitar.app.view.dialog.transport.TGTransportDialog;
 import org.herac.tuxguitar.app.view.menu.TGMenuItem;
 import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
 import org.herac.tuxguitar.app.view.toolbar.main.TGMainToolBar;
@@ -37,7 +36,6 @@ public class ViewMenuItem extends TGMenuItem {
 	private UIMenuCheckableItem showEditToolbar;
 	private UIMenuCheckableItem showTableViewer;
 	private UIMenuCheckableItem showInstruments;
-	private UIMenuCheckableItem showTransport;
 	private UIMenuCheckableItem showFretBoard;
 	private UIMenuCheckableItem showPiano;
 	private UIMenuCheckableItem showMatrix;
@@ -83,10 +81,6 @@ public class ViewMenuItem extends TGMenuItem {
 		this.showInstruments = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showInstruments.addSelectionListener(this.createActionProcessor(TGToggleChannelsDialogAction.NAME));
 		
-		//--TRANSPORT--
-		this.showTransport = this.layoutMenuItem.getMenu().createCheckItem();
-		this.showTransport.addSelectionListener(this.createActionProcessor(TGToggleTransportDialogAction.NAME));
-
 		//--MATRIX--
 		this.showMatrix = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
@@ -168,7 +162,6 @@ public class ViewMenuItem extends TGMenuItem {
 		this.showEditToolbar.setChecked(TGEditToolBar.getInstance(this.findContext()).isVisible());
 		this.showTableViewer.setChecked(TGTableViewer.getInstance(this.findContext()).isVisible());
 		this.showInstruments.setChecked(!TuxGuitar.getInstance().getChannelManager().isDisposed());
-		this.showTransport.setChecked(!TGTransportDialog.getInstance(this.findContext()).isDisposed());
 		this.showFretBoard.setChecked(TuxGuitar.getInstance().getFretBoardEditor().isVisible());
 		this.showPiano.setChecked(TuxGuitar.getInstance().getPianoEditor().isVisible());
 		this.showMatrix.setChecked(!TuxGuitar.getInstance().getMatrixEditor().isDisposed());
@@ -194,7 +187,6 @@ public class ViewMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.showEditToolbar, "view.show-edit-toolbar", TGToggleEditToolbarAction.NAME);
 		setMenuItemTextAndAccelerator(this.showTableViewer, "view.show-table-viewer", TGToggleTableViewerAction.NAME);
 		setMenuItemTextAndAccelerator(this.showInstruments, "view.show-instruments", TGToggleChannelsDialogAction.NAME);
-		setMenuItemTextAndAccelerator(this.showTransport, "view.show-transport", TGToggleTransportDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.showFretBoard, "view.show-fretboard", TGToggleFretBoardEditorAction.NAME);
 		setMenuItemTextAndAccelerator(this.showPiano, "view.show-piano", TGTogglePianoEditorAction.NAME);
 		setMenuItemTextAndAccelerator(this.showMatrix, "view.show-matrix", TGToggleMatrixEditorAction.NAME);

@@ -8,8 +8,6 @@ import org.herac.tuxguitar.app.action.impl.file.TGReadURLAction;
 import org.herac.tuxguitar.app.action.impl.marker.TGToggleMarkerListAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleMatrixEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGTogglePianoEditorAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleTransportDialogAction;
 import org.herac.tuxguitar.app.document.TGDocumentListAttributes;
 import org.herac.tuxguitar.app.document.TGDocumentListManager;
 import org.herac.tuxguitar.app.editor.EditorCache;
@@ -182,10 +180,6 @@ public class TuxGuitar {
 		//---Instruments---
 		if( config.getBooleanValue(TGConfigKeys.SHOW_INSTRUMENTS) ){
 			new TGActionProcessor(this.context, TGToggleChannelsDialogAction.NAME).process();
-		}
-		//---Transport---
-		if(config.getBooleanValue(TGConfigKeys.SHOW_TRANSPORT)){
-			new TGActionProcessor(this.context, TGToggleTransportDialogAction.NAME).process();
 		}
 		//---Matrix---
 		if(config.getBooleanValue(TGConfigKeys.SHOW_MATRIX)){
