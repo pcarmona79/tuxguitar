@@ -244,8 +244,8 @@ public class TGChannelManagerDialog implements TGEventListener {
 
 	public void loadProperties() {
 		if(!this.isDisposed()){
-			this.addChannelButton.setText(TuxGuitar.getProperty("add"));
-			
+			this.addChannelButton.setToolTipText(TuxGuitar.getProperty("add"));
+
 			this.volumeValueTitleLabel.setText(TuxGuitar.getProperty("instruments.volume") + ":");
 			this.volumeTip = TuxGuitar.getProperty("instruments.volume");
 			this.volumeScale.setToolTipText(this.volumeTip + ": " + MidiPlayer.getInstance(this.context).getVolume());
@@ -257,7 +257,9 @@ public class TGChannelManagerDialog implements TGEventListener {
 
 	public void loadIcons() {
 		if(!this.isDisposed()){
-			this.dialog.setImage(TGIconManager.getInstance(getContext()).getAppIcon());
+			TGIconManager iconManager = TGIconManager.getInstance(getContext());
+			this.addChannelButton.setImage(iconManager.getListAdd());
+			this.dialog.setImage(iconManager.getAppIcon());
 			this.channelList.loadIcons();
 		}
 	}

@@ -16,14 +16,7 @@ import org.herac.tuxguitar.ui.event.UIFocusLostListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UIContainer;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UIKnob;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UITextField;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGChannelItem {
@@ -44,7 +37,7 @@ public class TGChannelItem {
 	
 	private UIButton setupChannelButton;
 	private UIButton removeChannelButton;
-	private UICheckBox percussionButton;
+	private UIToggleButton percussionButton;
 	
 	private UIKnob volumeScale;
 	private UIKnob balanceScale;
@@ -98,39 +91,33 @@ public class TGChannelItem {
 			}
 		});
 		col1Layout.set(this.bankCombo, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false);
-		
-		// Column 2
-		UITableLayout col2Layout = new UITableLayout();
-		UIPanel col2Panel = uiFactory.createPanel(this.composite, false);
-		col2Panel.setLayout(col2Layout);
-		uiLayout.set(col2Panel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
-		
-		this.percussionButton = uiFactory.createCheckBox(col2Panel);
-		this.percussionButton.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				updateChannel(true);
-			}
-		});
-		col2Layout.set(this.percussionButton, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true);
-		
+
 		// Column 3
 		UITableLayout col3Layout = new UITableLayout();
 		UIPanel col3Panel = uiFactory.createPanel(this.composite, false);
 		col3Panel.setLayout(col3Layout);
-		uiLayout.set(col3Panel, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+		uiLayout.set(col3Panel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 		
 		UITableLayout actionButtonsLayout = new UITableLayout(0f);
 		UIPanel actionButtonsComposite = uiFactory.createPanel(col3Panel, false);
 		actionButtonsComposite.setLayout(actionButtonsLayout);
 		col3Layout.set(actionButtonsComposite, 1, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_TOP, true, true, 1, 1, null, null, 0f);
-		
+
+		this.percussionButton = uiFactory.createToggleButton(actionButtonsComposite, false);
+		this.percussionButton.addSelectionListener(new UISelectionListener() {
+			public void onSelect(UISelectionEvent event) {
+				updateChannel(true);
+			}
+		});
+		actionButtonsLayout.set(this.percussionButton, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
+
 		this.setupChannelButton = uiFactory.createButton(actionButtonsComposite);
 		this.setupChannelButton.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				setupChannel();
 			}
 		});
-		actionButtonsLayout.set(this.setupChannelButton, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
+		actionButtonsLayout.set(this.setupChannelButton, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		
 		this.removeChannelButton = uiFactory.createButton(actionButtonsComposite);
 		this.removeChannelButton.addSelectionListener(new UISelectionListener() {
@@ -138,7 +125,7 @@ public class TGChannelItem {
 				removeChannel();
 			}
 		});
-		actionButtonsLayout.set(this.removeChannelButton, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
+		actionButtonsLayout.set(this.removeChannelButton, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 		
 		UITableLayout controllerScalesLayout = new UITableLayout(0f);
 		UIPanel controllerScalesComposite = uiFactory.createPanel(col3Panel, false);
@@ -208,7 +195,7 @@ public class TGChannelItem {
 	public void loadProperties(){
 		if(!isDisposed()){
 			this.percussionButton.setText(TuxGuitar.getProperty("instrument.percussion-channel"));
-			this.removeChannelButton.setText(TuxGuitar.getProperty("remove"));
+			this.removeChannelButton.setToolTipText(TuxGuitar.getProperty("remove"));
 			this.setupChannelButton.setToolTipText(TuxGuitar.getProperty("settings"));
 			
 			this.volumeScale.setToolTipText(TuxGuitar.getProperty("instrument.volume"));
@@ -222,7 +209,9 @@ public class TGChannelItem {
 	
 	public void loadIcons(){
 		if(!isDisposed()){
-			this.setupChannelButton.setImage(TGIconManager.getInstance(getContext()).getSettings());
+			TGIconManager iconManager = TGIconManager.getInstance(getContext());
+			this.removeChannelButton.setImage(iconManager.getListRemove());
+			this.setupChannelButton.setImage(iconManager.getSettings());
 		}
 	}
 	
