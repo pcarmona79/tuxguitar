@@ -11,15 +11,7 @@ import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILegendPanel;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UIRadioButton;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
 
 public class TGTransposeDialog {
 	
@@ -45,13 +37,11 @@ public class TGTransposeDialog {
 		transpositionLabel.setText(TuxGuitar.getProperty("tools.transpose.semitones"));
 		groupLayout.set(transpositionLabel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, true);
 		
-		final UIDropDownSelect<Integer> transpositionCombo = uiFactory.createDropDownSelect(group);
-		for( int i = -TRANSPOSITION_SEMITONES ; i <= TRANSPOSITION_SEMITONES; i ++ ){
-			transpositionCombo.addItem(new UISelectItem<Integer>(Integer.toString(i), i));
-		}
-		
-		transpositionCombo.setSelectedValue(0);
-		groupLayout.set(transpositionCombo, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		final UISpinner transpositionSpinner = uiFactory.createSpinner(group);
+		transpositionSpinner.setMinimum(-127);
+		transpositionSpinner.setMaximum(127);
+		transpositionSpinner.setValue(0);
+		groupLayout.set(transpositionSpinner, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//------------------OPTIONS--------------------------
 		UITableLayout optionsLayout = new UITableLayout();
@@ -95,7 +85,7 @@ public class TGTransposeDialog {
 		buttonOK.setDefaultButton();
 		buttonOK.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
-				Integer transposition = transpositionCombo.getSelectedValue();
+				Integer transposition = transpositionSpinner.getValue();
 				if( transposition != null ){
 					final boolean tryKeepString = tryKeepStringButton.isSelected();
 					final boolean applyToChords = applyToChordsButton.isSelected();
