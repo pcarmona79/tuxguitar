@@ -47,18 +47,6 @@ public class TGEditToolBarSectionEdit extends TGEditToolBarSection {
 	}
 	
 	public void createSectionToolBars() {
-		UIPanel topPanel = this.createPanel();
-		UITableLayout layout = new UITableLayout();
-		topPanel.setLayout(layout);
-
-		this.lyrics = getToolBar().getFactory().createButton(topPanel);
-		this.lyrics.addSelectionListener(this.createActionProcessor(TGToggleLyricEditorAction.NAME));
-		layout.set(this.lyrics, 1, 1, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_FILL, false, false, 1, 1, null, null, 0f);
-
-		this.song = getToolBar().getFactory().createButton(topPanel);
-		this.song.addSelectionListener(this.createActionProcessor(TGOpenSongInfoDialogAction.NAME));
-		layout.set(this.song, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_FILL, false, false, 1, 1, null, null, 0f);
-
 		UIToolBar toolBar = this.createToolBar();
 		
 		this.voice1 = toolBar.createCheckItem();
@@ -96,6 +84,20 @@ public class TGEditToolBarSectionEdit extends TGEditToolBarSection {
 
 		this.paste = toolBar2.createActionItem();
 		this.paste.addSelectionListener(this.createActionProcessor(TGPasteNoteOrMeasureAction.NAME));
+
+		UIPanel bottomPanel = this.createPanel();
+		UITableLayout layout = new UITableLayout();
+		bottomPanel.setLayout(layout);
+
+		this.lyrics = getToolBar().getFactory().createButton(bottomPanel);
+		this.lyrics.addSelectionListener(this.createActionProcessor(TGToggleLyricEditorAction.NAME));
+		layout.set(this.lyrics, 1, 1, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_FILL, false, false, 1, 1, null, null, 0f);
+
+		this.song = getToolBar().getFactory().createButton(bottomPanel);
+		this.song.addSelectionListener(this.createActionProcessor(TGOpenSongInfoDialogAction.NAME));
+		layout.set(this.song, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_FILL, false, false, 1, 1, null, null, 0f);
+		layout.set(this.song, UITableLayout.MARGIN_LEFT, 4f);
+
 	}
 	
 	public void updateSectionItems() {
@@ -143,7 +145,8 @@ public class TGEditToolBarSectionEdit extends TGEditToolBarSection {
 		this.copy.setToolTipText(this.getText("edit.copy"));
 		this.paste.setToolTipText(this.getText("edit.paste"));
 		this.lyrics.setText(this.getText("track.lyrics"));
-		this.song.setText(this.getText("composition.properties"));
+		this.song.setText(this.getText("song"));
+		this.song.setToolTipText(this.getText("composition.properties"));
 	}
 	
 	public void loadSectionIcons() {
