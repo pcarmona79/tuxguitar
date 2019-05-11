@@ -83,6 +83,7 @@ import org.herac.tuxguitar.app.action.impl.measure.TGOpenMeasureRemoveDialogActi
 import org.herac.tuxguitar.app.action.impl.note.TGOpenBeatMoveDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenStrokeDownDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenStrokeUpDialogAction;
+import org.herac.tuxguitar.app.action.impl.note.TGPasteNoteOrMeasureAction;
 import org.herac.tuxguitar.app.action.impl.selector.*;
 import org.herac.tuxguitar.app.action.impl.settings.TGOpenKeyBindingEditorAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGOpenPluginListDialogAction;
@@ -360,7 +361,7 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGDecrementNoteSemitoneAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, UPDATE_NOTE_RANGE_CTL, UNDOABLE_NOTE_RANGE);
 		this.map(TGCutNoteAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGCopyNoteAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT);
-		this.map(TGPasteNoteAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, UPDATE_SONG_CTL, UNDOABLE_SONG_GENERIC);
+		this.map(TGPasteNoteAction.NAME, LOCKABLE | DISABLE_ON_PLAY, UPDATE_SONG_CTL, UNDOABLE_SONG_GENERIC);
 		this.map(TGDeleteNoteAction.NAME, LOCKABLE | DISABLE_ON_PLAY, UPDATE_MEASURE_CTL, UNDOABLE_MEASURE_GENERIC);
 		this.map(TGDeleteNoteOrRestAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, UPDATE_BEAT_RANGE_CTL, UNDOABLE_BEAT_RANGE_GENERIC);
 		this.map(TGIncrementNoteSemitoneAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, UPDATE_NOTE_RANGE_CTL, UNDOABLE_NOTE_RANGE);
@@ -497,6 +498,7 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		//gui actions
 		this.map(TGOpenViewAction.NAME, LOCKABLE | SYNC_THREAD);
 		this.map(TGToggleViewAction.NAME, LOCKABLE | SYNC_THREAD);
+		this.map(TGPasteNoteOrMeasureAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenSongInfoDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenTempoDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenClefDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);

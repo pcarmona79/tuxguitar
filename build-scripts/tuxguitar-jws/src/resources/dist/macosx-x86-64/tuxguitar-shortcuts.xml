@@ -43,7 +43,7 @@
 	<shortcut keys="Command Left" action="action.measure.go-previous"/>
 	<shortcut keys="Command x" action="action.note.cut"/>
 	<shortcut keys="Command c" action="action.note.copy"/>
-	<shortcut keys="Command v" action="action.note.paste"/>
+	<shortcut keys="Command v" action="action.gui.paste"/>
 	<shortcut keys="Command Shift c" action="action.gui.open-measure-copy-dialog"/>
 	<shortcut keys="Command Shift v" action="action.gui.open-measure-paste-dialog"/>
 	<shortcut keys=";" action="action.note.effect.change-accentuated"/>

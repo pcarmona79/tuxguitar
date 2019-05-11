@@ -2,6 +2,7 @@ package org.herac.tuxguitar.app.view.dialog.marker;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.marker.TGModifyMarkerAction;
+import org.herac.tuxguitar.app.action.impl.marker.TGRemoveMarkerAction;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.TGColorButton;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
@@ -119,7 +120,17 @@ public class TGMarkerEditor {
 			}
 		});
 		buttonsLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
-		
+		UIButton buttonClean = uiFactory.createButton(buttons);
+		buttonClean.setText(TuxGuitar.getProperty("clean"));
+		buttonClean.addSelectionListener(new UISelectionListener() {
+			public void onSelect(UISelectionEvent event) {
+			    removeMarker();
+				TGMarkerEditor.this.dialog.dispose();
+			}
+		});
+		buttonClean.setEnabled(this.context.hasAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER));
+		buttonsLayout.set(buttonClean, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
+
 		UIButton buttonCancel = uiFactory.createButton(buttons);
 		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
 		buttonCancel.addSelectionListener(new UISelectionListener() {
@@ -127,7 +138,7 @@ public class TGMarkerEditor {
 				TGMarkerEditor.this.dialog.dispose();
 			}
 		});
-		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
+		buttonsLayout.set(buttonCancel, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
 		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
 
 		dialog.computePackedSize(null, null);
@@ -143,6 +154,13 @@ public class TGMarkerEditor {
 		TGActionProcessor tgActionProcessor = new TGActionProcessor(this.context.getContext(), TGModifyMarkerAction.NAME);
 		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER, this.context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER));
 		tgActionProcessor.setAttribute(TGModifyMarkerAction.ATTRIBUTE_MODIFIED_MARKER, this.marker.clone(songManager.getFactory()));
+		tgActionProcessor.process();
+	}
+
+	private void removeMarker() {
+		TGActionProcessor tgActionProcessor = new TGActionProcessor(this.context.getContext(), TGRemoveMarkerAction.NAME);
+		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER, this.context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER));
+		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG, this.context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG));
 		tgActionProcessor.process();
 	}
 	

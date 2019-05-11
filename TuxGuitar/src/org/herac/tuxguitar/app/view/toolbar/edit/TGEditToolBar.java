@@ -24,15 +24,16 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 	
 	private UIScrollBarPanel control;
 	private UIPanel sectionContainer;
-	
+	private UIFactory factory;
+
 	private TGEditToolBar(TGContext context) {
 		super(context);
 	}
 	
 	public void createToolBar(UIContainer parent, boolean visible) {
-		UIFactory uiFactory = TGApplication.getInstance(this.getContext()).getFactory();
+		this.factory = TGApplication.getInstance(this.getContext()).getFactory();
 		
-		this.control = uiFactory.createScrollBarPanel(parent, true, false, false);
+		this.control = factory.createScrollBarPanel(parent, true, false, false);
 		this.control.setVisible(visible);
 		this.control.setLayout(new UIScrollBarPanelLayout(false, true, false, false, false, false));
 		this.control.addFocusGainedListener(this);
@@ -43,7 +44,7 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 			}
 		});
 
-		this.sectionContainer = uiFactory.createPanel(this.control, false);
+		this.sectionContainer = factory.createPanel(this.control, false);
 		this.sectionContainer.setLayout(new UITableLayout());
 		this.sectionContainer.addFocusGainedListener(this);
 		this.createSections();
@@ -75,7 +76,11 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 	public UIScrollBarPanel getControl() {
 		return control;
 	}
-	
+
+	public UIFactory getFactory() {
+		return this.factory;
+	}
+
 	public static TGEditToolBar getInstance(TGContext context) {
 		return TGSingletonUtil.getInstance(context, TGEditToolBar.class.getName(), new TGSingletonFactory<TGEditToolBar>() {
 			public TGEditToolBar createInstance(TGContext context) {

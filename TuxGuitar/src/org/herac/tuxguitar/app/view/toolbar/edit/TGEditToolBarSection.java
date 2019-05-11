@@ -68,7 +68,14 @@ public abstract class TGEditToolBarSection implements TGToolBarSection {
 		
 		return toolBar;
 	}
-	
+
+	public UIPanel createPanel() {
+		UIFactory uiFactory = TGApplication.getInstance(this.getToolBar().getContext()).getFactory();
+		UIPanel panel = uiFactory.createPanel(this.toolBarContainer, false);
+
+		return panel;
+	}
+
 	public TGActionProcessorListener createActionProcessor(String actionId) {
 		return new TGActionProcessorListener(this.toolBar.getContext(), actionId);
 	}

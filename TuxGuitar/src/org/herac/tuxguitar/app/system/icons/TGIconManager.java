@@ -22,6 +22,9 @@ public class TGIconManager {
 	private UIImage[] durations;
 	private UIImage editUndo;
 	private UIImage editRedo;
+	private UIImage cut;
+	private UIImage copy;
+	private UIImage paste;
 	private UIImage editVoice1;
 	private UIImage editVoice2;
 	private UIImage editModeSelection;
@@ -195,6 +198,9 @@ public class TGIconManager {
 		this.filePrintPreview = loadIcon("print-preview");
 		this.editUndo = loadIcon("edit_undo");
 		this.editRedo = loadIcon("edit_redo");
+		this.cut = loadIcon("cut");
+		this.copy = loadIcon("copy");
+		this.paste = loadIcon("paste");
 		this.editVoice1 = loadIcon("edit_voice_1");
 		this.editVoice2 = loadIcon("edit_voice_2");
 		this.editModeSelection = loadIcon("edit_mode_selection");
@@ -487,7 +493,19 @@ public class TGIconManager {
 	public UIImage getEditUndo() {
 		return this.editUndo;
 	}
-	
+
+	public UIImage getCut() {
+		return cut;
+	}
+
+	public UIImage getCopy() {
+		return copy;
+	}
+
+	public UIImage getPaste() {
+		return paste;
+	}
+
 	public UIImage getEditVoice1() {
 		return this.editVoice1;
 	}

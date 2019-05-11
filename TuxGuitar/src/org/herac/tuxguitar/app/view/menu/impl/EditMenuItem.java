@@ -110,7 +110,7 @@ public class EditMenuItem extends TGMenuItem{
 		boolean noteSelected = kit.getTablature().getCaret().getSelectedNote() != null || kit.getTablature().getSelector().isActive();
 		this.cut.setEnabled(!running && noteSelected);
 		this.copy.setEnabled(!running && noteSelected);
-		this.paste.setEnabled(!running && TGClipboard.getInstance(findContext()).getBeats() != null);
+		this.paste.setEnabled(!running && TGClipboard.getInstance(findContext()).hasContents());
 		this.copyMeasure.setEnabled(!running);
 		this.pasteMeasure.setEnabled(!running && TGClipboard.getInstance(findContext()).getSegment() != null);
 		this.undo.setEnabled(!running && TuxGuitar.getInstance().getUndoableManager().canUndo());

@@ -24,6 +24,10 @@ public class TGClipboard {
 		return beats;
 	}
 
+	public boolean hasContents() {
+		return this.segment != null || this.beats != null;
+	}
+
 	public void setData(TGSongSegment data) {
 		this.segment = data;
 		this.beats = null;

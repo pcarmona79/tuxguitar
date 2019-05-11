@@ -4,6 +4,8 @@ import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.composition.*;
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatAlternativeDialogAction;
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatCloseDialogAction;
+import org.herac.tuxguitar.app.action.impl.marker.TGOpenMarkerEditorAction;
+import org.herac.tuxguitar.app.action.impl.marker.TGRemoveMarkerAction;
 import org.herac.tuxguitar.editor.action.composition.TGRepeatOpenAction;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.ui.toolbar.UIToolActionItem;
@@ -19,10 +21,11 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 	private UIToolActionItem clef;
 	private UIToolActionItem keySignature;
 	private UIToolActionItem tripletFeel;
+	private UIToolActionItem marker;
 	private UIToolCheckableItem repeatOpen;
 	private UIToolCheckableItem repeatClose;
 	private UIToolCheckableItem repeatAlternative;
-	
+
 	public TGEditToolBarSectionComposition(TGEditToolBar toolBar) {
 		super(toolBar, SECTION_TITLE);
 	}
@@ -46,6 +49,9 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 		this.tripletFeel = toolBar1.createActionItem();
 		this.tripletFeel.addSelectionListener(this.createActionProcessor(TGOpenTripletFeelDialogAction.NAME));
 
+		this.marker = toolBar1.createActionItem();
+		this.marker.addSelectionListener(this.createActionProcessor(TGOpenMarkerEditorAction.NAME));
+
 		this.repeatOpen = toolBar2.createCheckItem();
 		this.repeatOpen.addSelectionListener(this.createActionProcessor(TGRepeatOpenAction.NAME));
 		
@@ -64,6 +70,8 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 		this.timeSignature.setEnabled(!running);
 		this.clef.setEnabled(!running);
 		this.keySignature.setEnabled(!running);
+		this.tripletFeel.setEnabled(!running);
+		this.marker.setEnabled(!running);
 		this.repeatOpen.setEnabled( !running );
 		this.repeatOpen.setChecked(measure != null && measure.isRepeatOpen());
 		this.repeatClose.setEnabled( !running );
@@ -78,6 +86,7 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 		this.clef.setToolTipText(this.getText("composition.clef"));
 		this.keySignature.setToolTipText(this.getText("composition.keysignature"));
 		this.tripletFeel.setToolTipText(this.getText("composition.tripletfeel"));
+		this.marker.setToolTipText(this.getText("marker"));
 		this.repeatOpen.setToolTipText(this.getText("repeat.open"));
 		this.repeatClose.setToolTipText(this.getText("repeat.close"));
 		this.repeatAlternative.setToolTipText(this.getText("repeat.alternative"));
@@ -89,6 +98,7 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 		this.clef.setImage(this.getIconManager().getCompositionClef());
 		this.keySignature.setImage(this.getIconManager().getCompositionKeySignature());
 		this.tripletFeel.setImage(this.getIconManager().getCompositionTripletFeel());
+		this.marker.setImage(this.getIconManager().getMarkerList());
 		this.repeatOpen.setImage(this.getIconManager().getCompositionRepeatOpen());
 		this.repeatClose.setImage(this.getIconManager().getCompositionRepeatClose());
 		this.repeatAlternative.setImage(this.getIconManager().getCompositionRepeatAlternative());

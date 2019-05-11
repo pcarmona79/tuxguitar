@@ -52,21 +52,9 @@ public class TGPasteNoteAction extends TGActionBase{
 
 				TGActionManager tgActionManager = TGActionManager.getInstance(getContext());
 				if (pasteMode.equals(TRANSFER_TYPE_REPLACE)) {
-				    /*
-					TGBeat end = measureManager.getBeat(track, start.getStart() + beatList.getLength());
-					if (end == null) {
-						end = measureManager.getLastBeat(trackManager.getLastMeasure(songManager.getLastTrack(song)).getBeats());
-					}
-					TGNoteRange range = new TGNoteRange(start, end);
-					context.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_NOTE_RANGE, range);
-					tgActionManager.execute(TGDeleteNoteOrRestAction.NAME, context);
-					*/
 					context.setAttribute(TGMoveBeatsAction.ATTRIBUTE_MOVE, -beatList.getLength());
 					tgActionManager.execute(TGMoveBeatsAction.NAME, context);
-				}/* else if (pasteMode.equals(TRANSFER_TYPE_INSERT)) {
-					context.setAttribute(TGMoveBeatsAction.ATTRIBUTE_MOVE, beatList.getLength());
-                    tgActionManager.execute(TGMoveBeatsAction.NAME, context);
-                }*/
+				}
 				transpose(context, trackManager.addBeats(track, beatList, start.getStart()));
 			}
 		}

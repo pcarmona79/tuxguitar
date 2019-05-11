@@ -46,7 +46,6 @@ public class TGMainToolBar extends TGToolBarModel {
 	
 	public void createSections() {
 		this.clearSections();
-		//this.createSection(new TGMainToolBarSectionFile(this), UITableLayout.ALIGN_LEFT);
 		this.createSection(new TGMainToolBarSectionLayout(this), UITableLayout.ALIGN_LEFT);
 		this.createSection(new TGMainToolBarSectionTransport(this), UITableLayout.ALIGN_CENTER);
 		this.createSection(new TGMainToolBarSectionView(this), UITableLayout.ALIGN_RIGHT);
