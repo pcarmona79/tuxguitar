@@ -368,7 +368,7 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 			}
 		} else if (TGUpdateEvent.EVENT_TYPE.equals(event.getEventType())) {
 			int type = event.getAttribute(TGUpdateEvent.PROPERTY_UPDATE_MODE);
-			if (type == TGUpdateEvent.SONG_UPDATED || type == TGUpdateEvent.MEASURE_UPDATED) {
+			if (type == TGUpdateEvent.SONG_UPDATED || type == TGUpdateEvent.MEASURE_UPDATED || type == TGUpdateEvent.SONG_LOADED) {
 				this.updateProcess.process();
 			}
 		}
