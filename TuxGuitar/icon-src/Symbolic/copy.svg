@@ -1,6 +1,2 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <g fill="#202020">
-        <path d="M7 7v6.969h5l1.99-1.987L13.97 7H7z"/>
-        <path d="M2 2v7.969L6 10V6h3l-.031-4H2z"/>
-    </g>
-</svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.6684 0 0 1.6684 -1.3368 -1.3368)" fill="#202020"><path d="m6.795 6.795v7.1925h5.3944l1.7981-1.7981v-5.3944z"/><path d="m2 2 1e-7 7.1925h4.1957v-2.9969h2.9969v-4.1957z"/></g></svg>
