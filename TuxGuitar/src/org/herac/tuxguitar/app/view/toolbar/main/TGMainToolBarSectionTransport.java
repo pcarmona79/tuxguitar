@@ -96,12 +96,6 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		this.last = this.createButton();
 		this.last.addSelectionListener(event -> TGTransport.getInstance(getToolBar().getContext()).gotoLast());
 
-
-		TGColorManager tgColorManager = TGColorManager.getInstance(getToolBar().getContext());
-		tgColorManager.appendSkinnableColors(SKINNABLE_COLORS);
-		backgroundColor = tgColorManager.getColor(COLOR_BACKGROUND);
-		foregroundColor = tgColorManager.getColor(COLOR_FOREGROUND);
-
 		this.display = getFactory().createCanvas(getControl(), false);
 		addItem(this.display);
 		getLayout().set(this.display, 1, getItems().size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, 100f, 18f, 0f);
@@ -145,6 +139,9 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 
 		this.playMode = this.createButton();
 		this.playMode.addSelectionListener(this.createActionProcessor(TGOpenTransportModeDialogAction.NAME));
+
+		TGColorManager tgColorManager = TGColorManager.getInstance(getToolBar().getContext());
+		tgColorManager.appendSkinnableColors(SKINNABLE_COLORS);
 
 		this.status = STATUS_STOPPED;
 		this.loadIcons();
@@ -305,6 +302,15 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 
 		painter.dispose();
 		dummyImage.dispose();
+
+		if (backgroundColor != null)
+			backgroundColor.dispose();
+		if (foregroundColor != null)
+			foregroundColor.dispose();
+
+		TGColorManager tgColorManager = TGColorManager.getInstance(getToolBar().getContext());
+		backgroundColor = tgColorManager.getColor(COLOR_BACKGROUND);
+		foregroundColor = tgColorManager.getColor(COLOR_FOREGROUND);
 	}
 	
 	public void loadIcons(){
