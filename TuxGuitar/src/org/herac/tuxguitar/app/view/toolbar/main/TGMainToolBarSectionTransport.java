@@ -68,8 +68,6 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 	private int status;
 
 	private UIFont displayFont;
-	private UIColor backgroundColor;
-	private UIColor foregroundColor;
 
 	public TGMainToolBarSectionTransport(TGMainToolBar toolBar) {
 		super(toolBar);
@@ -123,8 +121,6 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 				if (displayFont != null) {
 					displayFont.dispose();
 				}
-                backgroundColor.dispose();
-                foregroundColor.dispose();
 			}
 		});
 
@@ -230,6 +226,9 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		long maximum = last.getStart() + last.getLength() - 1;
 		float positionPercent = (position - minimum) / (float) (maximum - minimum);
 
+		TGColorManager tgColorManager = TGColorManager.getInstance(getToolBar().getContext());
+		UIColor backgroundColor = tgColorManager.getColor(COLOR_BACKGROUND);
+		UIColor foregroundColor = tgColorManager.getColor(COLOR_FOREGROUND);
 		painter.setBackground(backgroundColor);
 
 		painter.initPath(UIPainter.PATH_FILL);
@@ -302,15 +301,6 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 
 		painter.dispose();
 		dummyImage.dispose();
-
-		if (backgroundColor != null)
-			backgroundColor.dispose();
-		if (foregroundColor != null)
-			foregroundColor.dispose();
-
-		TGColorManager tgColorManager = TGColorManager.getInstance(getToolBar().getContext());
-		backgroundColor = tgColorManager.getColor(COLOR_BACKGROUND);
-		foregroundColor = tgColorManager.getColor(COLOR_FOREGROUND);
 	}
 	
 	public void loadIcons(){
