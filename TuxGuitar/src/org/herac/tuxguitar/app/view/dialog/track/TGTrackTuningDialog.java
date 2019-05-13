@@ -53,6 +53,7 @@ public class TGTrackTuningDialog {
 	private UIButton buttonDelete;
 	private UIButton buttonMoveUp;
 	private UIButton buttonMoveDown;
+	private TGTrackTuningPresetModel currentPreset;
 
 	public TGTrackTuningDialog(TGViewContext context) {
 		this.context = context;
@@ -151,6 +152,9 @@ public class TGTrackTuningDialog {
 				select.addItem(new UISelectItem<TGTrackTuningGroupEntryModel>(name, entry));
 				if (wasEmpty) {
 					select.setSelectedValue(entry);
+					if (entry.getPreset() != null) {
+						this.currentPreset = entry.getPreset();
+					}
 				}
 			}
 		}
@@ -357,17 +361,19 @@ public class TGTrackTuningDialog {
 	
 	private void onSelectPreset(UIDropDownSelect<TGTrackTuningGroupEntryModel> select) {
 		TGTrackTuningGroupEntryModel model = select.getSelectedValue();
-		for (int i = this.tuningPresetSelects.indexOf(select); i < this.tuningPresetSelects.size(); i++) {
+		// need to loop one past in order to get the preset
+		for (int i = this.tuningPresetSelects.indexOf(select) + 1; i < this.tuningPresetSelects.size() + 1; i++) {
 			if( model == null ) {
-				if (i > 0) {
+				if (i > 0 && i < this.tuningPresetSelects.size()) {
 					UIDropDownSelect<TGTrackTuningGroupEntryModel> child = this.tuningPresetSelects.get(i);
 					this.populatePresetDropDown(child, null);
 				}
 			} else {
 				if (model.getPreset() != null) {
-					this.updateTuningFromPreset(model.getPreset().getValues());
+					this.updateTuningFromPreset(model.getPreset());
+					this.currentPreset = model.getPreset();
 					model = null;
-				} else if (model.getGroup() != null) {
+				} else if (model.getGroup() != null && i < this.tuningPresetSelects.size()) {
 					UIDropDownSelect<TGTrackTuningGroupEntryModel> child = this.tuningPresetSelects.get(i);
 					this.populatePresetDropDown(child, model.getGroup());
 					TGTrackTuningGroupEntryModel[] entries = model.getGroup().getChildren();
@@ -430,6 +436,10 @@ public class TGTrackTuningDialog {
 		return false;
 	}
 
+	private static boolean areTuningsEqual(TGTrackTuningPresetModel a, TGTrackTuningPresetModel b) {
+	    return areTuningsEqual(Arrays.asList(a.getValues()), Arrays.asList(b.getValues()));
+    }
+
 	private boolean isUsingPreset(TGTrackTuningPresetModel preset) {
 		TGTrackTuningModel[] values = preset.getValues();
 		return areTuningsEqual(this.tuning, Arrays.asList(preset.getValues()));
@@ -443,6 +453,10 @@ public class TGTrackTuningDialog {
 				break;
 			}
 		}
+		// special case for when different presets have the same tuning
+		if (selection != null && currentPreset != null && areTuningsEqual(selection, currentPreset)) {
+			return;
+		}
 		if (selection == null) {
 			int depth = 0;
 			for (UIDropDownSelect<TGTrackTuningGroupEntryModel> select : this.tuningPresetSelects) {
@@ -455,6 +469,7 @@ public class TGTrackTuningDialog {
 				}
 				depth++;
 			}
+			this.currentPreset = null;
 		} else {
 			List<TGTrackTuningGroupModel> path = new ArrayList<TGTrackTuningGroupModel>();
 			TGTrackTuningGroupModel leaf = selection.getEntry().getParent();
@@ -471,10 +486,10 @@ public class TGTrackTuningDialog {
 			    if (depth < path.size()) {
 					this.populatePresetDropDown(select, path.get(depth));
 					select.setIgnoreEvents(true);
-                    if (depth == path.size() - 1) {
-						select.setSelectedValue(selection.getEntry());
-					} else {
-						select.setSelectedValue(path.get(depth + 1).getEntry());
+					TGTrackTuningGroupEntryModel entry = depth == path.size() - 1 ? selection.getEntry() : path.get(depth + 1).getEntry();
+                    select.setSelectedValue(entry);
+                    if (entry.getPreset() != null) {
+						this.currentPreset = entry.getPreset();
 					}
 					select.setIgnoreEvents(false);
 				} else {
@@ -552,9 +567,9 @@ public class TGTrackTuningDialog {
 		}
 	}
 	
-	private void updateTuningFromPreset(TGTrackTuningModel[] preset) {
+	private void updateTuningFromPreset(TGTrackTuningPresetModel preset) {
 		List<TGTrackTuningModel> models = new ArrayList<TGTrackTuningModel>();
-		for(TGTrackTuningModel presetModel : preset) {
+		for(TGTrackTuningModel presetModel : preset.getValues()) {
 			TGTrackTuningModel model = new TGTrackTuningModel();
 			model.setValue(presetModel.getValue());
 			models.add(model);
@@ -666,6 +681,7 @@ public class TGTrackTuningDialog {
 		TGTrackTuningPresetModel preset = new TGTrackTuningPresetModel();
 		preset.setName(tuning.getName());
 		preset.setValues(models);
+		preset.setProgram(tuning.getProgram());
 		return preset;
 	}
 	
