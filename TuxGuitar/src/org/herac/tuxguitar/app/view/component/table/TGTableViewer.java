@@ -141,6 +141,7 @@ public class TGTableViewer implements TGEventListener {
 		});
 		this.fireUpdate(true);
 		this.loadProperties();
+		this.loadIcons();
 	}
 	
 	private void addColorModel(){
@@ -148,13 +149,12 @@ public class TGTableViewer implements TGEventListener {
 	}
 	
 	public void loadProperties() {
-		this.table.getColumnName().setTitle(TuxGuitar.getProperty("track.name"));
-		this.table.getColumnInstrument().setTitle(TuxGuitar.getProperty("track.instrument"));
-		this.table.loadRowProperties();
+		this.table.loadProperties();
 		this.loadMenuProperties();
 	}
 	
 	public void loadIcons() {
+	    this.table.loadIcons();
 		this.loadMenuIcons();
 	}
 	

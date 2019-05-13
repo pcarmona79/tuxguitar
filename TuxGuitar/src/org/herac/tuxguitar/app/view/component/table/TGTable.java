@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.action.impl.track.TGAddAndEditNewTrackAction;
+import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
+import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.ui.UIFactory;
+import org.herac.tuxguitar.ui.event.UIMouseEvent;
+import org.herac.tuxguitar.ui.event.UIMouseUpListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIControl;
-import org.herac.tuxguitar.ui.widget.UIDivider;
-import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UIPanel;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGTable {
@@ -25,6 +27,7 @@ public class TGTable {
 	private TGTableColumn columnInstrument;
 	private TGTableColumn columnCanvas;
 	private List<TGTableRow> rows;
+	private UIImageView addTrackButton;
 
 	public TGTable(TGContext context, TGTableViewer viewer, UILayoutContainer parent){
 		this.context = context;
@@ -45,12 +48,22 @@ public class TGTable {
 		this.columnNumber = new TGTableColumn(this);
 		this.columnSoloMute = new TGTableColumn(this);
 		this.columnName = new TGTableColumn(this);
+		this.addTrackButton = uiFactory.createImageView(this.columnName.getControl());
+		this.addTrackButton.addMouseUpListener(new UIMouseUpListener() {
+			public void onMouseUp(UIMouseEvent event) {
+				if (event.getButton() == 1) {
+					TGActionProcessor processor = new TGActionProcessor(context, TGAddAndEditNewTrackAction.NAME);
+					processor.process();
+                }
+			}
+		});
+		this.columnName.getLayout().set(this.addTrackButton, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_RIGHT, false, true, 1, 1, null, null, 2f);
 		this.columnInstrument = new TGTableColumn(this);
 		this.columnCanvas = new TGTableColumn(this);
-		
+
 		this.rowControl = uiFactory.createPanel(this.table, false);
 		this.rowControl.setLayout(new TGTableBodyLayout());
-		
+
 		this.createTableLayout();
 		this.createColumnLayout();
 	}
@@ -166,9 +179,19 @@ public class TGTable {
 		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(control);
 	}
 
-	public void loadRowProperties() {
+	public void loadProperties() {
+		this.getColumnName().setTitle(TuxGuitar.getProperty("track"));
+		this.getColumnInstrument().setTitle(TuxGuitar.getProperty("track.instrument"));
+		this.addTrackButton.setToolTipText(TuxGuitar.getProperty("track.add"));
 		for (TGTableRow row : this.rows) {
 			row.loadProperties();
+		}
+	}
+
+	public void loadIcons() {
+		this.addTrackButton.setImage(TGIconManager.getInstance(context).getListAdd());
+		for (TGTableRow row : this.rows) {
+			row.loadIcons();
 		}
 	}
 

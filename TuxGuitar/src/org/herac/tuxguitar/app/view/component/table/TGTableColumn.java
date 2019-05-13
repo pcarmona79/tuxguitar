@@ -10,34 +10,39 @@ public class TGTableColumn {
 	private TGTable table;
 	private UIPanel column;
 	private UILabel label;
-	
+	private UITableLayout layout;
+
 	public TGTableColumn(TGTable table){
 		this.table = table;
 		this.column = this.table.getUIFactory().createPanel(this.table.getColumnControl(), false);
 		this.label = this.table.getUIFactory().createLabel(this.column);
 
 		this.table.appendListeners(this.column);
-		
+
 		this.createLayout();
 	}
 	
 	public void createLayout() {
-		UITableLayout uiTableLayout = new UITableLayout();
-		uiTableLayout.set(UITableLayout.MARGIN_TOP, 0f);
-		uiTableLayout.set(UITableLayout.MARGIN_BOTTOM, 0f);
-		uiTableLayout.set(this.label, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		this.layout = new UITableLayout();
+		this.layout.set(UITableLayout.MARGIN_TOP, 0f);
+		this.layout.set(UITableLayout.MARGIN_BOTTOM, 0f);
+		this.layout.set(this.label, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
 		
-		this.column.setLayout(uiTableLayout);
+		this.column.setLayout(this.layout);
 	}
 	
-	public UIControl getControl(){
+	public UIPanel getControl(){
 		return this.column;
 	}
 	
 	public UILabel getLabel(){
 		return this.label;
 	}
-	
+
+	public UITableLayout getLayout() {
+		return layout;
+	}
+
 	public void setTitle(String title){
 		this.label.setText(title);
 	}

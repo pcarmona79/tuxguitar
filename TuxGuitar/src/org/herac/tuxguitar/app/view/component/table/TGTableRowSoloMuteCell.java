@@ -23,6 +23,9 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
   private UIImageView muteButton;
   private TGContext context;
 
+  private boolean solo;
+  private boolean mute;
+
   public TGTableRowSoloMuteCell(final TGTableRow row) {
     super(row);
     this.context = row.getTable().getContext();
@@ -32,8 +35,6 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
     this.muteButton = table.getUIFactory().createImageView(getControl());
     table.appendListeners(this.soloButton);
     table.appendListeners(this.muteButton);
-    setSolo(false);
-    setMute(false);
     TGContext context = row.getTable().getContext();
     this.soloButton.addMouseUpListener(createClickListener(TGChangeTrackSoloAction.NAME));
     this.muteButton.addMouseUpListener(createClickListener(TGChangeTrackMuteAction.NAME));
@@ -94,15 +95,22 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
   public void setSolo(boolean solo) {
     TGIconManager iconManager = TGIconManager.getInstance(context);
     this.soloButton.setImage(solo ? iconManager.getSolo() : iconManager.getSoloDisabled());
+    this.solo = solo;
   }
 
   public void setMute(boolean mute) {
     TGIconManager iconManager = TGIconManager.getInstance(context);
     this.muteButton.setImage(mute ? iconManager.getMute() : iconManager.getMuteDisabled());
+    this.mute = mute;
   }
 
   public void loadProperties() {
     this.soloButton.setToolTipText(TuxGuitar.getProperty("track.solo"));
     this.muteButton.setToolTipText(TuxGuitar.getProperty("track.mute"));
+  }
+
+  public void loadIcons() {
+    setSolo(this.solo);
+    setMute(this.mute);
   }
 }

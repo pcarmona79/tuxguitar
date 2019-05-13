@@ -77,7 +77,11 @@ public class TGTableRow {
 	public void loadProperties() {
 		this.soloMute.loadProperties();
 	}
-	
+
+	public void loadIcons() {
+	    this.soloMute.loadIcons();
+	}
+
 	public void setBgColor(UIColor background){
 		this.number.setBgColor(background);
 		this.soloMute.setBgColor(background);
@@ -179,7 +183,7 @@ public class TGTableRow {
 	public void setPaintListenerCanvas(TGTableCanvasPainter paintListenerCanvas) {
 		this.paintListenerCanvas = paintListenerCanvas;
 	}
-	
+
 	private class MouseListenerLabel implements UIMouseUpListener, UIMouseDownListener, UIMouseDoubleClickListener{
 		
 		public MouseListenerLabel(){
