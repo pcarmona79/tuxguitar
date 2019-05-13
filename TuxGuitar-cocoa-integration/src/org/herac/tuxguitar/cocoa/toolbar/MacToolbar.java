@@ -101,7 +101,7 @@ public class MacToolbar {
                             layout.set(control, UITableLayout.MINIMUM_PACKED_WIDTH, 32f);
 						}
 						layout.set(control, UITableLayout.MINIMUM_PACKED_HEIGHT, 24f);
-						layout.set(control, UITableLayout.MARGIN, -2f);
+						layout.set(control, UITableLayout.MARGIN, -1f);
 						NSButton button = ((NSButton) ((Button) ((SWTControl) control).getControl()).view);
 						button.setBezelStyle(8);
 

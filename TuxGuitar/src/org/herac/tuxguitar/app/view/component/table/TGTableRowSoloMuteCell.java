@@ -35,7 +35,6 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
     this.muteButton = table.getUIFactory().createImageView(getControl());
     table.appendListeners(this.soloButton);
     table.appendListeners(this.muteButton);
-    TGContext context = row.getTable().getContext();
     this.soloButton.addMouseUpListener(createClickListener(TGChangeTrackSoloAction.NAME));
     this.muteButton.addMouseUpListener(createClickListener(TGChangeTrackMuteAction.NAME));
     getLayout().set(this.soloButton, 1, 1, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, null, 2f);
@@ -43,7 +42,7 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
     loadProperties();
   }
 
-  UIMouseUpListener createClickListener(final String action) {
+  private UIMouseUpListener createClickListener(final String action) {
     return event -> {
       if (event.getButton() == 1) {
         final TGTable table = getRow().getTable();

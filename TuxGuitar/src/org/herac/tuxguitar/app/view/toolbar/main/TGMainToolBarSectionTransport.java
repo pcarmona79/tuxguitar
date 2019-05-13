@@ -96,7 +96,7 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 
 		this.display = getFactory().createCanvas(getControl(), false);
 		addItem(this.display);
-		getLayout().set(this.display, 1, getItems().size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, 100f, 18f, 0f);
+		getLayout().set(this.display, 1, getItems().size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, 100f, 18f, 1f);
 		this.display.addMouseDownListener(new UIMouseDownListener() {
 			public void onMouseDown(UIMouseEvent event) {
 				if (event.getButton() == 1) {
