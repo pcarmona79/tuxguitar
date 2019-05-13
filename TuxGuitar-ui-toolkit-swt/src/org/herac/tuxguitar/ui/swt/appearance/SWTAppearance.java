@@ -24,12 +24,12 @@ public class SWTAppearance implements UIAppearance {
 		this.colorMap = new HashMap<UIColorAppearance, UIColorModel>();
 		this.colorMap.put(UIColorAppearance.WidgetBackground, this.createColorModel(SWT.COLOR_WIDGET_BACKGROUND));
 		this.colorMap.put(UIColorAppearance.WidgetForeground, this.createColorModel(SWT.COLOR_WIDGET_FOREGROUND));
-		this.colorMap.put(UIColorAppearance.WidgetLightBackground, this.createColorModel(SWT.COLOR_WIDGET_BACKGROUND, SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
-		this.colorMap.put(UIColorAppearance.WidgetLightForeground, this.createColorModel(SWT.COLOR_WIDGET_FOREGROUND));
-		this.colorMap.put(UIColorAppearance.WidgetHighlightBackground, this.createColorModel(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
-		this.colorMap.put(UIColorAppearance.WidgetHighlightForeground, this.createColorModel(SWT.COLOR_WIDGET_FOREGROUND));
+		this.colorMap.put(UIColorAppearance.WidgetLightBackground, UIColorModel.secondaryColor(this.createColorModel(SWT.COLOR_WIDGET_BACKGROUND)));
+		this.colorMap.put(UIColorAppearance.WidgetLightForeground,  UIColorModel.complementaryTextColor(this.colorMap.get(UIColorAppearance.WidgetLightBackground)));
+		this.colorMap.put(UIColorAppearance.WidgetHighlightBackground, UIColorModel.secondaryColor(this.colorMap.get(UIColorAppearance.WidgetLightBackground)));
+		this.colorMap.put(UIColorAppearance.WidgetHighlightForeground, UIColorModel.complementaryTextColor(this.colorMap.get(UIColorAppearance.WidgetHighlightBackground)));
 		this.colorMap.put(UIColorAppearance.WidgetSelectedBackground, this.createColorModel(SWT.COLOR_WIDGET_BACKGROUND, SWT.COLOR_WIDGET_NORMAL_SHADOW));
-		this.colorMap.put(UIColorAppearance.WidgetSelectedForeground, this.createColorModel(SWT.COLOR_LIST_SELECTION_TEXT));
+		this.colorMap.put(UIColorAppearance.WidgetSelectedForeground, UIColorModel.complementaryTextColor(this.colorMap.get(UIColorAppearance.WidgetSelectedBackground)));
 		this.colorMap.put(UIColorAppearance.WidgetDarkBackground, UIColorModel.darken(this.createColorModel(SWT.COLOR_WIDGET_BACKGROUND)));
 		this.colorMap.put(UIColorAppearance.WidgetDarkForeground, this.createColorModel(SWT.COLOR_WIDGET_FOREGROUND));
 		this.colorMap.put(UIColorAppearance.WidgetBorder, UIColorModel.adjustValue(this.createColorModel(SWT.COLOR_WIDGET_BACKGROUND), -.2f));

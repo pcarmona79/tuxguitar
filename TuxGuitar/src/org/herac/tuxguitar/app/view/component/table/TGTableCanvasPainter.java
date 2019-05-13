@@ -66,14 +66,14 @@ public class TGTableCanvasPainter {
 			}else{
 				painter.setBackground(colorBackground);
 			}
-			painter.addRectangle(x,y,size - 1,size );
+			painter.addRectangle(x + .5f,y + .5f,size - 1f,size - 1f);
 			painter.closePath();
 
-			final float C_MARGIN = 3f;
+			final float C_MARGIN = 2.5f;
 			float x1 = x + C_MARGIN;
 			float y1 = y + C_MARGIN;
-			float x2 = x1 + size - C_MARGIN * 2 - 1;
-			float y2 = y1 + size - C_MARGIN * 2;
+			float x2 = x1 + size - C_MARGIN * 2f;
+			float y2 = y1 + size - C_MARGIN * 2f;
 
 			boolean hasCaret = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().getMeasure().equals(measure);
 			if((playing && measure.isPlaying(this.viewer.getEditor().getTablature().getViewLayout())) || (!playing && hasCaret)){
@@ -86,13 +86,13 @@ public class TGTableCanvasPainter {
 				painter.setBackground(layout.getResources().getSelectionColor());
 				painter.setAlpha(SELECTION_ALPHA);
 				painter.initPath(UIPainter.PATH_FILL);
-				painter.addRectangle(x + 1f, y + 1f, size - 2f, size - 2f);
+				painter.addRectangle(x + 1.5f, y + 1.5f, size - 3f, size - 3f);
 				painter.closePath();
 
 				painter.setAlpha(SELECTION_BORDER_ALPHA);
 				painter.setForeground(getCaretColor(factory, trackColor, colorBackground, isRestMeasure));
 				painter.initPath(UIPainter.PATH_DRAW);
-				painter.addRectangle(x + 1f, y + 1f, size - 2f, size - 2f);
+				painter.addRectangle(x + 1.5f, y + 1.5f, size - 3f, size - 3f);
 				painter.closePath();
 				painter.setAlpha(255);
 			}

@@ -90,7 +90,13 @@ public class UIColorModel {
 	public static UIColorModel complementaryTextColor(UIColorModel color) {
 		float[] hsb = color.getHSB();
 		hsb[1] = 0f;
-		hsb[2] = hsb[2] >= .3f ? .1f : .8f;
+		hsb[2] = hsb[2] >= .4f ? .1f : .8f;
+		return new UIColorModel(hsb);
+	}
+
+	public static UIColorModel secondaryColor(UIColorModel color) {
+		float[] hsb = color.getHSB();
+		hsb[2] += hsb[2] >= .3f ? -.05f : .05f;
 		return new UIColorModel(hsb);
 	}
 
