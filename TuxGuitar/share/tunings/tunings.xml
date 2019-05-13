@@ -40,9 +40,6 @@
 		</group>
 	</group>
 	<group name="Bass">
-		<group name="3-String">
-			<tuning name="E Tuning" notes="38,33,28" />
-		</group>
 		<group name="4-String">
 			<tuning name="E Tuning" notes="43,38,33,28" />
 			<tuning name="Dropped D" notes="43,38,33,26" />
@@ -76,11 +73,6 @@
 		<group name="4-String">
 			<tuning name="Standard" notes="76,69,62,55" />
 			<tuning name="Tenor" notes="64,57,50,43" />
-		</group>
-	</group>
-	<group name="Viola">
-		<group name="4-String">
-			<tuning name="Standard" notes="69,62,55,48" />
 		</group>
 	</group>
 	<group name="Cello">
