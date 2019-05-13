@@ -131,9 +131,7 @@ public class TGTableViewer implements TGEventListener {
 		this.table.getColumnName().getControl().addMouseUpListener(listener);
 		this.table.getColumnInstrument().getControl().addMouseUpListener(listener);
 		this.table.getColumnCanvas().getControl().addMouseUpListener(listener);
-		this.table.getColumnCanvas().getLabel().addMouseDoubleClickListener(new TGActionProcessorListener(this.context, TGOpenSongInfoDialogAction.NAME));
-		this.table.getColumnCanvas().getControl().addMouseDoubleClickListener(new TGActionProcessorListener(this.context, TGOpenSongInfoDialogAction.NAME));
-		
+
 		this.table.getColumnCanvas().getControl().addResizeListener(new UIResizeListener() {
 			public void onResize(UIResizeEvent event) {
 				TGTableViewer.this.updateHScroll();
@@ -426,7 +424,6 @@ public class TGTableViewer implements TGEventListener {
 	public void redraw() {
 		if(!isDisposed()){
 			this.updateTable();
-			this.table.getColumnCanvas().setTitle(TuxGuitar.getInstance().getDocumentManager().getSong().getName());
 			int selectedTrack = getEditor().getTablature().getCaret().getTrack().getNumber();
 			this.redrawRows(selectedTrack);
 			this.selectedTrack = selectedTrack;

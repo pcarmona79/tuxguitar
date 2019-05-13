@@ -31,7 +31,7 @@ public class TGTableCanvasPainter {
 	private static float C_CPD = (float) (C_BR - C_BR * 4.*(Math.sqrt(2.)-1.)/3.);
 
 	protected void paintTrack(TGTableRow row, UIPainter painter){
-		int x = -this.viewer.getHScrollSelection();
+		int scrollX = this.viewer.getHScrollSelection();
 		int y = 0;
 		float size = this.viewer.getTable().getRowHeight();
 		float width = row.getPainter().getBounds().getWidth();
@@ -54,7 +54,8 @@ public class TGTableCanvasPainter {
 		TGBeatRange beatRange = viewer.getEditor().getTablature().getSelector().getBeatRange();
 
 		int count = this.track.countMeasures();
-		for(int j = 0;j < count;j++){
+		int j = (int) Math.floor(scrollX / size);
+		for(float x = -scrollX + j * size; j < count && x < width; j++, x += size) {
 			TGMeasureImpl measure = (TGMeasureImpl) this.track.getMeasure(j);
 			boolean isRestMeasure = this.isRestMeasure(measure);
 			painter.initPath(UIPainter.PATH_FILL);
@@ -94,7 +95,6 @@ public class TGTableCanvasPainter {
 				painter.closePath();
 				painter.setAlpha(255);
 			}
-			x += size;
 		}
 		
 		trackColor.dispose();

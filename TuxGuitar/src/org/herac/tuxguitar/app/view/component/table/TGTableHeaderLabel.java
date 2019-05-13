@@ -1,18 +1,17 @@
 package org.herac.tuxguitar.app.view.component.table;
 
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIControl;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 
-public class TGTableColumn {
+public class TGTableHeaderLabel implements TGTableHeader {
 	
 	private TGTable table;
 	private UIPanel column;
 	private UILabel label;
 	private UITableLayout layout;
 
-	public TGTableColumn(TGTable table){
+	public TGTableHeaderLabel(TGTable table){
 		this.table = table;
 		this.column = this.table.getUIFactory().createPanel(this.table.getColumnControl(), false);
 		this.label = this.table.getUIFactory().createLabel(this.column);
