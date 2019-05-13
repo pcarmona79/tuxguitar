@@ -100,15 +100,8 @@ import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenTransposeDialogAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGSelectScaleAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGToggleBrowserAction;
+import org.herac.tuxguitar.app.action.impl.track.*;
 import org.herac.tuxguitar.editor.action.tools.TGTransposeAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoFirstTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoLastTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoNextTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoPreviousTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoToTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackPropertiesDialogAction;
-import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackTuningDialogAction;
-import org.herac.tuxguitar.app.action.impl.track.TGToggleLyricEditorAction;
 import org.herac.tuxguitar.app.action.impl.transport.*;
 import org.herac.tuxguitar.app.action.impl.view.*;
 import org.herac.tuxguitar.app.action.listener.cache.TGUpdateController;
@@ -313,7 +306,7 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGClearSongAction.NAME, LOCKABLE | DISABLE_ON_PLAY);
 		
 		//track actions
-		this.map(TGAddNewTrackAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, new TGUpdateAddedTrackController(), new TGUndoableAddTrackController());
+		this.map(TGAddNewTrackAction.NAME, LOCKABLE | DISABLE_ON_PLAY, new TGUpdateAddedTrackController(), new TGUndoableAddTrackController());
 		this.map(TGAddTrackAction.NAME, LOCKABLE | DISABLE_ON_PLAY, new TGUpdateAddedTrackController(), new TGUndoableAddTrackController());
 		this.map(TGSetTrackMuteAction.NAME, LOCKABLE, new TGUpdatePlayerTracksController(), new TGUndoableTrackSoloMuteController());
 		this.map(TGSetTrackSoloAction.NAME, LOCKABLE, new TGUpdatePlayerTracksController(), new TGUndoableTrackSoloMuteController());
@@ -526,6 +519,7 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGOpenTrackTuningDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenTrackPropertiesDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenScaleDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
+		this.map(TGAddAndEditNewTrackAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenURLAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGOpenTransportModeDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGOpenMarkerEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);

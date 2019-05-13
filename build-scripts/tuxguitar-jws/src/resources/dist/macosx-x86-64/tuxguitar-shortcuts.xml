@@ -87,7 +87,7 @@
 	<shortcut keys="l" action="action.note.general.tied"/>
 	<shortcut keys="F7" action="action.settings.configure"/>
 	<shortcut keys="Command b" action="action.gui.toggle-browser-dialog"/>
-	<shortcut keys="Command Shift NumEnter" action="action.track.add-new"/>
+	<shortcut keys="Command Shift NumEnter" action="action.gui.add-new-track"/>
 	<shortcut keys="Command Shift Up" action="action.track.go-previous"/>
 	<shortcut keys="Command Shift Down" action="action.track.go-next"/>
 	<shortcut keys="Command Shift Del" action="action.track.remove"/>

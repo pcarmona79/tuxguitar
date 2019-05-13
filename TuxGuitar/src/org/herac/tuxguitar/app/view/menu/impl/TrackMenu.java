@@ -1,12 +1,7 @@
 package org.herac.tuxguitar.app.view.menu.impl;
 
 import org.herac.tuxguitar.app.TuxGuitar;
-import org.herac.tuxguitar.app.action.impl.track.TGGoFirstTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoLastTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoNextTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGGoPreviousTrackAction;
-import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackPropertiesDialogAction;
-import org.herac.tuxguitar.app.action.impl.track.TGToggleLyricEditorAction;
+import org.herac.tuxguitar.app.action.impl.track.*;
 import org.herac.tuxguitar.app.view.menu.TGMenuItem;
 import org.herac.tuxguitar.editor.action.track.TGAddNewTrackAction;
 import org.herac.tuxguitar.editor.action.track.TGChangeTrackMuteAction;
@@ -63,7 +58,7 @@ public class TrackMenu extends TGMenuItem {
 			this.menu.createSeparator();
 			//--ADD TRACK--
 			this.addTrack = this.menu.createActionItem();
-			this.addTrack.addSelectionListener(this.createActionProcessor(TGAddNewTrackAction.NAME));
+			this.addTrack.addSelectionListener(this.createActionProcessor(TGAddAndEditNewTrackAction.NAME));
 			//--CLONE TRACK--
 			this.cloneTrack = this.menu.createActionItem();
 			this.cloneTrack.addSelectionListener(this.createActionProcessor(TGCloneTrackAction.NAME));
@@ -106,7 +101,7 @@ public class TrackMenu extends TGMenuItem {
 			setMenuItemTextAndAccelerator(this.last, "track.last", TGGoLastTrackAction.NAME);
 			setMenuItemTextAndAccelerator(this.previous, "track.previous", TGGoPreviousTrackAction.NAME);
 			setMenuItemTextAndAccelerator(this.next, "track.next", TGGoNextTrackAction.NAME);
-			setMenuItemTextAndAccelerator(this.addTrack, "track.add", TGAddNewTrackAction.NAME);
+			setMenuItemTextAndAccelerator(this.addTrack, "track.add", TGAddAndEditNewTrackAction.NAME);
 			setMenuItemTextAndAccelerator(this.cloneTrack, "track.clone", TGCloneTrackAction.NAME);
 			setMenuItemTextAndAccelerator(this.removeTrack, "track.remove", TGRemoveTrackAction.NAME);
 			setMenuItemTextAndAccelerator(this.moveUp, "track.move-up", TGMoveTrackUpAction.NAME);
