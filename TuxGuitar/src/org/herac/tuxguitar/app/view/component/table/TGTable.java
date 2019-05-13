@@ -76,10 +76,8 @@ public class TGTable {
 		UITableLayout uiLayout = new UITableLayout(0f);
 		
 		int columnIndex = 0;
-		this.createColumnHeaderLayout(uiLayout, this.columnNumber, ++columnIndex, false, 20f);
-		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnNumber, this.columnSoloMute), ++columnIndex);
-		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, 72f);
-		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnSoloMute, this.columnName), ++columnIndex);
+		this.createColumnHeaderLayout(uiLayout, this.columnNumber, ++columnIndex, false, 25f);
+		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, 40f);
 		this.createColumnHeaderLayout(uiLayout, this.columnName, ++columnIndex, false, 250f);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnName, this.columnInstrument), ++columnIndex);
 		this.createColumnHeaderLayout(uiLayout, this.columnInstrument, ++columnIndex, false, 250f);
@@ -103,6 +101,10 @@ public class TGTable {
 	
 	public void createRow(){
 		this.rows.add(new TGTableRow(this));
+	}
+
+	public int getRowIndex(TGTableRow row) {
+		return this.rows.indexOf(row);
 	}
 	
 	public float getRowHeight(){
@@ -163,7 +165,13 @@ public class TGTable {
 	public void appendListeners(UIControl control){
 		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(control);
 	}
-	
+
+	public void loadRowProperties() {
+		for (TGTableRow row : this.rows) {
+			row.loadProperties();
+		}
+	}
+
 	public void update(){
 		this.table.layout();
 	}

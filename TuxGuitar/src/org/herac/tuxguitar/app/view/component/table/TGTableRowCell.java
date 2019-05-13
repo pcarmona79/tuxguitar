@@ -28,6 +28,10 @@ public class TGTableRowCell {
 
 		this.cell.setLayout(getLayout());
 	}
+
+	public TGTableRow getRow() {
+		return this.row;
+	}
 	
 	public UITableLayout getLayout() {
 		return layout;

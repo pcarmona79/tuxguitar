@@ -3,53 +3,57 @@ package org.herac.tuxguitar.app.view.component.table;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.TGActionProcessorListener;
 import org.herac.tuxguitar.app.system.icons.TGIconManager;
+import org.herac.tuxguitar.app.view.component.tab.Tablature;
+import org.herac.tuxguitar.document.TGDocumentContextAttributes;
+import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.action.track.TGChangeTrackMuteAction;
 import org.herac.tuxguitar.editor.action.track.TGChangeTrackSoloAction;
-import org.herac.tuxguitar.ui.event.UIMouseDownListener;
-import org.herac.tuxguitar.ui.event.UIMouseUpListener;
-import org.herac.tuxguitar.ui.event.UISelectionEvent;
-import org.herac.tuxguitar.ui.event.UISelectionListener;
+import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.TGTrack;
+import org.herac.tuxguitar.ui.event.*;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.menu.UIPopupMenu;
 import org.herac.tuxguitar.ui.resource.UIColor;
-import org.herac.tuxguitar.ui.resource.UIRectangle;
-import org.herac.tuxguitar.ui.widget.UIToggleButton;
+import org.herac.tuxguitar.ui.widget.UIImageView;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGTableRowSoloMuteCell extends TGTableRowCell {
 
-  private UIToggleButton soloButton;
-  private UIToggleButton muteButton;
+  private UIImageView soloButton;
+  private UIImageView muteButton;
   private TGContext context;
 
   public TGTableRowSoloMuteCell(final TGTableRow row) {
     super(row);
     this.context = row.getTable().getContext();
-    TGTable table = row.getTable();
+    final TGTable table = row.getTable();
 
-    this.soloButton = table.getUIFactory().createToggleButton(getControl(), true);
-    this.muteButton = table.getUIFactory().createToggleButton(getControl(), true);
-    this.setSoloIcon();
-    this.setMuteIcon();
+    this.soloButton = table.getUIFactory().createImageView(getControl());
+    this.muteButton = table.getUIFactory().createImageView(getControl());
     table.appendListeners(this.soloButton);
     table.appendListeners(this.muteButton);
+    setSolo(false);
+    setMute(false);
     TGContext context = row.getTable().getContext();
-    this.soloButton.addSelectionListener(new TGActionProcessorListener(context, TGChangeTrackSoloAction.NAME));
-    this.muteButton.addSelectionListener(new TGActionProcessorListener(context, TGChangeTrackMuteAction.NAME));
-    this.soloButton.addSelectionListener(event -> TGTableRowSoloMuteCell.this.setSoloIcon());
-    this.muteButton.addSelectionListener(event -> TGTableRowSoloMuteCell.this.setMuteIcon());
-    getLayout().set(this.soloButton, 1, 1, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, null, 0f);
-    getLayout().set(this.muteButton, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, null, 0f);
+    this.soloButton.addMouseUpListener(createClickListener(TGChangeTrackSoloAction.NAME));
+    this.muteButton.addMouseUpListener(createClickListener(TGChangeTrackMuteAction.NAME));
+    getLayout().set(this.soloButton, 1, 1, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, null, 2f);
+    getLayout().set(this.muteButton, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false, 1, 1, null, null, 2f);
+    loadProperties();
   }
 
-  private void setSoloIcon() {
-    TGIconManager iconManager = TGIconManager.getInstance(context);
-    this.soloButton.setImage(this.soloButton.isSelected() ? iconManager.getSolo() : iconManager.getSoloDisabled());
-  }
+  UIMouseUpListener createClickListener(final String action) {
+    return event -> {
+      if (event.getButton() == 1) {
+        final TGTable table = getRow().getTable();
+        final Tablature tablature = table.getViewer().getEditor().getTablature();
+        final TGTrack track = tablature.getSongManager().getTrack(tablature.getSong(), table.getRowIndex(getRow()) + 1);
 
-  private void setMuteIcon() {
-    TGIconManager iconManager = TGIconManager.getInstance(context);
-    this.muteButton.setImage(this.muteButton.isSelected() ? iconManager.getMute() : iconManager.getMuteDisabled());
+        TGActionProcessor processor = new TGActionProcessor(context, action);
+        processor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK, track);
+        processor.process();
+      }
+    };
   }
 
   @Override
@@ -88,12 +92,17 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
   }
 
   public void setSolo(boolean solo) {
-    this.soloButton.setSelected(solo);
-    this.setSoloIcon();
+    TGIconManager iconManager = TGIconManager.getInstance(context);
+    this.soloButton.setImage(solo ? iconManager.getSolo() : iconManager.getSoloDisabled());
   }
 
   public void setMute(boolean mute) {
-    this.muteButton.setSelected(mute);
-    this.setMuteIcon();
+    TGIconManager iconManager = TGIconManager.getInstance(context);
+    this.muteButton.setImage(mute ? iconManager.getMute() : iconManager.getMuteDisabled());
+  }
+
+  public void loadProperties() {
+    this.soloButton.setToolTipText(TuxGuitar.getProperty("track.solo"));
+    this.muteButton.setToolTipText(TuxGuitar.getProperty("track.mute"));
   }
 }

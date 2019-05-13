@@ -150,6 +150,7 @@ public class TGTableViewer implements TGEventListener {
 	public void loadProperties() {
 		this.table.getColumnName().setTitle(TuxGuitar.getProperty("track.name"));
 		this.table.getColumnInstrument().setTitle(TuxGuitar.getProperty("track.instrument"));
+		this.table.loadRowProperties();
 		this.loadMenuProperties();
 	}
 	

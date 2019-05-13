@@ -53,9 +53,6 @@ public class TGTableRow {
 		this.number.addMouseDoubleClickListener(mouseListenerLabel);
 		
 		this.soloMute = new TGTableRowSoloMuteCell(this);
-		this.soloMute.addMouseDownListener(mouseListenerLabel);
-		this.soloMute.addMouseUpListener(mouseListenerLabel);
-		this.soloMute.addMouseDoubleClickListener(mouseListenerLabel);
 		this.soloMute.getLayout().set(UITableLayout.MARGIN_LEFT, 0f);
 		this.soloMute.getLayout().set(UITableLayout.MARGIN_RIGHT, 0f);
 
@@ -75,6 +72,10 @@ public class TGTableRow {
 		this.painter.addMouseDoubleClickListener(mouseListenerCanvas);
 		this.painter.addPaintListener(new TGBufferedPainterListenerLocked(this.table.getContext(), new TGTableRowPaintHandle()));
 		this.table.appendListeners(this.painter);
+	}
+
+	public void loadProperties() {
+		this.soloMute.loadProperties();
 	}
 	
 	public void setBgColor(UIColor background){
