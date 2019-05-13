@@ -50,6 +50,7 @@ public class TGTableHeaderMeasures implements TGTableHeader, TGBufferedPainterHa
 
 	private void headerMouseExit(UIMouseEvent event) {
 	    this.mousePosition = null;
+		this.canvas.redraw();
 	}
 
 	private void headerClicked(UIMouseEvent event) {
