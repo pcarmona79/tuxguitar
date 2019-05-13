@@ -26,17 +26,7 @@ import org.herac.tuxguitar.ui.event.UIMouseEvent;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UITable;
-import org.herac.tuxguitar.ui.widget.UITableItem;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
 
 public class TGTrackTuningDialog {
 	
@@ -57,7 +47,7 @@ public class TGTrackTuningDialog {
 	private UICheckBox stringTransposition;
 	private UICheckBox stringTranspositionTryKeepString;
 	private UICheckBox stringTranspositionApplyToChords;
-	private UIDropDownSelect<Integer> offsetCombo;
+	private UISpinner offsetSpinner;
 	private UISelectItem<TGTrackTuningGroupEntryModel> customPresetItem;
 	private UIButton buttonEdit;
 	private UIButton buttonDelete;
@@ -305,12 +295,11 @@ public class TGTrackTuningDialog {
 		offsetLabel.setText(TuxGuitar.getProperty("tuning.offset") + ":");
 		topLayout.set(offsetLabel, 1, 1, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, true, true);
 		
-		this.offsetCombo = factory.createDropDownSelect(top);
-		for(int i = TGTrack.MIN_OFFSET;i <= TGTrack.MAX_OFFSET;i ++){
-			this.offsetCombo.addItem(new UISelectItem<Integer>(Integer.toString(i), i));
-		}
-		this.offsetCombo.setSelectedValue(track.getOffset());
-		topLayout.set(this.offsetCombo, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		this.offsetSpinner = factory.createSpinner(top);
+		this.offsetSpinner.setMinimum(TGTrack.MIN_OFFSET);
+		this.offsetSpinner.setMaximum(TGTrack.MAX_OFFSET);
+		this.offsetSpinner.setValue(track.getOffset());
+		topLayout.set(this.offsetSpinner, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
 		
 		//---------------------------------OPTIONS----------------------------------
 		this.stringTransposition = factory.createCheckBox(bottom);
@@ -583,7 +572,7 @@ public class TGTrackTuningDialog {
 			strings.add(TGSongManager.newString(findSongManager().getFactory(),(i + 1), this.tuning.get(i).getValue()));
 		}
 		
-		final Integer offset = ((songManager.isPercussionChannel(song, track.getChannelId())) ? 0 : this.offsetCombo.getSelectedValue());
+		final Integer offset = ((songManager.isPercussionChannel(song, track.getChannelId())) ? 0 : this.offsetSpinner.getValue());
 		final boolean offsetChanges = (offset != null && !offset.equals(track.getOffset()));
 		final boolean tuningChanges = hasTuningChanges(track, strings);
 		final boolean transposeStrings = shouldTransposeStrings(track, track.getChannelId());
