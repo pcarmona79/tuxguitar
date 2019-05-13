@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.herac.tuxguitar.song.helpers.tuning.TuningGroup;
 import org.herac.tuxguitar.song.helpers.tuning.TuningPreset;
 
+import org.herac.tuxguitar.song.models.TGChannel;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -22,8 +23,9 @@ public class TuningReader {
 	private static final String GROUP_TAG = "group";
 	private static final String NAME_ATTRIBUTE = "name";
 	private static final String NOTES_ATTRIBUTE = "notes";
+	private static final String PROGRAM_ATTRIBUTE = "program";
 	private static final String KEY_SEPARATOR = ",";
-	
+
 	public void loadTunings(TuningGroup group, InputStream stream){
 		try{
 			if ( stream != null ){
@@ -56,7 +58,8 @@ public class TuningReader {
 				
 				String name = params.getNamedItem(NAME_ATTRIBUTE).getNodeValue();
 				String notes = params.getNamedItem(NOTES_ATTRIBUTE).getNodeValue();
-				
+				String program = params.getNamedItem(PROGRAM_ATTRIBUTE).getNodeValue();
+
 				if (name == null || notes == null || name.trim().equals("") || notes.trim().equals("")){
 					throw new RuntimeException("Invalid Tuning file format.");
 				}
@@ -70,8 +73,9 @@ public class TuningReader {
 						throw new RuntimeException("Invalid Tuning note: " + noteStrings[j]);
 					}
 				}
-				
-				TuningPreset tuning = new TuningPreset(group, name, noteValues);
+
+				Integer programNumber = program == null ? TGChannel.DEFAULT_PROGRAM : Integer.parseInt(program);
+				TuningPreset tuning = new TuningPreset(group, name, noteValues, programNumber);
 				group.getTunings().add(tuning);
 			} else if (nodeName.equals(GROUP_TAG)) {
 				NamedNodeMap params = child.getAttributes();
