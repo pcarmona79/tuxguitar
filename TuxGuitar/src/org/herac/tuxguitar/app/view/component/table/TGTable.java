@@ -16,6 +16,9 @@ import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGTable {
+
+	public static final float DIVIDER_WIDTH = 2f;
+
 	private final TGTableViewer viewer;
 	private TGContext context;
 	private UIPanel table;
@@ -102,7 +105,7 @@ public class TGTable {
 	
 	public void createColumnDividerLayout(UITableLayout uiLayout, UIDivider divider, int columnIndex) {
 		uiLayout.set(divider, 1, columnIndex, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
-		uiLayout.set(divider, UITableLayout.PACKED_WIDTH, 2f);
+		uiLayout.set(divider, UITableLayout.PACKED_WIDTH, DIVIDER_WIDTH);
 		uiLayout.set(divider, UITableLayout.MARGIN, 0f);
 	}
 	

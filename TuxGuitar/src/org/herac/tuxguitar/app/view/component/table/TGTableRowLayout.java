@@ -27,15 +27,21 @@ public class TGTableRowLayout extends UIAbstractLayout {
 		
 		this.setBounds(this.row.getTable().getColumnNumber(), this.row.getNumber(), rowHeight);
 		this.setBounds(this.row.getTable().getColumnSoloMute(), this.row.getSoloMute(), rowHeight);
-		this.setBounds(this.row.getTable().getColumnName(), this.row.getName(), rowHeight);
-		this.setBounds(this.row.getTable().getColumnInstrument(), this.row.getInstrument(), rowHeight);
+		this.setBoundsPlusDivider(this.row.getTable().getColumnName(), this.row.getName(), rowHeight);
+		this.setBoundsPlusDivider(this.row.getTable().getColumnInstrument(), this.row.getInstrument(), rowHeight);
 		this.setBounds(this.row.getTable().getColumnCanvas(), this.row.getPainter(), rowHeight);
 	}
 	
 	public void setBounds(TGTableHeader column, TGTableRowCell cell, float rowHeight) {
 		this.setBounds(column, cell.getControl(), rowHeight);
 	}
-	
+
+	public void setBoundsPlusDivider(TGTableHeader column, TGTableRowCell cell, float rowHeight) {
+		UIRectangle bounds = column.getControl().getBounds();
+
+		cell.getControl().setBounds(new UIRectangle(bounds.getX(), 0, bounds.getWidth() + TGTable.DIVIDER_WIDTH, rowHeight));
+	}
+
 	public void setBounds(TGTableHeader column, UIControl cell, float rowHeight) {
 		UIRectangle bounds = column.getControl().getBounds();
 		
