@@ -3,14 +3,12 @@ package org.herac.tuxguitar.app.view.component.table;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.graphics.control.TGLayout;
 import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
-import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIPainter;
-
-import java.util.Set;
+import org.herac.tuxguitar.util.TGBeatRange;
 
 public class TGTableCanvasPainter {
 	
@@ -53,7 +51,7 @@ public class TGTableCanvasPainter {
 		UIColor trackColor = factory.createColor(this.track.getColor().getR(), this.track.getColor().getG(), this.track.getColor().getB());
 
 		TGLayout layout = viewer.getEditor().getTablature().getViewLayout();
-		Set<TGMeasure> selectedMeasures = viewer.getEditor().getTablature().getSelector().getBeatRange().getMeasures();
+		TGBeatRange beatRange = viewer.getEditor().getTablature().getSelector().getBeatRange();
 
 		int count = this.track.countMeasures();
 		for(int j = 0;j < count;j++){
@@ -82,7 +80,7 @@ public class TGTableCanvasPainter {
 				paintRoundedRect(painter, x1, y1, x2, y2);
 			}
 
-			if (selectedMeasures.contains(measure)) {
+			if (beatRange.containsMeasure(measure)) {
 				painter.setBackground(layout.getResources().getSelectionColor());
 				painter.setAlpha(SELECTION_ALPHA);
 				painter.initPath(UIPainter.PATH_FILL);

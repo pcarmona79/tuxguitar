@@ -26,7 +26,7 @@ public class TGTimeSignatureDialog {
 		if (range.isEmpty()) {
 			return context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER);
 		}
-		return range.getMeasures().first().getHeader();
+		return range.firstMeasure().getHeader();
 	}
 	
 	public void show(final TGViewContext context) {
@@ -109,7 +109,7 @@ public class TGTimeSignatureDialog {
 					if (range.isEmpty()) {
 						end = start;
 					} else {
-						end = range.getMeasures().last().getHeader();
+						end = range.lastMeasure().getHeader();
 					}
 				}
 				changeTimeSignature(context.getContext(), song, start, end, parseTimeSignature(songManager, numerator, denominator), truncate.isSelected());

@@ -12,16 +12,20 @@ import java.util.*;
  */
 public class TGNoteRange {
 	private List<TGNote> notes;
-	private TreeSet<TGMeasure> measures = new TreeSet<TGMeasure>(Comparator.comparingLong(a -> a.getHeader().getNumber()));
-	private TreeSet<TGBeat> beats = new TreeSet<TGBeat>(Comparator.comparingLong(TGBeat::getStart));
+	private List<TGMeasure> measures;
+	private List<TGBeat> beats;
 
 	public TGNoteRange(List<TGNote> notes) {
+		TreeSet<TGMeasure> measures = new TreeSet<>(Comparator.comparingLong(a -> a.getHeader().getNumber()));
+		TreeSet<TGBeat> beats = new TreeSet<>(Comparator.comparingLong(TGBeat::getStart));
 		this.notes = notes;
 		for (TGNote note : notes) {
 			TGBeat beat = note.getVoice().getBeat();
 			beats.add(beat);
 			measures.add(beat.getMeasure());
 		}
+		this.measures = new ArrayList<>(measures);
+		this.beats = new ArrayList<>(beats);
 	}
 
 	public TGNoteRange(TGBeat start, TGBeat end, Collection<Integer> voices) {
@@ -33,7 +37,7 @@ public class TGNoteRange {
 	}
 
 	public static TGNoteRange empty() {
-		return new TGNoteRange(Collections.<TGNote>emptyList());
+		return new TGNoteRange(Collections.emptyList());
 	}
 
 	public List<TGNote> getNotes() {
@@ -44,11 +48,19 @@ public class TGNoteRange {
 		return notes.isEmpty();
 	}
 
-	public TreeSet<TGMeasure> getMeasures() {
+	public TGMeasure firstMeasure() {
+		return this.measures.get(0);
+	}
+
+	public TGMeasure lastMeasure() {
+		return this.measures.get(this.measures.size() - 1);
+	}
+
+	public List<TGMeasure> getMeasures() {
 		return measures;
 	}
 
-	public TreeSet<TGBeat> getBeats() {
+	public List<TGBeat> getBeats() {
 		return beats;
 	}
 }
