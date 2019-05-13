@@ -205,7 +205,6 @@ public class TGTrackManager {
 		    results.add(newBeat);
 		}
         measureManager.orderBeats(startMeasure);
-        moveOutOfBoundsBeatsToNewMeasure(track, startMeasure.getStart());
 		return results;
 	}
 	

@@ -45,8 +45,6 @@ public class TGPasteNoteAction extends TGActionBase{
 			if (beatList != null && beatList.getLength() > 0) {
 				TGSongManager songManager = this.getSongManager(context);
 				TGTrackManager trackManager = songManager.getTrackManager();
-				TGMeasureManager measureManager = songManager.getMeasureManager();
-				TGSong song = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG);
 				TGBeat start = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT);
 				TGTrack track = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK);
 
@@ -56,20 +54,23 @@ public class TGPasteNoteAction extends TGActionBase{
 					tgActionManager.execute(TGMoveBeatsAction.NAME, context);
 				}
 				transpose(context, trackManager.addBeats(track, beatList, start.getStart()));
+				trackManager.moveOutOfBoundsBeatsToNewMeasure(track, start.getStart());
 			}
 		}
 	}
 	private void transpose(TGActionContext context, List<TGBeat> beats) {
-		Integer transposition = context.getAttribute(TGTransposeAction.ATTRIBUTE_TRANSPOSITION);
-		if (transposition == null || transposition == 0) {
-			return;
-		}
-		Boolean tryKeepString = Boolean.TRUE.equals(context.getAttribute(TGTransposeAction.ATTRIBUTE_TRY_KEEP_STRING));
-		boolean applyToChords = Boolean.TRUE.equals(context.getAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_CHORDS));
 		TGMeasureManager measureManager = this.getSongManager(context).getMeasureManager();
-		List<TGString> strings = measureManager.getSortedStringsByValue(beats.get(0).getMeasure().getTrack(), ( transposition > 0 ? 1 : -1 ) ) ;
-		for (TGBeat beat : beats) {
-			measureManager.transposeNotes( beat , strings, transposition , tryKeepString , applyToChords , -1 );
+		TGMeasure measure = beats.get(0).getMeasure();
+
+		Integer transposition = context.getAttribute(TGTransposeAction.ATTRIBUTE_TRANSPOSITION);
+		if (transposition != null && transposition != 0) {
+            Boolean tryKeepString = Boolean.TRUE.equals(context.getAttribute(TGTransposeAction.ATTRIBUTE_TRY_KEEP_STRING));
+            boolean applyToChords = Boolean.TRUE.equals(context.getAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_CHORDS));
+            List<TGString> strings = measureManager.getSortedStringsByValue(measure.getTrack(), ( transposition > 0 ? 1 : -1 ) ) ;
+            for (TGBeat beat : beats) {
+                measureManager.transposeNotes( beat , strings, transposition , tryKeepString , applyToChords , -1 );
+            }
 		}
+		measureManager.removeNotesAfterString(measure, measure.getTrack().stringCount());
 	}
 }
