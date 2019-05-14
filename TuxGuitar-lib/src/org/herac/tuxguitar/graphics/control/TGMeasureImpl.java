@@ -1439,7 +1439,7 @@ public class TGMeasureImpl extends TGMeasure{
 	}
 
 	private float getBeatLeftEdge(TGLayout layout, TGBeatImpl beat) {
-		return getPosX() + beat.getPosX() + getHeaderImpl().getLeftSpacing(layout) * .5f;
+		return getPosX() + beat.getPosX() + beat.getSpacing(layout) + getHeaderImpl().getLeftSpacing(layout) * .5f;
 	}
 
 	public void paintSelectionEnd(TGLayout layout, UIPainter painter, TGBeat to) {
@@ -1463,7 +1463,7 @@ public class TGMeasureImpl extends TGMeasure{
 	}
 
 	private float getBeatRightEdge(TGLayout layout, TGBeatImpl beat) {
-		return getPosX() + beat.getPosX() + beat.getMinimumWidth() + getHeaderImpl().getLeftSpacing(layout) * .5f;
+		return getPosX() + beat.getPosX() + beat.getSpacing(layout) + beat.getMinimumWidth() + getHeaderImpl().getLeftSpacing(layout) * .5f;
 	}
 
 	public void paintFullSelection(TGLayout layout, UIPainter painter) {
