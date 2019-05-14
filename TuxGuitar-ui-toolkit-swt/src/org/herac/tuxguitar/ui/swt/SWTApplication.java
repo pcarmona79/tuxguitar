@@ -56,7 +56,7 @@ public class SWTApplication extends SWTComponent<Display> implements UIApplicati
 	}
 
     public boolean allowsMenubarHiding() {
-		return SWTEnvironment.getInstance().allowsMenuBarHiding();
+		return SWTEnvironment.allowsMenuBarHiding();
     }
 
     public void start(Runnable runnable) {

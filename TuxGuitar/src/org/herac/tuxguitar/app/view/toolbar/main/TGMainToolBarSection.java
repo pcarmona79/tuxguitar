@@ -36,7 +36,7 @@ public abstract class TGMainToolBarSection implements TGToolBarSection {
 	}
 	
 	public abstract void createSection();
-	
+
 	public TGActionProcessorListener createActionProcessor(String actionId) {
 		return new TGActionProcessorListener(this.toolBar.getContext(), actionId);
 	}

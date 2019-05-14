@@ -38,12 +38,11 @@ public class TGMenuManager implements TGEventListener {
 	private UIPopupMenu popupMenu;
 	private List<TGMenuItem> loadedMenuItems;
 	private List<TGMenuItem> loadedPopupMenuItems;
-	
 	private TGSyncProcessLocked loadIconsProcess;
 	private TGSyncProcessLocked loadPropertiesProcess;
 	private TGSyncProcessLocked updateItemsProcess;
 	private TGSyncProcessLocked createMenuProcess;
-	
+	private boolean forceHidden;
 	public TGMenuManager(TGContext context){
 		this.context = context;
 		this.loadedMenuItems = new ArrayList<TGMenuItem>();
@@ -51,6 +50,14 @@ public class TGMenuManager implements TGEventListener {
 		this.createSyncProcesses();
 		this.loadItems();
 		this.appendListeners();
+	}
+
+	public List<TGMenuItem> getLoadedMenuItems() {
+		return loadedMenuItems;
+	}
+
+	public List<TGMenuItem> getLoadedPopupMenuItems() {
+		return loadedPopupMenuItems;
 	}
 	
 	public void loadItems(){
@@ -97,6 +104,7 @@ public class TGMenuManager implements TGEventListener {
 			}
 			
 			this.loadedPopupMenuItems.clear();
+			this.loadedPopupMenuItems.add(new FileMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new ViewMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new EditMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new CompositionMenuItem(this.popupMenu));
@@ -104,7 +112,9 @@ public class TGMenuManager implements TGEventListener {
 			this.loadedPopupMenuItems.add(new MeasureMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new BeatMenuItem(this.popupMenu)); 
 			this.loadedPopupMenuItems.add(new MarkerMenuItem(this.popupMenu));
+			this.loadedPopupMenuItems.add(new ToolMenuItem(this.popupMenu));
 			this.loadedPopupMenuItems.add(new TransportMenuItem(this.popupMenu));
+			this.loadedPopupMenuItems.add(new HelpMenuItem(this.popupMenu));
 			this.showMenuItems(this.loadedPopupMenuItems);
 		}
 	}
@@ -224,9 +234,15 @@ public class TGMenuManager implements TGEventListener {
 		}
 	}
 
+	public void setMainMenuForceHidden(boolean hidden) {
+		this.forceHidden = hidden;
+		this.updateMainMenuVisibility(this.isMainMenuVisible());
+	}
+
 	public void updateMainMenuVisibility(boolean visible) {
 		boolean allowed = TGApplication.getInstance(this.context).getApplication().allowsMenubarHiding();
 		if (allowed && this.menu != null && !this.menu.isDisposed()) {
+		    visible = !this.forceHidden && visible;
 			this.menu.setVisible(visible);
 		}
 	}

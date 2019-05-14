@@ -11,12 +11,18 @@ for more information.
 - Java 7 or higher
 
 ## What's Changed
-- Added tuning presets, grouped by instrument and number of strings
-- Removed VST2 instrument support due to the SDK being discontinued
-- Removed the Gervill synth due to the interface being hidden in JDK9 (see [JDK-8170518](https://bugs.openjdk.java.net/browse/JDK-8170518))
-- Various bugfixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
+- Global style update with a new skin
+- Main toolbar redesigned and given platform-specific appearances
+- High DPI display support
+- Click-n-drag selection support, started by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
+- Cut/Copy/Paste of individual notes
+- More tuning presets, grouped by instrument and number of strings
+- Support for creating custom scales in the scale list
 - UI cleanup, MIDI track name support by [Alex Abdugafarov](https://github.com/frozenspider/tuxguitar)
-- Mouse selection support by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
+- Various bug fixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
+- And lots of other small improvements and bug fixes
+
+VST2 instrument support has been disabled, due to the SDK being discontinued.
 
 ## Build Instructions
 See [INSTALL.md](INSTALL.md)

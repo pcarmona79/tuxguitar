@@ -209,4 +209,13 @@ public class ViewMenuItem extends TGMenuItem {
 	public void loadIcons(){
 		//Nothing to do
 	}
+
+	public UIMenuCheckableItem getShowMenuBar() {
+		return showMenuBar;
+	}
+
+	public UIMenuCheckableItem getShowMainToolbar() {
+		return showMainToolbar;
+	}
+
 }

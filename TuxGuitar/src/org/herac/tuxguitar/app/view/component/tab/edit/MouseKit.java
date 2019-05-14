@@ -84,9 +84,11 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 
 	public void onMouseDrag(UIMouseEvent event) {
 		if ((event.getState() & UIMouseEvent.BUTTON1) != 0) {
-			this.position.set(this.startPosition);
-			this.position.add(event.getPosition());
-			this.executeAction(TGUpdateDragSelectionAction.NAME, this.position.clone(), event, false);
+			if (this.startPosition != null) {
+				this.position.set(this.startPosition);
+				this.position.add(event.getPosition());
+				this.executeAction(TGUpdateDragSelectionAction.NAME, this.position.clone(), event, false);
+			}
 		} else if ((event.getState() & UIMouseEvent.BUTTON2) != 0) {
 			UIPosition delta = this.scrollStartPosition.clone();
 			delta.add(event.getPosition());

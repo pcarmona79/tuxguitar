@@ -67,7 +67,11 @@ public class SWTEnvironment {
 		return this.defaultFontName;
 	}
 
-	public boolean allowsMenuBarHiding() {
+	public static boolean needsWrappedButtons() {
+		return PLATFORM_COCOA.equals(SWT.getPlatform());
+	}
+
+	public static boolean allowsMenuBarHiding() {
 		return !PLATFORM_COCOA.equals(SWT.getPlatform());
 	}
 

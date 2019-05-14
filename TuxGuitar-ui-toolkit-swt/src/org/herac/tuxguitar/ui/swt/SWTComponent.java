@@ -17,6 +17,10 @@ public abstract class SWTComponent<T> implements UIComponent {
 	public T getControl() {
 		return this.component;
 	}
+
+	public void setControl(T component) {
+		this.component = component;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public <Data> Data getData(String key) {

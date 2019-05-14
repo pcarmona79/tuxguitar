@@ -1,0 +1,135 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+		<artifactId>tuxguitar-pom</artifactId>
+		<groupId>org.herac.tuxguitar</groupId>
+		<version>2.0-SNAPSHOT</version>
+		<relativePath>../../../</relativePath>
+	</parent>
+	
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>tuxguitar-gtk-integration-linux-x86_64</artifactId>
+	<packaging>pom</packaging>
+	<name>${project.artifactId}</name>
+
+	<properties>
+		<tuxguitar.jni.cc>gcc</tuxguitar.jni.cc>
+		<tuxguitar.jni.rm>rm -f</tuxguitar.jni.rm>
+		<tuxguitar.jni.ldpath>-L/usr/lib</tuxguitar.jni.ldpath>
+		<tuxguitar.jni.library.prefix>lib</tuxguitar.jni.library.prefix>
+		<tuxguitar.jni.library.suffix>.so</tuxguitar.jni.library.suffix>
+		<tuxguitar.jni.header.path>-I${basedir}/../common-include</tuxguitar.jni.header.path>
+		
+		<tuxguitar-gtk-integration.jni.path>${parent.relativePath}/TuxGuitar-gtk-integration/jni/</tuxguitar-gtk-integration.jni.path>
+		<tuxguitar-gtk-integration.jni.rm>${tuxguitar.jni.rm}</tuxguitar-gtk-integration.jni.rm>
+		<tuxguitar-gtk-integration.jni.cc>${tuxguitar.jni.cc}</tuxguitar-gtk-integration.jni.cc>
+		<tuxguitar-gtk-integration.jni.cflags>${tuxguitar.jni.header.path} -m64 -fPIC `pkg-config --cflags gtk+-3.0`</tuxguitar-gtk-integration.jni.cflags>
+		<tuxguitar-gtk-integration.jni.ldflags>-m64 -fPIC</tuxguitar-gtk-integration.jni.ldflags>
+		<tuxguitar-gtk-integration.jni.ldlibs>`pkg-config --libs gtk+-3.0`</tuxguitar-gtk-integration.jni.ldlibs>
+		<tuxguitar-gtk-integration.jni.ldpath>${tuxguitar.jni.ldpath}</tuxguitar-gtk-integration.jni.ldpath>
+		<tuxguitar-gtk-integration.jni.library.name>tuxguitar-gtk-integration-jni</tuxguitar-gtk-integration.jni.library.name>
+		<tuxguitar-gtk-integration.jni.library.prefix>${tuxguitar.jni.library.prefix}</tuxguitar-gtk-integration.jni.library.prefix>
+		<tuxguitar-gtk-integration.jni.library.suffix>${tuxguitar.jni.library.suffix}</tuxguitar-gtk-integration.jni.library.suffix>
+	</properties>
+	
+	<modules>
+		<module>${parent.relativePath}/TuxGuitar-gtk-integration</module>
+	</modules>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>compile-native</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target name="compile-native">
+								<exec dir="${tuxguitar-gtk-integration.jni.path}" executable="make" failonerror="true" >
+									<env key="CC" value="${tuxguitar-gtk-integration.jni.cc}" />
+									<env key="CFLAGS" value="${tuxguitar-gtk-integration.jni.cflags}" />
+									<env key="LDFLAGS" value="${tuxguitar-gtk-integration.jni.ldflags}" />
+									<env key="LDLIBS" value="${tuxguitar-gtk-integration.jni.ldlibs}" />
+									<env key="LDPATH" value="${tuxguitar-gtk-integration.jni.ldpath}" />
+									<env key="LIBRARY_NAME" value="${tuxguitar-gtk-integration.jni.library.name}" />
+									<env key="LIBRARY_PREFIX" value="${tuxguitar-gtk-integration.jni.library.prefix}" />
+									<env key="LIBRARY_SUFFIX" value="${tuxguitar-gtk-integration.jni.library.suffix}" />
+								</exec>
+							</target>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>clean-native</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target name="clean-native">
+								<exec dir="${tuxguitar-gtk-integration.jni.path}" executable="make" failonerror="true" >
+									<arg value="clean"/>
+									<env key="RM" value="${tuxguitar-gtk-integration.jni.rm}" />
+									<env key="LIBRARY_NAME" value="${tuxguitar-gtk-integration.jni.library.name}" />
+									<env key="LIBRARY_PREFIX" value="${tuxguitar-gtk-integration.jni.library.prefix}" />
+									<env key="LIBRARY_SUFFIX" value="${tuxguitar-gtk-integration.jni.library.suffix}" />
+								</exec>
+							</target>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>native-module-copy</id>
+						<phase>package</phase>
+						<configuration>
+							<target name="copy-files">
+								<mkdir dir="${project.build.directory}/build/lib" />
+								<copy todir="${project.build.directory}/build/lib">
+									<fileset file="${tuxguitar-gtk-integration.jni.path}/${tuxguitar-gtk-integration.jni.library.prefix}${tuxguitar-gtk-integration.jni.library.name}${tuxguitar-gtk-integration.jni.library.suffix}" />
+								</copy>
+								<chmod file="${project.build.directory}/build/lib/${tuxguitar-gtk-integration.jni.library.prefix}${tuxguitar-gtk-integration.jni.library.name}${tuxguitar-gtk-integration.jni.library.suffix}" perm="775" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>native-module-copy-libs</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>tuxguitar-gtk-integration</artifactId>
+									<destFileName>tuxguitar-gtk-integration.jar</destFileName>
+									<outputDirectory>${project.build.directory}/build/share/plugins</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+</project>

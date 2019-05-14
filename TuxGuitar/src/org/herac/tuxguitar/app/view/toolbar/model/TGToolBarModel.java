@@ -22,7 +22,8 @@ public abstract class TGToolBarModel implements TGEventListener {
 	private TGSyncProcessLocked loadIconsProcess;
 	private TGSyncProcessLocked loadPropertiesProcess;
 	private TGSyncProcessLocked updateItemsProcess;
-	
+	private boolean forceHidden;
+
 	public TGToolBarModel(TGContext context) {
 		this.context = context;
 		this.sections = new ArrayList<TGToolBarSection>();
@@ -79,10 +80,15 @@ public abstract class TGToolBarModel implements TGEventListener {
 			}
 		}
 	}
+
+	public void setForceHidden(boolean hidden) {
+		this.forceHidden = hidden;
+		this.updateVisibility(this.isVisible());
+	}
 	
 	public void updateVisibility(boolean visible) {
 		if(!this.isDisposed()) {
-			this.getControl().setVisible(visible);
+			this.getControl().setVisible(!this.forceHidden && visible);
 			
 			TGWindow.getInstance(this.context).getWindow().layout();
 		}

@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.resource.UIImage;
+import org.herac.tuxguitar.ui.swt.SWTEnvironment;
 import org.herac.tuxguitar.ui.swt.event.SWTSelectionListenerManager;
 import org.herac.tuxguitar.ui.swt.resource.SWTImage;
 import org.herac.tuxguitar.ui.widget.UIButton;
@@ -16,7 +17,7 @@ public class SWTButton extends SWTControl<Button> implements UIButton {
 	private UIImage image;
 	
 	public SWTButton(SWTContainer<? extends Composite> parent) {
-		super(new Button(parent.getControl(), SWT.PUSH| SWT.WRAP), parent);
+		super(new Button(parent.getControl(), SWT.PUSH| (SWTEnvironment.needsWrappedButtons() ? SWT.WRAP : 0)), parent);
 		
 		this.selectionListener = new SWTSelectionListenerManager(this);
 	}

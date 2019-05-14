@@ -12,8 +12,6 @@ import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UIToggleButton;
 
-import java.util.Iterator;
-
 public class TGMainToolBarSectionView extends TGMainToolBarSection {
 	
 	private UIToggleButton showFretBoard;
@@ -59,7 +57,7 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.loadIcons();
 		this.loadProperties();
 	}
-	
+
 	public void loadProperties(){
 		this.showFretBoard.setToolTipText(this.getText("view.show-fretboard"));
 		this.showPiano.setToolTipText(this.getText("view.show-piano"));

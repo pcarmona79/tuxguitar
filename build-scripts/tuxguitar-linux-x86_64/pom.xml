@@ -32,7 +32,6 @@
 		<module>../../TuxGuitar-compat</module>
 		<module>../../TuxGuitar-converter</module>
 		<module>../../TuxGuitar-gm-settings</module>
-		<module>../../TuxGuitar-gtk-integration</module>
 		<module>../../TuxGuitar-gtp</module>
 		<module>../../TuxGuitar-gtp-ui</module>
 		<module>../../TuxGuitar-gpx</module>
@@ -365,6 +364,7 @@
 				<module>../native-modules/tuxguitar-jack-linux-x86_64</module>
 				<module>../native-modules/tuxguitar-oss-linux-x86_64</module>
 				<module>../native-modules/tuxguitar-fluidsynth-linux-x86_64</module>
+				<module>../native-modules/tuxguitar-gtk-integration-linux-x86_64</module>
 			</modules>
 			
 			<build>
@@ -391,6 +391,9 @@
 										</copy>
 										<copy todir="${project.build.directory}/${project.finalName}/">
 											<fileset dir="../native-modules/tuxguitar-fluidsynth-linux-x86_64/target/build" />
+										</copy>
+										<copy todir="${project.build.directory}/${project.finalName}/">
+											<fileset dir="../native-modules/tuxguitar-gtk-integration-linux-x86_64/target/build" />
 										</copy>
 										
 										<chmod file="${project.build.directory}/${project.finalName}/lib/*.so" perm="775" />

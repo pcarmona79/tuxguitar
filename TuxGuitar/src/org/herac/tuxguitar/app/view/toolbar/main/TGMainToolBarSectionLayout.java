@@ -1,11 +1,7 @@
 package org.herac.tuxguitar.app.view.toolbar.main;
 
 import org.herac.tuxguitar.app.action.impl.layout.*;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleEditToolbarAction;
-import org.herac.tuxguitar.app.action.impl.view.TGToggleTableViewerAction;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
-import org.herac.tuxguitar.app.view.component.table.TGTableViewer;
-import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
 import org.herac.tuxguitar.graphics.control.TGLayout;
 import org.herac.tuxguitar.graphics.control.TGLayoutHorizontal;
 import org.herac.tuxguitar.graphics.control.TGLayoutVertical;
@@ -63,7 +59,7 @@ public class TGMainToolBarSectionLayout extends TGMainToolBarSection {
 		this.loadIcons();
 		this.loadProperties();
 	}
-	
+
 	public void loadProperties(){
 		this.pageLayout.setToolTipText(this.getText("view.layout.page"));
 		this.linearLayout.setToolTipText(this.getText("view.layout.linear"));

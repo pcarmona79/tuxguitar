@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.resource.UIImage;
+import org.herac.tuxguitar.ui.swt.SWTEnvironment;
 import org.herac.tuxguitar.ui.swt.event.SWTSelectionListenerManager;
 import org.herac.tuxguitar.ui.swt.resource.SWTImage;
 import org.herac.tuxguitar.ui.widget.UIToggleButton;
@@ -16,7 +17,7 @@ public class SWTToggleButton extends SWTControl<Button> implements UIToggleButto
 	private UIImage image;
 	
 	public SWTToggleButton(SWTContainer<? extends Composite> parent, boolean flat) {
-		super(new Button(parent.getControl(), SWT.TOGGLE | SWT.WRAP | (flat ? SWT.FLAT : 0)), parent);
+		super(new Button(parent.getControl(), SWT.TOGGLE | (SWTEnvironment.needsWrappedButtons() ? SWT.WRAP : 0) | (flat ? SWT.FLAT : 0)), parent);
 		
 		this.selectionListener = new SWTSelectionListenerManager(this);
 	}
