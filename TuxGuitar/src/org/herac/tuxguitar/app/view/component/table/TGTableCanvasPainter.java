@@ -68,14 +68,12 @@ public class TGTableCanvasPainter {
 			final float C_MARGIN = 2.5f;
 			float x1 = x + C_MARGIN;
 			float y1 = y + C_MARGIN;
-			float x2 = x1 + size - C_MARGIN * 2f;
-			float y2 = y1 + size - C_MARGIN * 2f;
 
 			boolean hasCaret = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().getMeasure().equals(measure);
 			if((playing && measure.isPlaying(this.viewer.getEditor().getTablature().getViewLayout())) || (!playing && hasCaret)){
 				painter.setBackground(getCaretColor(factory, trackColor, colorBackground, isRestMeasure));
 				painter.initPath(UIPainter.PATH_FILL);
-				TGShapeUtil.addRoundedRect(painter, x1, y1, x2, y2, 3f);
+				TGShapeUtil.addRoundedRect(painter, x1, y1, size - C_MARGIN * 2f, size - C_MARGIN * 2f, 3f);
 				painter.closePath();
 			}
 
