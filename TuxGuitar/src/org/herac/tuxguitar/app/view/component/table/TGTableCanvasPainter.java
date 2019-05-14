@@ -9,6 +9,7 @@ import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.util.TGBeatRange;
+import org.herac.tuxguitar.util.TGShapeUtil;
 
 public class TGTableCanvasPainter {
 	
@@ -25,10 +26,6 @@ public class TGTableCanvasPainter {
 
 	private static final int SELECTION_ALPHA = 128;
 	private static final int SELECTION_BORDER_ALPHA = 64;
-	/* border radius */
-	private static float C_BR = 3f;
-	/* dist from corner make a circle with control point */
-	private static float C_CPD = (float) (C_BR - C_BR * 4.*(Math.sqrt(2.)-1.)/3.);
 
 	protected void paintTrack(TGTableRow row, UIPainter painter){
 		int scrollX = this.viewer.getHScrollSelection();
@@ -78,7 +75,8 @@ public class TGTableCanvasPainter {
 			if((playing && measure.isPlaying(this.viewer.getEditor().getTablature().getViewLayout())) || (!playing && hasCaret)){
 				painter.setBackground(getCaretColor(factory, trackColor, colorBackground, isRestMeasure));
 				painter.initPath(UIPainter.PATH_FILL);
-				paintRoundedRect(painter, x1, y1, x2, y2);
+				TGShapeUtil.addRoundedRect(painter, x1, y1, x2, y2, 3f);
+				painter.closePath();
 			}
 
 			if (beatRange.containsMeasure(measure)) {
@@ -123,20 +121,6 @@ public class TGTableCanvasPainter {
 		}
 	}
 
-	private void paintRoundedRect(UIPainter painter, float x1, float y1, float x2, float y2) {
-		painter.setAntialias(true);
-		painter.moveTo(x1 + C_BR, y1);
-		painter.cubicTo(x1 + C_CPD, y1, x1, y1 + C_CPD, x1, y1 + C_BR);
-		painter.lineTo(x1, y2 - C_BR);
-		painter.cubicTo(x1, y2 - C_CPD, x1 + C_CPD, y2, x1 + C_BR, y2);
-		painter.lineTo(x2 - C_BR, y2);
-		painter.cubicTo(x2 - C_CPD, y2, x2, y2 - C_CPD, x2, y2 - C_BR);
-		painter.lineTo(x2, y1 + C_BR);
-		painter.cubicTo(x2, y1 + C_CPD, x2 - C_CPD, y1, x2 - C_BR, y1);
-		painter.lineTo(x1 + C_BR, y1);
-		painter.closePath();
-	}
-	
 	private boolean isRestMeasure(TGMeasureImpl measure){
 		int beatCount = measure.countBeats();
 		for(int i = 0; i < beatCount; i++){

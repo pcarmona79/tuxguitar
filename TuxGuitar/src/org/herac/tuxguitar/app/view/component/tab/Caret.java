@@ -30,6 +30,7 @@ import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIResource;
+import org.herac.tuxguitar.util.TGShapeUtil;
 
 /**
  * @author julian
@@ -164,7 +165,7 @@ public class Caret {
 					for (int style : new int[] {UIPainter.PATH_FILL, UIPainter.PATH_DRAW}) {
 						painter.initPath(style);
 						painter.setAlpha(style == UIPainter.PATH_FILL ? FILL_ALPHA : 255);
-						painter.addRectangle(x, y, width, height);
+						TGShapeUtil.addRoundedRect(painter, x, y, width, height, 2f);
 						painter.closePath();
 					}
 				}
