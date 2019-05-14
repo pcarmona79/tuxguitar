@@ -44,6 +44,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.menu.UIPopupMenu;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIResource;
+import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UIScrollBar;
 import org.herac.tuxguitar.ui.widget.UIScrollBarPanel;
@@ -620,6 +621,14 @@ public class TGTableViewer implements TGEventListener {
 
 	public UIColor getBorderColor() {
 	    return this.backgrounds[5];
+	}
+
+	public UISize getTrimSize() {
+        UISize outer = this.composite.getPackedSize();
+		UISize inner = this.table.getControl().getPackedSize();
+        outer.setWidth(outer.getWidth() - inner.getWidth());
+		outer.setHeight(outer.getHeight() - inner.getHeight());
+		return outer;
 	}
 
 	public void updateVisibility(boolean visible) {

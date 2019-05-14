@@ -95,10 +95,10 @@ public class TGTable {
 		this.createColumnHeaderLayout(uiLayout, this.columnNumber, ++columnIndex, false, 25f);
 		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, 40f);
 		this.createColumnHeaderLayout(uiLayout, this.columnName, ++columnIndex, false, 250f);
-		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnName, this.columnInstrument), ++columnIndex);
+		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnName, this.columnInstrument, false), ++columnIndex);
 		this.createColumnHeaderLayout(uiLayout, this.columnInstrument, ++columnIndex, false, 250f);
-		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnInstrument, this.columnCanvas), ++columnIndex);
-		this.createColumnHeaderLayout(uiLayout, this.columnCanvas, ++columnIndex, true, null);
+		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnInstrument, this.columnCanvas, true), ++columnIndex);
+		this.createColumnHeaderLayout(uiLayout, this.columnCanvas, ++columnIndex, true, 20f);
 		
 		this.columnControl.setLayout(uiLayout);
 	}

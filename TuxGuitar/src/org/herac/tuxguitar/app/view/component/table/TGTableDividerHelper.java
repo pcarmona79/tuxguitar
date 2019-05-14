@@ -12,11 +12,11 @@ public class TGTableDividerHelper {
 		this.table = table;
 	}
 
-	public UIDivider createDivider(TGTableHeader leftColumn, TGTableHeader rightColumn) {
+	public UIDivider createDivider(TGTableHeader leftColumn, TGTableHeader rightColumn, boolean atEnd) {
 		UIFactory uiFactory = this.table.getUIFactory();
 		UIDivider uiDivider = uiFactory.createVerticalDivider(this.table.getColumnControl());
 		uiDivider.setBgColor(this.table.getViewer().getBackgroundColor());
-		uiDivider.addMouseDragListener(new TGTableDividerListener(this.table, leftColumn, rightColumn));
+		uiDivider.addMouseDragListener(new TGTableDividerListener(this.table, leftColumn, rightColumn, atEnd));
 		uiDivider.setCursor(UICursor.SIZEWE);
 		
 		return uiDivider;
