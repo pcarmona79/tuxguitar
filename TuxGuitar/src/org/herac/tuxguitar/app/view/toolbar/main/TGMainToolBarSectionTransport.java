@@ -231,16 +231,28 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		UIColor foregroundColor = tgColorManager.getColor(COLOR_FOREGROUND);
 		painter.setBackground(backgroundColor);
 
+		painter.setAntialias(false);
+		painter.setAlpha(255);
 		painter.initPath(UIPainter.PATH_FILL);
 		painter.addRectangle(0f, 0f, size.getWidth(), size.getHeight());
 		painter.closePath();
 
 		painter.setBackground(foregroundColor);
-		painter.setAlpha(64);
+
+		float gradHeight = size.getHeight() - 2;
+		for (int y = 1; y <= gradHeight; y++) {
+            painter.setAlpha(16 - Math.round((1f - y / gradHeight) * 16f));
+			painter.initPath(UIPainter.PATH_FILL);
+			painter.addRectangle(1f, y, size.getWidth() - 2f, 1f);
+			painter.closePath();
+		}
+		painter.setAlpha(192);
 		painter.initPath(UIPainter.PATH_FILL);
-		painter.addRectangle(0, 0, size.getWidth() * positionPercent, size.getHeight());
+		painter.addRectangle(1f, size.getHeight() - 3f, (size.getWidth() - 2) * positionPercent, 2f);
 		painter.closePath();
+
 		painter.setAlpha(255);
+		painter.setAntialias(true);
 
 		Map.Entry<Long, TGMeasureHeader> entry = headerMap.floorEntry(position);
 		TGMeasureHeader current = entry != null ? entry.getValue() : first;
@@ -252,14 +264,14 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 
 		long s = (long) Math.floor(seconds);
 		long ms = (long) Math.floor((seconds - s) * 1000);
-		String time = String.format("% 3d:%02d:%02d.%03d", s / 3600, (s % 3600) / 60, (s % 60), ms);
+		String time = String.format("%d:%02d:%02d.%03d", s / 3600, (s % 3600) / 60, (s % 60), ms);
 
+		float hMargin = this.displayFont.getHeight() * .5f;
 		painter.setFont(this.displayFont);
 		painter.setForeground(foregroundColor);
-		float realTextHeight = painter.getFMTopLine() - painter.getFMBaseLine();
-		painter.drawString(time, DISPLAY_MARGIN, painter.getFMTopLine() + (size.getHeight() - realTextHeight) / 2f);
+		painter.drawString(time, hMargin, (size.getHeight() - painter.getFMHeight()) / 2f);
 
-		float newWidth = painter.getFMWidth(time) + DISPLAY_MARGIN * 2f;
+		float newWidth = painter.getFMWidth(time) + hMargin * 2f;
 		if (newWidth > size.getWidth()) {
 			getLayout().set(this.display, UITableLayout.PACKED_WIDTH, newWidth);
 			getControl().layout();
