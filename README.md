@@ -14,6 +14,7 @@ for more information.
 - Global style update with a new skin
 - Main toolbar redesigned and given platform-specific appearances
 - High DPI display support
+- Hiding/showing of individual tracks
 - Click-n-drag selection support, started by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
 - Cut/Copy/Paste of individual notes
 - More tuning presets, grouped by instrument and number of strings
