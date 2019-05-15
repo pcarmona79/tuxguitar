@@ -30,6 +30,7 @@
 		<module>../../TuxGuitar-community</module>
 		<module>../../TuxGuitar-compat</module>
 		<module>../../TuxGuitar-converter</module>
+		<module>../../TuxGuitar-gervill</module>
 		<module>../../TuxGuitar-gm-settings</module>
 		<module>../../TuxGuitar-gtp</module>
 		<module>../../TuxGuitar-gtp-ui</module>
@@ -49,6 +50,7 @@
 		<module>../../TuxGuitar-svg</module>
 		<module>../../TuxGuitar-image</module>
 		<module>../../TuxGuitar-synth</module>
+		<module>../../TuxGuitar-synth-gervill</module>
 		<module>../../TuxGuitar-synth-export</module>
 	</modules>
 	
@@ -168,6 +170,12 @@
 								</artifactItem>
 								<artifactItem>
 									<groupId>${project.groupId}</groupId>
+									<artifactId>tuxguitar-gervill</artifactId>
+									<destFileName>tuxguitar-gervill.jar</destFileName>
+									<outputDirectory>${project.build.directory}/${project.finalName}/share/plugins</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
 									<artifactId>tuxguitar-gm-settings</artifactId>
 									<destFileName>tuxguitar-gm-settings.jar</destFileName>
 									<outputDirectory>${project.build.directory}/${project.finalName}/share/plugins</outputDirectory>
@@ -272,6 +280,12 @@
 									<groupId>${project.groupId}</groupId>
 									<artifactId>tuxguitar-synth</artifactId>
 									<destFileName>tuxguitar-synth.jar</destFileName>
+									<outputDirectory>${project.build.directory}/${project.finalName}/share/plugins</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>tuxguitar-synth-gervill</artifactId>
+									<destFileName>tuxguitar-synth-gervill.jar</destFileName>
 									<outputDirectory>${project.build.directory}/${project.finalName}/share/plugins</outputDirectory>
 								</artifactItem>
 								<artifactItem>
