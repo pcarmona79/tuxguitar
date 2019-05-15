@@ -105,8 +105,9 @@ public class TGChannelList {
 	
 	public void layoutItems() {
 		UITableLayout uiLayout = new UITableLayout();
+		uiLayout.set(UITableLayout.MARGIN, 0f);
 		for(int i = 0 ; i < this.channelItems.size() ; i ++) {
-			uiLayout.set(this.channelItems.get(i).getComposite(), ((i * 2) + 1), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false);
+			uiLayout.set(this.channelItems.get(i).getComposite(), ((i * 2) + 1), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, null, null, 4f);
             uiLayout.set(this.separators.get(i), ((i * 2) + 2), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, null, null, 0f);
 		}
 		this.channelItemArea.setLayout(uiLayout);

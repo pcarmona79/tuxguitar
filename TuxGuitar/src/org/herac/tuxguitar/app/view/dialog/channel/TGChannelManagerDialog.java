@@ -78,10 +78,12 @@ public class TGChannelManagerDialog implements TGEventListener {
 		UITableLayout compositeLayout = new UITableLayout();
 		UIPanel composite = uiFactory.createPanel(this.dialog, false);
 		composite.setLayout(compositeLayout);
-		dialogLayout.set(composite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		compositeLayout.set(UITableLayout.MARGIN, 0f);
+
+		dialogLayout.set(composite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 		
 		UIControl mainControl = this.createChannelList(composite);
-		compositeLayout.set(mainControl, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		compositeLayout.set(mainControl, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 
 		UISeparator separator = uiFactory.createVerticalSeparator(composite);
 		compositeLayout.set(separator, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
