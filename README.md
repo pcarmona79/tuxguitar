@@ -1,4 +1,4 @@
-# TuxGuitar2
+# TuxGuitar
 A multitrack tablature editor and player for stringed instruments. This is a downstream fork
 of [TuxGuitar](http://tuxguitar.com.ar/) with several changes merged in from the community.
 
@@ -15,7 +15,7 @@ for more information.
 - Main toolbar redesigned and given platform-specific appearances
 - High DPI display support
 - Hiding/showing of individual tracks
-- Click-n-drag selection support, started by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
+- Click-and-drag selection support, started by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
 - Cut/Copy/Paste of individual notes
 - More tuning presets, grouped by instrument and number of strings
 - Support for creating custom scales in the scale list
