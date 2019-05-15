@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.community.io;
 
+import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.io.base.TGSongExporter;
 import org.herac.tuxguitar.io.base.TGSongStream;
 import org.herac.tuxguitar.io.base.TGSongStreamContext;
@@ -18,7 +19,7 @@ public class TGShareSongExporter implements TGSongExporter {
 	}
 	
 	public String getExportName() {
-		return ("Share with the Community");
+		return TuxGuitar.getProperty("tuxguitar-community.export-label");
 	}
 
 	public TGSongStream openStream(TGSongStreamContext streamContext) {

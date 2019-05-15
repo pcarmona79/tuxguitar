@@ -9,7 +9,7 @@ import org.herac.tuxguitar.io.base.TGSongWriterHandle;
 
 public class SVGSongWriter implements TGSongWriter {
 	
-	public static final TGFileFormat FILE_FORMAT = new TGFileFormat("Scalable Vector Graphics", "image/svg+xml", new String[]{"svg"});
+	public static final TGFileFormat FILE_FORMAT = new TGFileFormat("SVG", "image/svg+xml", new String[]{"svg"});
 	
 	public SVGSongWriter() {
 		super();

@@ -333,7 +333,10 @@ public class FileMenuItem extends TGMenuItem {
 			
 			for(UIMenuActionItem item : this.readerItems) {
 				TGFileFormat fileFormat = item.getData(TGFileFormat.class.getName());
-				item.setText(TuxGuitar.getProperty("file.import") + " " + fileFormat.getName());
+				item.setText(String.format("%s %s%s",
+						TuxGuitar.getProperty("file.import"),
+						fileFormat.getName(),
+						TuxGuitar.getProperty("file.import.postfix")));
 			}
 			
 			for(UIMenuActionItem item : this.importItems) {
@@ -346,7 +349,10 @@ public class FileMenuItem extends TGMenuItem {
 			
 			for(UIMenuActionItem item : this.writerItems) {
 				TGFileFormat fileFormat = item.getData(TGFileFormat.class.getName());
-				item.setText(TuxGuitar.getProperty("file.export") + " " + fileFormat.getName());
+				item.setText(String.format("%s %s%s",
+						TuxGuitar.getProperty("file.export"),
+						fileFormat.getName(),
+						TuxGuitar.getProperty("file.export.postfix")));
 			}
 			
 			for(UIMenuActionItem item : this.exportItems) {
