@@ -4,9 +4,18 @@ button:not(.flat) {
 
 headerbar buttonbox button:not(.flat) {
   margin: 0;
-  padding: 4px 4px 4px 8px
+  padding: 4px 9px;
+}
+
+headerbar buttonbox image {
+  margin: 0;
+  padding: 0;
 }
 
 headerbar .image-button {
-padding: 4px;
+  padding: 4px;
+}
+
+separator {
+  background-color: darker(@borders);
 }

@@ -27,9 +27,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.menu.UIMenuCheckableItem;
 import org.herac.tuxguitar.ui.menu.UIMenuSubMenuItem;
 import org.herac.tuxguitar.ui.swt.menu.SWTMenuCheckableItem;
-import org.herac.tuxguitar.ui.swt.widget.SWTControl;
-import org.herac.tuxguitar.ui.swt.widget.SWTPanel;
-import org.herac.tuxguitar.ui.swt.widget.SWTWindow;
+import org.herac.tuxguitar.ui.swt.widget.*;
 import org.herac.tuxguitar.util.TGContext;
 
 import java.io.IOException;
@@ -90,6 +88,13 @@ public class GTKHeaderBar implements TGEventListener {
         if (this.enabled) {
             for (TGMenuItem menuItem : menuItems) {
                 menuItem.loadIcons();
+            }
+        }
+        for (HeaderWidget widget : this.widgets) {
+            if (widget.control instanceof SWTButton) {
+                ((SWTButton) widget.control).setText("");
+            } else if (widget.control instanceof SWTToggleButton) {
+                ((SWTToggleButton) widget.control).setText("");
             }
         }
     }
@@ -178,6 +183,9 @@ public class GTKHeaderBar implements TGEventListener {
                     GTK.gtk_style_context_add_provider_for_screen(GTK.gtk_widget_get_screen(headerBar), provider, GTK.GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
                     // ---- RIGHT ----
+                    this.createMenu();
+                    TGGTK.headerBarPackLeft(headerBar, menuButton.handle);
+
                     TGMainToolBarSection layout = (TGMainToolBarSection) this.toolBar.getSections().get(0);
 
                     long scrolled = TGGTK.createHidingScrolledWindow(GTK.GTK_ALIGN_START);
@@ -196,9 +204,6 @@ public class GTKHeaderBar implements TGEventListener {
                     }
 
                     // ---- LEFT ----
-                    this.createMenu();
-                    TGGTK.headerBarPackRight(headerBar, menuButton.handle);
-
                     TGMainToolBarSection view = (TGMainToolBarSection) this.toolBar.getSections().get(2);
 
                     scrolled = TGGTK.createHidingScrolledWindow(GTK.GTK_ALIGN_END);
