@@ -1,4 +1,7 @@
 # TuxGuitar
+
+[![Screenshot](./TuxGuitar/share/skins/Symbolic-Dark/skin-preview.png)](./TuxGuitar/share/skins/Symbolic-Dark/skin-preview.png)
+
 A multitrack tablature editor and player for stringed instruments. This is a downstream fork
 of [TuxGuitar](http://tuxguitar.com.ar/) with several changes merged in from the community.
 

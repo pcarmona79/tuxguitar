@@ -12,7 +12,7 @@ cd tuxguitar
 ## GNU/Linux
 ### Debian/Ubuntu
 ```sh
-sudo apt install build-essential default-jdk maven libfluidsynth-dev libjack-jackd2-dev libasound2-dev
+sudo apt install build-essential default-jdk maven libfluidsynth-dev libjack-jackd2-dev libasound2-dev libgtk-3-dev
 cd build-scripts/tuxguitar-linux-x86_64-deb
 mvn -P native-modules package
 sudo dpkg -i target/tuxguitar-*.deb
