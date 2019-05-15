@@ -43,7 +43,7 @@ public class TGLayoutVertical extends TGLayout{
 		this.clearTrackPositions();
 		
 		int style = getStyle();
-		int number = getComponent().getTrackSelection();
+		List<TGTrack> tracks = getComponent().getTrackSelection();
 		float posY = Math.round(fromY + getFirstTrackSpacing());
 		float height = getFirstTrackSpacing();
 		float lineHeight = 0;
@@ -52,11 +52,10 @@ public class TGLayoutVertical extends TGLayout{
 		int nextMeasureIndex = 0;
 		while(measureCount > nextMeasureIndex){
 			TempLine line = null;
-			Iterator<TGTrack> tracks = getSong().getTracks();
-			while(tracks.hasNext()){
-				TGTrackImpl track = (TGTrackImpl) tracks.next();
-				if(number < 0 || track.getNumber() == number){
-					
+			for (TGTrack origTrack : tracks) {
+				if(origTrack instanceof TGTrackImpl){
+					TGTrackImpl track = (TGTrackImpl) origTrack;
+
 					TGTrackSpacing ts = new TGTrackSpacing(this) ;
 					ts.setSize(TGTrackSpacing.POSITION_SCORE_MIDDLE_LINES, ((style & DISPLAY_SCORE) != 0 ?( (getScoreLineSpacing() * 5) ):0));
 					

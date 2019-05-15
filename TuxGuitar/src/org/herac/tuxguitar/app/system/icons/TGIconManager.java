@@ -150,6 +150,8 @@ public class TGIconManager {
 	private UIImage soloDisabled;
 	private UIImage mute;
 	private UIImage muteDisabled;
+	private UIImage visible;
+	private UIImage visibleDisabled;
 	private UIImage sharp;
 	private UIImage flat;
 
@@ -314,6 +316,8 @@ public class TGIconManager {
 		this.soloDisabled = loadIcon("solo-disabled");
 		this.mute = loadIcon("mute");
 		this.muteDisabled = loadIcon("mute-disabled");
+		this.visible = loadIcon("visible");
+		this.visibleDisabled = loadIcon("visible-disabled");
 		this.sharp = loadIcon("sharp");
 		this.flat = loadIcon("flat");
 	}
@@ -957,6 +961,15 @@ public class TGIconManager {
 	public UIImage getMuteDisabled() {
 		return muteDisabled;
 	}
+
+	public UIImage getVisible() {
+		return visible;
+	}
+
+	public UIImage getVisibleDisabled() {
+		return visibleDisabled;
+	}
+
 	public UIImage getSharp() {
 		return sharp;
 	}

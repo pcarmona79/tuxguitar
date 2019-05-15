@@ -1039,4 +1039,33 @@ public class TGSongManager {
 		}
 		return defaultLength;
 	}
+
+    public int countVisibleTracks(TGSong song) {
+	    int count = 0;
+		for (int i = 0; i < song.countTracks(); i++) {
+			TGTrack track = song.getTrack(i);
+			if (track.isVisible()) {
+			    count++;
+			}
+		}
+		return count;
+	}
+
+    public List<TGTrack> getVisibleTracks(TGSong song) {
+	    List<TGTrack> tracks = new ArrayList<>();
+		for (int i = 0; i < song.countTracks(); i++) {
+			TGTrack track = song.getTrack(i);
+			if (track.isVisible()) {
+			    tracks.add(track);
+			}
+		}
+		return tracks;
+	}
+
+	public void showSingleTrack(TGSong song, TGTrack track) {
+		for (int i = 0; i < song.countTracks(); i++) {
+			TGTrack t = song.getTrack(i);
+			getTrackManager().changeVisible(t, t == track);
+		}
+	}
 }

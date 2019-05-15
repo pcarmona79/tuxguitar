@@ -24,6 +24,7 @@ public abstract class TGTrack {
 	private int channelId;
 	private boolean solo;
 	private boolean mute;
+	private boolean visible;
 	private String name;
 	private List<TGMeasure> measures;
 	private List<TGString> strings;
@@ -37,6 +38,7 @@ public abstract class TGTrack {
 		this.channelId = -1;
 		this.solo = false;
 		this.mute = false;
+		this.visible = true;
 		this.name = new String();
 		this.measures = new ArrayList<TGMeasure>();
 		this.strings = new ArrayList<TGString>();
@@ -128,7 +130,15 @@ public abstract class TGTrack {
 	public void setMute(boolean mute) {
 		this.mute = mute;
 	}
-	
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
 	public int getChannelId() {
 		return this.channelId;
 	}
@@ -185,6 +195,7 @@ public abstract class TGTrack {
 		this.setOffset(track.getOffset());
 		this.setSolo(track.isSolo());
 		this.setMute(track.isMute());
+		this.setVisible(track.isVisible());
 		this.setChannelId(track.getChannelId());
 		this.getColor().copyFrom(track.getColor());
 		this.getLyrics().copyFrom(track.getLyrics());

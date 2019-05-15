@@ -96,6 +96,7 @@ public class Caret {
 		this.selectedMeasure = selectedMeasure;
 		this.selectedBeat = selectedBeat;
 		this.string = string;
+		this.updateTrackVisibility();
 		this.updatePosition();
 		this.updateDuration();
 		this.updateString();
@@ -318,6 +319,14 @@ public class Caret {
 	public void changeDuration(TGDuration duration){
 		getSongManager().getMeasureManager().changeDuration(getMeasure(),getSelectedBeat(),duration,getVoice(), true);
 		setChanges(true);
+	}
+
+	private void updateTrackVisibility() {
+		TGSong song = getSong();
+		if (getSongManager().countVisibleTracks(song) == 1) {
+		    getSongManager().showSingleTrack(song, getTrack());
+		}
+		getTrack().setVisible(true);
 	}
 	
 	private void updatePosition(){

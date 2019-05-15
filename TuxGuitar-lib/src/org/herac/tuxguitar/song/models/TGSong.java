@@ -179,7 +179,11 @@ public abstract class TGSong {
 	public Iterator<TGTrack> getTracks() {
 		return this.tracks.iterator();
 	}
-	
+
+	public List<TGTrack> getTrackList() {
+		return new ArrayList<>(this.tracks);
+	}
+
 	public int countChannels(){
 		return this.channels.size();
 	}

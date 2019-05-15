@@ -7,14 +7,14 @@ import org.herac.tuxguitar.graphics.control.TGLayoutVertical;
 import org.herac.tuxguitar.graphics.control.TGResourceBuffer;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGSong;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
 import org.herac.tuxguitar.ui.resource.UIResourceFactory;
+
+import java.util.Collections;
+import java.util.List;
 
 public class SVGController implements TGController {
 	
@@ -96,8 +96,12 @@ public class SVGController implements TGController {
 		return this.tgStyles.getStyles();
 	}
 	
-	public int getTrackSelection() {
-		return this.tgStyles.getTrack();
+	public List<TGTrack> getTrackSelection() {
+		int track = this.tgStyles.getTrack();
+		if (track == -1) {
+			return getSong().getTrackList();
+		}
+	    return Collections.singletonList(getSongManager().getTrack(getSong(), track));
 	}
 	
 	public boolean isRunning(TGBeat beat) {

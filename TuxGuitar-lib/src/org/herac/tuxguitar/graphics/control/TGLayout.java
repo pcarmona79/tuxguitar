@@ -150,6 +150,8 @@ public abstract class TGLayout {
 	}
 	
 	public void updateSong(){
+		List tracks = getComponent().getTrackSelection();
+		setStyle(tracks.size() > 1 ? getStyle() | DISPLAY_MULTITRACK : getStyle() & ~DISPLAY_MULTITRACK);
 		this.getResourceBuffer().clearRegistry();
 		this.updateMeasures();
 	}

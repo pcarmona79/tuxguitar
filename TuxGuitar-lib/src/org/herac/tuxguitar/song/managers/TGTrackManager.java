@@ -259,7 +259,11 @@ public class TGTrackManager {
 		track.setMute(mute);
 		track.setSolo(track.isMute() ? false : track.isSolo());
 	}
-	
+
+	public void changeVisible(TGTrack track, boolean visible) {
+		track.setVisible(visible);
+	}
+
 	public void changeInfo(TGTrack track,String name,TGColor color,int offset){
 		track.setName(name);
 		track.setOffset(offset);
@@ -364,4 +368,5 @@ public class TGTrackManager {
 	public boolean isLastMeasure(TGMeasure measure){
 		return (measure.getTrack().getSong().countMeasureHeaders() == measure.getNumber());
 	}
+
 }

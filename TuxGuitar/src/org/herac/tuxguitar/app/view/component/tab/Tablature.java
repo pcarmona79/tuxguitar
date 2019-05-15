@@ -220,13 +220,10 @@ public class Tablature implements TGController {
 		return this.resourceBuffer;
 	}
 	
-	public int getTrackSelection(){
-		if( (getViewLayout().getStyle() & TGLayout.DISPLAY_MULTITRACK) == 0 ){
-			return getCaret().getTrack().getNumber();
-		}
-		return -1;
+	public List<TGTrack> getTrackSelection(){
+		return getSongManager().getVisibleTracks(getSong());
 	}
-	
+
 	public boolean isRunning(TGBeat beat) {
 		return ( isRunning( beat.getMeasure() ) && TuxGuitar.getInstance().getEditorCache().isPlaying(beat.getMeasure(),beat) );
 	}

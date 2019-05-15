@@ -8,7 +8,7 @@ import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleDecrementActio
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleIncrementAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleResetAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLinearLayoutAction;
-import org.herac.tuxguitar.app.action.impl.layout.TGSetMultitrackViewAction;
+import org.herac.tuxguitar.app.action.impl.layout.TGChangeShowAllTracksAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetPageLayoutAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetScoreEnabledAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetTablatureEnabledAction;
@@ -23,6 +23,7 @@ import org.herac.tuxguitar.app.view.toolbar.main.TGMainToolBar;
 import org.herac.tuxguitar.graphics.control.TGLayout;
 import org.herac.tuxguitar.graphics.control.TGLayoutHorizontal;
 import org.herac.tuxguitar.graphics.control.TGLayoutVertical;
+import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.ui.menu.UIMenu;
 import org.herac.tuxguitar.ui.menu.UIMenuActionItem;
 import org.herac.tuxguitar.ui.menu.UIMenuCheckableItem;
@@ -45,7 +46,7 @@ public class ViewMenuItem extends TGMenuItem {
 	private UIMenuCheckableItem dockToTop;
 	private UIMenuCheckableItem pageLayout;
 	private UIMenuCheckableItem linearLayout;
-	private UIMenuCheckableItem multitrack;
+	private UIMenuCheckableItem showAll;
 	private UIMenuCheckableItem scoreEnabled;
 	private UIMenuCheckableItem tablatureEnabled;
 	private UIMenuCheckableItem compact;
@@ -124,8 +125,8 @@ public class ViewMenuItem extends TGMenuItem {
 		this.linearLayout.addSelectionListener(this.createActionProcessor(TGSetLinearLayoutAction.NAME));
 		
 		//--MULTITRACK--
-		this.multitrack = this.layoutMenuItem.getMenu().createCheckItem();
-		this.multitrack.addSelectionListener(this.createActionProcessor(TGSetMultitrackViewAction.NAME));
+		this.showAll = this.layoutMenuItem.getMenu().createCheckItem();
+		this.showAll.addSelectionListener(this.createActionProcessor(TGChangeShowAllTracksAction.NAME));
 		
 		//--SCORE
 		this.scoreEnabled = this.layoutMenuItem.getMenu().createCheckItem();
@@ -168,7 +169,9 @@ public class ViewMenuItem extends TGMenuItem {
 	
 	public void update() {
 		Tablature tablature = TablatureEditor.getInstance(this.findContext()).getTablature();
+		TGSong song = tablature.getSong();
 		int style = tablature.getViewLayout().getStyle();
+		int visibleTrackCount = tablature.getSongManager().countVisibleTracks(song);
 		if (this.showMenuBar != null) {
 			this.showMenuBar.setChecked(TuxGuitar.getInstance().getItemManager().isMainMenuVisible());
 		}
@@ -182,11 +185,12 @@ public class ViewMenuItem extends TGMenuItem {
 		this.pageLayout.setChecked(tablature.getViewLayout() instanceof TGLayoutVertical);
 		this.linearLayout.setChecked(tablature.getViewLayout() instanceof TGLayoutHorizontal);
 		this.dockToTop.setChecked(TuxGuitar.getInstance().getDockingManager().isDockedToTop());
-		this.multitrack.setChecked( (style & TGLayout.DISPLAY_MULTITRACK) != 0 );
+		this.showAll.setEnabled(song.countTracks() > 1);
+		this.showAll.setChecked(visibleTrackCount == song.countTracks());
 		this.scoreEnabled.setChecked( (style & TGLayout.DISPLAY_SCORE) != 0 );
 		this.tablatureEnabled.setChecked( (style & TGLayout.DISPLAY_TABLATURE) != 0 );
 		this.compact.setChecked( (style & TGLayout.DISPLAY_COMPACT) != 0 );
-		this.compact.setEnabled((style & TGLayout.DISPLAY_MULTITRACK) == 0 || tablature.getViewLayout().getSong().countTracks() == 1);
+		this.compact.setEnabled(visibleTrackCount == 1);
 		this.chordName.setChecked( (style & TGLayout.DISPLAY_CHORD_NAME) != 0 );
 		this.chordDiagram.setChecked( (style & TGLayout.DISPLAY_CHORD_DIAGRAM) != 0 );
 		this.zoomReset.setEnabled(Tablature.DEFAULT_SCALE != tablature.getScale());
@@ -208,7 +212,7 @@ public class ViewMenuItem extends TGMenuItem {
 		
 		setMenuItemTextAndAccelerator(this.pageLayout, "view.layout.page", TGSetPageLayoutAction.NAME);
 		setMenuItemTextAndAccelerator(this.linearLayout, "view.layout.linear", TGSetLinearLayoutAction.NAME);
-		setMenuItemTextAndAccelerator(this.multitrack, "view.layout.multitrack", TGSetMultitrackViewAction.NAME);
+		setMenuItemTextAndAccelerator(this.showAll, "view.layout.multitrack", TGChangeShowAllTracksAction.NAME);
 		setMenuItemTextAndAccelerator(this.scoreEnabled, "view.layout.score-enabled", TGSetScoreEnabledAction.NAME);
 		setMenuItemTextAndAccelerator(this.tablatureEnabled, "view.layout.tablature-enabled", TGSetTablatureEnabledAction.NAME);
 		setMenuItemTextAndAccelerator(this.compact, "view.layout.compact", TGSetCompactViewAction.NAME);

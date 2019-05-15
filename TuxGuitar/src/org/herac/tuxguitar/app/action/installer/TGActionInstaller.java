@@ -58,7 +58,7 @@ import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleDecrementActio
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleIncrementAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLayoutScaleResetAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetLinearLayoutAction;
-import org.herac.tuxguitar.app.action.impl.layout.TGSetMultitrackViewAction;
+import org.herac.tuxguitar.app.action.impl.layout.TGChangeShowAllTracksAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetPageLayoutAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetScoreEnabledAction;
 import org.herac.tuxguitar.app.action.impl.layout.TGSetTablatureEnabledAction;
@@ -175,24 +175,7 @@ import org.herac.tuxguitar.editor.action.measure.TGRemoveMeasureRangeAction;
 import org.herac.tuxguitar.editor.action.note.*;
 import org.herac.tuxguitar.editor.action.song.TGClearSongAction;
 import org.herac.tuxguitar.editor.action.song.TGCopySongFromAction;
-import org.herac.tuxguitar.editor.action.track.TGAddNewTrackAction;
-import org.herac.tuxguitar.editor.action.track.TGAddTrackAction;
-import org.herac.tuxguitar.editor.action.track.TGChangeTrackMuteAction;
-import org.herac.tuxguitar.editor.action.track.TGChangeTrackPropertiesAction;
-import org.herac.tuxguitar.editor.action.track.TGChangeTrackSoloAction;
-import org.herac.tuxguitar.editor.action.track.TGChangeTrackTuningAction;
-import org.herac.tuxguitar.editor.action.track.TGCloneTrackAction;
-import org.herac.tuxguitar.editor.action.track.TGCopyTrackFromAction;
-import org.herac.tuxguitar.editor.action.track.TGMoveTrackDownAction;
-import org.herac.tuxguitar.editor.action.track.TGMoveTrackUpAction;
-import org.herac.tuxguitar.editor.action.track.TGRemoveTrackAction;
-import org.herac.tuxguitar.editor.action.track.TGSetTrackChannelAction;
-import org.herac.tuxguitar.editor.action.track.TGSetTrackInfoAction;
-import org.herac.tuxguitar.editor.action.track.TGSetTrackLyricsAction;
-import org.herac.tuxguitar.editor.action.track.TGSetTrackMuteAction;
-import org.herac.tuxguitar.editor.action.track.TGSetTrackNameAction;
-import org.herac.tuxguitar.editor.action.track.TGSetTrackSoloAction;
-import org.herac.tuxguitar.editor.action.track.TGSetTrackStringCountAction;
+import org.herac.tuxguitar.editor.action.track.*;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGActionInstaller {
@@ -275,8 +258,10 @@ public class TGActionInstaller {
 		installAction(new TGAddTrackAction(context));
 		installAction(new TGSetTrackMuteAction(context));
 		installAction(new TGSetTrackSoloAction(context));
+		installAction(new TGSetTrackVisibleAction(context));
 		installAction(new TGChangeTrackMuteAction(context));
 		installAction(new TGChangeTrackSoloAction(context));
+		installAction(new TGChangeTrackVisibleAction(context));
 		installAction(new TGCloneTrackAction(context));
 		installAction(new TGGoFirstTrackAction(context));
 		installAction(new TGGoLastTrackAction(context));
@@ -423,7 +408,7 @@ public class TGActionInstaller {
 		//layout actions
 		installAction(new TGSetPageLayoutAction(context));
 		installAction(new TGSetLinearLayoutAction(context));
-		installAction(new TGSetMultitrackViewAction(context));
+		installAction(new TGChangeShowAllTracksAction(context));
 		installAction(new TGSetScoreEnabledAction(context));
 		installAction(new TGSetTablatureEnabledAction(context));
 		installAction(new TGSetCompactViewAction(context));

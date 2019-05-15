@@ -340,6 +340,7 @@ public class TGTableViewer implements TGEventListener {
 	private void updateTableSoloMuteRow(TGTableRowSoloMuteCell cell, TGTrack track) {
 		cell.setSolo(track.isSolo());
 		cell.setMute(track.isMute());
+		cell.setVisible(track.isVisible());
 		updateTableRow(cell, track);
 	}
 	
@@ -374,6 +375,7 @@ public class TGTableViewer implements TGEventListener {
 			row.getNumber().setText(Integer.toString(((TGTrack)row.getNumber().getData(TGTrack.class.getName())).getNumber()));
 			row.getSoloMute().setSolo(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isSolo());
 			row.getSoloMute().setMute(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isMute());
+			row.getSoloMute().setVisible(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isVisible());
 			row.getName().setText(((TGTrack)row.getName().getData(TGTrack.class.getName())).getName());
 			row.getInstrument().setText(getInstrument((TGTrack)row.getInstrument().getData(TGTrack.class.getName())));
 		}

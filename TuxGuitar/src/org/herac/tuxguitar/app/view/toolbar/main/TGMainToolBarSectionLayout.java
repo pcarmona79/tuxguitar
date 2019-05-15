@@ -13,7 +13,7 @@ public class TGMainToolBarSectionLayout extends TGMainToolBarSection {
 
 	private UIToggleButton pageLayout;
 	private UIToggleButton linearLayout;
-	private UIToggleButton multitrack;
+	private UIToggleButton showAll;
 	private UIToggleButton scoreEnabled;
 	private UIToggleButton tablatureEnabled;
 	private UIToggleButton compact;
@@ -33,8 +33,8 @@ public class TGMainToolBarSectionLayout extends TGMainToolBarSection {
 		this.linearLayout = this.createToggleButton();
 		this.linearLayout.addSelectionListener(this.createActionProcessor(TGSetLinearLayoutAction.NAME));
 
-		this.multitrack = this.createToggleButton();
-		this.multitrack.addSelectionListener(this.createActionProcessor(TGSetMultitrackViewAction.NAME));
+		this.showAll = this.createToggleButton();
+		this.showAll.addSelectionListener(this.createActionProcessor(TGChangeShowAllTracksAction.NAME));
 
 		this.scoreEnabled = this.createToggleButton();
 		this.scoreEnabled.addSelectionListener(this.createActionProcessor(TGSetScoreEnabledAction.NAME));
@@ -63,7 +63,7 @@ public class TGMainToolBarSectionLayout extends TGMainToolBarSection {
 	public void loadProperties(){
 		this.pageLayout.setToolTipText(this.getText("view.layout.page"));
 		this.linearLayout.setToolTipText(this.getText("view.layout.linear"));
-		this.multitrack.setToolTipText(this.getText("view.layout.multitrack"));
+		this.showAll.setToolTipText(this.getText("view.layout.multitrack"));
 		this.scoreEnabled.setToolTipText(this.getText("view.layout.score-enabled"));
 		this.tablatureEnabled.setToolTipText(this.getText("view.layout.tablature-enabled"));
 		this.compact.setToolTipText(this.getText("view.layout.compact"));
@@ -74,7 +74,7 @@ public class TGMainToolBarSectionLayout extends TGMainToolBarSection {
 	public void loadIcons(){
 		this.pageLayout.setImage(this.getIconManager().getLayoutPage());
 		this.linearLayout.setImage(this.getIconManager().getLayoutLinear());
-		this.multitrack.setImage(this.getIconManager().getLayoutMultitrack());
+		this.showAll.setImage(this.getIconManager().getLayoutMultitrack());
 		this.scoreEnabled.setImage(this.getIconManager().getLayoutScore());
 		this.tablatureEnabled.setImage(this.getIconManager().getLayoutTablature());
 		this.compact.setImage(this.getIconManager().getLayoutCompact());
@@ -85,16 +85,17 @@ public class TGMainToolBarSectionLayout extends TGMainToolBarSection {
 	public void updateItems(){
 		TGLayout layout = this.getTablature().getViewLayout();
 		int style = layout.getStyle();
-
+		int visibleTrackCount = this.getTablature().getSongManager().countVisibleTracks(this.getSong());
 		this.pageLayout.setSelected(layout instanceof TGLayoutVertical);
 		this.linearLayout.setSelected(layout instanceof TGLayoutHorizontal);
-		this.multitrack.setSelected( (style & TGLayout.DISPLAY_MULTITRACK) != 0 );
+		this.showAll.setEnabled(this.getSong().countTracks() > 1);
+		this.showAll.setSelected(visibleTrackCount == this.getSong().countTracks());
 		this.scoreEnabled.setSelected( (style & TGLayout.DISPLAY_SCORE) != 0 );
 		this.tablatureEnabled.setSelected( (style & TGLayout.DISPLAY_TABLATURE) != 0 );
 		this.compact.setSelected( (style & TGLayout.DISPLAY_COMPACT) != 0 );
-		this.compact.setEnabled((style & TGLayout.DISPLAY_MULTITRACK) == 0 || this.getSong().countTracks() == 1);
+		this.compact.setEnabled(visibleTrackCount == 1);
 
-		float scale = TablatureEditor.getInstance(this.getToolBar().getContext()).getTablature().getScale();
+		float scale = this.getTablature().getScale();
 
 		this.zoomOut.setEnabled(scale > TGSetLayoutScaleDecrementAction.MINIMUM_VALUE);
 		this.zoomReset.setText(Math.round(scale * 100) + "%");

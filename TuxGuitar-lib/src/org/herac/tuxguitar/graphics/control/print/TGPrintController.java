@@ -4,11 +4,11 @@ import org.herac.tuxguitar.graphics.control.TGController;
 import org.herac.tuxguitar.graphics.control.TGLayoutStyles;
 import org.herac.tuxguitar.graphics.control.TGResourceBuffer;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGSong;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.resource.UIResourceFactory;
+
+import java.util.Collections;
+import java.util.List;
 
 public class TGPrintController implements TGController {
 	
@@ -46,10 +46,10 @@ public class TGPrintController implements TGController {
 		return this.styles;
 	}
 	
-	public int getTrackSelection() {
-		return -1;
+	public List<TGTrack> getTrackSelection() {
+		return getSong().getTrackList();
 	}
-	
+
 	public boolean isRunning(TGBeat beat) {
 		return false;
 	}
