@@ -8,7 +8,7 @@ LIBRARY_PREFIX?=lib
 LIBRARY_SUFFIX?=.so
 
 LIBRARY=$(LIBRARY_PREFIX)$(LIBRARY_NAME)$(LIBRARY_SUFFIX)
-OBJECTS=org_herac_tuxguitar_gtk_headerbar_GTKHeaderBar.o
+OBJECTS=org_herac_tuxguitar_gtk_TGGTK.o
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<

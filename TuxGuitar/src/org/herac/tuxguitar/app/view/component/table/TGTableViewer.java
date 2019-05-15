@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herac.tuxguitar.app.TuxGuitar;
-import org.herac.tuxguitar.app.action.TGActionProcessorListener;
 import org.herac.tuxguitar.app.action.impl.caret.TGMoveToAction;
-import org.herac.tuxguitar.app.action.impl.composition.TGOpenSongInfoDialogAction;
 import org.herac.tuxguitar.app.action.impl.track.TGGoToTrackAction;
 import org.herac.tuxguitar.app.action.impl.track.TGOpenTrackPropertiesDialogAction;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
@@ -331,7 +329,7 @@ public class TGTableViewer implements TGEventListener {
 	
 	private void updateTableRow(TGTableRowCell cell, TGTrack track) {
 		cell.setData(TGTrack.class.getName(), track);
-		cell.setMenu((UIPopupMenu) this.menu.getMenu());
+		cell.setMenu((UIPopupMenu) this.menu.getMenuItem());
 	}
 	
 	private void updateTableTextRow(TGTableRowTextCell cell, TGTrack track, String label) {

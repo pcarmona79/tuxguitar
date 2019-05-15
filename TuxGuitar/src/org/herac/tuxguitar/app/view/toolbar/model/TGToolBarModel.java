@@ -83,7 +83,7 @@ public abstract class TGToolBarModel implements TGEventListener {
 
 	public void setForceHidden(boolean hidden) {
 		this.forceHidden = hidden;
-		this.updateVisibility(this.isVisible());
+		this.updateVisibility(!hidden);
 	}
 	
 	public void updateVisibility(boolean visible) {

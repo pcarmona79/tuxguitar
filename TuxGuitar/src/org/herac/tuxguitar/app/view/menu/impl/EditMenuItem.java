@@ -35,7 +35,7 @@ public class EditMenuItem extends TGMenuItem{
 	private UIMenuActionItem redo;
 	private UIMenuActionItem selectAll;
 	private UIMenuActionItem selectNone;
-	private UIMenuCheckableItem modeSelection;
+	public UIMenuCheckableItem modeSelection;
 	private UIMenuCheckableItem modeEdition;
 	private UIMenuCheckableItem notNaturalKey;
 	private UIMenuCheckableItem voice1;
@@ -44,7 +44,11 @@ public class EditMenuItem extends TGMenuItem{
 	public EditMenuItem(UIMenu parent) {
 		this.editMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.editMenuItem;
+	}
+
 	public void showItems() {
 		//---------------------------------------------------
 		//--CUT--

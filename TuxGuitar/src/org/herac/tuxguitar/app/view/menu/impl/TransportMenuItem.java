@@ -37,7 +37,11 @@ public class TransportMenuItem extends TGMenuItem {
 	public TransportMenuItem(UIMenu parent) {
 		this.transportMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.transportMenuItem;
+	}
+
 	public void showItems(){
 		this.play = this.transportMenuItem.getMenu().createActionItem();
 		this.play.addSelectionListener(this.createActionProcessor(TGTransportPlayAction.NAME));

@@ -45,7 +45,11 @@ public class DurationMenuItem  extends TGMenuItem {
 	public DurationMenuItem(UIMenu parent) {
 		this(parent.createSubMenuItem());
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.durationMenuItem;
+	}
+
 	public void showItems(){
 		//--whole--
 		this.whole = this.durationMenuItem.getMenu().createActionItem();

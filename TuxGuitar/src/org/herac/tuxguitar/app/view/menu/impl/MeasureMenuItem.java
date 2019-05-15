@@ -31,7 +31,11 @@ public class MeasureMenuItem extends TGMenuItem {
 	public MeasureMenuItem(UIMenu parent) {
 		this.measureMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.measureMenuItem;
+	}
+
 	public void showItems(){
 		//--first--
 		this.first = this.measureMenuItem.getMenu().createActionItem();

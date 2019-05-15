@@ -26,7 +26,11 @@ public class ChordMenuItem extends TGMenuItem {
 	public ChordMenuItem(UIMenu parent) {
 		this(parent.createSubMenuItem());
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.chordMenuItem;
+	}
+
 	public void showItems() {
 		//--INSERT CHORD--
 		this.insertChord = this.chordMenuItem.getMenu().createActionItem();

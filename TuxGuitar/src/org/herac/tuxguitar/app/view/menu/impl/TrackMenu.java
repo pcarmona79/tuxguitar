@@ -14,6 +14,7 @@ import org.herac.tuxguitar.graphics.control.TGTrackImpl;
 import org.herac.tuxguitar.ui.menu.UIMenu;
 import org.herac.tuxguitar.ui.menu.UIMenuActionItem;
 import org.herac.tuxguitar.ui.menu.UIMenuCheckableItem;
+import org.herac.tuxguitar.ui.menu.UIMenuSubMenuItem;
 
 public class TrackMenu extends TGMenuItem {
 	
@@ -35,7 +36,11 @@ public class TrackMenu extends TGMenuItem {
 	public TrackMenu(UIMenu menu) {
 		this.menu = menu;
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return null;
+	}
+
 	public UIMenu getMenu() {
 		return this.menu;
 	}

@@ -31,7 +31,11 @@ public class CompositionMenuItem extends TGMenuItem {
 	public CompositionMenuItem(UIMenu parent) {
 		this.compositionMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.compositionMenuItem;
+	}
+
 	public void showItems(){
 		//--TIME SIGNATURE--
 		this.timeSignature = this.compositionMenuItem.getMenu().createActionItem();

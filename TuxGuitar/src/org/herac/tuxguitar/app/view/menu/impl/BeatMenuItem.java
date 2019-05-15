@@ -29,6 +29,9 @@ import org.herac.tuxguitar.ui.menu.UIMenuActionItem;
 import org.herac.tuxguitar.ui.menu.UIMenuCheckableItem;
 import org.herac.tuxguitar.ui.menu.UIMenuSubMenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BeatMenuItem extends TGMenuItem {
 	
 	private UIMenuSubMenuItem noteMenuItem;
@@ -59,7 +62,21 @@ public class BeatMenuItem extends TGMenuItem {
 	public BeatMenuItem(UIMenu parent) {
 		this.noteMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.noteMenuItem;
+	}
+
+	@Override
+	public List<UIMenuSubMenuItem> getSubMenuItems() {
+		List<UIMenuSubMenuItem> items = new ArrayList<>();
+		items.add(durationMenuItem.getMenuItem());
+		items.add(chordMenuItem.getMenuItem());
+		items.add(effectMenuItem.getMenuItem());
+		items.add(dynamicMenuItem.getMenuItem());
+		return items;
+	}
+
 	public void showItems(){
 		//--Tied Note
 		this.tiedNote = this.noteMenuItem.getMenu().createCheckItem();

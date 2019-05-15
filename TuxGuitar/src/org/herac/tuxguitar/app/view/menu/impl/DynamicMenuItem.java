@@ -30,7 +30,11 @@ public class DynamicMenuItem extends TGMenuItem {
 	public DynamicMenuItem(UIMenu parent) {
 		this(parent.createSubMenuItem());
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.dynamicMenuItem;
+	}
+
 	public void showItems(){
 		this.pianoPianissimo = this.dynamicMenuItem.getMenu().createCheckItem();
 		this.pianoPianissimo.addSelectionListener(this.createChangeVelocityAction(TGVelocities.PIANO_PIANISSIMO));

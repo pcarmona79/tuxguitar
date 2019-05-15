@@ -28,6 +28,9 @@ import org.herac.tuxguitar.ui.menu.UIMenuActionItem;
 import org.herac.tuxguitar.ui.menu.UIMenuCheckableItem;
 import org.herac.tuxguitar.ui.menu.UIMenuSubMenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ViewMenuItem extends TGMenuItem {
 	
 	private UIMenuSubMenuItem layoutMenuItem;
@@ -57,7 +60,18 @@ public class ViewMenuItem extends TGMenuItem {
 	public ViewMenuItem(UIMenu parent) {
 		this.layoutMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.layoutMenuItem;
+	}
+
+	@Override
+	public List<UIMenuSubMenuItem> getSubMenuItems() {
+		List<UIMenuSubMenuItem> items = new ArrayList<>();
+		items.add(chordMenuItem);
+		return items;
+	}
+
 	public void showItems(){
 		if (TGApplication.getInstance(findContext()).getApplication().allowsMenubarHiding()) {
 			//--MENU--

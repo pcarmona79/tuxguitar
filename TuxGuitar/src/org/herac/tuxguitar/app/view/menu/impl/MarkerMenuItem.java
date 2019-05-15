@@ -25,7 +25,11 @@ public class MarkerMenuItem extends TGMenuItem {
 	public MarkerMenuItem(UIMenu parent) {
 		this.markerMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.markerMenuItem;
+	}
+
 	public void showItems(){
 		//--ADD--
 		this.add = this.markerMenuItem.getMenu().createActionItem();

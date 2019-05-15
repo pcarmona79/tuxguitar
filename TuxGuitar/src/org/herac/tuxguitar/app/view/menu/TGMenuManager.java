@@ -63,6 +63,8 @@ public class TGMenuManager implements TGEventListener {
 	public void loadItems(){
 		this.createMenuProcess.process();
 		this.createPopupMenu();
+		this.loadIcons(this.loadedMenuItems);
+		this.loadIcons(this.loadedPopupMenuItems);
 	}
 	
 	public void createMenu() {
@@ -152,7 +154,13 @@ public class TGMenuManager implements TGEventListener {
 			menuItem.loadProperties();
 		}
 	}
-	
+
+	public void loadIcons(List<TGMenuItem> menuItems){
+		for(TGMenuItem menuItem : menuItems) {
+			menuItem.loadIcons();
+		}
+	}
+
 	public void loadIcons(){
 		if(!this.isDisposed()){
 			this.loadItems();
@@ -236,7 +244,7 @@ public class TGMenuManager implements TGEventListener {
 
 	public void setMainMenuForceHidden(boolean hidden) {
 		this.forceHidden = hidden;
-		this.updateMainMenuVisibility(this.isMainMenuVisible());
+		this.updateMainMenuVisibility(!hidden);
 	}
 
 	public void updateMainMenuVisibility(boolean visible) {

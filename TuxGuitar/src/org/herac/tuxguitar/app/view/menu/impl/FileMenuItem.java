@@ -70,7 +70,21 @@ public class FileMenuItem extends TGMenuItem {
 		this.importItems = new ArrayList<UIMenuActionItem>();
 		this.exportItems = new ArrayList<UIMenuActionItem>();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.fileMenuItem;
+	}
+
+	@Override
+	public List<UIMenuSubMenuItem> getSubMenuItems() {
+	    List<UIMenuSubMenuItem> items = new ArrayList<>();
+	    items.add(newSong);
+	    items.add(importItem);
+	    items.add(exportItem);
+	    items.add(historyItem);
+	    return items;
+	}
+
 	public void showItems(){
 		//---------------------------------------------------
 		//--NEW--

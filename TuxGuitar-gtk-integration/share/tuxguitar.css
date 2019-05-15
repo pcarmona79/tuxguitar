@@ -2,7 +2,11 @@ button:not(.flat) {
   padding: 0px 5px;
 }
 
-headerbar button:not(.flat) {
+headerbar buttonbox button:not(.flat) {
   margin: 0;
   padding: 4px 4px 4px 8px
+}
+
+headerbar .image-button {
+padding: 4px;
 }

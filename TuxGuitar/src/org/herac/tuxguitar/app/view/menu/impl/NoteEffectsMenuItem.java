@@ -58,7 +58,11 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 	public NoteEffectsMenuItem(UIMenu parent) {
 		this(parent.createSubMenuItem());
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.noteEffectsMenuItem;
+	}
+
 	public void showItems(){
 		//--VIBRATO--
 		this.vibrato = this.noteEffectsMenuItem.getMenu().createCheckItem();

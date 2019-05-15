@@ -13,7 +13,11 @@ public class TrackMenuItem extends TGMenuItem {
 		this.trackMenuItem = parent.createSubMenuItem();
 		this.menu = new TrackMenu(this.trackMenuItem.getMenu());
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.trackMenuItem;
+	}
+
 	public void showItems(){
 		this.menu.showItems();
 		this.loadIcons();

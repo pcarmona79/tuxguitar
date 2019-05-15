@@ -16,7 +16,11 @@ public class HelpMenuItem extends TGMenuItem{
 	public HelpMenuItem(UIMenu parent) {
 		this.helpMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.helpMenuItem;
+	}
+
 	public void showItems(){
 		//--Doc
 		this.doc = this.helpMenuItem.getMenu().createActionItem();

@@ -29,7 +29,11 @@ public class ToolMenuItem extends TGMenuItem {
 	public ToolMenuItem(UIMenu parent) {
 		this.settingsMenuItem = parent.createSubMenuItem();
 	}
-	
+
+	public UIMenuSubMenuItem getMenuItem() {
+		return this.settingsMenuItem;
+	}
+
 	public void showItems(){
 		this.transpose = this.settingsMenuItem.getMenu().createActionItem();
 		this.transpose.addSelectionListener(this.createActionProcessor(TGOpenTransposeDialogAction.NAME));
