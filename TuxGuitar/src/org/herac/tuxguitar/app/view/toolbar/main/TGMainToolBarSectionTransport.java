@@ -96,7 +96,7 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 
 		this.display = getFactory().createCanvas(getControl(), false);
 		addItem(this.display);
-		getLayout().set(this.display, 1, getItems().size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, 70f, 18f, 1f);
+		getLayout().set(this.display, 1, getItems().size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, 40f, 18f, 1f);
 		this.display.addMouseDownListener(new UIMouseDownListener() {
 			public void onMouseDown(UIMouseEvent event) {
 				if (event.getButton() == 1) {
@@ -307,7 +307,7 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		UIPainter painter = dummyImage.createPainter();
 
 		painter.setFont(this.displayFont);
-		getLayout().set(this.display, UITableLayout.PACKED_WIDTH, painter.getFMWidth("000:00:00.000") + DISPLAY_MARGIN * 2f);
+		getLayout().set(this.display, UITableLayout.PACKED_WIDTH, painter.getFMWidth("0:00:00.000") + DISPLAY_MARGIN * 2f);
 		getLayout().set(this.display, UITableLayout.PACKED_HEIGHT, this.displayFont.getHeight() + DISPLAY_MARGIN * 2f);
 		getControl().layout();
 
