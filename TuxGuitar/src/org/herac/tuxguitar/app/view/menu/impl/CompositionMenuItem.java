@@ -88,11 +88,11 @@ public class CompositionMenuItem extends TGMenuItem {
 	
 	public void loadProperties(){
 		setMenuItemTextAndAccelerator(this.compositionMenuItem, "composition", null);		
-		setMenuItemTextAndAccelerator(this.timeSignature, "composition.timesignature", TGOpenTimeSignatureDialogAction.NAME);
-		setMenuItemTextAndAccelerator(this.tempo, "composition.tempo", TGOpenTempoDialogAction.NAME);
-		setMenuItemTextAndAccelerator(this.clef, "composition.clef", TGOpenClefDialogAction.NAME);
-		setMenuItemTextAndAccelerator(this.keySignature, "composition.keysignature", TGOpenKeySignatureDialogAction.NAME);
-		setMenuItemTextAndAccelerator(this.tripletFeel, "composition.tripletfeel", TGOpenTripletFeelDialogAction.NAME);
+		setMenuItemTextAndAccelerator(this.timeSignature, "composition.change-timesignature", TGOpenTimeSignatureDialogAction.NAME);
+		setMenuItemTextAndAccelerator(this.tempo, "composition.change-tempo", TGOpenTempoDialogAction.NAME);
+		setMenuItemTextAndAccelerator(this.clef, "composition.change-clef", TGOpenClefDialogAction.NAME);
+		setMenuItemTextAndAccelerator(this.keySignature, "composition.change-keysignature", TGOpenKeySignatureDialogAction.NAME);
+		setMenuItemTextAndAccelerator(this.tripletFeel, "composition.change-tripletfeel", TGOpenTripletFeelDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.repeatOpen, "repeat.open", TGRepeatOpenAction.NAME);
 		setMenuItemTextAndAccelerator(this.repeatClose, "repeat.close", TGOpenRepeatCloseDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.repeatAlternative, "repeat.alternative", TGOpenRepeatAlternativeDialogAction.NAME);

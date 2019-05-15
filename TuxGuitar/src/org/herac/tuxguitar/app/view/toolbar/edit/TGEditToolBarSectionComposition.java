@@ -81,11 +81,11 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 	}
 	
 	public void loadSectionProperties() {
-		this.tempo.setToolTipText(this.getText("composition.tempo"));
-		this.timeSignature.setToolTipText(this.getText("composition.timesignature"));
-		this.clef.setToolTipText(this.getText("composition.clef"));
-		this.keySignature.setToolTipText(this.getText("composition.keysignature"));
-		this.tripletFeel.setToolTipText(this.getText("composition.tripletfeel"));
+		this.tempo.setToolTipText(this.getText("composition.change-tempo"));
+		this.timeSignature.setToolTipText(this.getText("composition.change-timesignature"));
+		this.clef.setToolTipText(this.getText("composition.change-clef"));
+		this.keySignature.setToolTipText(this.getText("composition.change-keysignature"));
+		this.tripletFeel.setToolTipText(this.getText("composition.change-tripletfeel"));
 		this.marker.setToolTipText(this.getText("marker"));
 		this.repeatOpen.setToolTipText(this.getText("repeat.open"));
 		this.repeatClose.setToolTipText(this.getText("repeat.close"));
