@@ -13,12 +13,14 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIScrollBarPanel;
+import org.herac.tuxguitar.ui.widget.UISeparator;
 
 public class TGChannelList {
 	
 	private static final int SCROLL_INCREMENT = 10;
 	
 	private List<TGChannelItem> channelItems;
+	private List<UISeparator> separators;
 	private TGChannelManagerDialog dialog;
 	
 	protected UIScrollBarPanel channelItemAreaSC;
@@ -27,12 +29,13 @@ public class TGChannelList {
 	public TGChannelList(TGChannelManagerDialog dialog){
 		this.dialog = dialog;
 		this.channelItems = new ArrayList<TGChannelItem>();
+		this.separators = new ArrayList<>();
 	}
 	
 	public void show(UILayoutContainer parent){
 		UIFactory uiFactory = this.dialog.getUIFactory();
 		
-		this.channelItemAreaSC = uiFactory.createScrollBarPanel(parent, true, false, true);
+		this.channelItemAreaSC = uiFactory.createScrollBarPanel(parent, true, false, false);
 		this.channelItemAreaSC.setLayout(new UIScrollBarPanelLayout(false, true, true, true, false, true));
 		
 		this.channelItemAreaSC.getVScroll().setIncrement(SCROLL_INCREMENT);
@@ -49,15 +52,18 @@ public class TGChannelList {
 		while(!this.channelItems.isEmpty() && this.channelItems.size() > count ){
 			TGChannelItem tgChannelItem = this.channelItems.remove(0);
 			tgChannelItem.dispose();
+            UISeparator separator = this.separators.remove(0);
+            separator.dispose();
 		}
 	}
 	
-	public TGChannelItem getOrCreateChannelItemAt( int index ){
+	public TGChannelItem getOrCreateChannelItemAt( int index){
 		while( this.channelItems.size() <= index ){
 			TGChannelItem tgChannelItem = new TGChannelItem(this.dialog);
 			tgChannelItem.show(this.channelItemArea);
-			
 			this.channelItems.add(tgChannelItem);
+            UISeparator separator = this.dialog.getUIFactory().createHorizontalSeparator(this.channelItemArea);
+            this.separators.add(separator);
 		}
 		return (TGChannelItem)this.channelItems.get(index);
 	}
@@ -100,7 +106,8 @@ public class TGChannelList {
 	public void layoutItems() {
 		UITableLayout uiLayout = new UITableLayout();
 		for(int i = 0 ; i < this.channelItems.size() ; i ++) {
-			uiLayout.set(this.channelItems.get(i).getComposite(), (i + 1), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false);
+			uiLayout.set(this.channelItems.get(i).getComposite(), ((i * 2) + 1), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false);
+            uiLayout.set(this.separators.get(i), ((i * 2) + 2), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, null, null, 0f);
 		}
 		this.channelItemArea.setLayout(uiLayout);
 		this.channelItemAreaSC.layout();

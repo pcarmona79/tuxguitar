@@ -54,7 +54,7 @@ public class TGChannelItem {
 		UIFactory uiFactory = this.dialog.getUIFactory();
 		UITableLayout uiLayout = new UITableLayout(0f);
 		
-		this.composite = uiFactory.createPanel(parent, true);
+		this.composite = uiFactory.createPanel(parent, false);
 		this.composite.setLayout(uiLayout);
 		this.composite.addDisposeListener(new UIDisposeListener() {
 			public void onDispose(UIDisposeEvent event) {

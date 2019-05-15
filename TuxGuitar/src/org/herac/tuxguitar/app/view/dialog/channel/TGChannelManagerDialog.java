@@ -73,6 +73,7 @@ public class TGChannelManagerDialog implements TGEventListener {
 		
 		this.dialog = uiFactory.createWindow(uiParent, false, true);
 		this.dialog.setLayout(dialogLayout);
+		dialogLayout.set(UITableLayout.MARGIN, 0f);
 		
 		UITableLayout compositeLayout = new UITableLayout();
 		UIPanel composite = uiFactory.createPanel(this.dialog, false);
@@ -81,9 +82,12 @@ public class TGChannelManagerDialog implements TGEventListener {
 		
 		UIControl mainControl = this.createChannelList(composite);
 		compositeLayout.set(mainControl, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		
+
+		UISeparator separator = uiFactory.createVerticalSeparator(composite);
+		compositeLayout.set(separator, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+
 		UIControl rightControl = this.createRightComposite(composite);
-		compositeLayout.set(rightControl, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
+		compositeLayout.set(rightControl, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
 		
 		this.updateItems(true);
 		this.loadProperties();
@@ -150,11 +154,11 @@ public class TGChannelManagerDialog implements TGEventListener {
 		UIFactory uiFactory = this.getUIFactory();
 		
 		UITableLayout rightCompositeLayout = new UITableLayout();
-		UIPanel rightComposite = uiFactory.createPanel(parent, true);
+		UIPanel rightComposite = uiFactory.createPanel(parent, false);
 		rightComposite.setLayout(rightCompositeLayout);
 		
 		UITableLayout toolbarCompositeLayout = new UITableLayout();
-		UIPanel toolbarComposite = uiFactory.createPanel(rightComposite, true);
+		UIPanel toolbarComposite = uiFactory.createPanel(rightComposite, false);
 		toolbarComposite.setLayout(toolbarCompositeLayout);
 		rightCompositeLayout.set(toolbarComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false);
 		
@@ -167,7 +171,7 @@ public class TGChannelManagerDialog implements TGEventListener {
 		toolbarCompositeLayout.set(this.addChannelButton, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		UITableLayout volumeCompositeLayout = new UITableLayout();
-		UIPanel volumeComposite = uiFactory.createPanel(rightComposite, true);
+		UIPanel volumeComposite = uiFactory.createPanel(rightComposite, false);
 		volumeComposite.setLayout(volumeCompositeLayout);
 		rightCompositeLayout.set(volumeComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
@@ -177,13 +181,10 @@ public class TGChannelManagerDialog implements TGEventListener {
 		this.volumeScale.setIncrement(1);
 		volumeCompositeLayout.set(this.volumeScale, 1, 1, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_FILL, true, true);
 		
-		UISeparator separator = uiFactory.createHorizontalSeparator(volumeComposite);
-		volumeCompositeLayout.set(separator, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
-		
 		UITableLayout volumeValueLayout = new UITableLayout();
 		UIPanel volumeValueComposite = uiFactory.createPanel(volumeComposite, false);
 		volumeValueComposite.setLayout(volumeValueLayout);
-		volumeCompositeLayout.set(volumeValueComposite, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
+		volumeCompositeLayout.set(volumeValueComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 		
 		this.volumeValueTitleLabel = uiFactory.createLabel(volumeValueComposite);
 		volumeValueLayout.set(this.volumeValueTitleLabel, 1, 1, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, false);
