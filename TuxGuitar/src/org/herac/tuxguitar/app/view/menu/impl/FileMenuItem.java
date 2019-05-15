@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.app.view.menu.impl;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -252,7 +253,7 @@ public class FileMenuItem extends TGMenuItem {
 		for(int i = 0;i < this.historyFiles.length; i++){
 			URL url = (URL)urls.get(i);
 			this.historyFiles[i] = this.historyItem.getMenu().createActionItem();
-			this.historyFiles[i].setText(decode(url.toString()));
+			this.historyFiles[i].setText(new File(decode(url.toString())).getName());
 			this.historyFiles[i].addSelectionListener(this.createOpenUrlActionProcessor(url));
 		}
 		this.historyItem.setEnabled(this.historyFiles.length > 0);
