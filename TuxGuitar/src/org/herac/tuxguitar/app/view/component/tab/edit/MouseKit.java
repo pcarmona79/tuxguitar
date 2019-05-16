@@ -113,7 +113,6 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 
 	public void onMenuShow(UIMenuEvent event) {
 		this.menuOpen = true;
-		this.executeAction(TGMenuShownAction.NAME, this.position.clone(), null, false);
 	}
 
 	public void onMenuHide(UIMenuEvent event) {
