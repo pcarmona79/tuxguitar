@@ -12,6 +12,7 @@ import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialog;
 import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialogController;
+import org.herac.tuxguitar.editor.TGEditorManager;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatUtils;
@@ -54,9 +55,21 @@ public class TGFileChooserDialog {
 			
 			dialog.setDefaultPath(defaultPath);
 			dialog.setSupportedFormats(this.createSupportedFormats(formats));
-			
+
+			final TGEditorManager editorManager = TGEditorManager.getInstance(context.getContext());
+			int lockCount = 0;
+			while (editorManager.getLockControl().isLocked(null)) {
+				editorManager.unlock();
+				lockCount++;
+			}
+			final int totalLockCount = lockCount;
 			dialog.choose(new UIFileChooserHandler() {
 				public void onSelectFile(File file) {
+					int lockCount = totalLockCount;
+					while (lockCount > 0) {
+						lockCount--;
+						editorManager.lock();
+					}
 					if( file != null ) {
 						String path = file.getAbsolutePath();
 						File fileParent = file.getParentFile();
