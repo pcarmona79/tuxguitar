@@ -15,9 +15,20 @@ public class SWTToggleButton extends SWTControl<Button> implements UIToggleButto
 	private SWTSelectionListenerManager selectionListener;
 	
 	private UIImage image;
+
+	private static int makeStyle(boolean flat) {
+		int style = SWT.TOGGLE;
+		if (SWTEnvironment.needsWrappedButtons()) {
+			style |= SWT.WRAP;
+		}
+		if (flat) {
+			style |= SWT.FLAT | SWT.LEFT;
+		}
+		return style;
+	}
 	
 	public SWTToggleButton(SWTContainer<? extends Composite> parent, boolean flat) {
-		super(new Button(parent.getControl(), SWT.TOGGLE | (SWTEnvironment.needsWrappedButtons() ? SWT.WRAP : 0) | (flat ? SWT.FLAT : 0)), parent);
+		super(new Button(parent.getControl(), makeStyle(flat)), parent);
 		
 		this.selectionListener = new SWTSelectionListenerManager(this);
 	}

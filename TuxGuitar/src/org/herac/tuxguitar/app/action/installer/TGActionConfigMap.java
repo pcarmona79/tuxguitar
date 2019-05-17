@@ -509,18 +509,19 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGOpenTransportModeDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGOpenMarkerEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGOpenTransposeDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
+		this.map(TGToggleDockingToTopAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleFretBoardEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGTogglePianoEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
+		this.map(TGToggleChannelsDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
+		this.map(TGTogglePercussionEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleMatrixEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleLyricEditorAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
-		this.map(TGToggleChannelsDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleBrowserAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleMarkerListAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleMenuBarAction.NAME, LOCKABLE | SYNC_THREAD);
 		this.map(TGToggleMainToolbarAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleEditToolbarAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGToggleTableViewerAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
-		this.map(TGToggleDockingToTopAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGOpenDocumentationDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 		this.map(TGOpenAboutDialogAction.NAME, LOCKABLE | SYNC_THREAD |SHORTCUT);
 	}

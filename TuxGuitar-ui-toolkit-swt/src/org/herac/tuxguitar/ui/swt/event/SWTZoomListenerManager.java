@@ -22,7 +22,7 @@ public class SWTZoomListenerManager extends UIZoomListenerManager implements Lis
 			if((event.stateMask & SWT.CONTROL) == SWT.CONTROL) {
 				event.doit = false;
 				
-				this.onZoom(new UIZoomEvent(this.control, (event.count > 0 ? 1 : -1)));
+				this.onZoom(new UIZoomEvent(this.control, (event.count > 0 ? 1 : -1), event.stateMask));
 			}
 		}
 	}

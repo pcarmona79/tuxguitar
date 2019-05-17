@@ -194,7 +194,7 @@ public class TGChannelItem {
 	
 	public void loadProperties(){
 		if(!isDisposed()){
-			this.percussionButton.setText(TuxGuitar.getProperty("instrument.percussion-channel"));
+			this.percussionButton.setToolTipText(TuxGuitar.getProperty("instrument.percussion-channel"));
 			this.removeChannelButton.setToolTipText(TuxGuitar.getProperty("remove"));
 			this.setupChannelButton.setToolTipText(TuxGuitar.getProperty("settings"));
 			
@@ -210,6 +210,7 @@ public class TGChannelItem {
 	public void loadIcons(){
 		if(!isDisposed()){
 			TGIconManager iconManager = TGIconManager.getInstance(getContext());
+			this.percussionButton.setImage(iconManager.getPercussion());
 			this.removeChannelButton.setImage(iconManager.getListRemove());
 			this.setupChannelButton.setImage(iconManager.getSettings());
 		}

@@ -42,6 +42,7 @@ public class ViewMenuItem extends TGMenuItem {
 	private UIMenuCheckableItem showInstruments;
 	private UIMenuCheckableItem showFretBoard;
 	private UIMenuCheckableItem showPiano;
+	private UIMenuCheckableItem showPercussion;
 	private UIMenuCheckableItem showMatrix;
 	private UIMenuCheckableItem dockToTop;
 	private UIMenuCheckableItem pageLayout;
@@ -91,16 +92,11 @@ public class ViewMenuItem extends TGMenuItem {
 		//--EDIT TOOLBAR--
 		this.showTableViewer = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showTableViewer.addSelectionListener(this.createActionProcessor(TGToggleTableViewerAction.NAME));
-
-		//--INSTRUMENTS--
-		this.showInstruments = this.layoutMenuItem.getMenu().createCheckItem();
-		this.showInstruments.addSelectionListener(this.createActionProcessor(TGToggleChannelsDialogAction.NAME));
-		
-		//--MATRIX--
-		this.showMatrix = this.layoutMenuItem.getMenu().createCheckItem();
-		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
-
 		this.layoutMenuItem.getMenu().createSeparator();
+
+		//--DOCKING--
+		this.dockToTop = this.layoutMenuItem.getMenu().createCheckItem();
+		this.dockToTop.addSelectionListener(this.createActionProcessor(TGToggleDockingToTopAction.NAME));
 
 		//--FRETBOARD--
 		this.showFretBoard = this.layoutMenuItem.getMenu().createCheckItem();
@@ -110,12 +106,22 @@ public class ViewMenuItem extends TGMenuItem {
 		this.showPiano = this.layoutMenuItem.getMenu().createCheckItem();
 		this.showPiano.addSelectionListener(this.createActionProcessor(TGTogglePianoEditorAction.NAME));
 
-		//--DOCKING--
-		this.dockToTop = this.layoutMenuItem.getMenu().createCheckItem();
-		this.dockToTop.addSelectionListener(this.createActionProcessor(TGToggleDockingToTopAction.NAME));
-		
 		this.layoutMenuItem.getMenu().createSeparator();
-		
+
+		//--INSTRUMENTS--
+		this.showInstruments = this.layoutMenuItem.getMenu().createCheckItem();
+		this.showInstruments.addSelectionListener(this.createActionProcessor(TGToggleChannelsDialogAction.NAME));
+
+		//--PERCUSSION--
+		this.showPercussion = this.layoutMenuItem.getMenu().createCheckItem();
+		this.showPercussion.addSelectionListener(this.createActionProcessor(TGTogglePercussionEditorAction.NAME));
+
+		//--MATRIX--
+		this.showMatrix = this.layoutMenuItem.getMenu().createCheckItem();
+		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
+
+		this.layoutMenuItem.getMenu().createSeparator();
+
 		//--PAGE LAYOUT--
 		this.pageLayout = this.layoutMenuItem.getMenu().createRadioItem();
 		this.pageLayout.addSelectionListener(this.createActionProcessor(TGSetPageLayoutAction.NAME));
@@ -181,6 +187,7 @@ public class ViewMenuItem extends TGMenuItem {
 		this.showInstruments.setChecked(!TuxGuitar.getInstance().getChannelManager().isDisposed());
 		this.showFretBoard.setChecked(TuxGuitar.getInstance().getFretBoardEditor().isVisible());
 		this.showPiano.setChecked(TuxGuitar.getInstance().getPianoEditor().isVisible());
+		this.showPercussion.setChecked(!TuxGuitar.getInstance().getPercussionEditor().isDisposed());
 		this.showMatrix.setChecked(!TuxGuitar.getInstance().getMatrixEditor().isDisposed());
 		this.pageLayout.setChecked(tablature.getViewLayout() instanceof TGLayoutVertical);
 		this.linearLayout.setChecked(tablature.getViewLayout() instanceof TGLayoutHorizontal);
@@ -207,6 +214,7 @@ public class ViewMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.showInstruments, "view.show-instruments", TGToggleChannelsDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.showFretBoard, "view.show-fretboard", TGToggleFretBoardEditorAction.NAME);
 		setMenuItemTextAndAccelerator(this.showPiano, "view.show-piano", TGTogglePianoEditorAction.NAME);
+		setMenuItemTextAndAccelerator(this.showPercussion, "view.show-percussion", TGToggleMatrixEditorAction.NAME);
 		setMenuItemTextAndAccelerator(this.showMatrix, "view.show-matrix", TGToggleMatrixEditorAction.NAME);
 		setMenuItemTextAndAccelerator(this.dockToTop, "view.dock-to-top", TGToggleDockingToTopAction.NAME);
 		

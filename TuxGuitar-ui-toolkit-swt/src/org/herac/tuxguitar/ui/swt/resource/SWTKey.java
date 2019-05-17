@@ -30,7 +30,7 @@ public class SWTKey {
 		new SWTKeyMap(SWT.END, UIKey.END),
 		new SWTKeyMap(SWT.ALT, UIKey.ALT),
 		new SWTKeyMap(SWT.CONTROL, UIKey.CONTROL),
-		new SWTKeyMap(SWT.COMMAND, UIKey.COMMAND),
+		new SWTKeyMap(SWT.COMMAND, UIKey.SUPER),
 		new SWTKeyMap(SWT.SHIFT, UIKey.SHIFT),
 		new SWTKeyMap(SWT.TAB, UIKey.TAB),
 		new SWTKeyMap(SWT.BS, UIKey.BACKSPACE),
@@ -65,7 +65,7 @@ public class SWTKey {
 				keyCombination.getKeys().add(UIKey.CONTROL);
 			}
 			if((stateMask & SWT.COMMAND) != 0) {
-				keyCombination.getKeys().add(UIKey.COMMAND);
+				keyCombination.getKeys().add(UIKey.SUPER);
 			}
 		}
 		

@@ -25,7 +25,7 @@ public class UIKey {
 	public static final UIKey END = new UIKey("End");
 	public static final UIKey ALT = new UIKey("Alt");
 	public static final UIKey CONTROL = new UIKey("Control");
-	public static final UIKey COMMAND = new UIKey("Command");
+	public static final UIKey SUPER = new UIKey("Command");
 	public static final UIKey SHIFT = new UIKey("Shift");
 	public static final UIKey TAB = new UIKey("Tab");
 	public static final UIKey BACKSPACE = new UIKey("BackSpace");

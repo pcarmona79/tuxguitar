@@ -479,6 +479,7 @@ public class TGActionInstaller {
 		installAction(new TGTogglePianoEditorAction(context));
 		installAction(new TGToggleDockingToTopAction(context));
 
+		installAction(new TGTogglePercussionEditorAction(context));
 		installAction(new TGToggleMatrixEditorAction(context));
 		installAction(new TGToggleLyricEditorAction(context));
 		installAction(new TGToggleChannelsDialogAction(context));

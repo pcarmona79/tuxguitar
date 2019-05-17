@@ -95,7 +95,8 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		this.loadIcons();
 		this.loadProperties();
 		
-		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.toolComposite);
+		TuxGuitar.getInstance().getKeyBindingManager().
+				appendListenersTo(this.toolComposite);
 		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.canvas);
 	}
 	
@@ -119,7 +120,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		this.goLeft = uiFactory.createButton(this.toolComposite);
 		this.goLeft.addSelectionListener(new TGActionProcessorListener(this.context, TGGoLeftAction.NAME));
 		this.createToolItemLayout(this.goLeft, ++column);
-		
+
 		this.goRight = uiFactory.createButton(this.toolComposite);
 		this.goRight.addSelectionListener(new TGActionProcessorListener(this.context, TGGoRightAction.NAME));
 		this.createToolItemLayout(this.goRight, ++column);
@@ -180,9 +181,6 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 			}
 		});
 		this.createToolItemLayout(this.settings, ++column, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
-		
-		this.toolComposite.getLayout().set(goLeft, UITableLayout.MARGIN_LEFT, 0f);
-		this.toolComposite.getLayout().set(this.settings, UITableLayout.MARGIN_RIGHT, 0f);
 	}
 	
 	private void createToolBarLayout(){

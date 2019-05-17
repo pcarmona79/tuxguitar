@@ -35,6 +35,7 @@ import org.herac.tuxguitar.app.view.dialog.chord.TGCustomChordManager;
 import org.herac.tuxguitar.app.view.dialog.fretboard.TGFretBoardEditor;
 import org.herac.tuxguitar.app.view.dialog.lyric.TGLyricEditor;
 import org.herac.tuxguitar.app.view.dialog.matrix.TGMatrixEditor;
+import org.herac.tuxguitar.app.view.dialog.percussion.TGPercussionEditor;
 import org.herac.tuxguitar.app.view.dialog.piano.TGPianoEditor;
 import org.herac.tuxguitar.app.view.docking.TGDockingManager;
 import org.herac.tuxguitar.app.view.main.TGWindow;
@@ -217,7 +218,11 @@ public class TuxGuitar {
 	public TGPianoEditor getPianoEditor(){
 		return TGPianoEditor.getInstance(this.context);
 	}
-	
+
+	public TGPercussionEditor getPercussionEditor(){
+		return TGPercussionEditor.getInstance(this.context);
+	}
+
 	public TGMatrixEditor getMatrixEditor(){
 		return TGMatrixEditor.getInstance(this.context);
 	}

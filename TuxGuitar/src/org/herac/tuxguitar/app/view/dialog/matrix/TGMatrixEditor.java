@@ -185,7 +185,7 @@ public class TGMatrixEditor implements TGEventListener {
 		this.goLeft = uiFactory.createButton(this.toolbar);
 		this.goLeft.addSelectionListener(new TGActionProcessorListener(this.context, TGGoLeftAction.NAME));
 		this.createToolItemLayout(this.goLeft, ++column);
-		
+
 		this.goRight = uiFactory.createButton(this.toolbar);
 		this.goRight.addSelectionListener(new TGActionProcessorListener(this.context, TGGoRightAction.NAME));
 		this.createToolItemLayout(this.goRight, ++column);
@@ -238,9 +238,6 @@ public class TGMatrixEditor implements TGEventListener {
 			}
 		});
 		this.createToolItemLayout(this.settings, ++column, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
-		
-		this.toolbar.getLayout().set(goLeft, UITableLayout.MARGIN_LEFT, 0f);
-		this.toolbar.getLayout().set(this.settings, UITableLayout.MARGIN_RIGHT, 0f);
 	}
 	
 	private void createToolBarLayout(){

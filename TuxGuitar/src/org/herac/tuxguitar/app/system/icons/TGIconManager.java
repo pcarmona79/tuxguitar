@@ -94,6 +94,7 @@ public class TGIconManager {
 	private UIImage text;
 	private UIImage noteTied;
 	private UIImage instruments;
+	private UIImage percussion;
 	private UIImage dynamicPPP;
 	private UIImage dynamicPP;
 	private UIImage dynamicP;
@@ -260,6 +261,7 @@ public class TGIconManager {
 		this.markerPrevious = loadIcon("marker_previous");
 		this.markerNext = loadIcon("marker_next");
 		this.instruments = loadIcon("mixer");
+		this.percussion = loadIcon("percussion");
 		this.dynamicPPP = loadIcon("dynamic_ppp");
 		this.dynamicPP = loadIcon("dynamic_pp");
 		this.dynamicP = loadIcon("dynamic_p");
@@ -697,7 +699,11 @@ public class TGIconManager {
 	public UIImage getInstruments() {
 		return this.instruments;
 	}
-	
+
+	public UIImage getPercussion() {
+		return this.percussion;
+	}
+
 	public UIImage getNoteTied() {
 		return this.noteTied;
 	}

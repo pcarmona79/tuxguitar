@@ -7,6 +7,7 @@ import org.herac.tuxguitar.app.view.dialog.browser.main.TGBrowserDialog;
 import org.herac.tuxguitar.app.view.dialog.channel.TGChannelManagerDialog;
 import org.herac.tuxguitar.app.view.dialog.fretboard.TGFretBoardEditor;
 import org.herac.tuxguitar.app.view.dialog.matrix.TGMatrixEditor;
+import org.herac.tuxguitar.app.view.dialog.percussion.TGPercussionEditor;
 import org.herac.tuxguitar.app.view.dialog.piano.TGPianoEditor;
 import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBar;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
@@ -17,6 +18,7 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 	private UIToggleButton showFretBoard;
 	private UIToggleButton showPiano;
 	private UIToggleButton showInstruments;
+	private UIToggleButton showPercussion;
 	private UIToggleButton showMatrix;
 	private UIToggleButton showEditToolBar;
 	private UIToggleButton showTrackTable;
@@ -38,7 +40,11 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		//--INSTRUMENTS--
 		this.showInstruments = this.createToggleButton();
 		this.showInstruments.addSelectionListener(this.createActionProcessor(TGToggleChannelsDialogAction.NAME));
-		
+
+		//--PERCUSSION--
+		this.showPercussion = this.createToggleButton();
+		this.showPercussion.addSelectionListener(this.createActionProcessor(TGTogglePercussionEditorAction.NAME));
+
 		//--MATRIX--
 		this.showMatrix = this.createToggleButton();
 		this.showMatrix.addSelectionListener(this.createActionProcessor(TGToggleMatrixEditorAction.NAME));
@@ -62,6 +68,7 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.showFretBoard.setToolTipText(this.getText("view.show-fretboard"));
 		this.showPiano.setToolTipText(this.getText("view.show-piano"));
 		this.showInstruments.setToolTipText(this.getText("view.show-instruments"));
+		this.showPercussion.setToolTipText(this.getText("view.show-percussion"));
 		this.showMatrix.setToolTipText(this.getText("view.show-matrix"));
 		this.showBrowser.setToolTipText(this.getText("tools.browser"));
 		this.showEditToolBar.setToolTipText(this.getText("view.show-edit-toolbar"));
@@ -72,6 +79,7 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.showFretBoard.setImage(this.getIconManager().getFretboard());
 		this.showPiano.setImage(this.getIconManager().getPiano());
 		this.showInstruments.setImage(this.getIconManager().getInstruments());
+		this.showPercussion.setImage(this.getIconManager().getPercussion());
 		this.showMatrix.setImage(this.getIconManager().getMatrix());
 		this.showBrowser.setImage(this.getIconManager().getBrowser());
 		this.showEditToolBar.setImage(this.getIconManager().getToolbarEdit());
@@ -82,6 +90,7 @@ public class TGMainToolBarSectionView extends TGMainToolBarSection {
 		this.showFretBoard.setSelected(TGFretBoardEditor.getInstance(this.getToolBar().getContext()).isVisible());
 		this.showPiano.setSelected(TGPianoEditor.getInstance(this.getToolBar().getContext()).isVisible());
 		this.showInstruments.setSelected(!TGChannelManagerDialog.getInstance(this.getToolBar().getContext()).isDisposed());
+		this.showPercussion.setSelected(!TGPercussionEditor.getInstance(this.getToolBar().getContext()).isDisposed());
 		this.showMatrix.setSelected(!TGMatrixEditor.getInstance(this.getToolBar().getContext()).isDisposed());
 		this.showBrowser.setSelected(!TGBrowserDialog.getInstance(this.getToolBar().getContext()).isDisposed());
 		this.showEditToolBar.setSelected(TGEditToolBar.getInstance(this.getToolBar().getContext()).isVisible());
