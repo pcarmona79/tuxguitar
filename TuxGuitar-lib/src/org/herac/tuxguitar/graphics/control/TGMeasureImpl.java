@@ -16,14 +16,7 @@ import org.herac.tuxguitar.graphics.control.painters.TGNumberPainter;
 import org.herac.tuxguitar.graphics.control.painters.TGTempoPainter;
 import org.herac.tuxguitar.graphics.control.painters.TGTripletFeelPainter;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGDivisionType;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMarker;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGNote;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIResourceFactory;
@@ -915,7 +908,7 @@ public class TGMeasureImpl extends TGMeasure{
 
 			painter.initPath(UIPainter.PATH_FILL);
 
-            if (layout.getSongManager().isPercussionChannel(getTrack().getSong(), getTrack().getChannelId())) {
+			if (layout.getSongManager().isPercussionChannel(getTrack().getSong(), getTrack().getChannelId())) {
 				TGClefPainter.paintNeutral(painter, x, y, layout.getScoreLineSpacing());
 			}
 			else if(this.getClef() == TGMeasure.CLEF_TREBLE){
@@ -938,7 +931,8 @@ public class TGMeasureImpl extends TGMeasure{
 	 * Pinta la Armadura de Clave
 	 */
 	private void paintKeySignature(TGLayout layout,UIPainter painter, float fromX, float fromY) {
-		if((layout.getStyle() & TGLayout.DISPLAY_SCORE) != 0 && this.paintKeySignature){
+		TGTrack track = getTrack();
+		if((layout.getStyle() & TGLayout.DISPLAY_SCORE) != 0 && this.paintKeySignature && !layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())){
 			float scale = layout.getScoreLineSpacing();
 			float x = (fromX + getHeaderImpl().getLeftSpacing(layout) + getClefSpacing(layout));
 			float y = (fromY + getTs().getPosition(TGTrackSpacing.POSITION_SCORE_MIDDLE_LINES));

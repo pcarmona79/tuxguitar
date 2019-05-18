@@ -299,78 +299,101 @@ public class TGNoteImpl extends TGNote {
 			}
 			
 			layout.setScoreNoteStyle(painter,playing);
-			
+
+			TGTrack track = getMeasureImpl().getTrack();
+			boolean percussion = layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId());
+
 			//----------sostenido--------------------------------------
-			if(this.accidental == TGMeasureImpl.NATURAL){
-				painter.initPath(UIPainter.PATH_FILL);
-				painter.setLineWidth(layout.getLineWidth(0));
-				TGKeySignaturePainter.paintNatural(painter,(x - (scale - (scale / 4)) ),(y1 + (scale / 2)), scale);
-				painter.closePath();
-			}
-			else if(this.accidental == TGMeasureImpl.SHARP){
-				painter.initPath(UIPainter.PATH_FILL);
-				painter.setLineWidth(layout.getLineWidth(0));
-				TGKeySignaturePainter.paintSharp(painter,(x - (scale - (scale / 4)) ),(y1 + (scale / 2)), scale);
-				painter.closePath();
-			}
-			else if(this.accidental == TGMeasureImpl.FLAT){
-				painter.initPath(UIPainter.PATH_FILL);
-				painter.setLineWidth(layout.getLineWidth(0));
-				TGKeySignaturePainter.paintFlat(painter,(x - (scale - (scale / 4)) ),(y1 + (scale / 2)), scale);
-				painter.closePath();
+            if (!percussion) {
+				if (this.accidental == TGMeasureImpl.NATURAL) {
+					painter.initPath(UIPainter.PATH_FILL);
+					painter.setLineWidth(layout.getLineWidth(0));
+					TGKeySignaturePainter.paintNatural(painter, (x - (scale - (scale / 4))), (y1 + (scale / 2)), scale);
+					painter.closePath();
+				} else if (this.accidental == TGMeasureImpl.SHARP) {
+					painter.initPath(UIPainter.PATH_FILL);
+					painter.setLineWidth(layout.getLineWidth(0));
+					TGKeySignaturePainter.paintSharp(painter, (x - (scale - (scale / 4))), (y1 + (scale / 2)), scale);
+					painter.closePath();
+				} else if (this.accidental == TGMeasureImpl.FLAT) {
+					painter.initPath(UIPainter.PATH_FILL);
+					painter.setLineWidth(layout.getLineWidth(0));
+					TGKeySignaturePainter.paintFlat(painter, (x - (scale - (scale / 4))), (y1 + (scale / 2)), scale);
+					painter.closePath();
+				}
 			}
 			//----------fin sostenido--------------------------------------
-			if(getEffect().isHarmonic()){
+			if(!percussion && getEffect().isHarmonic()){
 				boolean fill = (getVoice().getDuration().getValue() >= TGDuration.QUARTER);
 				painter.setLineWidth(layout.getLineWidth(1));
 				painter.initPath((fill ? (UIPainter.PATH_FILL | UIPainter.PATH_DRAW) : UIPainter.PATH_DRAW));
 				TGNotePainter.paintHarmonic(painter, x, y1 + (1f * (scale / 10f)), (layout.getScoreLineSpacing() - ((scale / 10f) * 2f)));
 				painter.closePath();
 			}else{
-				TGTrack track = getMeasureImpl().getTrack();
-				if (layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
-					boolean fill = (getVoice().getDuration().getValue() >= TGDuration.QUARTER);
-					float noteX = (fill ? (x - (0.60f * (scale / 10f))) : x);
-					float noteY = (fill ? (y1 + (0.60f * (scale / 10f))) : (y1 + (1f * (scale / 10f))));
-					float noteScale = (fill ? ((layout.getScoreLineSpacing() - ((scale / 10f) * 1f) )) : ((layout.getScoreLineSpacing() - ((scale / 10f) * 2f) )));
+				boolean fill = (getVoice().getDuration().getValue() >= TGDuration.QUARTER);
+				float noteX = (fill ? (x - (0.60f * (scale / 10f))) : x);
+				float noteY = (fill ? (y1 + (0.60f * (scale / 10f))) : (y1 + (1f * (scale / 10f))));
+				float noteScale = (fill ? ((layout.getScoreLineSpacing() - ((scale / 10f) * 1f) )) : ((layout.getScoreLineSpacing() - ((scale / 10f) * 2f) )));
+				painter.setLineWidth(layout.getLineWidth(1));
 
-					painter.setLineWidth(layout.getLineWidth(1));
+				if (!percussion) {
 					painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
 					TGNotePainter.paintNote(painter, noteX, noteY, noteScale);
 					painter.closePath();
 				} else {
 					// drum gets special treatment according to value.
-					int renderType = 
-						TGPercussionMap.getCurrentDrumMap().getRenderType(getValue());
-					if ((renderType & TGPercussionMap.KIND_CYMBAL) != 0) {
+					int renderType = layout.getPercussionNoteMappings()[getValue()].getKind();
+					if ((renderType & TGPercussionNote.KIND_CYMBAL) != 0) {
 						// paint as X
-						painter.initPath(UIPainter.PATH_DRAW);
-						TGNotePainter.paintXNote(painter,x,y1+1, (layout.getScoreLineSpacing() ) - 2 );
+						painter.setLineWidth(layout.getLineWidth(0));
+						painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
+						TGNotePainter.paintXNote(painter, noteX, noteY, noteScale);
 						painter.closePath();
-					}
-					if ((renderType & TGPercussionMap.KIND_NOTE) != 0) {
-						boolean fill = (getVoice().getDuration().getValue() >= TGDuration.QUARTER);
-						float noteX = (fill ? (x - (0.60f * (scale / 10f))) : x);
-						float noteY = (fill ? (y1 + (0.60f * (scale / 10f))) : (y1 + (1f * (scale / 10f))));
-						float noteScale = (fill ? ((layout.getScoreLineSpacing() - ((scale / 10f) * 1f) )) : ((layout.getScoreLineSpacing() - ((scale / 10f) * 2f) )));
-
 						painter.setLineWidth(layout.getLineWidth(1));
+					}
+					if ((renderType & TGPercussionNote.KIND_NOTE) != 0) {
 						painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
 						TGNotePainter.paintNote(painter, noteX, noteY, noteScale);
 						painter.closePath();
 					}
-					// other render artefacts
-					if ((renderType & TGPercussionMap.KIND_OPEN) != 0) {
-						painter.initPath(UIPainter.PATH_DRAW);
-						painter.addCircle((x + (0.33f*scale)), (y1+ (-0.99f*scale)), 0.5f*scale);
+					if ((renderType & TGPercussionNote.KIND_DIAMOND) != 0) {
+						painter.setLineWidth(layout.getLineWidth(1));
+						painter.initPath((fill ? (UIPainter.PATH_FILL | UIPainter.PATH_DRAW) : UIPainter.PATH_DRAW));
+						TGNotePainter.paintHarmonic(painter, x, y1 + (1f * (scale / 10f)), (layout.getScoreLineSpacing() - ((scale / 10f) * 2f)));
 						painter.closePath();
 					}
-					if ((renderType & TGPercussionMap.KIND_CLOSED) != 0) {
+					if ((renderType & TGPercussionNote.KIND_TRIANGLE_UP) != 0) {
+						painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
+						TGNotePainter.paintTriangle(painter, noteX, noteY, -1, noteScale);
+						painter.closePath();
+					}
+					if ((renderType & TGPercussionNote.KIND_TRIANGLE_DOWN) != 0) {
+						painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
+						TGNotePainter.paintTriangle(painter, noteX, noteY, 1, noteScale);
+						painter.closePath();
+					}
+					if ((renderType & TGPercussionNote.KIND_SQUARE) != 0) {
+						painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
+						TGNotePainter.paintSquare(painter, noteX, noteY, noteScale);
+						painter.closePath();
+					}
+					// other render artefacts
+					if ((renderType & TGPercussionNote.KIND_OPEN) != 0) {
 						painter.initPath(UIPainter.PATH_DRAW);
-						painter.moveTo((x + (0.33f*scale)), (y1+ (-0.66f*scale)));
-						painter.lineTo((x + (0.99f*scale)), (y1+ (-0.66f*scale)));
-						painter.moveTo((x + (0.66f*scale)), (y1+ (-0.33f*scale)));
-						painter.lineTo((x + (0.66f*scale)), (y1+ (-0.99f*scale)));
+						painter.addCircle((x + (0.5f*scale)), (y1+ (-0.66f*scale)), 0.5f*scale);
+						painter.closePath();
+					}
+					if ((renderType & TGPercussionNote.KIND_CLOSED) != 0) {
+						painter.initPath(UIPainter.PATH_DRAW);
+						painter.moveTo((x + (0.17f*scale)), (y1+ (-0.66f*scale)));
+						painter.lineTo((x + (0.83f*scale)), (y1+ (-0.66f*scale)));
+						painter.moveTo((x + (0.5f*scale)), (y1+ (-0.33f*scale)));
+						painter.lineTo((x + (0.5f*scale)), (y1+ (-0.99f*scale)));
+						painter.closePath();
+					}
+					if ((renderType & TGPercussionNote.KIND_CIRCLED) != 0) {
+						painter.initPath(UIPainter.PATH_DRAW);
+						painter.addCircle(noteX + 0.55f*scale, noteY + 0.45f*scale, 1.2f*scale);
 						painter.closePath();
 					}
 				}

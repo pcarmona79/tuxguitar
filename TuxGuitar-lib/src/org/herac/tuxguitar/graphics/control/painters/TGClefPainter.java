@@ -374,27 +374,5 @@ public class TGClefPainter {
 		painter.lineTo((x + (1.0f * scale)),(y + (3.0f * scale)));
 		painter.lineTo((x + (1.5f * scale)),(y + (3.0f * scale)));
 		painter.lineTo((x + (1.5f * scale)),(y + (1.0f * scale)));
-		
-		// rectangle
-		// left
-		painter.moveTo((x + (3.0f * scale)),(y + (0.4f * scale)));
-		painter.lineTo((x + (3.0f * scale)),(y + (3.7f * scale)));
-		painter.lineTo((x + (3.2f * scale)),(y + (3.7f * scale)));
-		painter.lineTo((x + (3.2f * scale)),(y + (0.4f * scale)));
-		// top
-		painter.moveTo((x + (3.2f * scale)),(y + (0.7f * scale)));
-		painter.lineTo((x + (4.0f * scale)),(y + (0.7f * scale)));
-		painter.lineTo((x + (4.0f * scale)),(y + (0.4f * scale)));
-		painter.lineTo((x + (3.2f * scale)),(y + (0.4f * scale)));
-		// right
-		painter.moveTo((x + (4.0f * scale)),(y + (0.4f * scale)));
-		painter.lineTo((x + (4.0f * scale)),(y + (3.7f * scale)));
-		painter.lineTo((x + (4.2f * scale)),(y + (3.7f * scale)));
-		painter.lineTo((x + (4.2f * scale)),(y + (0.4f * scale)));
-		// bottom
-		painter.moveTo((x + (3.2f * scale)),(y + (3.7f * scale)));
-		painter.lineTo((x + (4.0f * scale)),(y + (3.7f * scale)));
-		painter.lineTo((x + (4.0f * scale)),(y + (3.4f * scale)));
-		painter.lineTo((x + (3.2f * scale)),(y + (3.4f * scale)));
 	}
 }

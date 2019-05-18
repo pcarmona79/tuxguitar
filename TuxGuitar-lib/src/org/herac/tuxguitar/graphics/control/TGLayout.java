@@ -694,6 +694,11 @@ public abstract class TGLayout {
 		}
 		return spacing;
 	}
+
+	public TGPercussionNote[] getPercussionNoteMappings() {
+		return TGPercussionNote.DEFAULT_MAPPING;
+	}
+
 	
 	public boolean isFirstMeasure(TGMeasureHeader mh){
 		return (mh.getNumber() == 1);

@@ -75,7 +75,45 @@ public class TGNotePainter {
 		new TGCubicTo(0.584375f, 0.10625f, 0.58125f, 0.096875f, 0.58125f, 0.0875f),
 		new TGCubicTo(0.58125f, 0.05f, 0.60625f, 0.01875f, 0.64375f, 0.00625f)
 	);
-	
+
+	private static final TGPaintCommand X_MODEL = new TGPaintModel(
+			new TGMoveTo( 0f,      0f),
+			new TGLineTo(  .29f, 0f),
+			new TGLineTo(  .665f, .375f),
+			new TGLineTo( 1.04f, 0f),
+			new TGLineTo( 1.33f, 0f),
+			new TGLineTo(  .83f,  .5f),
+			new TGLineTo( 1.33f, 1f),
+			new TGLineTo( 1.04f, 1f),
+			new TGLineTo(  .665f, .6250f),
+			new TGLineTo(  .29f, 1f),
+			new TGLineTo( 0f,    1f),
+			new TGLineTo(  .5f,   .5f),
+			new TGLineTo( 0f,    0f)
+	);
+
+	private static final TGPaintCommand TRIANGLE_UP_MODEL = new TGPaintModel(
+			new TGMoveTo( 0f,      1f),
+			new TGLineTo( 0.66f,      0f),
+			new TGLineTo( 1.33f,      1f),
+			new TGLineTo( 0f,      1f)
+	);
+
+	private static final TGPaintCommand TRIANGLE_DOWN_MODEL = new TGPaintModel(
+			new TGMoveTo( 0f,      0f),
+			new TGLineTo( 0.66f,      1f),
+			new TGLineTo( 1.33f,      0f),
+			new TGLineTo( 0f,      0f)
+	);
+
+	private static final TGPaintCommand SQUARE_MODEL = new TGPaintModel(
+			new TGMoveTo( 0f,      0f),
+			new TGLineTo( 1.33f,   0f),
+			new TGLineTo( 1.33f,   1f),
+			new TGLineTo( 0f,      1f),
+			new TGLineTo( 0f,      0f)
+	);
+
 	public static void paintNote(UIPainter painter, float x, float y, float scale) {
 		NOTE_MODEL.paint(painter, x, y, scale);
 	}
@@ -89,13 +127,19 @@ public class TGNotePainter {
 		tgPaintCommand.paint(painter, x, y, scale);
 	}
 
+	public static void paintTriangle(UIPainter painter, float x, float y,int dir,float scale) {
+		TGPaintCommand tgPaintCommand = (dir > 0 ? TRIANGLE_DOWN_MODEL : TRIANGLE_UP_MODEL);
+		tgPaintCommand.paint(painter, x, y, scale);
+	}
+
+	public static void paintSquare(UIPainter painter, float x, float y, float scale){
+		SQUARE_MODEL.paint(painter, x, y, scale);
+	}
+
 	/**
 	 * Paints the note as a cross, as it is for cymbals (most metallic percussions)
 	 */
 	public static void paintXNote(UIPainter painter, float x, float y, float scale) {
-		painter.moveTo((x + (0.33f * scale)), ( y + (0.0f * scale)));
-		painter.lineTo((x + (1.33f * scale)) ,( y + (1.0f * scale)));
-		painter.moveTo((x + (0.33f * scale)), ( y + (1.0f * scale) ));
-		painter.lineTo((x + (1.33f * scale)) ,( y + (0.0f * scale)));
+		X_MODEL.paint(painter, x, y, scale);
 	}
 }

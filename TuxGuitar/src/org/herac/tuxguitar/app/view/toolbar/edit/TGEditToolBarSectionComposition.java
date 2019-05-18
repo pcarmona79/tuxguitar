@@ -6,8 +6,10 @@ import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatAlternativeDialogA
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatCloseDialogAction;
 import org.herac.tuxguitar.app.action.impl.marker.TGOpenMarkerEditorAction;
 import org.herac.tuxguitar.app.action.impl.marker.TGRemoveMarkerAction;
+import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.editor.action.composition.TGRepeatOpenAction;
 import org.herac.tuxguitar.song.models.TGMeasure;
+import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.ui.toolbar.UIToolActionItem;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
 import org.herac.tuxguitar.ui.toolbar.UIToolCheckableItem;
@@ -63,13 +65,16 @@ public class TGEditToolBarSectionComposition extends TGEditToolBarSection {
 	}
 	
 	public void updateSectionItems() {
+		Tablature tablature = this.getTablature();
+		TGMeasure measure = tablature.getCaret().getMeasure();
+		TGTrack track = tablature.getCaret().getTrack();
+		boolean percussion = tablature.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId());
 		boolean running = TuxGuitar.getInstance().getPlayer().isRunning();
-		TGMeasure measure = this.getTablature().getCaret().getMeasure();
-		
+
 		this.tempo.setEnabled(!running);
 		this.timeSignature.setEnabled(!running);
-		this.clef.setEnabled(!running);
-		this.keySignature.setEnabled(!running);
+		this.clef.setEnabled(!running && !percussion);
+		this.keySignature.setEnabled(!running && !percussion);
 		this.tripletFeel.setEnabled(!running);
 		this.marker.setEnabled(!running);
 		this.repeatOpen.setEnabled( !running );
