@@ -155,7 +155,6 @@ public class TGMatrixEditor implements TGEventListener {
 	}
 	
 	public void addListeners(){
-		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.toolbar.getControl());
 		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.editor);
 		TuxGuitar.getInstance().getSkinManager().addLoader(this);
 		TuxGuitar.getInstance().getLanguageManager().addLoader(this);
@@ -177,7 +176,7 @@ public class TGMatrixEditor implements TGEventListener {
 		// grids
 		this.gridsLabel = factory.createLabel(this.toolbar.getLeftComposite());
 		this.gridsLabel.setText(TuxGuitar.getProperty("matrix.grids"));
-		this.toolbar.getLeftLayout().set(this.gridsLabel, 1, this.toolbar.nextColumn(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
+		this.toolbar.setLeftControlLayout(this.gridsLabel);
 
 		final UIDropDownSelect<Integer> divisionsCombo = factory.createDropDownSelect(this.toolbar.getLeftComposite());
 		for(int i = 0; i < DIVISIONS.length; i ++){
@@ -192,7 +191,7 @@ public class TGMatrixEditor implements TGEventListener {
 				}
 			}
 		});
-		this.toolbar.getLeftLayout().set(divisionsCombo, 1, this.toolbar.nextColumn(), UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_FILL, false, false);
+		this.toolbar.setLeftControlLayout(divisionsCombo);
 		this.toolbar.getSettings().addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				configure();

@@ -16,6 +16,7 @@ import org.herac.tuxguitar.app.view.component.docked.TGDockedPlayingComponent;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterListenerLocked;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterLocked.TGBufferedPainterHandle;
+import org.herac.tuxguitar.app.view.widgets.TGNoteToolbar;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.TGEditorManager;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
@@ -59,15 +60,9 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	
 	private TGContext context;
 	private TGFretBoardConfig config;
-	private UIPanel toolComposite;
-	private UIImageView durationLabel;
+	private TGNoteToolbar toolbar;
 	private UILabel scaleName;
 	private UIButton scale;
-	private UIButton goLeft;
-	private UIButton goRight;
-	private UIButton increment;
-	private UIButton decrement;
-	private UIButton settings;
 	private UIImage image;
 	
 	private TGBeat beat;
@@ -78,7 +73,6 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	private float fretSpacing;
 	private boolean changes;
 	private UISize lastSize;
-	private int duration;
 	protected UIDropDownSelect<Integer> handSelector;
 	protected UICanvas canvas;
 	private UIFont scaledFont;
@@ -95,56 +89,26 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		this.loadIcons();
 		this.loadProperties();
 		
-		TuxGuitar.getInstance().getKeyBindingManager().
-				appendListenersTo(this.toolComposite);
 		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.canvas);
 	}
 	
 	public void createControlLayout() {
 		UITableLayout uiLayout = new UITableLayout(0f);
-		uiLayout.set(this.toolComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
+		uiLayout.set(this.toolbar.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
 		uiLayout.set(this.canvas, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
-		
+
 		this.control.setLayout(uiLayout);
 	}
-	
-	private void initToolBar() {
-		UIFactory uiFactory = getUIFactory();
-		
-		int column = 0;
-		
-		this.toolComposite = uiFactory.createPanel(this.control, false);
-		this.createToolBarLayout();
-		
-		// position
-		this.goLeft = uiFactory.createButton(this.toolComposite);
-		this.goLeft.addSelectionListener(new TGActionProcessorListener(this.context, TGGoLeftAction.NAME));
-		this.createToolItemLayout(this.goLeft, ++column);
 
-		this.goRight = uiFactory.createButton(this.toolComposite);
-		this.goRight.addSelectionListener(new TGActionProcessorListener(this.context, TGGoRightAction.NAME));
-		this.createToolItemLayout(this.goRight, ++column);
-		
+	private void initToolBar() {
+		UIFactory factory = getUIFactory();
+		this.toolbar =  new TGNoteToolbar(context, factory, this.control);
+
 		// separator
-		this.createToolSeparator(uiFactory, ++column);
-		
-		// duration
-		this.decrement = uiFactory.createButton(this.toolComposite);
-		this.decrement.addSelectionListener(new TGActionProcessorListener(this.context, TGDecrementDurationAction.NAME));
-		this.createToolItemLayout(decrement, ++column);
-		
-		this.durationLabel = uiFactory.createImageView(this.toolComposite);
-		this.createToolItemLayout(this.durationLabel, ++column);
-		
-		this.increment = uiFactory.createButton(this.toolComposite);
-		this.increment.addSelectionListener(new TGActionProcessorListener(this.context, TGIncrementDurationAction.NAME));
-		this.createToolItemLayout(increment, ++column);
-		
-		// separator
-		this.createToolSeparator(uiFactory, ++column);
-		
+		this.toolbar.createLeftSeparator(factory);
+
 		// hand selector
-		this.handSelector = uiFactory.createDropDownSelect(this.toolComposite);
+		this.handSelector = factory.createDropDownSelect(this.toolbar.getLeftComposite());
 		this.handSelector.addItem(new UISelectItem<Integer>(TuxGuitar.getProperty("fretboard.right-mode"), TGFretBoardConfig.DIRECTION_RIGHT));
 		this.handSelector.addItem(new UISelectItem<Integer>(TuxGuitar.getProperty("fretboard.left-mode"), TGFretBoardConfig.DIRECTION_LEFT));
 		this.handSelector.setSelectedItem(new UISelectItem<Integer>(null, this.getDirection(this.config.getDirection())));
@@ -156,58 +120,28 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 				}
 			}
 		});
-		this.createToolItemLayout(this.handSelector, ++column);
-		
+		this.toolbar.setLeftControlLayout(this.handSelector);
+
 		// separator
-		this.createToolSeparator(uiFactory, ++column);
-		
+		this.toolbar.createLeftSeparator(factory);
+
 		// scale
-		this.scale = uiFactory.createButton(this.toolComposite);
+		this.scale = factory.createButton(this.toolbar.getLeftComposite());
 		this.scale.setText(TuxGuitar.getProperty("scale"));
 		this.scale.addSelectionListener(new TGActionProcessorListener(this.context, TGOpenScaleDialogAction.NAME));
-		this.createToolItemLayout(this.scale, ++column);
-		
+		this.toolbar.setLeftControlLayout(this.scale);
+
 		// scale name
-		this.scaleName = uiFactory.createLabel(this.toolComposite);
-		this.createToolItemLayout(this.scaleName, ++column, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
-		
-		// settings
-		this.settings = uiFactory.createButton(this.toolComposite);
-		this.settings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
-		this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
-		this.settings.addSelectionListener(new UISelectionListener() {
+		this.scaleName = factory.createLabel(this.toolbar.getLeftComposite());
+		this.toolbar.setLeftControlLayout(this.scaleName);
+
+		this.toolbar.getSettings().addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				configure();
 			}
 		});
-		this.createToolItemLayout(this.settings, ++column, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 	}
-	
-	private void createToolBarLayout(){
-		UITableLayout uiLayout = new UITableLayout();
-		uiLayout.set(UITableLayout.MARGIN_LEFT, 0f);
-		uiLayout.set(UITableLayout.MARGIN_RIGHT, 0f);
-		
-		this.toolComposite.setLayout(uiLayout);
-	}
-	
-	private void createToolItemLayout(UIControl uiControl, int column){
-		this.createToolItemLayout(uiControl, column, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
-	}
-	
-	private void createToolItemLayout(UIControl uiControl, int column, Integer alignX, Integer alignY, Boolean fillX, Boolean fillY){
-		UITableLayout uiLayout = (UITableLayout) this.toolComposite.getLayout();
-		uiLayout.set(uiControl, 1, column, alignX, alignY, fillX, fillX);
-	}
-	
-	private void createToolSeparator(UIFactory uiFactory, int column){
-		UISeparator uiSeparator = uiFactory.createVerticalSeparator(this.toolComposite);
-		UITableLayout uiLayout = (UITableLayout) this.toolComposite.getLayout();
-		uiLayout.set(uiSeparator, 1, column, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false);
-		uiLayout.set(uiSeparator, UITableLayout.PACKED_WIDTH, 20f);
-		uiLayout.set(uiSeparator, UITableLayout.PACKED_HEIGHT, 20f);
-	}
-	
+
 	private void initEditor() {
 		this.lastSize = new UISize();
 		this.canvas = getUIFactory().createCanvas(this.control, false);
@@ -215,15 +149,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		this.canvas.addMouseUpListener(new TGFretBoardMouseListener());
 		this.canvas.addPaintListener(new TGBufferedPainterListenerLocked(this.context, new TGFretBoardPainterListener()));
 	}
-	
-	private void loadDurationImage(boolean force) {
-		int duration = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().getDuration().getValue();
-		if(force || this.duration != duration){
-			this.duration = duration;
-			this.durationLabel.setImage(TuxGuitar.getInstance().getIconManager().getDuration(this.duration));
-		}
-	}
-	
+
 	private void loadScaleName() {
 		int scaleKey = TuxGuitar.getInstance().getScaleManager().getSelectionKey();
 		int scaleIndex = TuxGuitar.getInstance().getScaleManager().getSelectionIndex();
@@ -619,7 +545,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		if(!this.isDisposed()){
 			this.control.redraw();
 			this.canvas.redraw();
-			this.loadDurationImage(false);
+			this.toolbar.update();
 		}
 	}
 	
@@ -641,8 +567,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		this.handSelector.addItem(new UISelectItem<Integer>(TuxGuitar.getProperty("fretboard.right-mode"), TGFretBoardConfig.DIRECTION_RIGHT));
 		this.handSelector.addItem(new UISelectItem<Integer>(TuxGuitar.getProperty("fretboard.left-mode"), TGFretBoardConfig.DIRECTION_LEFT));
 		this.handSelector.setSelectedItem(new UISelectItem<Integer>(null, selection));
-		
-		this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
+		this.toolbar.loadProperties();
 		this.scale.setText(TuxGuitar.getProperty("scale"));
 		this.loadScaleName();
 		this.setChanges(true);
@@ -650,12 +575,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	}
 	
 	public void loadIcons(){
-		this.goLeft.setImage(TuxGuitar.getInstance().getIconManager().getArrowLeft());
-		this.goRight.setImage(TuxGuitar.getInstance().getIconManager().getArrowRight());
-		this.decrement.setImage(TuxGuitar.getInstance().getIconManager().getArrowUp());
-		this.increment.setImage(TuxGuitar.getInstance().getIconManager().getArrowDown());
-		this.settings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
-		this.loadDurationImage(true);
+	    this.toolbar.loadIcons();
 		this.control.layout();
 		this.layout(this.control.getChildArea().getWidth());
 	}

@@ -71,6 +71,8 @@ public class TGNoteToolbar {
         this.settings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
         this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
         rightLayout.set(this.increment, 1, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, false, false);
+
+        TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.toolbar);
     }
 
     public void createLeftSeparator(UIFactory factory) {
@@ -113,19 +115,15 @@ public class TGNoteToolbar {
         return leftComposite;
     }
 
-    public UITableLayout getLeftLayout() {
-        return leftLayout;
-    }
-
-    public UIPanel getRightComposite() {
-        return rightComposite;
+    public void setLeftControlLayout(UIControl control) {
+        this.leftLayout.set(control, 1, this.nextColumn(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
     }
 
     public UIButton getSettings() {
         return settings;
     }
 
-    public int nextColumn() {
+    private int nextColumn() {
         return this.columns++;
     }
 }
