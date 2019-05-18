@@ -88,4 +88,14 @@ public class TGNotePainter {
 		TGPaintCommand tgPaintCommand = (dir > 0 ? FOOTER_DOWN_MODEL : FOOTER_UP_MODEL);
 		tgPaintCommand.paint(painter, x, y, scale);
 	}
+
+	/**
+	 * Paints the note as a cross, as it is for cymbals (most metallic percussions)
+	 */
+	public static void paintXNote(UIPainter painter, float x, float y, float scale) {
+		painter.moveTo((x + (0.33f * scale)), ( y + (0.0f * scale)));
+		painter.lineTo((x + (1.33f * scale)) ,( y + (1.0f * scale)));
+		painter.moveTo((x + (0.33f * scale)), ( y + (1.0f * scale) ));
+		painter.lineTo((x + (1.33f * scale)) ,( y + (0.0f * scale)));
+	}
 }

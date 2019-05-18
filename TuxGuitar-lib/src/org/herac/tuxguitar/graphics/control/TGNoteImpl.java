@@ -6,11 +6,7 @@ import org.herac.tuxguitar.graphics.control.painters.TGKeySignaturePainter;
 import org.herac.tuxguitar.graphics.control.painters.TGNotePainter;
 import org.herac.tuxguitar.graphics.control.painters.TGNumberPainter;
 import org.herac.tuxguitar.song.factory.TGFactory;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGNoteEffect;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.ui.resource.UIInset;
 import org.herac.tuxguitar.ui.resource.UIPainter;
@@ -29,7 +25,10 @@ public class TGNoteImpl extends TGNote {
 	}
 	
 	public void update(TGLayout layout) {
-		this.accidental = getMeasureImpl().getNoteAccidental( getRealValue() );
+	    TGTrack track = getMeasureImpl().getTrack();
+		if (layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
+			this.accidental = getMeasureImpl().getNoteAccidental( getRealValue() );
+		}
 		this.tabPosY = ( (getString() * layout.getStringSpacing()) - layout.getStringSpacing() );
 		this.scorePosY = getVoiceImpl().getBeatGroup().getY1(layout,this,getMeasureImpl().getKeySignature(),getMeasureImpl().getClef());
 	}
@@ -328,15 +327,53 @@ public class TGNoteImpl extends TGNote {
 				TGNotePainter.paintHarmonic(painter, x, y1 + (1f * (scale / 10f)), (layout.getScoreLineSpacing() - ((scale / 10f) * 2f)));
 				painter.closePath();
 			}else{
-				boolean fill = (getVoice().getDuration().getValue() >= TGDuration.QUARTER);
-				float noteX = (fill ? (x - (0.60f * (scale / 10f))) : x);
-				float noteY = (fill ? (y1 + (0.60f * (scale / 10f))) : (y1 + (1f * (scale / 10f))));
-				float noteScale = (fill ? ((layout.getScoreLineSpacing() - ((scale / 10f) * 1f) )) : ((layout.getScoreLineSpacing() - ((scale / 10f) * 2f) )));
-				
-				painter.setLineWidth(layout.getLineWidth(1));
-				painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
-				TGNotePainter.paintNote(painter, noteX, noteY, noteScale);
-				painter.closePath();
+				TGTrack track = getMeasureImpl().getTrack();
+				if (layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
+					boolean fill = (getVoice().getDuration().getValue() >= TGDuration.QUARTER);
+					float noteX = (fill ? (x - (0.60f * (scale / 10f))) : x);
+					float noteY = (fill ? (y1 + (0.60f * (scale / 10f))) : (y1 + (1f * (scale / 10f))));
+					float noteScale = (fill ? ((layout.getScoreLineSpacing() - ((scale / 10f) * 1f) )) : ((layout.getScoreLineSpacing() - ((scale / 10f) * 2f) )));
+
+					painter.setLineWidth(layout.getLineWidth(1));
+					painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
+					TGNotePainter.paintNote(painter, noteX, noteY, noteScale);
+					painter.closePath();
+				} else {
+					// drum gets special treatment according to value.
+					int renderType = 
+						TGPercussionMap.getCurrentDrumMap().getRenderType(getValue());
+					if ((renderType & TGPercussionMap.KIND_CYMBAL) != 0) {
+						// paint as X
+						painter.initPath(UIPainter.PATH_DRAW);
+						TGNotePainter.paintXNote(painter,x,y1+1, (layout.getScoreLineSpacing() ) - 2 );
+						painter.closePath();
+					}
+					if ((renderType & TGPercussionMap.KIND_NOTE) != 0) {
+						boolean fill = (getVoice().getDuration().getValue() >= TGDuration.QUARTER);
+						float noteX = (fill ? (x - (0.60f * (scale / 10f))) : x);
+						float noteY = (fill ? (y1 + (0.60f * (scale / 10f))) : (y1 + (1f * (scale / 10f))));
+						float noteScale = (fill ? ((layout.getScoreLineSpacing() - ((scale / 10f) * 1f) )) : ((layout.getScoreLineSpacing() - ((scale / 10f) * 2f) )));
+
+						painter.setLineWidth(layout.getLineWidth(1));
+						painter.initPath((fill ? UIPainter.PATH_FILL : UIPainter.PATH_DRAW));
+						TGNotePainter.paintNote(painter, noteX, noteY, noteScale);
+						painter.closePath();
+					}
+					// other render artefacts
+					if ((renderType & TGPercussionMap.KIND_OPEN) != 0) {
+						painter.initPath(UIPainter.PATH_DRAW);
+						painter.addCircle((x + (0.33f*scale)), (y1+ (-0.99f*scale)), 0.5f*scale);
+						painter.closePath();
+					}
+					if ((renderType & TGPercussionMap.KIND_CLOSED) != 0) {
+						painter.initPath(UIPainter.PATH_DRAW);
+						painter.moveTo((x + (0.33f*scale)), (y1+ (-0.66f*scale)));
+						painter.lineTo((x + (0.99f*scale)), (y1+ (-0.66f*scale)));
+						painter.moveTo((x + (0.66f*scale)), (y1+ (-0.33f*scale)));
+						painter.lineTo((x + (0.66f*scale)), (y1+ (-0.99f*scale)));
+						painter.closePath();
+					}
+				}
 			}
 			
 			if(!layout.isPlayModeEnabled() ){

@@ -3,6 +3,7 @@ package org.herac.tuxguitar.graphics.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
 
 public class TGBeatGroup {
@@ -122,6 +123,11 @@ public class TGBeatGroup {
 	
 	public float getY1(TGLayout layout,TGNoteImpl note, int key, int clef){
 		int noteValue = note.getRealValue();
+		TGTrack track = note.getBeatImpl().getMeasureImpl().getTrack();
+		if (layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
+			// Transpose percussions notes according to current note mapping
+			noteValue = TGPercussionMap.getCurrentDrumMap().transposeDrum(noteValue);
+		}
 		
 		float scale = (layout.getScoreLineSpacing() / 2f);
 		float scoreLineY = 0;

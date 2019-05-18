@@ -25,7 +25,6 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.ui.resource.UIColor;
-import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIResourceFactory;
 
@@ -913,8 +912,13 @@ public class TGMeasureImpl extends TGMeasure{
 			float x = (fromX + getHeaderImpl().getLeftSpacing(layout));
 			float y = (fromY + getTs().getPosition(TGTrackSpacing.POSITION_SCORE_MIDDLE_LINES));
 			layout.setClefStyle(painter);
+
 			painter.initPath(UIPainter.PATH_FILL);
-			if(this.getClef() == TGMeasure.CLEF_TREBLE){
+
+            if (layout.getSongManager().isPercussionChannel(getTrack().getSong(), getTrack().getChannelId())) {
+				TGClefPainter.paintNeutral(painter, x, y, layout.getScoreLineSpacing());
+			}
+			else if(this.getClef() == TGMeasure.CLEF_TREBLE){
 				TGClefPainter.paintTreble(painter, x, y,layout.getScoreLineSpacing());
 			}
 			else if(this.getClef() == TGMeasure.CLEF_BASS){
