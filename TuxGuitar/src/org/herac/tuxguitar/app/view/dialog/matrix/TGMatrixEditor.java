@@ -18,6 +18,7 @@ import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterListenerLocked;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterLocked.TGBufferedPainterHandle;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGNoteToolbar;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.document.TGDocumentManager;
 import org.herac.tuxguitar.editor.TGEditorManager;
@@ -86,19 +87,13 @@ public class TGMatrixEditor implements TGEventListener {
 	private TGMatrixConfig config;
 	private UIWindow dialog;
 	private UIPanel composite;
-	private UIPanel toolbar;
+	private TGNoteToolbar toolbar;
 	private UIScrollBarPanel canvasPanel;
 	private UICanvas editor;
 	private UIRectangle clientArea;
 	private UIImage buffer;
 	private BufferDisposer bufferDisposer;
-	private UIImageView durationLabel;
 	private UILabel gridsLabel;
-	private UIButton goLeft;
-	private UIButton goRight;
-	private UIButton increment;
-	private UIButton decrement;
-	private UIButton settings;
 	private float width;
 	private float height;
 	private float bufferWidth;
@@ -153,14 +148,14 @@ public class TGMatrixEditor implements TGEventListener {
 	
 	public void createControlLayout() {
 		UITableLayout uiLayout = new UITableLayout(0f);
-		uiLayout.set(this.toolbar, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
+		uiLayout.set(this.toolbar.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, null, null, 0f);
 		uiLayout.set(this.canvasPanel, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.composite.setLayout(uiLayout);
 	}
 	
 	public void addListeners(){
-		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.toolbar);
+		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.toolbar.getControl());
 		TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.editor);
 		TuxGuitar.getInstance().getSkinManager().addLoader(this);
 		TuxGuitar.getInstance().getLanguageManager().addLoader(this);
@@ -174,46 +169,17 @@ public class TGMatrixEditor implements TGEventListener {
 	}
 	
 	private void initToolBar() {
-		UIFactory uiFactory = getUIFactory();
-		
-		int column = 0;
-		
-		this.toolbar = uiFactory.createPanel(this.composite, false);
-		this.createToolBarLayout();
-		
-		// position
-		this.goLeft = uiFactory.createButton(this.toolbar);
-		this.goLeft.addSelectionListener(new TGActionProcessorListener(this.context, TGGoLeftAction.NAME));
-		this.createToolItemLayout(this.goLeft, ++column);
+		UIFactory factory = getUIFactory();
+		this.toolbar =  new TGNoteToolbar(context, factory, this.composite);
 
-		this.goRight = uiFactory.createButton(this.toolbar);
-		this.goRight.addSelectionListener(new TGActionProcessorListener(this.context, TGGoRightAction.NAME));
-		this.createToolItemLayout(this.goRight, ++column);
-		
-		// separator
-		this.createToolSeparator(uiFactory, ++column);
-		
-		// duration
-		this.decrement = uiFactory.createButton(this.toolbar);
-		this.decrement.addSelectionListener(new TGActionProcessorListener(this.context, TGDecrementDurationAction.NAME));
-		this.createToolItemLayout(this.decrement, ++column);
-		
-		this.durationLabel = uiFactory.createImageView(this.toolbar);
-		this.createToolItemLayout(this.durationLabel, ++column);
-		
-		this.increment = uiFactory.createButton(this.toolbar);
-		this.increment.addSelectionListener(new TGActionProcessorListener(this.context, TGIncrementDurationAction.NAME));
-		this.createToolItemLayout(this.increment, ++column);
-		
-		// separator
-		this.createToolSeparator(uiFactory, ++column);
-		
+		this.toolbar.createLeftSeparator(factory);
+
 		// grids
-		this.gridsLabel = uiFactory.createLabel(this.toolbar);
+		this.gridsLabel = factory.createLabel(this.toolbar.getLeftComposite());
 		this.gridsLabel.setText(TuxGuitar.getProperty("matrix.grids"));
-		this.createToolItemLayout(this.gridsLabel, ++column, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
-		
-		final UIDropDownSelect<Integer> divisionsCombo = uiFactory.createDropDownSelect(this.toolbar);
+		this.toolbar.getLeftLayout().set(this.gridsLabel, 1, this.toolbar.nextColumn(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
+
+		final UIDropDownSelect<Integer> divisionsCombo = factory.createDropDownSelect(this.toolbar.getLeftComposite());
 		for(int i = 0; i < DIVISIONS.length; i ++){
 			divisionsCombo.addItem(new UISelectItem<Integer>(Integer.toString(DIVISIONS[i]), DIVISIONS[i]));
 		}
@@ -226,53 +192,14 @@ public class TGMatrixEditor implements TGEventListener {
 				}
 			}
 		});
-		this.createToolItemLayout(divisionsCombo, ++column);
-		
-		// settings
-		this.settings = uiFactory.createButton(this.toolbar);
-		this.settings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
-		this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
-		this.settings.addSelectionListener(new UISelectionListener() {
+		this.toolbar.getLeftLayout().set(divisionsCombo, 1, this.toolbar.nextColumn(), UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_FILL, false, false);
+		this.toolbar.getSettings().addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				configure();
 			}
 		});
-		this.createToolItemLayout(this.settings, ++column, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 	}
-	
-	private void createToolBarLayout(){
-		UITableLayout uiLayout = new UITableLayout();
-		uiLayout.set(UITableLayout.MARGIN_LEFT, 0f);
-		uiLayout.set(UITableLayout.MARGIN_RIGHT, 0f);
-		
-		this.toolbar.setLayout(uiLayout);
-	}
-	
-	private void createToolItemLayout(UIControl uiControl, int column){
-		this.createToolItemLayout(uiControl, column, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
-	}
-	
-	private void createToolItemLayout(UIControl uiControl, int column, Integer alignX, Integer alignY, Boolean fillX, Boolean fillY){
-		UITableLayout uiLayout = (UITableLayout) this.toolbar.getLayout();
-		uiLayout.set(uiControl, 1, column, alignX, alignY, fillX, fillX);
-	}
-	
-	private void createToolSeparator(UIFactory uiFactory, int column){
-		UISeparator uiSeparator = uiFactory.createVerticalSeparator(this.toolbar);
-		UITableLayout uiLayout = (UITableLayout) this.toolbar.getLayout();
-		uiLayout.set(uiSeparator, 1, column, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false);
-		uiLayout.set(uiSeparator, UITableLayout.PACKED_WIDTH, 20f);
-		uiLayout.set(uiSeparator, UITableLayout.PACKED_HEIGHT, 20f);
-	}
-	
-	private void loadDurationImage(boolean force) {
-		int duration = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().getDuration().getValue();
-		if(force || this.duration != duration){
-			this.duration = duration;
-			this.durationLabel.setImage(TuxGuitar.getInstance().getIconManager().getDuration(this.duration));
-		}
-	}
-	
+
 	public void initEditor(){
 		TGMatrixMouseListener mouseListener = new TGMatrixMouseListener();
 		UIFactory uiFactory = this.getUIFactory();
@@ -729,7 +656,7 @@ public class TGMatrixEditor implements TGEventListener {
 	public void redraw(){
 		if(!isDisposed()){
 			this.editor.redraw();
-			this.loadDurationImage(false);
+			this.toolbar.update();
 		}
 	}
 	
@@ -755,12 +682,7 @@ public class TGMatrixEditor implements TGEventListener {
 	public void loadIcons(){
 		if(!this.isDisposed() ){
 			this.dialog.setImage(TuxGuitar.getInstance().getIconManager().getAppIcon());
-			this.goLeft.setImage(TuxGuitar.getInstance().getIconManager().getArrowLeft());
-			this.goRight.setImage(TuxGuitar.getInstance().getIconManager().getArrowRight());
-			this.decrement.setImage(TuxGuitar.getInstance().getIconManager().getArrowUp());
-			this.increment.setImage(TuxGuitar.getInstance().getIconManager().getArrowDown());
-			this.settings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
-			this.loadDurationImage(true);
+			this.toolbar.loadIcons();;
 			this.layout();
 			this.redraw();
 		}
@@ -770,7 +692,7 @@ public class TGMatrixEditor implements TGEventListener {
 		if(!this.isDisposed() ){
 			this.dialog.setText(TuxGuitar.getProperty("matrix.editor"));
 			this.gridsLabel.setText(TuxGuitar.getProperty("matrix.grids"));
-			this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
+			this.toolbar.loadProperties();
 			this.disposeBuffer();
 			this.layout();
 			this.redraw();
