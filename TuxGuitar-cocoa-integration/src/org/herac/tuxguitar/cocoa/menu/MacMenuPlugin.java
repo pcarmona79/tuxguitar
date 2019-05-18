@@ -30,7 +30,7 @@ public class MacMenuPlugin implements TGPlugin {
 		keys.put(UIKey.END.toString(), "\u2198");
 		keys.put(UIKey.ALT.toString(), "\u2325");
 		keys.put(UIKey.CONTROL.toString(), "\u2303");
-		keys.put(UIKey.COMMAND.toString(), "\u2318");
+		keys.put(UIKey.SUPER.toString(), "\u2318");
 		keys.put(UIKey.SHIFT.toString(), "\u21E7");
 		keys.put(UIKey.TAB.toString(), "\u21E5");
 		keys.put(UIKey.BACKSPACE.toString(), "\u232B");
