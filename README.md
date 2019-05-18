@@ -22,6 +22,7 @@ for more information.
 - Cut/Copy/Paste of individual notes
 - More tuning presets, grouped by instrument and number of strings
 - Support for creating custom scales in the scale list
+- Percussion dialog and percussion notation editor
 - UI cleanup, MIDI track name support by [Alex Abdugafarov](https://github.com/frozenspider/tuxguitar)
 - Various bug fixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
 - And lots of other small improvements and bug fixes
