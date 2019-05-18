@@ -97,10 +97,7 @@ import org.herac.tuxguitar.app.action.impl.settings.TGReloadStylesAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGReloadTableSettingsAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGReloadTitleAction;
 import org.herac.tuxguitar.app.action.impl.system.TGDisposeAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGOpenTransposeDialogAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGSelectScaleAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGToggleBrowserAction;
+import org.herac.tuxguitar.app.action.impl.tools.*;
 import org.herac.tuxguitar.app.action.impl.track.*;
 import org.herac.tuxguitar.editor.action.tools.TGTransposeAction;
 import org.herac.tuxguitar.app.action.impl.transport.*;
@@ -190,9 +187,9 @@ public class TGActionInstaller {
 	
 	public void installDefaultActions(){
 		TGContext context = this.manager.getContext();
-		
+
 		installAction(new TGDisposeAction(context));
-		
+
 		//file actions
 		installAction(new TGLoadSongAction(context));
 		installAction(new TGNewSongAction(context));
@@ -421,6 +418,7 @@ public class TGActionInstaller {
 		
 		//tools
 		installAction(new TGSelectScaleAction(context));
+		installAction(new TGChangePercussionMapAction(context));
 		installAction(new TGTransposeAction(context));
 		installAction(new TGShowExternalBeatAction(context));
 		installAction(new TGHideExternalBeatAction(context));

@@ -16,7 +16,9 @@ public class TGMusicKeyUtils {
 	public static final String PREFIX_FRETBOARD = "fretboard";
 	
 	public static final String PREFIX_MATRIX = "matrix";
-	
+
+	public static final String PREFIX_PERCUSSION = "percussion";
+
 	private static final String[][] DEFAULT_KEY_NAMES = new String[][]{
 		{"C","C#","Cb"},
 		{"D","D#","Db"},

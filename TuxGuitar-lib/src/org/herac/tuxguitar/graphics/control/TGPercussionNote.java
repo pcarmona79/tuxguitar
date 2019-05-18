@@ -8,7 +8,8 @@ package org.herac.tuxguitar.graphics.control;
  */
 public class TGPercussionNote {
 
-	public static final TGPercussionNote[] DEFAULT_MAPPING = new TGPercussionNote[128];
+	public static final int NOTE_COUNT = 128;
+	public static final TGPercussionNote[] DEFAULT_MAPPING = new TGPercussionNote[NOTE_COUNT];
 
 	public static final int KIND_CYMBAL  = 1;      // X note
 	public static final int KIND_NOTE    = 1 << 1; // round and black
@@ -85,6 +86,10 @@ public class TGPercussionNote {
 	public TGPercussionNote(int note, int kind) {
 		this.note = note;
 		this.kind = kind;
+	}
+
+	public TGPercussionNote(TGPercussionNote other) {
+		this(other.getNote(), other.getKind());
 	}
 
 	public int getNote() {

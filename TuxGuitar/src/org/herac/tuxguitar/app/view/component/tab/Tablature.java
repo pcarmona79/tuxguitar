@@ -3,17 +3,14 @@ package org.herac.tuxguitar.app.view.component.tab;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
+import org.herac.tuxguitar.app.tools.percussion.PercussionEntry;
+import org.herac.tuxguitar.app.tools.percussion.PercussionManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tab.edit.EditorKit;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGSyncProcess;
 import org.herac.tuxguitar.document.TGDocumentManager;
-import org.herac.tuxguitar.graphics.control.TGController;
-import org.herac.tuxguitar.graphics.control.TGLayout;
-import org.herac.tuxguitar.graphics.control.TGLayoutHorizontal;
-import org.herac.tuxguitar.graphics.control.TGLayoutStyles;
-import org.herac.tuxguitar.graphics.control.TGLayoutVertical;
-import org.herac.tuxguitar.graphics.control.TGResourceBuffer;
+import org.herac.tuxguitar.graphics.control.*;
 import org.herac.tuxguitar.player.base.MidiPlayerMode;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.*;
@@ -155,8 +152,23 @@ public class Tablature implements TGController {
 		if( this.getViewLayout() != null ){
 			float deviceScale = TGWindow.getInstance(context).getWindow().getDeviceZoom() / 100f;
 			this.getViewLayout().loadStyles(this.scale * deviceScale);
+			this.loadPercussionMap();
 		}
 		this.loadCaretStyles();
+	}
+
+	private void loadPercussionMap() {
+		PercussionManager percussionManager = PercussionManager.getInstance(getContext());
+		setPercussionMap(percussionManager.getEntries());
+	}
+
+	public void setPercussionMap(PercussionEntry[] entries) {
+		TGPercussionNote[] map = new TGPercussionNote[entries.length];
+		for (int i = 0; i < entries.length; i++) {
+			PercussionEntry entry = entries[i];
+			map[i] = new TGPercussionNote(entry.getNote(), entry.getKind());
+		}
+		this.getViewLayout().setPercussionMap(map);
 	}
 	
 	public void reloadViewLayout(){

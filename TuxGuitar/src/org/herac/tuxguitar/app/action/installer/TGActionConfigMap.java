@@ -96,10 +96,7 @@ import org.herac.tuxguitar.app.action.impl.settings.TGReloadStylesAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGReloadTableSettingsAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGReloadTitleAction;
 import org.herac.tuxguitar.app.action.impl.system.TGDisposeAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGOpenTransposeDialogAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGSelectScaleAction;
-import org.herac.tuxguitar.app.action.impl.tools.TGToggleBrowserAction;
+import org.herac.tuxguitar.app.action.impl.tools.*;
 import org.herac.tuxguitar.app.action.impl.track.*;
 import org.herac.tuxguitar.editor.action.tools.TGTransposeAction;
 import org.herac.tuxguitar.app.action.impl.transport.*;
@@ -457,6 +454,7 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		
 		//tools
 		this.map(TGSelectScaleAction.NAME, LOCKABLE);
+		this.map(TGChangePercussionMapAction.NAME, LOCKABLE, UPDATE_SONG_CTL);
 		this.map(TGTransposeAction.NAME, LOCKABLE | DISABLE_ON_PLAY, UPDATE_SONG_CTL, UNDOABLE_SONG_GENERIC);
 		this.map(TGShowExternalBeatAction.NAME, LOCKABLE);
 		this.map(TGHideExternalBeatAction.NAME, LOCKABLE);
@@ -533,7 +531,7 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 	private void map(String actionId, int flags, TGUpdateController updateController) {
 		this.map(actionId, flags, updateController, null);
 	}
-	
+
 	private void map(String actionId, int flags, TGUpdateController updateController, TGUndoableActionController undoableController) {
 		TGActionConfig tgActionConfig = new TGActionConfig();
 		tgActionConfig.setUpdateController(updateController);

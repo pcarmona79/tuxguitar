@@ -29,7 +29,11 @@ public class UITableItem<T> {
 			while( this.texts.size() < column ) {
 				this.texts.add(new String());
 			}
-			this.texts.add(text);
+			if (this.texts.size() > column) {
+				this.texts.set(column, text);
+			} else {
+				this.texts.add(text);
+			}
 		}
 	}
 

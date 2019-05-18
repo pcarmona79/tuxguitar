@@ -69,6 +69,10 @@ public class SWTTable<T> extends SWTControl<Table> implements UITable<T> {
 		}
 		return null;
 	}
+
+	public int getSelectedIndex() {
+		return this.getControl().getSelectionIndex();
+	}
 	
 	public T getSelectedValue() {
 		UITableItem<T> selectedItem = this.getSelectedItem();
@@ -97,10 +101,18 @@ public class SWTTable<T> extends SWTControl<Table> implements UITable<T> {
 	public void addItem(UITableItem<T> item) {
 		TableItem tableItem = new TableItem(this.getControl(), SWT.NULL);
 		tableItem.setData(item);
+		updateItem(item, tableItem);
+	}
+
+	public void updateItem(UITableItem<T> item) {
+		this.updateItem(item, this.getTableItem(item));
+	}
+
+	private void updateItem(UITableItem<T> item, TableItem tableItem) {
 		if( item.getImage() != null && !item.getImage().isDisposed()) {
 			tableItem.setImage(((SWTImage)item.getImage()).getHandle());
 		}
-		
+
 		int columns = this.getColumns();
 		for(int i = 0 ; i < columns; i ++) {
 			String text = item.getText(i);
@@ -108,7 +120,7 @@ public class SWTTable<T> extends SWTControl<Table> implements UITable<T> {
 				tableItem.setText(i, text);
 			}
 		}
-		
+
 		// fix column size
 		if( this.isVisible() ) {
 			this.updateManager.setUpdateRequired();

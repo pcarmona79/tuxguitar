@@ -36,6 +36,10 @@ public abstract class UIAbstractLayout implements UILayout {
 		
 		return this.getControlAttributes(control);
 	}
+
+	public void removeControlAttributes(UIControl control) {
+		this.controlAttributes.remove(control);
+	}
 	
 	public <T extends Object> void set(String key, T value){
 		this.getAttributes().set(key, value);

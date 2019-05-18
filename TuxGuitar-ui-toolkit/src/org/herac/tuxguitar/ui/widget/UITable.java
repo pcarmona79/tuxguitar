@@ -11,6 +11,8 @@ public interface UITable<T> extends UIControl {
 	void setColumnName(int column, String name);
 	
 	String getColumnName(int column);
+
+	int getSelectedIndex();
 	
 	T getSelectedValue();
 	
@@ -21,7 +23,9 @@ public interface UITable<T> extends UIControl {
 	void setSelectedItem(UITableItem<T> item);
 	
 	void addItem(UITableItem<T> item);
-	
+
+	void updateItem(UITableItem<T> item);
+
 	void removeItem(UITableItem<T> item);
 	
 	void removeItems();

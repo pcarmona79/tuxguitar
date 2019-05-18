@@ -342,7 +342,7 @@ public class TGNoteImpl extends TGNote {
 					painter.closePath();
 				} else {
 					// drum gets special treatment according to value.
-					int renderType = layout.getPercussionNoteMappings()[getValue()].getKind();
+					int renderType = layout.getPercussionMap()[getValue()].getKind();
 					if ((renderType & TGPercussionNote.KIND_CYMBAL) != 0) {
 						// paint as X
 						painter.setLineWidth(layout.getLineWidth(0));

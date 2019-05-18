@@ -63,7 +63,8 @@ public abstract class TGLayout {
 	private boolean bufferEnabled;
 	private boolean playModeEnabled;
 	private boolean tabNotePathRendererEnabled;
-	
+
+	private TGPercussionNote[] percussionMap;
 	private List<TrackPosition> trackPositions;
 	
 	private TGController controller;
@@ -695,8 +696,12 @@ public abstract class TGLayout {
 		return spacing;
 	}
 
-	public TGPercussionNote[] getPercussionNoteMappings() {
-		return TGPercussionNote.DEFAULT_MAPPING;
+	public void setPercussionMap(TGPercussionNote[] map) {
+		this.percussionMap = map;
+	}
+
+	public TGPercussionNote[] getPercussionMap() {
+		return this.percussionMap;
 	}
 
 	

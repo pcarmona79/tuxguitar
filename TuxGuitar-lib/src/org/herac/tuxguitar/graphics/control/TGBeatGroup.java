@@ -126,7 +126,7 @@ public class TGBeatGroup {
 		TGTrack track = note.getBeatImpl().getMeasureImpl().getTrack();
 		if (layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
 			// Transpose percussions notes according to current note mapping
-			noteValue = layout.getPercussionNoteMappings()[noteValue].getNote();
+			noteValue = layout.getPercussionMap()[noteValue].getNote();
 		}
 		
 		float scale = (layout.getScoreLineSpacing() / 2f);
