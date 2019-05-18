@@ -5,7 +5,7 @@ import org.herac.tuxguitar.app.system.config.TGConfigDefaults;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
-import org.herac.tuxguitar.app.view.component.TGColorButton;
+import org.herac.tuxguitar.app.view.widgets.TGColorButton;
 import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.ui.UIFactory;

@@ -1,4 +1,4 @@
-package org.herac.tuxguitar.app.view.component;
+package org.herac.tuxguitar.app.view.widgets;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.ui.UIFactory;
