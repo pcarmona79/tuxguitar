@@ -22,11 +22,19 @@ public class SWTListBoxSelect<T> extends SWTControl<org.eclipse.swt.widgets.List
 		this.uiItems = new ArrayList<UISelectItem<T>>();
 	}
 
+	public int getSelectedIndex() {
+		return this.getControl().getSelectionIndex();
+	}
+
+	public void setSelectedIndex(int index) {
+		this.getControl().select(index);
+	}
+
 	public T getSelectedValue() {
 		UISelectItem<T> selectedItem = this.getSelectedItem();
 		return (selectedItem != null ? selectedItem.getValue() : null);
 	}
-	
+
 	public void setSelectedValue(T value) {
 		this.setSelectedItem(new UISelectItem<T>(null, value));
 	}
@@ -38,20 +46,41 @@ public class SWTListBoxSelect<T> extends SWTControl<org.eclipse.swt.widgets.List
 
 	public void setSelectedItem(UISelectItem<T> item) {
 		int index = (item != null ? this.uiItems.indexOf(item) : -1);
-		this.getControl().select(index);
+        this.setSelectedIndex(index);
 	}
 
 	public void addItem(UISelectItem<T> item) {
 		this.uiItems.add(item);
 		this.getControl().add(item.getText());
 	}
-	
-	public void removeItem(UISelectItem<T> item) {
+
+	public void addItem(UISelectItem<T> item, int index) {
+		this.uiItems.add(index, item);
+		this.getControl().add(item.getText(), index);
+	}
+
+	public void setIndex(int index, String text) {
+		if( index >= 0 && index < this.uiItems.size() ) {
+            this.uiItems.get(index).setText(text);
+			this.getControl().setItem(index, text);
+		}
+	}
+
+	public void setItem(UISelectItem<T> item, String text) {
 		int index = (item != null ? this.uiItems.indexOf(item) : -1);
+		setIndex(index, text);
+	}
+
+	public void removeIndex(int index) {
 		if( index >= 0 && index < this.uiItems.size() ) {
 			this.getControl().remove(index);
-			this.uiItems.remove(item);
+			this.uiItems.remove(index);
 		}
+	}
+
+	public void removeItem(UISelectItem<T> item) {
+		int index = (item != null ? this.uiItems.indexOf(item) : -1);
+		this.removeIndex(index);
 	}
 	
 	public void removeItems() {

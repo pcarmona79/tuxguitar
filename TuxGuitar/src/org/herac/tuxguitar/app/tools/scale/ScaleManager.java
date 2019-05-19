@@ -1,12 +1,14 @@
 package org.herac.tuxguitar.app.tools.scale;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.*;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.tools.scale.xml.ScaleReader;
+import org.herac.tuxguitar.app.tools.scale.xml.ScaleWriter;
+import org.herac.tuxguitar.app.util.TGFileUtils;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
 import org.herac.tuxguitar.event.TGEventListener;
 import org.herac.tuxguitar.event.TGEventManager;
@@ -26,8 +28,10 @@ public class ScaleManager {
 	private TGContext context;
 
 	private List<ScaleInfo> scales;
+	private Set<ScaleInfo> defaultScales;
+	private Set<ScaleInfo> customScales;
 	private Map<Integer, Integer> scaleKeysToIndex;
-	
+
 	private TGScale scale;
 	
 	private int selectionIndex;
@@ -36,13 +40,24 @@ public class ScaleManager {
 	private ScaleManager(TGContext context){
 		this.context = context;
 		this.scales = new ArrayList<>();
+		this.defaultScales = new HashSet<>();
+		this.customScales = new HashSet<>();
 		this.scaleKeysToIndex = new HashMap<>();
 		this.scale = TuxGuitar.getInstance().getSongManager().getFactory().newScale();
 		this.selectionKey = 0;
 		this.selectionIndex = NONE_SELECTION;
-		this.loadScales();
+		this.init();
 	}
-	
+
+	private void init() {
+		try{
+		    this.loadScales(TGResourceManager.getInstance(this.context).getResourceAsStream("scales/scales.xml"), false);
+		} catch (Throwable e) {
+			TGErrorManager.getInstance(this.context).handleError(e);
+		}
+		this.loadScales(getUserFileName());
+	}
+
 	public void addListener(TGEventListener listener){
 		TGEventManager.getInstance(this.context).addListener(ScaleEvent.EVENT_TYPE, listener);
 	}
@@ -131,19 +146,70 @@ public class ScaleManager {
 	public int getSelectionKey() {
 		return this.selectionKey;
 	}
-	
-	private void loadScales(){
+
+	private boolean loadScales(String fileName) {
 		try{
-			new ScaleReader().loadScales(this.scales, TGResourceManager.getInstance(this.context).getResourceAsStream("scales/scales.xml") );
-			for (int i = 0; i < this.scales.size(); i++) {
-				ScaleInfo info = this.scales.get(i);
-				if (!this.scaleKeysToIndex.containsKey(info.getKeys())) {
-					this.scaleKeysToIndex.put(info.getKeys(), i);
-				}
-			}
+			loadScales(new FileInputStream(fileName), true);
+			return true;
 		} catch (Throwable e) {
-			TGErrorManager.getInstance(this.context).handleError(e);
-		} 
+			return false;
+		}
+	}
+	
+	private void loadScales(InputStream stream, boolean custom){
+        ScaleReader.loadScales(this.scales, stream);
+        for (int i = 0; i < this.scales.size(); i++) {
+            addScale(this.scales.get(i), i, custom);
+        }
+	}
+
+	private void addScale(ScaleInfo info, int index, boolean custom) {
+		if (!this.scaleKeysToIndex.containsKey(info.getKeys())) {
+			this.scaleKeysToIndex.put(info.getKeys(), index);
+		}
+		if (custom) {
+			this.customScales.add(info);
+		} else {
+			this.defaultScales.add(info);
+		}
+	}
+
+	public void addCustomScale(ScaleInfo info) {
+		Integer oldIndex = this.scaleKeysToIndex.get(info.getKeys());
+	    if (oldIndex != null) {
+	    	ScaleInfo old = this.scales.get(oldIndex);
+	    	if (this.customScales.contains(old)) {
+				this.customScales.remove(old);
+				this.scales.set(oldIndex, info);
+			}
+		} else {
+			this.scales.add(info);
+			this.addScale(info, this.scales.size() - 1, true);
+		}
+	}
+
+	public void removeCustomScale(ScaleInfo info) {
+		if (isCustomScale(info)) {
+			int index = this.scaleKeysToIndex.get(info.getKeys());
+			this.scales.remove(index);
+			this.scaleKeysToIndex.remove(info.getKeys());
+			this.customScales.remove(info);
+			if (this.selectionIndex > index) {
+				this.selectionIndex--;
+			}
+		}
+	}
+
+	public boolean isCustomScale(int index) {
+		return index != NONE_SELECTION && this.customScales.contains(this.scales.get(index));
+	}
+
+	private String getUserFileName() {
+		return TGFileUtils.PATH_USER_CONFIG + File.separator + "scales.xml";
+	}
+
+	public void saveCustomScales() {
+		ScaleWriter.write(this.customScales, getUserFileName());
 	}
 	
 	public static ScaleManager getInstance(TGContext context) {

@@ -17,12 +17,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ScaleReader {
-	private static final String SCALE_TAG = "scale";
-	private static final String NAME_ATTRIBUTE = "name";
-	private static final String KEYS_ATTRIBUTE = "keys";
-	private static final String KEY_SEPARATOR = ",";
+	public static final String SCALE_TAG = "scale";
+	public static final String NAME_ATTRIBUTE = "name";
+	public static final String KEYS_ATTRIBUTE = "keys";
+	public static final String KEY_SEPARATOR = ",";
 
-	public void loadScales(List<ScaleInfo> scales,InputStream stream){
+	public static void loadScales(List<ScaleInfo> scales,InputStream stream){
 		try{
 			if ( stream != null ){
 				Document doc = getDocument(stream);

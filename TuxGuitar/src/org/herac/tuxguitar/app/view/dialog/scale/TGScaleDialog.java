@@ -27,18 +27,27 @@ public class TGScaleDialog {
 	private int initialScale;
 	private int initialKey;
 
+	private UIWindow dialog;
+	private UIListBoxSelect<Integer> scales;
+	private UILabel intervalLabel;
+	private UIButton buttonAddPreset;
+	private UIButton buttonRemovePreset;
+	private UIButton buttonCancel;
+	private UIButton buttonOK;
+	private TGContext context;
+
 	public void show(final TGViewContext context) {
+	    this.context = context.getContext();
 		final ScaleManager scaleManager = ScaleManager.getInstance(context.getContext());
 		final UIFactory uiFactory = TGApplication.getInstance(context.getContext()).getFactory();
 		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
-		final UIWindow dialog = uiFactory.createWindow(uiParent, true, true);
+		this.dialog = uiFactory.createWindow(uiParent, true, true);
 
 		initialScale = scaleManager.getSelectionIndex();
 		initialKey = scaleManager.getSelectionKey();
 
 		dialog.setLayout(dialogLayout);
-		dialog.setText(TuxGuitar.getProperty("scale.list"));
 
 		final List<UIToggleButton> intervalButtons = new ArrayList<>();
 
@@ -57,7 +66,7 @@ public class TGScaleDialog {
 		compositeLayout.set(keys, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
 		compositeLayout.set(keys, UITableLayout.PACKED_HEIGHT, 200f);
 		
-		final UIListBoxSelect<Integer> scales = uiFactory.createListBoxSelect(composite);
+		this.scales = uiFactory.createListBoxSelect(composite);
 		scales.addItem(new UISelectItem<Integer>(TuxGuitar.getProperty("scale.custom"), ScaleManager.NONE_SELECTION));
 		String[] scaleNames = scaleManager.getScaleNames();
 		for(int i = 0;i < scaleNames.length;i ++){
@@ -72,6 +81,7 @@ public class TGScaleDialog {
 		});
 		scales.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
+				updatePresetButtons();
 				selectScale(context.getContext(), scales.getSelectedValue(), keys.getSelectedValue());
 				Integer keys = scaleManager.getScaleKeys(scales.getSelectedValue());
 				if (keys == null) {
@@ -89,8 +99,7 @@ public class TGScaleDialog {
 		compositeLayout.set(scales, UITableLayout.PACKED_HEIGHT, 200f);
 
 		//------------------INTERVALS--------------------------
-        UILabel intervalLabel = uiFactory.createLabel(composite);
-        intervalLabel.setText(TuxGuitar.getProperty("scale.intervals"));
+        this.intervalLabel = uiFactory.createLabel(composite);
 		compositeLayout.set(intervalLabel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);
 
 		UITableLayout intervalLayout = new UITableLayout();
@@ -117,14 +126,32 @@ public class TGScaleDialog {
 			intervalLayout.set(button, 1, ++col, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, null);
 		}
 
+		UITableLayout presetLayout = new UITableLayout();
+		UIPanel presetGroup = uiFactory.createPanel(composite, false);
+		presetGroup.setLayout(presetLayout);
+		compositeLayout.set(presetGroup, 2, 3, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, false, false);
+
+		this.buttonAddPreset = uiFactory.createButton(presetGroup);
+		buttonAddPreset.addSelectionListener(new UISelectionListener() {
+			public void onSelect(UISelectionEvent event) {
+			}
+		});
+		presetLayout.set(buttonAddPreset, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
+
+		this.buttonRemovePreset = uiFactory.createButton(presetGroup);
+		buttonRemovePreset.addSelectionListener(new UISelectionListener() {
+			public void onSelect(UISelectionEvent event) {
+			}
+		});
+		presetLayout.set(buttonRemovePreset, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
+
 		//------------------BUTTONS--------------------------
 		UITableLayout buttonsLayout = new UITableLayout();
 		UIPanel buttons = uiFactory.createPanel(dialog, false);
 		buttons.setLayout(buttonsLayout);
 		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
-		UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
+		this.buttonOK = uiFactory.createButton(buttons);
 		buttonOK.setDefaultButton();
 		buttonOK.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
@@ -133,8 +160,7 @@ public class TGScaleDialog {
 		});
 		buttonsLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
 		
-		UIButton buttonCancel = uiFactory.createButton(buttons);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
+		this.buttonCancel = uiFactory.createButton(buttons);
 		buttonCancel.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				selectScale(context.getContext(), initialScale, initialKey);
@@ -147,16 +173,40 @@ public class TGScaleDialog {
 		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
-	public void selectScale(TGContext context, TGScale scale) {
+
+	public void loadProperties() {
+		this.scales.setItem(0, TuxGuitar.getProperty("scale.custom"));
+		this.dialog.setText(TuxGuitar.getProperty("scale.list"));
+		this.buttonOK.setText(TuxGuitar.getProperty("ok"));
+		this.buttonCancel.setText(TuxGuitar.getProperty("cancel"));
+		this.buttonAddPreset.setToolTipText(TuxGuitar.getProperty("scale.add-preset"));
+		this.buttonRemovePreset.setToolTipText(TuxGuitar.getProperty("scale.remove-preset"));
+		this.intervalLabel.setText(TuxGuitar.getProperty("scale.intervals"));
+	}
+
+	public void loadIcons() {
+		this.buttonAddPreset.setImage(TuxGuitar.getInstance().getIconManager().getListAdd());
+		this.buttonRemovePreset.setImage(TuxGuitar.getInstance().getIconManager().getListRemove());
+	}
+
+	private void selectScale(TGContext context, TGScale scale) {
 		TGActionProcessor tgActionProcessor = new TGActionProcessor(context, TGSelectScaleAction.NAME);
 		tgActionProcessor.setAttribute(TGSelectScaleAction.ATTRIBUTE_SCALE, scale);
 		tgActionProcessor.process();
     }
 
-	public void selectScale(TGContext context, Integer index, Integer key) {
+	private void selectScale(TGContext context, Integer index, Integer key) {
 		TGActionProcessor tgActionProcessor = new TGActionProcessor(context, TGSelectScaleAction.NAME);
 		tgActionProcessor.setAttribute(TGSelectScaleAction.ATTRIBUTE_INDEX, index);
 		tgActionProcessor.setAttribute(TGSelectScaleAction.ATTRIBUTE_KEY, key);
 		tgActionProcessor.process();
+	}
+
+	private void updatePresetButtons() {
+		final ScaleManager scaleManager = ScaleManager.getInstance(context);
+		int index = this.scales.getSelectedValue();
+		boolean isCustomScale = scaleManager.isCustomScale(index);
+		this.buttonAddPreset.setEnabled(index == ScaleManager.NONE_SELECTION || isCustomScale);
+        this.buttonRemovePreset.setEnabled(isCustomScale);
 	}
 }
