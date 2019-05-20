@@ -253,9 +253,6 @@ public class TGPercussionConfig {
         this.addTableItems();
 
         TGDialogUtil.openDialog(window, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
-        window.computePackedSize(null, null);
-        UISize minimumSize = window.getPackedSize();
-        window.setMinimumSize(minimumSize);
     }
 
     private boolean isNatural(int value) {

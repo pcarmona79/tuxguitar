@@ -87,8 +87,6 @@ public class TGTrackPropertiesDialog implements TGEventListener {
 		//LISTENERS
 		this.initListeners();
 
-		dialog.computePackedSize(null, null);
-		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

@@ -89,8 +89,6 @@ public class TGKeyBindingEditor {
 				});
 		dialogLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 
-		dialog.computePackedSize(null, null);
-		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

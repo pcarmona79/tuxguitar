@@ -237,8 +237,6 @@ public class TGBendDialog {
 				setBend(presetItems.get(0).getValue());
 			}
 
-			dialog.computePackedSize(null, null);
-			dialog.setMinimumSize(dialog.getPackedSize());
 			TGDialogUtil.openDialog(dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 		}
 	}

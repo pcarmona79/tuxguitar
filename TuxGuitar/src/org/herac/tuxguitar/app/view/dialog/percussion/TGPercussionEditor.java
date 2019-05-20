@@ -159,8 +159,7 @@ public class TGPercussionEditor implements TGEventListener {
             }
         }
         this.dialog.computePackedSize(null, null);
-        UISize minimumSize = this.dialog.getPackedSize();
-        this.dialog.setMinimumSize(minimumSize);
+        this.dialog.setMinimumSize(this.dialog.getPackedSize());
     }
 
     private void addListeners() {

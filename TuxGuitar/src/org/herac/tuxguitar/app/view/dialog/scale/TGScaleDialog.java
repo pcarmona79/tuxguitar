@@ -169,8 +169,6 @@ public class TGScaleDialog {
 		});
 		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
 
-		dialog.computePackedSize(null, null);
-		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 

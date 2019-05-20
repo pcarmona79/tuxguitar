@@ -12,7 +12,7 @@ public class TGDialogUtil {
 	public static final int OPEN_STYLE_CENTER = 0x04;
 	
 	public static final int OPEN_STYLE_MAXIMIZED = 0x8;
-	
+
 	public static final void openDialog(UIWindow dialog, int style){
 		TGDialogUtil.openDialog(dialog, (UIWindow) dialog.getParent(), style);
 	}
@@ -20,6 +20,7 @@ public class TGDialogUtil {
 	public static final void openDialog(UIWindow dialog, UIWindow parent, int style){
 		if((style & OPEN_STYLE_PACK) != 0){
 			dialog.pack();
+			dialog.setMinimumSize(dialog.getPackedSize());
 		}
 		if((style & OPEN_STYLE_LAYOUT) != 0){
 			dialog.layout();
