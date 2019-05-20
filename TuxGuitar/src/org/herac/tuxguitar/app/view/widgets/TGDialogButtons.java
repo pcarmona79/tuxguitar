@@ -126,6 +126,10 @@ public class TGDialogButtons {
         return panel;
     }
 
+    public UIButton getButton(int index) {
+        return this.buttons.get(index);
+    }
+
     public static class Button {
         private String property;
         private Runnable callback;

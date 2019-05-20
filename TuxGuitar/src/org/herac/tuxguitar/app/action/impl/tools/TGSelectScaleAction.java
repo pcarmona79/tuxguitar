@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.app.action.impl.tools;
 
 import org.herac.tuxguitar.action.TGActionContext;
+import org.herac.tuxguitar.app.tools.scale.ScaleInfo;
 import org.herac.tuxguitar.app.tools.scale.ScaleManager;
 import org.herac.tuxguitar.editor.action.TGActionBase;
 import org.herac.tuxguitar.song.models.TGScale;
@@ -10,7 +11,7 @@ public class TGSelectScaleAction extends TGActionBase{
 	
 	public static final String NAME = "action.tools.select-scale";
 	
-	public static final String ATTRIBUTE_INDEX = "scaleIndex";
+	public static final String ATTRIBUTE_SCALE_INFO = "scaleInfo";
 	public static final String ATTRIBUTE_KEY = "scaleKey";
     public static final String ATTRIBUTE_SCALE = "scale";
 
@@ -24,10 +25,10 @@ public class TGSelectScaleAction extends TGActionBase{
 		if (scale != null) {
 			scaleManager.setScale(scale);
 		} else {
-			Integer index = context.getAttribute(ATTRIBUTE_INDEX);
+			ScaleInfo info = context.getAttribute(ATTRIBUTE_SCALE_INFO);
 			Integer key = context.getAttribute(ATTRIBUTE_KEY);
 
-			scaleManager.selectScale(index != null ? index : ScaleManager.NONE_SELECTION, key != null ? key : 0);
+			scaleManager.selectScale(info, key != null ? key : 0);
 		}
 	}
 }

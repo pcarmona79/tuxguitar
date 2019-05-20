@@ -26,6 +26,8 @@ public interface UIListBoxSelect<T> extends UIControl {
 
 	void removeIndex(int index);
 
+	void removeValue(T value);
+
 	void removeItem(UISelectItem<T> item);
 	
 	void removeItems();

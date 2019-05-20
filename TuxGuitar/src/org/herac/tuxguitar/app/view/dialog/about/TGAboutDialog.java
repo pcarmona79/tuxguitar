@@ -137,8 +137,6 @@ public class TGAboutDialog {
 		
 		tabFolder.setSelectedIndex(0);
 
-		dialog.computePackedSize(null, null);
-		dialog.setMinimumSize(dialog.getPackedSize());
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

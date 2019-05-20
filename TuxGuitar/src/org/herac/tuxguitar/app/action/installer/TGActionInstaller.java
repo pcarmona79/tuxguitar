@@ -435,7 +435,7 @@ public class TGActionInstaller {
 		installAction(new TGOpenSettingsEditorAction(context));
 		installAction(new TGOpenKeyBindingEditorAction(context));
 		installAction(new TGOpenPluginListDialogAction(context));
-		
+
 		//gui actions
 		installAction(new TGOpenViewAction(context));
 		installAction(new TGToggleViewAction(context));

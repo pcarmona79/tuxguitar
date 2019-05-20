@@ -6,6 +6,11 @@ import org.herac.tuxguitar.app.view.controller.TGOpenViewController;
 public class TGScaleDialogController implements TGOpenViewController {
 
 	public void openView(TGViewContext context) {
-		new TGScaleDialog().show(context);
+		TGScaleDialog editor = TGScaleDialog.getInstance(context.getContext());
+		if( editor.isDisposed()){
+			editor.show(context);
+		} else {
+			editor.dispose();
+		}
 	}
 }

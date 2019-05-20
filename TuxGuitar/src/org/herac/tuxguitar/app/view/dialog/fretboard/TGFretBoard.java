@@ -10,6 +10,7 @@ import org.herac.tuxguitar.app.action.impl.caret.TGMoveToAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.icons.TGIconManager;
+import org.herac.tuxguitar.app.tools.scale.ScaleInfo;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
 import org.herac.tuxguitar.app.view.component.docked.TGDockedPlayingComponent;
@@ -152,10 +153,9 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 
 	private void loadScaleName() {
 		int scaleKey = TuxGuitar.getInstance().getScaleManager().getSelectionKey();
-		int scaleIndex = TuxGuitar.getInstance().getScaleManager().getSelectionIndex();
+		ScaleInfo info = TuxGuitar.getInstance().getScaleManager().getSelection();
 		String key = TuxGuitar.getInstance().getScaleManager().getKeyName( scaleKey );
-		String name = TuxGuitar.getInstance().getScaleManager().getScaleName( scaleIndex );
-		this.scaleName.setText( ( key != null && name != null ) ? ( key + " - " + name ) : "" );
+		this.scaleName.setText( ( key != null && info != null ) ? ( key + " - " + info.getName() ) : "" );
 	}
 	
 	private void calculateFretSpacing(float width) {

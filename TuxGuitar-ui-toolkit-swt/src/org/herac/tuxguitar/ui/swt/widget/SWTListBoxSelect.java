@@ -2,6 +2,7 @@ package org.herac.tuxguitar.ui.swt.widget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -75,6 +76,16 @@ public class SWTListBoxSelect<T> extends SWTControl<org.eclipse.swt.widgets.List
 		if( index >= 0 && index < this.uiItems.size() ) {
 			this.getControl().remove(index);
 			this.uiItems.remove(index);
+		}
+	}
+
+	public void removeValue(T value) {
+	    for (int i = 0; i < this.uiItems.size(); i++) {
+			T itemValue = this.uiItems.get(i).getValue();
+	    	if (Objects.equals(itemValue, value)) {
+	    		this.removeIndex(i);
+	    		i--;
+			}
 		}
 	}
 
