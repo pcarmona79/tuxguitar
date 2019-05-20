@@ -111,6 +111,14 @@ public class TGActionProcessor {
 	public void process(){
 		this.process(null);
 	}
+
+	public static void process(TGContext context, String actionName, Object ... attributes) {
+		TGActionProcessor tgActionProcessor = new TGActionProcessor(context, actionName);
+		for (int i = 0; i < attributes.length - 1; i += 2) {
+			tgActionProcessor.setAttribute((String) attributes[i], attributes[i+1]);
+		}
+		tgActionProcessor.process();
+	}
 	
 	public void onFinish() {
 		if( this.onFinish != null ) {
