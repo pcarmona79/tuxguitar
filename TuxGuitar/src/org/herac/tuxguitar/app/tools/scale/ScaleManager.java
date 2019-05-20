@@ -50,11 +50,7 @@ public class ScaleManager {
 	}
 
 	private void init() {
-		try{
-		    this.loadScales(TGResourceManager.getInstance(this.context).getResourceAsStream("scales/scales.xml"), false);
-		} catch (Throwable e) {
-			TGErrorManager.getInstance(this.context).handleError(e);
-		}
+		this.loadScales(TGResourceManager.getInstance(this.context).getResourceAsStream("scales/scales.xml"), false);
 		this.loadScales(getUserFileName());
 	}
 
@@ -149,18 +145,26 @@ public class ScaleManager {
 
 	private boolean loadScales(String fileName) {
 		try{
-			loadScales(new FileInputStream(fileName), true);
-			return true;
+		    File file = new File(fileName);
+		    if (file.exists()) {
+				loadScales(new FileInputStream(file), true);
+				return true;
+			}
 		} catch (Throwable e) {
-			return false;
+			TGErrorManager.getInstance(this.context).handleError(e);
 		}
+		return false;
 	}
 	
 	private void loadScales(InputStream stream, boolean custom){
-        ScaleReader.loadScales(this.scales, stream);
-        for (int i = 0; i < this.scales.size(); i++) {
-            addScale(this.scales.get(i), i, custom);
-        }
+		try{
+			ScaleReader.loadScales(this.scales, stream);
+			for (int i = 0; i < this.scales.size(); i++) {
+				this.addScale(this.scales.get(i), i, custom);
+			}
+		} catch (Throwable e) {
+			TGErrorManager.getInstance(this.context).handleError(e);
+		}
 	}
 
 	private void addScale(ScaleInfo info, int index, boolean custom) {

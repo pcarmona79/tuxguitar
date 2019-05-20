@@ -11,6 +11,7 @@ import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class PercussionManager {
@@ -31,11 +32,7 @@ public class PercussionManager {
 
     private void init() {
         if (!loadPercussion(getUserFileName())) {
-            try {
-                loadPercussion(TGResourceManager.getInstance(this.context).getResourceAsStream("percussion/percussion.xml"));
-            } catch (Throwable e) {
-                TGErrorManager.getInstance(this.context).handleError(e);
-            }
+            loadPercussion(TGResourceManager.getInstance(this.context).getResourceAsStream("percussion/percussion.xml"));
         }
     }
 
@@ -58,17 +55,24 @@ public class PercussionManager {
     }
 
     private boolean loadPercussion(String fileName) {
-        try {
-            loadPercussion(new FileInputStream(fileName));
-            return true;
-        } catch (Throwable e) {
-            return false;
+        File file = new File(fileName);
+        if (file.exists()) {
+            try {
+                loadPercussion(new FileInputStream(file));
+                return true;
+            } catch (FileNotFoundException e) {
+                TGErrorManager.getInstance(this.context).handleError(e);
+            }
         }
-
+        return false;
     }
 
     private void loadPercussion(InputStream stream) {
-        PercussionReader.loadPercussion(this.entries, stream);
+        try {
+            PercussionReader.loadPercussion(this.entries, stream);
+        } catch (Throwable e) {
+            TGErrorManager.getInstance(this.context).handleError(e);
+        }
     }
 
     public void savePercussion() {
