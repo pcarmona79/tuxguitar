@@ -1,34 +1,24 @@
 package org.herac.tuxguitar.app.view.dialog.beat;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.action.note.TGMoveBeatsAction;
 import org.herac.tuxguitar.song.factory.TGFactory;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGDivisionType;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGTrack;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UIControl;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UISpinner;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TGBeatMoveDialog {
 	
@@ -172,37 +162,20 @@ public class TGBeatMoveDialog {
 		updateControls( 0, move2Controls );
 		
 		//------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 4, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		final UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.setDefaultButton();
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				final int directionValue = getDirection(directionCombo);
-				final long duration1 = getDuration1(duration1Combo, count1Spinner.getValue());
-				final long duration2 = getDuration2(duration2Combo, type2Combo, division2Combo, count2Spinner.getValue());
-				final long duration = ( ( duration1 + duration2 ) * directionValue );
-				
-				dialog.dispose();
-				moveBeats(context.getContext(), track, measure, beat, duration);
-			}
-		});
-		buttonsLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton buttonCancel = uiFactory.createButton(buttons);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-		buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
-		
+
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> {
+					final int directionValue = getDirection(directionCombo);
+					final long duration1 = getDuration1(duration1Combo, count1Spinner.getValue());
+					final long duration2 = getDuration2(duration2Combo, type2Combo, division2Combo, count2Spinner.getValue());
+					final long duration = ( ( duration1 + duration2 ) * directionValue );
+
+					dialog.dispose();
+					moveBeats(context.getContext(), track, measure, beat, duration);
+				}),
+				TGDialogButtons.cancel(dialog::dispose));
+		dialogLayout.set(buttons.getControl(), 4, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
+
 		TGDialogUtil.openDialog(dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

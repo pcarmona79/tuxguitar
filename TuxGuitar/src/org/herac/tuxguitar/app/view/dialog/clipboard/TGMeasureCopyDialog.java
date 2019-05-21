@@ -5,6 +5,7 @@ import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tab.Selector;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.action.measure.TGCopyMeasureAction;
@@ -15,18 +16,12 @@ import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UISpinner;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGMeasureCopyDialog {
 	public static final String ATTRIBUTE_SELECTOR = Selector.class.getName();
 	private static final int MIN_SELECTION = 1;
-	private static final float BUTTONS_PANEL_MARGIN = 0f;
 
 	private UIFactory uiFactory;
 	private UIWindow dialog;
@@ -36,8 +31,6 @@ public class TGMeasureCopyDialog {
 	private UICheckBox allTracksCheckBox = null;
 	private UIPanel range;
 	private UITableLayout rangeLayout;
-	private UIPanel buttons;
-	private UITableLayout buttonsLayout;
 
 	public void show(final TGViewContext context) {
 		final TGSong song = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG);
@@ -58,9 +51,7 @@ public class TGMeasureCopyDialog {
 		if (song.countTracks() > 1)
 			createOptionsPanel();
 
-		createButtonsPanel();
-		createOkButton(context.getContext());
-		createCancelButton();
+		createButtonsPanel(context.getContext());
 
 		if (selector.isActive()) {
             setInitialFromToValues(selector.getStartBeat(), selector.getEndBeat());
@@ -148,36 +139,14 @@ public class TGMeasureCopyDialog {
 		allTracksCheckBox.setSelected(true);
 	}
 
-	private void createButtonsPanel() {
-		buttonsLayout = new UITableLayout(BUTTONS_PANEL_MARGIN);
-		buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, (allTracksCheckBox != null ? 3 : 2), 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-	}
-
-	private void createOkButton(final TGContext context) {
-		UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.setDefaultButton();
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				processAction(context);
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-	}
-
-	private void createCancelButton() {
-		UIButton buttonCancel = uiFactory.createButton(buttons);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-		buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
+	private void createButtonsPanel(final TGContext context) {
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> {
+					processAction(context);
+					dialog.dispose();
+				}),
+				TGDialogButtons.cancel(dialog::dispose));
+		dialogLayout.set(buttons.getControl(), (allTracksCheckBox != null ? 3 : 2), 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 	}
 
 	private void setInitialFromToValues(TGBeat start, TGBeat end) {

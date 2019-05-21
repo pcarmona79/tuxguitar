@@ -5,16 +5,15 @@ import org.herac.tuxguitar.app.system.config.TGConfigDefaults;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
-import org.herac.tuxguitar.app.view.widgets.TGColorButton;
-import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGColorButton;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.widget.UILabel;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
@@ -114,25 +113,19 @@ public class TGPianoConfig {
 		final UIColorModel rgbScale = getColorChooser(window, group, TuxGuitar.getProperty("piano.scale-note-color"), this.colorScale, ++groupRow);
 		
 		// ------------------BUTTONS--------------------------
-		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context, factory, window,
-				new Runnable() {
-					public void run() {
-						window.dispose();
-						save(rgbNatural, rgbNotNatural,rgbNote, rgbScale);
-						applyChanges();
-					}
-				}, new Runnable() {
-					public void run() {
-						window.dispose();
-					}
-				}, new Runnable() {
-					public void run() {
-						window.dispose();
-						defaults();
-						applyChanges();
-					}
-				});
-		windowLayout.set(okCancelDefaults.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		TGDialogButtons buttons = new TGDialogButtons(factory, window,
+				TGDialogButtons.ok(() -> {
+					window.dispose();
+					save(rgbNatural, rgbNotNatural,rgbNote, rgbScale);
+					applyChanges();
+				}),
+				TGDialogButtons.cancel(window::dispose),
+				TGDialogButtons.defaults(() -> {
+					window.dispose();
+					defaults();
+					applyChanges();
+				}));
+		windowLayout.set(buttons.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 		
 		TGDialogUtil.openDialog(window, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}

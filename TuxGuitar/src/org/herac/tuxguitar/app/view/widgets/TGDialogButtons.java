@@ -14,6 +14,8 @@ import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.util.TGContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class TGDialogButtons {
@@ -31,6 +33,10 @@ public class TGDialogButtons {
     private List<String> properties;
 
     public TGDialogButtons(UIFactory factory, UIContainer parent, Button... buttons) {
+        this(factory, parent, Arrays.asList(buttons));
+    }
+
+    public TGDialogButtons(UIFactory factory, UIContainer parent, Collection<Button> buttons) {
         this.buttons = new ArrayList<>();
         this.properties = new ArrayList<>();
         init(factory, parent, buttons);
@@ -45,15 +51,32 @@ public class TGDialogButtons {
     }
 
     public static Button cancel(Runnable callback) {
-        return new Button("cancel", ALIGN_RIGHT, callback);
+        return cancel(callback, false);
+    }
+
+
+    public static Button cancel(Runnable callback, boolean defaultButton) {
+        return new Button("cancel", ALIGN_RIGHT, defaultButton, callback);
+    }
+
+    public static Button clean(Runnable callback) {
+        return new Button("clean", ALIGN_RIGHT, callback);
     }
 
     public static Button yes(Runnable callback) {
-        return new Button("yes", ALIGN_RIGHT, true, callback);
+        return yes(callback, true);
+    }
+
+    public static Button yes(Runnable callback, boolean defaultButton) {
+        return new Button("yes", ALIGN_RIGHT, defaultButton, callback);
     }
 
     public static Button no(Runnable callback) {
-        return new Button("no", ALIGN_RIGHT, callback);
+        return no(callback, false);
+    }
+
+    public static Button no(Runnable callback, boolean defaultButton) {
+        return new Button("no", ALIGN_RIGHT, defaultButton, callback);
     }
 
     public static Button revert(Runnable callback) {
@@ -64,7 +87,7 @@ public class TGDialogButtons {
         return new ConfirmButton("defaults", ALIGN_LEFT, callback);
     }
 
-    private void init(final UIFactory factory, final UIContainer parent, Button[] buttons) {
+    private void init(final UIFactory factory, final UIContainer parent, Collection<Button> buttons) {
 
         UITableLayout layout = new UITableLayout(0f);
         this.panel = factory.createPanel(parent, false);
@@ -102,6 +125,8 @@ public class TGDialogButtons {
         for (Button button : rightButtons) {
             addButton(factory, layout, button, UITableLayout.ALIGN_RIGHT);
         }
+
+        this.loadProperties();
     }
 
     public void loadProperties() {

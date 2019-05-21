@@ -5,16 +5,16 @@ import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.ui.UIFactory;
-import org.herac.tuxguitar.ui.event.UISelectionEvent;
-import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UIImageView;
 import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TGConfirmDialog {
 
@@ -60,41 +60,27 @@ public class TGConfirmDialog {
 		panelLayout.set(uiMessage, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false);
 		
 		//========================================================================
-		UITableLayout buttonsLayout = new UITableLayout();
-		UIPanel buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		int columns = 0;
+
+        List<TGDialogButtons.Button> buttonList = new ArrayList<>();
 		if((style & BUTTON_YES) != 0){
-			addCloseButton(uiFactory, dialog, buttons, TuxGuitar.getProperty("yes"), yesRunnable, (defaultButton == BUTTON_YES), ++columns);
+		    buttonList.add(TGDialogButtons.yes(() -> exec(dialog, yesRunnable), defaultButton == BUTTON_YES));
 		}
 		if((style & BUTTON_NO) != 0){
-			addCloseButton(uiFactory, dialog, buttons, TuxGuitar.getProperty("no"), noRunnable, (defaultButton == BUTTON_NO), ++columns);
+			buttonList.add(TGDialogButtons.no(() -> exec(dialog, noRunnable), defaultButton == BUTTON_NO));
 		}
 		if((style & BUTTON_CANCEL) != 0){
-			addCloseButton(uiFactory, dialog, buttons, TuxGuitar.getProperty("cancel"), cancelRunnable, (defaultButton == BUTTON_CANCEL), ++columns);
+			buttonList.add(TGDialogButtons.yes(() -> exec(dialog, cancelRunnable), defaultButton == BUTTON_CANCEL));
 		}
-		
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog, buttonList);
+		dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
+
 		TGDialogUtil.openDialog(dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
-	
-	private void addCloseButton(final UIFactory factory, final UIWindow dialog, UILayoutContainer parent, String text, final Runnable runnable, boolean defaultButton, int column){
-		UIButton uiButton = factory.createButton(parent);
-		uiButton.setText(text);
-		uiButton.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dialog.dispose();
-				if( runnable != null ) {
-					runnable.run();
-				}
-			}
-		});
-		if( defaultButton ){
-			uiButton.setDefaultButton();
+
+	private void exec(final UIWindow dialog, final Runnable runnable) {
+		dialog.dispose();
+		if (runnable != null) {
+			runnable.run();
 		}
-		
-		UITableLayout uiLayout = (UITableLayout) parent.getLayout();
-		uiLayout.set(uiButton, 1, column, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
 	}
 }

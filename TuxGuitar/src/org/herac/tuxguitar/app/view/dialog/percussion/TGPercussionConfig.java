@@ -6,15 +6,13 @@ import org.herac.tuxguitar.app.tools.percussion.PercussionEntry;
 import org.herac.tuxguitar.app.tools.percussion.PercussionManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
-import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.graphics.control.TGPercussionNote;
 import org.herac.tuxguitar.player.base.MidiPercussionKey;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.resource.UIRectangle;
-import org.herac.tuxguitar.ui.resource.UISize;
 import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
 
@@ -238,17 +236,17 @@ public class TGPercussionConfig {
         }
 
         // ------------------BUTTONS--------------------------
-        TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context, factory, window,
-                () -> {
+        TGDialogButtons buttons = new TGDialogButtons(factory, window,
+                TGDialogButtons.ok(() -> {
                     save(true);
                     window.dispose();
-                },
-                window::dispose,
-                () -> {
+                }),
+                TGDialogButtons.cancel(window::dispose),
+                TGDialogButtons.defaults(() -> {
                     defaults();
                     addTableItems();
-                });
-        windowLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
+                }));
+        windowLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 
         this.addTableItems();
 

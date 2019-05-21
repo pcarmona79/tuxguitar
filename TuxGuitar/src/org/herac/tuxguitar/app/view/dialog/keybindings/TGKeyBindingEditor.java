@@ -1,8 +1,5 @@
 package org.herac.tuxguitar.app.view.dialog.keybindings;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.settings.TGReloadLanguageAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGReloadSettingsAction;
@@ -10,8 +7,8 @@ import org.herac.tuxguitar.app.system.keybindings.KeyBindingAction;
 import org.herac.tuxguitar.app.system.keybindings.KeyBindingActionDefaults;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
-import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UIMouseDoubleClickListener;
@@ -22,6 +19,9 @@ import org.herac.tuxguitar.ui.widget.UITable;
 import org.herac.tuxguitar.ui.widget.UITableItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGKeyBindFormatter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TGKeyBindingEditor {
 	
@@ -70,24 +70,15 @@ public class TGKeyBindingEditor {
 		this.loadCurrentKeyBindingActions();
 		
 		//------------------BUTTONS--------------------------
-		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context.getContext(), uiFactory, this.dialog,
-				new Runnable() {
-					public void run() {
-						save();
-						TGKeyBindingEditor.this.dialog.dispose();
-					}
-				},
-				new Runnable() {
-					public void run() {
-						TGKeyBindingEditor.this.dialog.dispose();
-					}
-				},
-				new Runnable() {
-					public void run() {
-						TGKeyBindingEditor.this.loadDefaultKeyBindingActions();
-					}
-				});
-		dialogLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
+
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> {
+					save();
+					TGKeyBindingEditor.this.dialog.dispose();
+				}),
+				TGDialogButtons.cancel(dialog::dispose),
+				TGDialogButtons.defaults(TGKeyBindingEditor.this::loadDefaultKeyBindingActions));
+		dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}

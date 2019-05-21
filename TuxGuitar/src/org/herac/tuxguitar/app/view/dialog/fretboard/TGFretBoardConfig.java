@@ -6,8 +6,8 @@ import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.widgets.TGColorButton;
-import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.chooser.UIFontChooser;
 import org.herac.tuxguitar.ui.chooser.UIFontChooserHandler;
@@ -199,35 +199,30 @@ public class TGFretBoardConfig {
 		groupLayout.set(displayTextScale, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		// ------------------BUTTONS--------------------------
-		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context, factory, window,
-				new Runnable() {
-					public void run() {
-						int style = 0;
-						style |= (displayTextNote.isSelected() ? DISPLAY_TEXT_NOTE : 0 );
-						style |= (displayTextScale.isSelected() ? DISPLAY_TEXT_SCALE : 0 );
-						
-						Integer direction = directionCombo.getSelectedValue();
-						if( direction == null ) {
-							direction = DIRECTION_RIGHT;
-						}
-						
-						window.dispose();
-						
-						save(style, direction, fontData, rgbBackground, rgbString, rgbFretPoint, rgbNote, rgbScale);
-						applyChanges();
+
+		TGDialogButtons buttons = new TGDialogButtons(factory, window,
+				TGDialogButtons.ok(() -> {
+					int style = 0;
+					style |= (displayTextNote.isSelected() ? DISPLAY_TEXT_NOTE : 0 );
+					style |= (displayTextScale.isSelected() ? DISPLAY_TEXT_SCALE : 0 );
+
+					Integer direction = directionCombo.getSelectedValue();
+					if( direction == null ) {
+						direction = DIRECTION_RIGHT;
 					}
-				}, new Runnable() {
-					public void run() {
-						window.dispose();
-					}
-				}, new Runnable() {
-					public void run() {
-						window.dispose();
-						defaults();
-						applyChanges();
-					}
-				});
-		windowLayout.set(okCancelDefaults.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
+					window.dispose();
+
+					save(style, direction, fontData, rgbBackground, rgbString, rgbFretPoint, rgbNote, rgbScale);
+					applyChanges();
+				}),
+				TGDialogButtons.cancel(window::dispose),
+				TGDialogButtons.defaults(() -> {
+					window.dispose();
+					defaults();
+					applyChanges();
+				}));
+		windowLayout.set(buttons.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		TGDialogUtil.openDialog(window, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}

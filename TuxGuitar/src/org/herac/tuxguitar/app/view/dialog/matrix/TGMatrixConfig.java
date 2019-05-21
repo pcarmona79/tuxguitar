@@ -5,22 +5,17 @@ import org.herac.tuxguitar.app.system.config.TGConfigDefaults;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
-import org.herac.tuxguitar.app.view.widgets.TGColorButton;
-import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGColorButton;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.chooser.UIFontChooser;
 import org.herac.tuxguitar.ui.chooser.UIFontChooserHandler;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.resource.UIColor;
-import org.herac.tuxguitar.ui.resource.UIColorModel;
-import org.herac.tuxguitar.ui.resource.UIFont;
-import org.herac.tuxguitar.ui.resource.UIFontModel;
-import org.herac.tuxguitar.ui.resource.UIResource;
+import org.herac.tuxguitar.ui.resource.*;
 import org.herac.tuxguitar.ui.widget.*;
-
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.properties.TGProperties;
 
@@ -189,25 +184,20 @@ public class TGMatrixConfig {
 		final UIColorModel rgbPlay = getColorChooser(window, group, TuxGuitar.getProperty("matrix.play-note-color"), this.colorPlay, ++groupRow);
 
 		// ------------------BUTTONS--------------------------
-		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context, factory, window,
-				new Runnable() {
-					public void run() {
-						window.dispose();
-						save(fontData, rgbForeground, rgbBorder, rgbPosition, rgbNote, rgbPlay, rgbLines);
-						applyChanges();
-					}
-				}, new Runnable() {
-					public void run() {
-						window.dispose();
-					}
-				}, new Runnable() {
-					public void run() {
-						window.dispose();
-						defaults();
-						applyChanges();
-					}
-				});
-		windowLayout.set(okCancelDefaults.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
+		TGDialogButtons buttons = new TGDialogButtons(factory, window,
+				TGDialogButtons.ok(() -> {
+					window.dispose();
+					save(fontData, rgbForeground, rgbBorder, rgbPosition, rgbNote, rgbPlay, rgbLines);
+					applyChanges();
+				}),
+				TGDialogButtons.cancel(window::dispose),
+				TGDialogButtons.defaults(() -> {
+					window.dispose();
+					defaults();
+					applyChanges();
+				}));
+		windowLayout.set(buttons.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		TGDialogUtil.openDialog(window, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}

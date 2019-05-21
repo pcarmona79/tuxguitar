@@ -1,9 +1,5 @@
 package org.herac.tuxguitar.app.view.dialog.track;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
@@ -11,6 +7,7 @@ import org.herac.tuxguitar.app.util.TGMessageDialogUtil;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.action.track.TGChangeTrackTuningAction;
@@ -27,6 +24,10 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TGTrackTuningDialog {
 	
@@ -86,17 +87,12 @@ public class TGTrackTuningDialog {
 			UIPanel rightPanel = factory.createPanel(this.dialog, false);
 			rightPanel.setLayout(rightPanelLayout);
 			dialogLayout.set(rightPanel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
-			
-			UITableLayout bottomPanelLayout = new UITableLayout(0f);
-			UIPanel bottomPanel = factory.createPanel(this.dialog, false);
-			bottomPanel.setLayout(bottomPanelLayout);
-			dialogLayout.set(bottomPanel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false, 1, 2);
-			
+
 			this.initTuningTable(leftPanel);
 			
 			this.initTuningOptions(rightPanel, track);
 			
-			this.initButtons(bottomPanel);
+			this.initButtons(dialogLayout);
 
 			this.updateTuningControls();
 
@@ -332,31 +328,17 @@ public class TGTrackTuningDialog {
 		});
 	}
 	
-	private void initButtons(UILayoutContainer parent) {
+	private void initButtons(UITableLayout layout) {
 		UIFactory factory = this.getUIFactory();
-		UITableLayout parentLayout = (UITableLayout) parent.getLayout();
-		
-		UIButton buttonOK = factory.createButton(parent);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.setDefaultButton();
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				if( TGTrackTuningDialog.this.updateTrackTuning() ) {
-					TGTrackTuningDialog.this.dialog.dispose();
-				}
-			}
-		});
-		parentLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
-		
-		UIButton buttonCancel = factory.createButton(parent);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-		buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				TGTrackTuningDialog.this.dialog.dispose();
-			}
-		});
-		parentLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, MINIMUM_BUTTON_WIDTH, MINIMUM_BUTTON_HEIGHT, null);
-		parentLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
+
+        TGDialogButtons buttons = new TGDialogButtons(factory, dialog,
+                TGDialogButtons.ok(() -> {
+					if( updateTrackTuning() ) {
+						dialog.dispose();
+					}
+                }), TGDialogButtons.cancel(dialog::dispose));
+
+        layout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false, 1, 2);
 	}
 	
 	private void onSelectPreset(UIDropDownSelect<TGTrackTuningGroupEntryModel> select) {

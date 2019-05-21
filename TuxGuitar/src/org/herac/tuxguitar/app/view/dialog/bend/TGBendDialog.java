@@ -1,15 +1,12 @@
 package org.herac.tuxguitar.app.view.dialog.bend;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.system.icons.TGColorManager;
 import org.herac.tuxguitar.app.system.icons.TGColorManager.TGSkinnableColor;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.editor.action.effect.TGChangeBendNoteAction;
@@ -28,13 +25,12 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UISize;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UICanvas;
-import org.herac.tuxguitar.ui.widget.UIListBoxSelect;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TGBendDialog {
 	
@@ -201,36 +197,19 @@ public class TGBendDialog {
 			rightCompositeLayout.set(defaultBendList, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			//------------------BUTTONS--------------------------
-			UIButton buttonClean = uiFactory.createButton(rightComposite);
-			buttonClean.setText(TuxGuitar.getProperty("clean"));
-			buttonClean.addSelectionListener(new UISelectionListener() {
-				public void onSelect(UISelectionEvent event) {
-					changeBend(context.getContext(), measure, beat, string, null);
-					dialog.dispose();
-				}
-			});
-			rightCompositeLayout.set(buttonClean, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false, 1, 1, 80f, 25f, null);
-			
-			UIButton buttonOK = uiFactory.createButton(rightComposite);
-			buttonOK.setDefaultButton();
-			buttonOK.setText(TuxGuitar.getProperty("ok"));
-			buttonOK.addSelectionListener(new UISelectionListener() {
-				public void onSelect(UISelectionEvent event) {
-					changeBend(context.getContext(), measure, beat, string, getBend());
-					dialog.dispose();
-				}
-			});
-			rightCompositeLayout.set(buttonOK, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false, 1, 1, 80f, 25f, null);
-			
-			UIButton buttonCancel = uiFactory.createButton(rightComposite);
-			buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-			buttonCancel.addSelectionListener(new UISelectionListener() {
-				public void onSelect(UISelectionEvent event) {
-					dialog.dispose();
-				}
-			});
-			rightCompositeLayout.set(buttonCancel, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false, 1, 1, 80f, 25f, null);
-			
+
+			TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+					TGDialogButtons.ok(() -> {
+						changeBend(context.getContext(), measure, beat, string, getBend());
+						dialog.dispose();
+					}),
+					TGDialogButtons.clean(() -> {
+						changeBend(context.getContext(), measure, beat, string, null);
+						dialog.dispose();
+					}),
+					TGDialogButtons.cancel(dialog::dispose));
+			dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
 			if( note.getEffect().isBend() ){
 				setBend(note.getEffect().getBend());
 			}else{

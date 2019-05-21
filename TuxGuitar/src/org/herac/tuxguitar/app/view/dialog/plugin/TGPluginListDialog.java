@@ -1,15 +1,12 @@
 package org.herac.tuxguitar.app.view.dialog.plugin;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.view.TGOpenViewAction;
 import org.herac.tuxguitar.app.system.plugins.TGPluginSettingsManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UICheckTableSelectionEvent;
@@ -18,15 +15,17 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UICursor;
-import org.herac.tuxguitar.ui.widget.UIButton;
 import org.herac.tuxguitar.ui.widget.UICheckTable;
-import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UITableItem;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.plugin.TGPlugin;
 import org.herac.tuxguitar.util.plugin.TGPluginInfo;
 import org.herac.tuxguitar.util.plugin.TGPluginManager;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TGPluginListDialog {
 	
@@ -68,54 +67,30 @@ public class TGPluginListDialog {
 		}
 		
 		//------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
-		
-		final UIButton buttonSetup = uiFactory.createButton(buttons);
-		buttonSetup.setText(TuxGuitar.getProperty("configure"));
-		buttonSetup.setEnabled(false);
-		buttonSetup.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				String moduleId = table.getSelectedValue();
-				if( moduleId != null && isConfigurable(moduleId) ){
-					configure(context.getContext(), dialog, moduleId);
-				}
-			}
-		});
-		buttonsLayout.set(buttonSetup, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		final UIButton buttonInfo = uiFactory.createButton(buttons);
-		buttonInfo.setText(TuxGuitar.getProperty("info"));
-		buttonInfo.setDefaultButton();
-		buttonInfo.setEnabled(false);
-		buttonInfo.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				String moduleId = table.getSelectedValue();
-				if( moduleId != null ){
-					showInfo(context.getContext(), dialog, moduleId);
-				}
-			}
-		});
-		buttonsLayout.set(buttonInfo, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton buttonClose = uiFactory.createButton(buttons);
-		buttonClose.setText(TuxGuitar.getProperty("close"));
-		buttonClose.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonClose, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(buttonClose, UITableLayout.MARGIN_RIGHT, 0f);
-		
+
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				new TGDialogButtons.Button("configure", TGDialogButtons.ALIGN_RIGHT, () -> {
+					String moduleId = table.getSelectedValue();
+					if (moduleId != null && isConfigurable(moduleId)) {
+						configure(context.getContext(), dialog, moduleId);
+					}
+				}), new TGDialogButtons.Button("info", TGDialogButtons.ALIGN_RIGHT, true, () -> {
+                    String moduleId = table.getSelectedValue();
+                    if( moduleId != null ){
+                        showInfo(context.getContext(), dialog, moduleId);
+                    }
+		}), TGDialogButtons.close(dialog::dispose));
+		dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
+
+		buttons.getButton(0).setEnabled(false);
+		buttons.getButton(1).setEnabled(false);
+
 		table.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				String moduleId = table.getSelectedValue();
 				
-				buttonInfo.setEnabled(moduleId != null);
-				buttonSetup.setEnabled(moduleId != null && isConfigurable(moduleId));
+				buttons.getButton(0).setEnabled(moduleId != null && isConfigurable(moduleId));
+				buttons.getButton(1).setEnabled(moduleId != null);
 			}
 		});
 		table.addCheckSelectionListener(new UICheckTableSelectionListener<String>() {

@@ -1,8 +1,5 @@
 package org.herac.tuxguitar.app.view.dialog.settings;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.settings.TGReloadSettingsAction;
 import org.herac.tuxguitar.app.action.impl.view.TGOpenViewAction;
@@ -13,15 +10,10 @@ import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.app.view.controller.TGViewContext;
 import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialog;
 import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialogController;
-import org.herac.tuxguitar.app.view.dialog.helper.TGOkCancelDefaults;
-import org.herac.tuxguitar.app.view.dialog.settings.items.LanguageOption;
-import org.herac.tuxguitar.app.view.dialog.settings.items.MainOption;
-import org.herac.tuxguitar.app.view.dialog.settings.items.SkinOption;
-import org.herac.tuxguitar.app.view.dialog.settings.items.SoundOption;
-import org.herac.tuxguitar.app.view.dialog.settings.items.StylesOption;
-import org.herac.tuxguitar.app.view.dialog.settings.items.TGSettingsOption;
+import org.herac.tuxguitar.app.view.dialog.settings.items.*;
 import org.herac.tuxguitar.app.view.util.TGCursorController;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
@@ -31,6 +23,9 @@ import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.properties.TGProperties;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TGSettingsEditor{
 	
@@ -64,25 +59,19 @@ public class TGSettingsEditor{
 		this.createComposites(mainComposite);
 		
 		//-------buttons-------------------------------------
-		TGOkCancelDefaults okCancelDefaults = new TGOkCancelDefaults(context.getContext(), uiFactory, this.dialog,
-				new Runnable() {
-					public void run() {
-						updateOptions();
-						dispose();
-						applyConfigWithConfirmation(false);
-					}
-				}, new Runnable() {
-					public void run() {
-						dispose();
-					}
-				}, new Runnable() {
-					public void run() {
-						dispose();
-						setDefaults();
-						applyConfigWithConfirmation(true);
-					}
-				});
-		dialogLayout.set(okCancelDefaults.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, this.dialog,
+				TGDialogButtons.ok(() -> {
+					updateOptions();
+					dispose();
+					applyConfigWithConfirmation(false);
+				}),
+				TGDialogButtons.cancel(this::dispose),
+				TGDialogButtons.defaults(() -> {
+					dispose();
+					setDefaults();
+					applyConfigWithConfirmation(true);
+				}));
+		dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
 		
 		TGDialogUtil.openDialog(this.dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}

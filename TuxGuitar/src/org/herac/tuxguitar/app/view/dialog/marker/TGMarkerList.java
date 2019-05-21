@@ -53,8 +53,7 @@ public class TGMarkerList implements TGEventListener {
 	private UIButton buttonEdit;
 	private UIButton buttonDelete;
 	private UIButton buttonGo;
-	private UIButton buttonClose;
-	
+
 	private TGProcess loadPropertiesProcess;
 	private TGProcess loadIconsProcess;
 	private TGProcess updateProcess;
@@ -126,18 +125,10 @@ public class TGMarkerList implements TGEventListener {
 			}
 		});
 		
-		this.buttonClose = uiFactory.createButton(this.compositeButtons);
-		this.buttonClose.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				TGMarkerList.this.dialog.dispose();
-			}
-		});
-		
 		buttonsLayout.set(this.buttonAdd, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, 80f, 25f, null);
 		buttonsLayout.set(this.buttonEdit, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, 80f, 25f, null);
 		buttonsLayout.set(this.buttonDelete, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, false, 1, 1, 80f, 25f, null);
 		buttonsLayout.set(this.buttonGo, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(this.buttonClose, 5, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, false, 1, 1, 80f, 25f, null);
 
 		this.table.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
@@ -264,8 +255,7 @@ public class TGMarkerList implements TGEventListener {
 			this.buttonEdit.setImage(iconManager.getListEdit());
 			this.buttonDelete.setImage(iconManager.getListRemove());
 			this.buttonGo.setText(TuxGuitar.getProperty("go"));
-			this.buttonClose.setText(TuxGuitar.getProperty("close"));
-			
+
 			if( layout){
 				this.dialog.pack();
 			}

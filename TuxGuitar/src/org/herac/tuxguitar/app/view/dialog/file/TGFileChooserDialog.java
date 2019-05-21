@@ -1,10 +1,5 @@
 package org.herac.tuxguitar.app.view.dialog.file;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.view.TGOpenViewAction;
 import org.herac.tuxguitar.app.helper.TGFileHistory;
@@ -21,6 +16,11 @@ import org.herac.tuxguitar.ui.chooser.UIFileChooser;
 import org.herac.tuxguitar.ui.chooser.UIFileChooserFormat;
 import org.herac.tuxguitar.ui.chooser.UIFileChooserHandler;
 import org.herac.tuxguitar.ui.widget.UIWindow;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TGFileChooserDialog {
 	

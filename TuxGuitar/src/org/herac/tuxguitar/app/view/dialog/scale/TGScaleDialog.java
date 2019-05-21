@@ -42,7 +42,6 @@ public class TGScaleDialog implements TGEventListener {
     private UIButton buttonAddPreset;
     private UIButton buttonRemovePreset;
     private TGContext context;
-    private TGDialogButtons buttons;
     private List<UIToggleButton> intervalButtons;
 
     private TGScaleDialog(TGContext context) {
@@ -130,10 +129,6 @@ public class TGScaleDialog implements TGEventListener {
         buttonRemovePreset.addSelectionListener(event -> openRemovePresetDialog());
         presetLayout.set(buttonRemovePreset, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false);
 
-        //------------------BUTTONS--------------------------
-        this.buttons = new TGDialogButtons(uiFactory, dialog, TGDialogButtons.close(dialog::dispose));
-        dialogLayout.set(this.buttons.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
-
         this.loadProperties();
         this.loadIcons();
         this.updateIntervalButtons();
@@ -144,7 +139,6 @@ public class TGScaleDialog implements TGEventListener {
     public void loadProperties() {
         this.scaleSelect.setIndex(0, TuxGuitar.getProperty("scale.custom"));
         this.dialog.setText(TuxGuitar.getProperty("scale.list"));
-        this.buttons.loadProperties();
         this.buttonAddPreset.setToolTipText(TuxGuitar.getProperty("scale.add-preset"));
         this.buttonRemovePreset.setToolTipText(TuxGuitar.getProperty("scale.remove-preset"));
         this.intervalLabel.setText(TuxGuitar.getProperty("scale.intervals"));
