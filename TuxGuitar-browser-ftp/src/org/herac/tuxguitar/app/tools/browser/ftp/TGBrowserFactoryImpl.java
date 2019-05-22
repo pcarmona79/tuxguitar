@@ -1,11 +1,5 @@
 package org.herac.tuxguitar.app.tools.browser.ftp;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.tools.browser.TGBrowserCollection;
 import org.herac.tuxguitar.app.tools.browser.TGBrowserManager;
@@ -18,17 +12,19 @@ import org.herac.tuxguitar.app.util.TGMessageDialogUtil;
 import org.herac.tuxguitar.app.view.dialog.browser.main.TGBrowserDialog;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UICheckBox;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UITextField;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TGBrowserFactoryImpl implements TGBrowserFactory{
 	
@@ -186,57 +182,40 @@ class TGBrowserDataDialog{
 		});
 		
 		//------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		final UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.setDefaultButton();
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				String name = nameText.getText();
-				String host = hostText.getText();
-				String path = pathText.getText();
-				String user = userText.getText();
-				String password = passwordText.getText();
-				String proxyHost = proxyHostText.getText();
-				String proxyPortStr = proxyPortText.getText();
-				String proxyUser = proxyUserText.getText();
-				String proxyPwd = proxyPwdText.getText();
-				
-				List<String> errors = validate(name, host, proxyHost, proxyPortStr, hasProxy.isSelected());
-				if( !errors.isEmpty() ){
-					StringWriter buffer = new StringWriter();
-					PrintWriter writer = new PrintWriter( buffer );
-					Iterator<String> it = errors.iterator();
-					while( it.hasNext() ){
-						writer.println( "*" + (String)it.next() );
+
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> {
+					String name = nameText.getText();
+					String host = hostText.getText();
+					String path = pathText.getText();
+					String user = userText.getText();
+					String password = passwordText.getText();
+					String proxyHost = proxyHostText.getText();
+					String proxyPortStr = proxyPortText.getText();
+					String proxyUser = proxyUserText.getText();
+					String proxyPwd = proxyPwdText.getText();
+
+					List<String> errors = validate(name, host, proxyHost, proxyPortStr, hasProxy.isSelected());
+					if( !errors.isEmpty() ){
+						StringWriter buffer = new StringWriter();
+						PrintWriter writer = new PrintWriter( buffer );
+						Iterator<String> it = errors.iterator();
+						while( it.hasNext() ){
+							writer.println( "*" + (String)it.next() );
+						}
+						TGMessageDialogUtil.errorMessage(getContext(), parent, buffer.getBuffer().toString() );
+					}else{
+						int proxyPort = Integer.parseInt( proxyPortStr );
+
+						dialog.dispose();
+
+						TGBrowserSettings settings = new TGBrowserSettingsModel(name, host, path, user, password, proxyUser, proxyPwd, proxyHost, proxyPort).toBrowserSettings();
+						TGBrowserDataDialog.this.handler.onCreateSettings(settings);
 					}
-					TGMessageDialogUtil.errorMessage(getContext(), parent, buffer.getBuffer().toString() );
-				}else{
-					int proxyPort = Integer.parseInt( proxyPortStr );
-					
-					dialog.dispose();
-					
-					TGBrowserSettings settings = new TGBrowserSettingsModel(name, host, path, user, password, proxyUser, proxyPwd, proxyHost, proxyPort).toBrowserSettings();
-					TGBrowserDataDialog.this.handler.onCreateSettings(settings);
-				}
-			}
-		});
-		buttonsLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton buttonCancel = uiFactory.createButton(buttons);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-		buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
-		
+				}),
+				TGDialogButtons.cancel(dialog::dispose));
+		dialogLayout.set(buttons.getControl(), 3, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
+
 		TGDialogUtil.openDialog(dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	

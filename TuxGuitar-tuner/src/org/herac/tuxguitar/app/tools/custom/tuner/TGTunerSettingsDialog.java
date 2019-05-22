@@ -3,6 +3,7 @@ package org.herac.tuxguitar.app.tools.custom.tuner;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.util.TGMessageDialogUtil;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
@@ -145,30 +146,10 @@ public class TGTunerSettingsDialog {
 		infoLayout.set(this.settingsInfo, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 400f, 100f, null);
 		
 		//------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 5, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.setDefaultButton();
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-            	TGTunerSettingsDialog.this.dispose(dialog, true);
-            }
-        });
-		buttonsLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton buttonExit = uiFactory.createButton(buttons);
-        buttonExit.setText(TuxGuitar.getProperty("close"));
-        buttonExit.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-            	TGTunerSettingsDialog.this.dispose(dialog, false);
-            }
-        });
-		buttonsLayout.set(buttonExit, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(buttonExit, UITableLayout.MARGIN_RIGHT, 0f);
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> dispose(dialog, true)),
+				TGDialogButtons.cancel(() -> dispose(dialog, false)));
+		dialogLayout.set(buttons.getControl(), 5, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
 		
         this.loadSettings(this.tunerDialog.getTuner().getSettings(), dialog);
         

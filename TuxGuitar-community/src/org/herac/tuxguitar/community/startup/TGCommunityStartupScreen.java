@@ -4,6 +4,7 @@ import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.community.TGCommunitySingleton;
 import org.herac.tuxguitar.community.utils.TGCommunityWeb;
 import org.herac.tuxguitar.ui.UIFactory;
@@ -65,7 +66,7 @@ public class TGCommunityStartupScreen {
 		UITableLayout topLayout = new UITableLayout();
 		UIPanel top = uiFactory.createPanel(dialog, false);
 		top.setLayout(topLayout);
-		dialogLayout.set(top, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(top, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 2);
 		
 		UIImageView image = uiFactory.createImageView(top);
 		image.setImage( TuxGuitar.getInstance().getIconManager().getAppIcon() );
@@ -81,34 +82,24 @@ public class TGCommunityStartupScreen {
 		UITableLayout bottomLayout = new UITableLayout();
 		UIPanel bottom = uiFactory.createPanel(dialog, false);
 		bottom.setLayout(bottomLayout);
-		dialogLayout.set(bottom, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		dialogLayout.set(bottom, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 2);
 		
 		addComment(uiFactory, bottom, 1, 1, TuxGuitar.getProperty("tuxguitar-community.welcome-dialog.tip-bottom"), top.getPackedContentSize().getWidth());
 		
 		//==============================================================//
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
-		
-		final UICheckBox buttonDisabled = uiFactory.createCheckBox(buttons);
+
+		final UICheckBox buttonDisabled = uiFactory.createCheckBox(dialog);
 		buttonDisabled.setText( TuxGuitar.getProperty("tuxguitar-community.welcome-dialog.disable") );
 		buttonDisabled.setSelected( this.isDisabled() );
-		buttonsLayout.set(buttonDisabled, 1, 1, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, true, false);
-		
-		final UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.setDefaultButton();
-		buttonOK.setFocus();
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				setDisabled( buttonDisabled.isSelected() );
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonOK, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, true, false, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(buttonOK, UITableLayout.MARGIN_RIGHT, 0f);
-		
+		dialogLayout.set(buttonDisabled, 3, 1, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, false);
+
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> {
+					setDisabled( buttonDisabled.isSelected() );
+					dialog.dispose();
+				}));
+		dialogLayout.set(buttons.getControl(), 3, 2, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
+
 		TGDialogUtil.openDialog(dialog, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK );
 	}
 	

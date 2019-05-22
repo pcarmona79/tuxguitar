@@ -1,9 +1,5 @@
 package org.herac.tuxguitar.app.tools.custom.converter;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.system.icons.TGSkinEvent;
 import org.herac.tuxguitar.app.system.language.TGLanguageEvent;
@@ -11,6 +7,7 @@ import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.util.TGMessageDialogUtil;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.event.TGEvent;
 import org.herac.tuxguitar.event.TGEventListener;
 import org.herac.tuxguitar.io.base.TGFileFormat;
@@ -23,14 +20,12 @@ import org.herac.tuxguitar.ui.event.UIDisposeListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIButton;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILabel;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
-import org.herac.tuxguitar.ui.widget.UITextField;
-import org.herac.tuxguitar.ui.widget.UIWindow;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TGConverterDialog implements TGEventListener{
 	
@@ -43,9 +38,8 @@ public class TGConverterDialog implements TGEventListener{
 	private UILabel inputFolderLabel;
 	private UIButton inputFolderChooser;
 	private UIButton outputFolderChooser;
-	private UIButton buttonOK;
-	private UIButton buttonCancel;
-	
+	private TGDialogButtons buttons;
+
 	public TGConverterDialog(TGContext context) {
 		this.context = context;
 	}
@@ -133,46 +127,30 @@ public class TGConverterDialog implements TGEventListener{
 		groupLayout.set(this.outputFolderChooser, 3, 3, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_CENTER, false, false);
 		
 		//------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(this.dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		this.buttonOK = uiFactory.createButton(buttons);
-		this.buttonOK.setDefaultButton();
-		this.buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				String inputFolderValue = inputFolder.getText();
-				String outputFolderValue = outputFolder.getText();
-				TGConverterFormat outputFormatValue = outputFormat.getSelectedValue();
-				
-				if(inputFolderValue == null || inputFolderValue.trim().length() == 0){
-					TGMessageDialogUtil.errorMessage(TGConverterDialog.this.context, TGConverterDialog.this.dialog, TuxGuitar.getProperty("batch.converter.input.folder.invalid"));
-				}
-				else if(outputFolderValue == null || outputFolderValue.trim().length() == 0){
-					TGMessageDialogUtil.errorMessage(TGConverterDialog.this.context, TGConverterDialog.this.dialog, TuxGuitar.getProperty("batch.converter.output.folder.invalid"));
-				}
-				else if(outputFormatValue == null){
-					TGMessageDialogUtil.errorMessage(TGConverterDialog.this.context, TGConverterDialog.this.dialog, TuxGuitar.getProperty("batch.converter.output.format.invalid"));
-				}
-				else{
-					TGConverterProcess process = new TGConverterProcess(getContext());
-					process.start(inputFolderValue.trim(), outputFolderValue.trim(), outputFormatValue );
-					TGConverterDialog.this.dialog.dispose();
-				}
-			}
-		});
-		buttonsLayout.set(this.buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		this.buttonCancel = uiFactory.createButton(buttons);
-		this.buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				TGConverterDialog.this.dialog.dispose();
-			}
-		});
-		buttonsLayout.set(this.buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(this.buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
-		
+
+		this.buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> {
+					String inputFolderValue = inputFolder.getText();
+					String outputFolderValue = outputFolder.getText();
+					TGConverterFormat outputFormatValue = outputFormat.getSelectedValue();
+
+					if(inputFolderValue == null || inputFolderValue.trim().length() == 0){
+						TGMessageDialogUtil.errorMessage(TGConverterDialog.this.context, TGConverterDialog.this.dialog, TuxGuitar.getProperty("batch.converter.input.folder.invalid"));
+					}
+					else if(outputFolderValue == null || outputFolderValue.trim().length() == 0){
+						TGMessageDialogUtil.errorMessage(TGConverterDialog.this.context, TGConverterDialog.this.dialog, TuxGuitar.getProperty("batch.converter.output.folder.invalid"));
+					}
+					else if(outputFormatValue == null){
+						TGMessageDialogUtil.errorMessage(TGConverterDialog.this.context, TGConverterDialog.this.dialog, TuxGuitar.getProperty("batch.converter.output.format.invalid"));
+					}
+					else{
+						TGConverterProcess process = new TGConverterProcess(getContext());
+						process.start(inputFolderValue.trim(), outputFolderValue.trim(), outputFormatValue );
+						TGConverterDialog.this.dialog.dispose();
+					}
+				}), TGDialogButtons.cancel(dialog::dispose));
+		dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
+
 		this.loadIcons(false);
 		this.loadProperties(false);
 		
@@ -225,8 +203,7 @@ public class TGConverterDialog implements TGEventListener{
 			this.inputFolderLabel.setText(TuxGuitar.getProperty("batch.converter.input.folder"));
 			this.outputFolderLabel.setText(TuxGuitar.getProperty("batch.converter.output.folder"));
 			this.outputFormatLabel.setText(TuxGuitar.getProperty("batch.converter.output.format"));
-			this.buttonOK.setText(TuxGuitar.getProperty("ok"));
-			this.buttonCancel.setText(TuxGuitar.getProperty("cancel"));
+			this.buttons.loadProperties();
 			if( layout ){
 				this.dialog.layout();
 			}

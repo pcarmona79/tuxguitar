@@ -9,6 +9,7 @@ import java.util.Map;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
+import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.io.gtp.GTPSettingsManager;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
@@ -59,36 +60,18 @@ public class GTPSettingsDialog {
 		groupLayout.set(value, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, 250f, null, null);
 		
 		//------------------BUTTONS--------------------------
-		UITableLayout buttonsLayout = new UITableLayout(0f);
-		UIPanel buttons = uiFactory.createPanel(dialog, false);
-		buttons.setLayout(buttonsLayout);
-		dialogLayout.set(buttons, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, true);
-		
-		UIButton buttonOK = uiFactory.createButton(buttons);
-		buttonOK.setText(TuxGuitar.getProperty("ok"));
-		buttonOK.setDefaultButton();
-		buttonOK.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				String charset = value.getSelectedValue();
-				if( charset != null ){
-					settingsUtil.getSettings().setCharset(charset);
-					settingsUtil.saveSettings();
-				}
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonOK, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		
-		UIButton buttonCancel = uiFactory.createButton(buttons);
-		buttonCancel.setText(TuxGuitar.getProperty("cancel"));
-		buttonCancel.addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				dialog.dispose();
-			}
-		});
-		buttonsLayout.set(buttonCancel, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 80f, 25f, null);
-		buttonsLayout.set(buttonCancel, UITableLayout.MARGIN_RIGHT, 0f);
-		
+		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
+				TGDialogButtons.ok(() -> {
+					String charset = value.getSelectedValue();
+					if( charset != null ){
+						settingsUtil.getSettings().setCharset(charset);
+						settingsUtil.saveSettings();
+					}
+					dialog.dispose();
+				}),
+				TGDialogButtons.cancel(dialog::dispose));
+		dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
+
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	
