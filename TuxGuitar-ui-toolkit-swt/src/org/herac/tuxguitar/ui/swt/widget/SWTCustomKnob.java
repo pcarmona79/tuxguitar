@@ -13,8 +13,12 @@ import org.herac.tuxguitar.ui.event.UIMouseWheelListener;
 import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.event.UISelectionListenerManager;
+import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIPainter;
+import org.herac.tuxguitar.ui.resource.UIResourceFactory;
+import org.herac.tuxguitar.ui.swt.appearance.SWTAppearance;
 import org.herac.tuxguitar.ui.swt.resource.SWTPainter;
+import org.herac.tuxguitar.ui.swt.resource.SWTResourceFactory;
 import org.herac.tuxguitar.ui.widget.UIKnob;
 
 public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMouseDragListener, UIMouseUpListener, UIMouseWheelListener, PaintListener {
@@ -25,8 +29,8 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 	private static final float DEFAULT_PACKED_WIDTH = 32f;
 	private static final float DEFAULT_PACKED_HEIGHT = 32f;
 	
-	private static final float MARGIN = 2;
-	
+	private static final float MARGIN = 6;
+
 	private int maximum;
 	private int minimum;
 	private int increment;
@@ -129,27 +133,63 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 		
 		// knob
 		float ovalSize = (Math.min(area.width, area.height) - MARGIN);
+		float notchStart = (float) (ovalSize / 2.f / Math.sqrt(2.f));
+		float notchEnd = notchStart + (float) (MARGIN / 2.f / Math.sqrt(2.f));
 		float x = area.x + (area.width  / 2f);
 		float y = area.y + (area.height / 2f);
 		
 		// value
 		float value = (this.value - this.minimum);
 		float maximum = (this.maximum - this.minimum);
-		float percent = (0.5f + (value > 0 && maximum > 0 ? ((value / maximum) * 1.5f) : 0f));
-		float valueSize = (ovalSize / 10f);
-		float valueX = (x +  Math.round((ovalSize / 3f) * Math.cos(Math.PI * percent)));
-		float valueY = (y + Math.round((ovalSize / 3f) * Math.sin(Math.PI * percent)));
-		
+		float percent = (0.75f + (value > 0 && maximum > 0 ? ((value / maximum) * 1.5f) : 0f));
+		float valueX = (float) Math.cos(Math.PI * percent);
+		float valueY = (float) Math.sin(Math.PI * percent);
+
+		SWTAppearance appearance = new SWTAppearance(this.getControl().getDisplay());
+		UIResourceFactory factory = new SWTResourceFactory(this.getControl().getDisplay());
 		UIPainter uiPainter = new SWTPainter(e.gc);
+
+		UIColor foreground = factory.createColor(appearance.createColorModel(SWT.COLOR_WIDGET_FOREGROUND));
+		UIColor background = factory.createColor(appearance.createColorModel(SWT.COLOR_WIDGET_BACKGROUND));
+
+        // background
+		uiPainter.setBackground(foreground);
+		uiPainter.setAlpha(96);
+		uiPainter.initPath(UIPainter.PATH_FILL);
+		uiPainter.moveTo(x, y);
+		uiPainter.addCircle(x, y, ovalSize + MARGIN);
+		uiPainter.closePath();
+
+		// notches
+		uiPainter.setAlpha(128);
+		uiPainter.setForeground(foreground);
+		uiPainter.initPath(UIPainter.PATH_DRAW);
+		uiPainter.moveTo(x - notchStart , y + notchStart);
+		uiPainter.lineTo(x - notchEnd, y + notchEnd);
+		uiPainter.closePath();
+
+		uiPainter.initPath(UIPainter.PATH_DRAW);
+		uiPainter.moveTo(x + notchStart, y + notchStart);
+		uiPainter.lineTo(x + notchEnd, y + notchEnd);
+		uiPainter.closePath();
+
+		// knob
+		uiPainter.setAlpha(192);
+		uiPainter.setBackground(background);
+		uiPainter.initPath(UIPainter.PATH_FILL);
+		uiPainter.moveTo(x, y);
+		uiPainter.addCircle(x, y, ovalSize);
+		uiPainter.closePath();
+
+		// value
+		uiPainter.setAlpha(255);
+		uiPainter.setLineWidth(2.f);
+		uiPainter.setForeground(foreground);
 		uiPainter.initPath(UIPainter.PATH_DRAW);
 		uiPainter.moveTo(x, y);
-		uiPainter.addCircle(y, y, ovalSize);
+		uiPainter.lineTo(x + valueX * ((ovalSize + MARGIN) / 2.f), y + valueY * ((ovalSize + MARGIN) / 2.f));
 		uiPainter.closePath();
-		
-		uiPainter.initPath(UIPainter.PATH_DRAW);
-		uiPainter.moveTo(valueX, valueY);
-		uiPainter.addCircle(valueX, valueY, valueSize);
-		uiPainter.closePath();
+
 	}
 	
 	public void onMouseWheel(UIMouseWheelEvent event) {
