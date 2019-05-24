@@ -47,14 +47,29 @@ public class TGEditToolBarSectionDuration extends TGEditToolBarSection {
 	private List<UIToolCheckableItem> durationToolItems;
 	private List<UIMenuCheckableItem> divisionTypeMenuItems;
 	
-	private Map<Integer, String> durationNameKeys;
-	private Map<Integer, String> durationActions;
-	
+	private static Map<Integer, String> DURATION_PROPERTIES = new HashMap<>();
+	private static Map<Integer, String> DURATION_ACTIONS = new HashMap<>();
+
+	static {
+		DURATION_PROPERTIES.put(TGDuration.WHOLE, "duration.whole");
+		DURATION_PROPERTIES.put(TGDuration.HALF, "duration.half");
+		DURATION_PROPERTIES.put(TGDuration.QUARTER, "duration.quarter");
+		DURATION_PROPERTIES.put(TGDuration.EIGHTH, "duration.eighth");
+		DURATION_PROPERTIES.put(TGDuration.SIXTEENTH, "duration.sixteenth");
+		DURATION_PROPERTIES.put(TGDuration.THIRTY_SECOND, "duration.thirtysecond");
+		DURATION_PROPERTIES.put(TGDuration.SIXTY_FOURTH, "duration.sixtyfourth");
+
+		DURATION_ACTIONS.put(TGDuration.WHOLE, TGSetWholeDurationAction.NAME);
+		DURATION_ACTIONS.put(TGDuration.HALF, TGSetHalfDurationAction.NAME);
+		DURATION_ACTIONS.put(TGDuration.QUARTER, TGSetQuarterDurationAction.NAME);
+		DURATION_ACTIONS.put(TGDuration.EIGHTH, TGSetEighthDurationAction.NAME);
+		DURATION_ACTIONS.put(TGDuration.SIXTEENTH, TGSetSixteenthDurationAction.NAME);
+		DURATION_ACTIONS.put(TGDuration.THIRTY_SECOND, TGSetThirtySecondDurationAction.NAME);
+		DURATION_ACTIONS.put(TGDuration.SIXTY_FOURTH, TGSetSixtyFourthDurationAction.NAME);
+	}
+
 	public TGEditToolBarSectionDuration(TGEditToolBar toolBar) {
 		super(toolBar, SECTION_TITLE);
-		
-		this.createDurationNames();
-		this.createDurationActions();
 	}
 	
 	public void createSectionToolBars() {
@@ -131,7 +146,7 @@ public class TGEditToolBarSectionDuration extends TGEditToolBarSection {
 		UIToolCheckableItem toolItem = toolBar.createCheckItem();
 		toolItem.setData(DURATION_VALUE, value);
 		
-		String action = this.findDurationAction(value);
+		String action = findDurationAction(value);
 		if( action != null ) {
 			toolItem.addSelectionListener(this.createActionProcessor(action));
 		}
@@ -141,7 +156,7 @@ public class TGEditToolBarSectionDuration extends TGEditToolBarSection {
 	private void updateDurationToolItems(int selection, boolean running) {
 		for(UIToolCheckableItem uiToolItem : this.durationToolItems) {
 			Integer value = uiToolItem.getData(DURATION_VALUE);
-			String nameKey = this.findDurationNameKey(value);
+			String nameKey = findDurationProperty(value);
 			if( nameKey != null ) {
 				uiToolItem.setEnabled(!running);
 				uiToolItem.setChecked(value == selection);
@@ -162,45 +177,23 @@ public class TGEditToolBarSectionDuration extends TGEditToolBarSection {
 	private void loadDurationToolProperties(int selection) {
 		for(UIToolActionItem uiToolItem : this.durationToolItems) {
 			Integer value = (Integer) uiToolItem.getData(DURATION_VALUE);
-			String nameKey = this.findDurationNameKey(value);
+			String nameKey = findDurationProperty(value);
 			if( nameKey != null ) {
 				uiToolItem.setToolTipText(this.getText(nameKey));
 			}
 		}
 	}
-	
-	private void createDurationNames() {
-		this.durationNameKeys = new HashMap<Integer, String>();
-		this.durationNameKeys.put(TGDuration.WHOLE, "duration.whole");
-		this.durationNameKeys.put(TGDuration.HALF, "duration.half");
-		this.durationNameKeys.put(TGDuration.QUARTER, "duration.quarter");
-		this.durationNameKeys.put(TGDuration.EIGHTH, "duration.eighth");
-		this.durationNameKeys.put(TGDuration.SIXTEENTH, "duration.sixteenth");
-		this.durationNameKeys.put(TGDuration.THIRTY_SECOND, "duration.thirtysecond");
-		this.durationNameKeys.put(TGDuration.SIXTY_FOURTH, "duration.sixtyfourth");
-	}
-	
-	private void createDurationActions() {
-		this.durationActions = new HashMap<Integer, String>();
-		this.durationActions.put(TGDuration.WHOLE, TGSetWholeDurationAction.NAME);
-		this.durationActions.put(TGDuration.HALF, TGSetHalfDurationAction.NAME);
-		this.durationActions.put(TGDuration.QUARTER, TGSetQuarterDurationAction.NAME);
-		this.durationActions.put(TGDuration.EIGHTH, TGSetEighthDurationAction.NAME);
-		this.durationActions.put(TGDuration.SIXTEENTH, TGSetSixteenthDurationAction.NAME);
-		this.durationActions.put(TGDuration.THIRTY_SECOND, TGSetThirtySecondDurationAction.NAME);
-		this.durationActions.put(TGDuration.SIXTY_FOURTH, TGSetSixtyFourthDurationAction.NAME);
-	}
-	
-	private String findDurationNameKey(int value) {
-		if( this.durationNameKeys.containsKey(value) ) {
-			return this.durationNameKeys.get(value);
+
+	public static String findDurationProperty(int value) {
+		if( DURATION_PROPERTIES.containsKey(value) ) {
+			return DURATION_PROPERTIES.get(value);
 		}
 		return null;
 	}
 	
-	private String findDurationAction(int value) {
-		if( this.durationActions.containsKey(value) ) {
-			return this.durationActions.get(value);
+	private static String findDurationAction(int value) {
+		if( DURATION_ACTIONS.containsKey(value) ) {
+			return DURATION_ACTIONS.get(value);
 		}
 		return null;
 	}

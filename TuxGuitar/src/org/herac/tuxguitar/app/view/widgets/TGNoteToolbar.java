@@ -4,6 +4,7 @@ import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.TGActionProcessorListener;
 import org.herac.tuxguitar.app.action.impl.caret.TGGoLeftAction;
 import org.herac.tuxguitar.app.action.impl.caret.TGGoRightAction;
+import org.herac.tuxguitar.app.view.toolbar.edit.TGEditToolBarSectionDuration;
 import org.herac.tuxguitar.editor.action.duration.TGDecrementDurationAction;
 import org.herac.tuxguitar.editor.action.duration.TGIncrementDurationAction;
 import org.herac.tuxguitar.ui.UIFactory;
@@ -87,24 +88,37 @@ public class TGNoteToolbar {
         this.decrement.setImage(TuxGuitar.getInstance().getIconManager().getArrowUp());
         this.increment.setImage(TuxGuitar.getInstance().getIconManager().getArrowDown());
         this.settings.setImage(TuxGuitar.getInstance().getIconManager().getSettings());
-        this.loadDurationImage(true);
+        this.loadDurationImage(true, this.duration);
     }
 
     public void update() {
-        this.loadDurationImage(false);
+        int duration = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().getDuration().getValue();
+        this.loadDurationText(false, duration);
+        this.loadDurationImage(false, duration);
+        this.duration = duration;
     }
 
-    private void loadDurationImage(boolean force) {
-        int duration = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().getDuration().getValue();
+    private void loadDurationImage(boolean force, int duration) {
         if(force || this.duration != duration){
-            this.duration = duration;
-            this.durationLabel.setImage(TuxGuitar.getInstance().getIconManager().getDuration(this.duration));
+            this.durationLabel.setImage(TuxGuitar.getInstance().getIconManager().getDuration(duration));
+            this.toolbar.layout();
         }
     }
 
+    private void loadDurationText(boolean force, int duration) {
+        if(force || this.duration != duration){
+            String property = TGEditToolBarSectionDuration.findDurationProperty(duration);
+            this.durationLabel.setToolTipText(property != null ? TuxGuitar.getProperty(property) : null);
+        }
+    }
 
     public void loadProperties() {
         this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
+        this.goLeft.setToolTipText(TuxGuitar.getProperty("action.caret.go-left"));
+        this.goRight.setToolTipText(TuxGuitar.getProperty("action.caret.go-right"));
+        this.decrement.setToolTipText(TuxGuitar.getProperty("action.note.duration.decrement-duration"));
+        this.increment.setToolTipText(TuxGuitar.getProperty("action.note.duration.increment-duration"));
+        this.loadDurationText(true, this.duration);
     }
 
     public UIPanel getControl() {
