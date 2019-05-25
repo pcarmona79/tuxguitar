@@ -5,6 +5,7 @@ import org.herac.tuxguitar.app.action.impl.tools.TGSelectScaleAction;
 import org.herac.tuxguitar.app.action.impl.view.TGOpenViewAction;
 import org.herac.tuxguitar.app.system.icons.TGSkinEvent;
 import org.herac.tuxguitar.app.system.language.TGLanguageEvent;
+import org.herac.tuxguitar.app.tools.scale.ScaleEvent;
 import org.herac.tuxguitar.app.tools.scale.ScaleInfo;
 import org.herac.tuxguitar.app.tools.scale.ScaleManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
@@ -13,6 +14,7 @@ import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialog;
 import org.herac.tuxguitar.app.view.dialog.confirm.TGConfirmDialogController;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.app.view.util.TGSyncProcess;
+import org.herac.tuxguitar.app.view.util.TGSyncProcessLocked;
 import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.event.TGEvent;
@@ -33,6 +35,7 @@ public class TGScaleDialog implements TGEventListener {
     };
     private final TGSyncProcess loadPropertiesProcess;
     private final TGSyncProcess loadIconsProcess;
+    private final TGSyncProcessLocked updateProcess;
     private final ScaleManager scaleManager;
 
     private UIWindow dialog;
@@ -48,6 +51,7 @@ public class TGScaleDialog implements TGEventListener {
         this.context = context;
         this.loadPropertiesProcess = new TGSyncProcess(this.context, this::loadProperties);
         this.loadIconsProcess = new TGSyncProcess(this.context, this::loadIcons);
+        this.updateProcess = new TGSyncProcessLocked(this.context, this::update);
         this.scaleManager = ScaleManager.getInstance(context);
     }
 
@@ -144,13 +148,19 @@ public class TGScaleDialog implements TGEventListener {
     }
 
     public void loadIcons() {
-
         if (scaleManager.isCustomScale(this.scaleSelect.getSelectedValue())) {
             this.buttonAddPreset.setImage(TuxGuitar.getInstance().getIconManager().getListEdit());
         } else {
             this.buttonAddPreset.setImage(TuxGuitar.getInstance().getIconManager().getListAdd());
         }
         this.buttonRemovePreset.setImage(TuxGuitar.getInstance().getIconManager().getListRemove());
+    }
+
+    private void update() {
+        this.keySelect.setSelectedValue(scaleManager.getSelectionKey());
+        this.scaleSelect.setSelectedValue(scaleManager.getSelection());
+        this.updateIntervalButtons();
+        this.updatePresetButtons();
     }
 
     private void selectScale(TGScale scale) {
@@ -292,11 +302,13 @@ public class TGScaleDialog implements TGEventListener {
     private void addListeners(){
         TuxGuitar.getInstance().getSkinManager().addLoader(this);
         TuxGuitar.getInstance().getLanguageManager().addLoader(this);
+        scaleManager.addListener(this);
     }
 
     private void removeListeners(){
         TuxGuitar.getInstance().getSkinManager().removeLoader(this);
         TuxGuitar.getInstance().getLanguageManager().removeLoader(this);
+        scaleManager.removeListener(this);
     }
 
     public void processEvent(final TGEvent event) {
@@ -304,6 +316,8 @@ public class TGScaleDialog implements TGEventListener {
             this.loadIconsProcess.process();
         } else if (TGLanguageEvent.EVENT_TYPE.equals(event.getEventType())) {
             this.loadPropertiesProcess.process();
+        } else if (ScaleEvent.EVENT_TYPE.equals(event.getEventType())) {
+            this.updateProcess.process();
         }
     }
 }
