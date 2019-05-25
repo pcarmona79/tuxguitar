@@ -10,10 +10,7 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.layout.UIScrollBarPanelLayout;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
-import org.herac.tuxguitar.ui.widget.UIContainer;
-import org.herac.tuxguitar.ui.widget.UIControl;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UIScrollBarPanel;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.singleton.TGSingletonFactory;
 import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
@@ -22,7 +19,8 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 	
 	private static final int SCROLL_INCREMENT = 10;
 	
-	private UIScrollBarPanel control;
+	private UIPanel control;
+	private UIScrollBarPanel scroll;
 	private UIPanel sectionContainer;
 	private UIFactory factory;
 
@@ -32,22 +30,30 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 	
 	public void createToolBar(UIContainer parent, boolean visible) {
 		this.factory = TGApplication.getInstance(this.getContext()).getFactory();
+
+		this.control = factory.createPanel(parent, false);
+		UITableLayout layout = new UITableLayout(0f);
+		this.control.setLayout(layout);
 		
-		this.control = factory.createScrollBarPanel(parent, true, false, false);
-		this.control.setVisible(visible);
-		this.control.setLayout(new UIScrollBarPanelLayout(false, true, false, false, false, false));
-		this.control.addFocusGainedListener(this);
-		this.control.getVScroll().setIncrement(SCROLL_INCREMENT);
-		this.control.getVScroll().addSelectionListener(new UISelectionListener() {
+		this.scroll = factory.createScrollBarPanel(this.control, true, false, false);
+		this.scroll.setVisible(visible);
+		this.scroll.setLayout(new UIScrollBarPanelLayout(false, true, false, false, false, false));
+		this.scroll.addFocusGainedListener(this);
+		this.scroll.getVScroll().setIncrement(SCROLL_INCREMENT);
+		this.scroll.getVScroll().addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
 				TGEditToolBar.this.getControl().layout();
 			}
 		});
+		layout.set(this.scroll, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 
-		this.sectionContainer = factory.createPanel(this.control, false);
+		this.sectionContainer = factory.createPanel(this.scroll, false);
 		this.sectionContainer.setLayout(new UITableLayout());
 		this.sectionContainer.addFocusGainedListener(this);
 		this.createSections();
+
+		UISeparator separator = factory.createVerticalSeparator(this.control);
+		layout.set(separator, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, 2f, null, 0f);
 	}
 
 	public void createSection(TGEditToolBarSection section) {
@@ -73,7 +79,7 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 		TGTabFolder.getInstance(this.getContext()).updateFocus();
 	}
 	
-	public UIScrollBarPanel getControl() {
+	public UIPanel getControl() {
 		return control;
 	}
 

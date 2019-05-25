@@ -8,6 +8,7 @@ import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
+import org.herac.tuxguitar.ui.widget.UISeparator;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.singleton.TGSingletonFactory;
 import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
@@ -29,10 +30,8 @@ public class TGMainToolBar extends TGToolBarModel {
 
 		this.createSections();
 
-		UIPanel border = uiFactory.createPanel(this.container, false);
-		UIColorModel borderColor = TGApplication.getInstance(getContext()).getAppearance().getColorModel(UIColorAppearance.WidgetBorder);
-		border.setBgColor(uiFactory.createColor(borderColor));
-		layout.set(border, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, this.getSections().size(), null, 1f, 0f);
+		UISeparator separator = uiFactory.createHorizontalSeparator(this.container);
+		layout.set(separator, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, this.getSections().size(), null, 1f, 0f);
 		this.updateVisibility(visible);
 	}
 	
