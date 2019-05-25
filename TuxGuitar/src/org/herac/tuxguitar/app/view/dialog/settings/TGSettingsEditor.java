@@ -21,6 +21,7 @@ import org.herac.tuxguitar.ui.resource.UICursor;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
 import org.herac.tuxguitar.ui.widget.UILayoutContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
+import org.herac.tuxguitar.ui.widget.UISeparator;
 import org.herac.tuxguitar.ui.widget.UIWindow;
 import org.herac.tuxguitar.util.properties.TGProperties;
 
@@ -46,7 +47,7 @@ public class TGSettingsEditor{
 	public void show() {
 		final UIFactory uiFactory = this.getUIFactory();
 		final UIWindow uiParent = this.context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
-		final UITableLayout dialogLayout = new UITableLayout();
+		final UITableLayout dialogLayout = new UITableLayout(0f);
 		
 		this.dialog = uiFactory.createWindow(uiParent, true, false);
 		this.dialog.setLayout(dialogLayout);
@@ -54,8 +55,8 @@ public class TGSettingsEditor{
 		
 		//-------main-------------------------------------
 		UIPanel mainComposite = uiFactory.createPanel(this.dialog, false);
-		mainComposite.setLayout(new UITableLayout());
-		dialogLayout.set(mainComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		mainComposite.setLayout(new UITableLayout(0f));
+		dialogLayout.set(mainComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 		this.createComposites(mainComposite);
 		
 		//-------buttons-------------------------------------
@@ -82,10 +83,13 @@ public class TGSettingsEditor{
 		
 		UIToolBar toolBar = uiFactory.createHorizontalToolBar(parent);
 		parentLayout.set(toolBar, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
-		
+
+		UISeparator separator = uiFactory.createHorizontalSeparator(parent);
+		parentLayout.set(separator, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+
 		UIPanel option = uiFactory.createPanel(parent, false);
 		option.setLayout(new UITableLayout(0f));
-		parentLayout.set(option, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		parentLayout.set(option, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		initOptions(toolBar, option);
 		
@@ -97,12 +101,12 @@ public class TGSettingsEditor{
 	private void initOptions(UIToolBar toolBar, UILayoutContainer parent){
 		
 		this.options = new ArrayList<TGSettingsOption>();
+		this.options.add(new SoundOption(this, toolBar, parent));
 		this.options.add(new MainOption(this, toolBar, parent));
 		this.options.add(new StylesOption(this, toolBar, parent));
 		this.options.add(new LanguageOption(this, toolBar, parent));
 		this.options.add(new SkinOption(this, toolBar, parent));
-		this.options.add(new SoundOption(this, toolBar, parent));
-		
+
 		for(TGSettingsOption option : this.options) {
 			option.createOption();
 		}
