@@ -25,6 +25,7 @@ public class TGIconManager {
 	private UIImage cut;
 	private UIImage copy;
 	private UIImage paste;
+	private UIImage search;
 	private UIImage editVoice1;
 	private UIImage editVoice2;
 	private UIImage editModeSelection;
@@ -204,6 +205,7 @@ public class TGIconManager {
 		this.cut = loadIcon("cut");
 		this.copy = loadIcon("copy");
 		this.paste = loadIcon("paste");
+		this.search = loadIcon("search");
 		this.editVoice1 = loadIcon("edit_voice_1");
 		this.editVoice2 = loadIcon("edit_voice_2");
 		this.editModeSelection = loadIcon("edit_mode_selection");
@@ -510,6 +512,10 @@ public class TGIconManager {
 
 	public UIImage getPaste() {
 		return paste;
+	}
+
+	public UIImage getSearch() {
+		return search;
 	}
 
 	public UIImage getEditVoice1() {

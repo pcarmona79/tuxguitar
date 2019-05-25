@@ -5,6 +5,7 @@ import org.herac.tuxguitar.app.action.TGActionProcessorListener;
 import org.herac.tuxguitar.app.action.impl.caret.TGGoRightAction;
 import org.herac.tuxguitar.app.action.impl.caret.TGMoveToAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
+import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleFinderDialogAction;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.tools.scale.ScaleInfo;
@@ -47,6 +48,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	private TGNoteToolbar toolbar;
 	private UILabel scaleName;
 	private UIButton scale;
+	private UIButton scaleFinder;
 	private UIImage image;
 	
 	private TGBeat beat;
@@ -111,9 +113,13 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 
 		// scale
 		this.scale = factory.createButton(this.toolbar.getLeftComposite());
-		this.scale.setText(TuxGuitar.getProperty("scale"));
 		this.scale.addSelectionListener(new TGActionProcessorListener(this.context, TGOpenScaleDialogAction.NAME));
 		this.toolbar.setLeftControlLayout(this.scale);
+
+		// finder
+		this.scaleFinder = factory.createButton(this.toolbar.getLeftComposite());
+		this.scaleFinder.addSelectionListener(new TGActionProcessorListener(this.context, TGOpenScaleFinderDialogAction.NAME));
+		this.toolbar.setLeftControlLayout(this.scaleFinder);
 
 		// scale name
 		this.scaleName = factory.createLabel(this.toolbar.getLeftComposite());
@@ -552,6 +558,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		this.handSelector.setSelectedItem(new UISelectItem<Integer>(null, selection));
 		this.toolbar.loadProperties();
 		this.scale.setText(TuxGuitar.getProperty("scale"));
+		this.scaleFinder.setToolTipText(TuxGuitar.getProperty("scale.finder"));
 		this.loadScaleName();
 		this.setChanges(true);
 		this.control.layout();
@@ -559,6 +566,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	
 	public void loadIcons(){
 	    this.toolbar.loadIcons();
+		this.scaleFinder.setImage(TGIconManager.getInstance(this.context).getSearch());
 		this.control.layout();
 		this.layout(this.control.getChildArea().getWidth());
 	}

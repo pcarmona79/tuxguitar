@@ -467,6 +467,7 @@ public class TGActionInstaller {
 		installAction(new TGOpenTrackTuningDialogAction(context));
 		installAction(new TGOpenTrackPropertiesDialogAction(context));
 		installAction(new TGOpenScaleDialogAction(context));
+		installAction(new TGOpenScaleFinderDialogAction(context));
 		installAction(new TGAddAndEditNewTrackAction(context));
 		installAction(new TGOpenURLAction(context));
 		installAction(new TGOpenTransportModeDialogAction(context));

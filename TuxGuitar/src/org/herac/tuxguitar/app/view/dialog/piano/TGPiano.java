@@ -4,6 +4,8 @@ import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.TGActionProcessorListener;
 import org.herac.tuxguitar.app.action.impl.caret.TGGoRightAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
+import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleFinderDialogAction;
+import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.tools.scale.ScaleInfo;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.docked.TGDockedPlayingComponent;
@@ -53,6 +55,7 @@ public class TGPiano extends TGDockedPlayingComponent {
 	private UICanvas canvas;
 	private UILabel scaleName;
 	private UIButton scale;
+	private UIButton scaleFinder;
 	private TGBeat beat;
 	private TGBeat externalBeat;
 	private UIImage image;
@@ -91,9 +94,13 @@ public class TGPiano extends TGDockedPlayingComponent {
 
 		// scale
 		this.scale = factory.createButton(this.toolbar.getLeftComposite());
-		this.scale.setText(TuxGuitar.getProperty("scale"));
 		this.scale.addSelectionListener(new TGActionProcessorListener(this.context, TGOpenScaleDialogAction.NAME));
 		this.toolbar.setLeftControlLayout(this.scale);
+
+		// finder
+		this.scaleFinder = factory.createButton(this.toolbar.getLeftComposite());
+		this.scaleFinder.addSelectionListener(new TGActionProcessorListener(this.context, TGOpenScaleFinderDialogAction.NAME));
+		this.toolbar.setLeftControlLayout(this.scaleFinder);
 
 		// scale name
 		this.scaleName = factory.createLabel(this.toolbar.getLeftComposite());
@@ -459,6 +466,7 @@ public class TGPiano extends TGDockedPlayingComponent {
 	
 	public void loadProperties(){
 		this.scale.setText(TuxGuitar.getProperty("scale"));
+		this.scaleFinder.setToolTipText(TuxGuitar.getProperty("scale.finder"));
 		this.toolbar.loadProperties();
 		this.loadScaleName();
 		this.control.layout();
@@ -466,6 +474,7 @@ public class TGPiano extends TGDockedPlayingComponent {
 	
 	public void loadIcons(){
 		this.toolbar.loadIcons();
+		this.scaleFinder.setImage(TGIconManager.getInstance(this.context).getSearch());
 		this.control.layout();
 	}
 	

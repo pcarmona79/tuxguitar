@@ -82,7 +82,6 @@ public class TGScaleDialog implements TGEventListener {
         }
         keySelect.setSelectedValue(scaleManager.getSelectionKey());
         compositeLayout.set(keySelect, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true);
-        compositeLayout.set(keySelect, UITableLayout.PACKED_HEIGHT, 200f);
 
         this.scaleSelect = uiFactory.createListBoxSelect(composite);
         scaleSelect.addItem(new UISelectItem<>(TuxGuitar.getProperty("scale.custom")));
