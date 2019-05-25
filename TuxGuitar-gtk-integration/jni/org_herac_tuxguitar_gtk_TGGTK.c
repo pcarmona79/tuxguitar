@@ -70,6 +70,7 @@ JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createMenuButton(JN
 {
   GtkWidget *button = gtk_menu_button_new();
   gtk_button_set_image(GTK_BUTTON(button), gtk_image_new_from_icon_name("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_can_focus(button, FALSE);
 
   GSimpleActionGroup *actions = g_simple_action_group_new();
   gtk_widget_insert_action_group(button, TG_ACTION_PREFIX, G_ACTION_GROUP(actions));

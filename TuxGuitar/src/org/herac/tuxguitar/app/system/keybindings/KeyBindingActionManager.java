@@ -88,12 +88,18 @@ public class KeyBindingActionManager {
 	public void appendListenersTo(UIControl control){
 		control.addKeyPressedListener(this.listener);
 	}
-	
-	public void processKeyBinding(UIKeyCombination kb){
+
+	public void removeListenersFrom(UIControl control){
+		control.removeKeyPressedListener(this.listener);
+	}
+
+	public boolean processKeyBinding(UIKeyCombination kb){
 		final String actionId = getActionForKeyBinding(kb);
 		if( actionId != null ){
 			new TGActionProcessor(this.context, actionId).process();
+			return true;
 		}
+		return false;
 	}
 	
 	public static KeyBindingActionManager getInstance(TGContext context) {

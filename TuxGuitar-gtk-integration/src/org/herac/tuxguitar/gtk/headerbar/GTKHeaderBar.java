@@ -5,6 +5,7 @@ import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.widgets.Control;
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.system.icons.TGSkinEvent;
+import org.herac.tuxguitar.app.system.keybindings.KeyBindingActionManager;
 import org.herac.tuxguitar.app.system.language.TGLanguageEvent;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.menu.TGMenuItem;
@@ -46,6 +47,7 @@ public class GTKHeaderBar implements TGEventListener {
     private final TGMenuManager menuManager;
     private final TGMainToolBar toolBar;
     private final TGResourceManager resourceManager;
+    private final KeyBindingActionManager keyBindings;
 
     private long headerBar;
     private boolean enabled;
@@ -68,6 +70,7 @@ public class GTKHeaderBar implements TGEventListener {
         this.widgets = new ArrayList<>();
         this.menuItems = new ArrayList<>();
         this.resourceManager = TGResourceManager.getInstance(context);
+        this.keyBindings = KeyBindingActionManager.getInstance(context);
 
         this.updateItemsProcess = new TGSyncProcessLocked(context, this::updateItems);
         this.loadIconsProcess = new TGSyncProcessLocked(context, this::loadIcons);
@@ -220,6 +223,7 @@ public class GTKHeaderBar implements TGEventListener {
                     for (HeaderWidget widget : this.widgets) {
                         moveWidget(widget, widget.previousParent);
                         widget.owner.removeChild(widget.control);
+                        this.keyBindings.appendListenersTo(widget.control);
                     }
                 }
 
@@ -241,6 +245,7 @@ public class GTKHeaderBar implements TGEventListener {
                 for (HeaderWidget widget : this.widgets) {
                     moveWidget(widget, widget.previousParent);
                     widget.owner.addChild(widget.control);
+                    this.keyBindings.removeListenersFrom(widget.control);
                 }
             }
         }
@@ -298,6 +303,7 @@ public class GTKHeaderBar implements TGEventListener {
 
             moveWidget(widget, box);
             widget.owner.removeChild(widget.control);
+            this.keyBindings.appendListenersTo(widget.control);
             this.widgets.add(widget);
         }
         boxes.add(reverse ? 0 : boxes.size(), box);

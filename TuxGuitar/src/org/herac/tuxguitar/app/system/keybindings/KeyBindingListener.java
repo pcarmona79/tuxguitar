@@ -12,6 +12,8 @@ public class KeyBindingListener implements UIKeyPressedListener {
 	}
 	
 	public void onKeyPressed(UIKeyEvent event) {
-		this.keyBindingActionManager.processKeyBinding(event.getKeyCombination());
+		if (this.keyBindingActionManager.processKeyBinding(event.getKeyCombination())) {
+			event.stopPropagation();
+		}
 	}
 }

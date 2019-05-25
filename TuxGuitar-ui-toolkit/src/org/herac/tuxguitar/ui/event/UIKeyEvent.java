@@ -10,7 +10,8 @@ public class UIKeyEvent extends UIEvent {
 	public static final int SUPER = 1 << 22;
 
 	private UIKeyCombination keyCombination;
-	
+	private boolean stopPropagation;
+
 	public UIKeyEvent(UIComponent control, UIKeyCombination keyCombination) {
 		super(control);
 		
@@ -19,5 +20,13 @@ public class UIKeyEvent extends UIEvent {
 
 	public UIKeyCombination getKeyCombination() {
 		return keyCombination;
+	}
+
+	public boolean isPropagationStopped() {
+		return stopPropagation;
+	}
+
+	public void stopPropagation() {
+		this.stopPropagation = true;
 	}
 }
