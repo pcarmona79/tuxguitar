@@ -7,6 +7,7 @@ import org.herac.tuxguitar.app.action.impl.settings.TGOpenKeyBindingEditorAction
 import org.herac.tuxguitar.app.action.impl.settings.TGOpenPluginListDialogAction;
 import org.herac.tuxguitar.app.action.impl.settings.TGOpenSettingsEditorAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleDialogAction;
+import org.herac.tuxguitar.app.action.impl.tools.TGOpenScaleFinderDialogAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGOpenTransposeDialogAction;
 import org.herac.tuxguitar.app.action.impl.tools.TGToggleBrowserAction;
 import org.herac.tuxguitar.app.tools.custom.TGCustomTool;
@@ -20,6 +21,7 @@ public class ToolMenuItem extends TGMenuItem {
 	
 	private UIMenuSubMenuItem settingsMenuItem;
 	private UIMenuActionItem scale;
+	private UIMenuActionItem scaleFinder;
 	private UIMenuActionItem browser;
 	private UIMenuActionItem transpose;
 	private UIMenuActionItem plugins;
@@ -40,7 +42,10 @@ public class ToolMenuItem extends TGMenuItem {
 		
 		this.scale = this.settingsMenuItem.getMenu().createActionItem();
 		this.scale.addSelectionListener(this.createActionProcessor(TGOpenScaleDialogAction.NAME));
-		
+
+		this.scaleFinder = this.settingsMenuItem.getMenu().createActionItem();
+		this.scaleFinder.addSelectionListener(this.createActionProcessor(TGOpenScaleFinderDialogAction.NAME));
+
 		this.browser = this.settingsMenuItem.getMenu().createActionItem();
 		this.browser.addSelectionListener(this.createActionProcessor(TGToggleBrowserAction.NAME));
 		
@@ -75,6 +80,7 @@ public class ToolMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.settingsMenuItem, "tools", null);
 		setMenuItemTextAndAccelerator(this.transpose, "tools.transpose", TGOpenTransposeDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.scale, "tools.scale", TGOpenScaleDialogAction.NAME);
+		setMenuItemTextAndAccelerator(this.scaleFinder, "tools.scale-finder", TGOpenScaleFinderDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.browser, "tools.browser", TGToggleBrowserAction.NAME);
 		setMenuItemTextAndAccelerator(this.plugins, "tools.plugins", TGOpenPluginListDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.keyBindings, "tools.shortcuts", TGOpenKeyBindingEditorAction.NAME);

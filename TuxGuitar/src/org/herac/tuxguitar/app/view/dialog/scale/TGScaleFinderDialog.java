@@ -225,7 +225,7 @@ public class TGScaleFinderDialog implements TGEventListener {
 
 
     private String createResultLabel(Result result) {
-        return String.format("%s %s (%d%%)", scaleManager.getKeyName(result.key), result.info.getName(), (int) Math.floor(result.confidence * 100f));
+        return String.format("%s - %s (%d%%)", scaleManager.getKeyName(result.key), result.info.getName(), (int) Math.floor(result.confidence * 100f));
     }
 
     private static List<Result> searchScales(ScaleManager scaleManager, TGFactory factory, TGTrack track, List<TGNote> notes, float confidence, AtomicBoolean killSignal) {
