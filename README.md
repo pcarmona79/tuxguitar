@@ -15,13 +15,16 @@ for more information.
 
 ## What's Changed
 - Global style update with a new skin
-- Main toolbar redesigned and given platform-specific appearances
+- Main toolbar redesigned
+- Native window header and toolbar for the SWT GTK backend
 - High DPI display support
 - Hiding/showing of individual tracks
 - Click-and-drag selection support, started by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
 - Cut/Copy/Paste of individual notes
 - More tuning presets, grouped by instrument and number of strings
-- Support for creating custom scales in the scale list
+- Default program/clef support for tunings
+- Scale finder
+- Customizable scale intervals
 - Percussion dialog and percussion notation editor
 - UI cleanup, MIDI track name support by [Alex Abdugafarov](https://github.com/frozenspider/tuxguitar)
 - Various bug fixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
