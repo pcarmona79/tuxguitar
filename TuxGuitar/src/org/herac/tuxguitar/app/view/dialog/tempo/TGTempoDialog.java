@@ -58,20 +58,20 @@ public class TGTempoDialog {
 		UIPanel options = uiFactory.createPanel(dialog, false);
 		options.setLayout(optionsLayout);
 		dialogLayout.set(options, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		
-		final UIRadioButton applyToAllMeasures = uiFactory.createRadioButton(options);
-		applyToAllMeasures.setText(TuxGuitar.getProperty("composition.tempo.start-to-end"));
-		applyToAllMeasures.setSelected(true);
-		optionsLayout.set(applyToAllMeasures, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		
+
+		final UIRadioButton applyToNext = uiFactory.createRadioButton(options);
+		applyToNext.setText(TuxGuitar.getProperty("composition.tempo.position-to-next"));
+		applyToNext.setSelected(true);
+		optionsLayout.set(applyToNext, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
 		final UIRadioButton applyToEnd = uiFactory.createRadioButton(options);
 		applyToEnd.setText(TuxGuitar.getProperty("composition.tempo.position-to-end"));
 		optionsLayout.set(applyToEnd, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		
-		final UIRadioButton applyToNext = uiFactory.createRadioButton(options);
-		applyToNext.setText(TuxGuitar.getProperty("composition.tempo.position-to-next"));
-		optionsLayout.set(applyToNext, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		
+
+		final UIRadioButton applyToAllMeasures = uiFactory.createRadioButton(options);
+		applyToAllMeasures.setText(TuxGuitar.getProperty("composition.tempo.start-to-end"));
+		optionsLayout.set(applyToAllMeasures, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
 		//------------------BUTTONS--------------------------
 		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
 				TGDialogButtons.ok(() -> {

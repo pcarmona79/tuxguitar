@@ -42,7 +42,7 @@ public class TGTrillDialog {
 			
 			//-----defaults-------------------------------------------------
 			int fret = note.getValue();
-			int duration = TGDuration.SIXTEENTH;
+			int duration = TGDuration.THIRTY_SECOND;
 			if(note.getEffect().isTrill()){
 				fret = note.getEffect().getTrill().getFret();
 				duration = note.getEffect().getTrill().getDuration().getValue();

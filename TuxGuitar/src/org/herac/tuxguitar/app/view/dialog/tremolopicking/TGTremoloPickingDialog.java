@@ -42,7 +42,7 @@ public class TGTremoloPickingDialog {
 			dialog.setText(TuxGuitar.getProperty("effects.tremolo-picking-editor"));
 			
 			//-----defaults-------------------------------------------------
-			int duration = TGDuration.EIGHTH;
+			int duration = TGDuration.SIXTEENTH;
 			if(note.getEffect().isTremoloPicking()){
 				duration = note.getEffect().getTremoloPicking().getDuration().getValue();
 			}

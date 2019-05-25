@@ -59,7 +59,7 @@ public class TGGraceDialog {
 			boolean dead = false;
 			boolean onBeat = false;
 			int fret = note.getValue();
-			int duration = 1;
+			int duration = 2;
 			int dynamic = TGVelocities.DEFAULT;
 			int transition = TGEffectGrace.TRANSITION_NONE;
 			if(note.getEffect().isGrace()){
