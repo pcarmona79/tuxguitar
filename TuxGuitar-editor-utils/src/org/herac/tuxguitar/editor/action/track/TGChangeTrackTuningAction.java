@@ -1,11 +1,17 @@
 package org.herac.tuxguitar.editor.action.track;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.action.TGActionContext;
+import org.herac.tuxguitar.action.TGActionManager;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.action.TGActionBase;
+import org.herac.tuxguitar.editor.action.channel.TGUpdateChannelAction;
+import org.herac.tuxguitar.editor.action.composition.TGChangeClefAction;
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.TGChannel;
+import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.util.TGContext;
@@ -16,6 +22,8 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 	
 	public static final String ATTRIBUTE_OFFSET = "offset";
 	public static final String ATTRIBUTE_STRINGS = "strings";
+	public static final String ATTRIBUTE_PROGRAM = "program";
+	public static final String ATTRIBUTE_CLEF = "clef";
 	public static final String ATTRIBUTE_TRANSPOSE_STRINGS = "transposeStrings";
 	public static final String ATTRIBUTE_TRANSPOSE_TRY_KEEP_STRINGS = "transposeTryKeepString";
 	public static final String ATTRIBUTE_TRANSPOSE_APPLY_TO_CHORDS = "transposeApplyToChords";
@@ -29,8 +37,41 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 		TGTrack track = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK);
 		Integer offset = context.getAttribute(ATTRIBUTE_OFFSET);
 		List<TGString> strings = ((List<TGString>) context.getAttribute(ATTRIBUTE_STRINGS));
+		Short program = context.getAttribute(ATTRIBUTE_PROGRAM);
+		Integer clef = context.getAttribute(ATTRIBUTE_CLEF);
 		if( track != null ) {
 			TGSongManager songManager = getSongManager(context);
+			if (program != null) {
+			    List<TGTrack> channelTracks = songManager.getTracksConnectedToChannel(track.getSong(), track.getChannelId());
+				TGChannel channel = songManager.getChannel(track.getSong(), track.getChannelId());
+				if (channelTracks.size() == 1 && channel.getProgram() == TGChannel.DEFAULT_PROGRAM) {
+					TGActionManager tgActionManager = TGActionManager.getInstance(getContext());
+					context.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_CHANNEL, channel);
+					context.setAttribute(TGUpdateChannelAction.ATTRIBUTE_PROGRAM, program);
+					tgActionManager.execute(TGUpdateChannelAction.NAME, context);
+				}
+			}
+			if (clef != null) {
+			    // do not set clef if more than one is set on this track
+                Iterator<TGMeasure> iter = track.getMeasures();
+                int firstClef = -1;
+                while (iter.hasNext()) {
+                	TGMeasure measure = iter.next();
+                	if (firstClef == -1) {
+                		firstClef = measure.getClef();
+					} else if (measure.getClef() != firstClef) {
+                		firstClef = -1;
+                		break;
+					}
+				}
+                if (firstClef != -1) {
+					TGActionManager tgActionManager = TGActionManager.getInstance(getContext());
+					context.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_MEASURE, songManager.getTrackManager().getFirstMeasure(track));
+					context.setAttribute(TGChangeClefAction.ATTRIBUTE_CLEF, clef);
+					context.setAttribute(TGChangeClefAction.ATTRIBUTE_APPLY_TO_END, true);
+					tgActionManager.execute(TGChangeClefAction.NAME, context);
+				}
+			}
 			if( strings != null ){
 				int[] transpositions = createTranspositions(track, strings);
 				

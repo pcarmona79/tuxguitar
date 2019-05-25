@@ -245,7 +245,19 @@ public class TGSongManager {
 		}
 		return false;
 	}
-	
+
+	public List<TGTrack> getTracksConnectedToChannel(TGSong song, int channelId ){
+		List<TGTrack> tracks = new ArrayList<TGTrack>();
+		Iterator<TGTrack> it = song.getTracks();
+		while( it.hasNext() ){
+			TGTrack track = it.next();
+			if( track.getChannelId() == channelId ){
+				tracks.add(track);
+			}
+		}
+		return tracks;
+	}
+
 	public String createChannelName(TGSong song, TGChannel channel, String prefix) {
 		int number = 0;
 		

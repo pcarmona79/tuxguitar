@@ -12,6 +12,7 @@ import org.herac.tuxguitar.song.helpers.tuning.TuningGroup;
 import org.herac.tuxguitar.song.helpers.tuning.TuningPreset;
 
 import org.herac.tuxguitar.song.models.TGChannel;
+import org.herac.tuxguitar.song.models.TGMeasure;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -19,12 +20,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class TuningReader {
-	private static final String TUNING_TAG = "tuning";
-	private static final String GROUP_TAG = "group";
-	private static final String NAME_ATTRIBUTE = "name";
-	private static final String NOTES_ATTRIBUTE = "notes";
-	private static final String PROGRAM_ATTRIBUTE = "program";
-	private static final String KEY_SEPARATOR = ",";
+	public static final String TUNING_TAG = "tuning";
+	public static final String GROUP_TAG = "group";
+	public static final String NAME_ATTRIBUTE = "name";
+	public static final String NOTES_ATTRIBUTE = "notes";
+	public static final String PROGRAM_ATTRIBUTE = "program";
+	public static final String CLEF_ATTRIBUTE = "clef";
+	public static final String KEY_SEPARATOR = ",";
 
 	public void loadTunings(TuningGroup group, InputStream stream){
 		try{
@@ -59,6 +61,7 @@ public class TuningReader {
 				String name = params.getNamedItem(NAME_ATTRIBUTE).getNodeValue();
 				String notes = params.getNamedItem(NOTES_ATTRIBUTE).getNodeValue();
 				String program = params.getNamedItem(PROGRAM_ATTRIBUTE).getNodeValue();
+				String clef = params.getNamedItem(CLEF_ATTRIBUTE).getNodeValue();
 
 				if (name == null || notes == null || name.trim().equals("") || notes.trim().equals("")){
 					throw new RuntimeException("Invalid Tuning file format.");
@@ -74,8 +77,9 @@ public class TuningReader {
 					}
 				}
 
-				Integer programNumber = program == null ? TGChannel.DEFAULT_PROGRAM : Integer.parseInt(program);
-				TuningPreset tuning = new TuningPreset(group, name, noteValues, programNumber);
+				short programNumber = program == null ? TGChannel.DEFAULT_PROGRAM : Short.parseShort(program);
+				int clefValue = clef == null ? TGMeasure.DEFAULT_CLEF : Integer.parseInt(clef);
+				TuningPreset tuning = new TuningPreset(group, name, noteValues, programNumber, clefValue);
 				group.getTunings().add(tuning);
 			} else if (nodeName.equals(GROUP_TAG)) {
 				NamedNodeMap params = child.getAttributes();

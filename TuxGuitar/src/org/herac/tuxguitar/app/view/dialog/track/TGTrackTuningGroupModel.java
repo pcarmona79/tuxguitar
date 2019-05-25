@@ -1,16 +1,18 @@
 package org.herac.tuxguitar.app.view.dialog.track;
 
+import java.util.List;
+
 public class TGTrackTuningGroupModel {
 
     private String name;
-    private TGTrackTuningGroupEntryModel[] children;
+    private List<TGTrackTuningGroupEntryModel> children;
     private TGTrackTuningGroupEntryModel entry;
 
-    public TGTrackTuningGroupEntryModel[] getChildren() {
+    public List<TGTrackTuningGroupEntryModel> getChildren() {
         return children;
     }
 
-    public void setChildren(TGTrackTuningGroupEntryModel[] children) {
+    public void setChildren(List<TGTrackTuningGroupEntryModel> children) {
         this.children = children;
     }
 
