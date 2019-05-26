@@ -127,6 +127,7 @@ public class TGIconManager {
 	private UIImage effectSlapping;
 	private UIImage effectPopping;
 	private UIImage effectFadeIn;
+ 	private UIImage effectFadeOut;
 	private UIImage browser;
 	private UIImage browserNew;
 	private UIImage browserFile;
@@ -299,6 +300,7 @@ public class TGIconManager {
 		this.effectSlapping = loadIcon("effect_slapping");
 		this.effectPopping = loadIcon("effect_popping");
 		this.effectFadeIn = loadIcon("effect_fade_in");
+		this.effectFadeOut = loadIcon("effect_fade_out");
 		this.browser = loadIcon("browser");
 		this.browserNew = loadIcon("browser_new");
 		this.browserFile = loadIcon("browser_file");
@@ -549,7 +551,11 @@ public class TGIconManager {
 	public UIImage getEffectFadeIn() {
 		return this.effectFadeIn;
 	}
-	
+
+	public UIImage getEffectFadeOut() {
+		return this.effectFadeOut;
+	}
+
 	public UIImage getEffectGhost() {
 		return this.effectGhost;
 	}

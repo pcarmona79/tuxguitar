@@ -43,6 +43,7 @@ public abstract class TGNoteEffect {
 	private boolean slapping;
 	private boolean popping;
 	private boolean fadeIn;
+	private boolean fadeOut;
 	private boolean letRing;
 	
 	public TGNoteEffect(){
@@ -67,6 +68,7 @@ public abstract class TGNoteEffect {
 		this.slapping = false;
 		this.popping = false;
 		this.fadeIn = false;
+		this.fadeOut = false;
 		this.letRing = false;
 	}
 	
@@ -425,6 +427,14 @@ public abstract class TGNoteEffect {
 		this.fadeIn = fadeIn;
 	}
 	
+	public boolean isFadeOut() {
+		return this.fadeOut;
+	}
+	
+	public void setFadeOut(boolean fadeOut) {
+		this.fadeOut = fadeOut;
+	}
+	
 	public boolean hasAnyEffect(){
 		return (isBend() ||
 				isTremoloBar() ||
@@ -447,6 +457,7 @@ public abstract class TGNoteEffect {
 				isSlapping() ||
 				isPopping() ||
 				isFadeIn() ||
+				isFadeOut() ||
 				getSlideTo() != 0 ||
 				getSlideFrom() != 0);
 	}
@@ -468,6 +479,7 @@ public abstract class TGNoteEffect {
 		effect.setSlapping(isSlapping());
 		effect.setPopping(isPopping());
 		effect.setFadeIn(isFadeIn());
+		effect.setFadeOut(isFadeOut());
 		effect.setSlideFrom(getSlideFrom());
 		effect.setSlideTo(getSlideTo());
 		effect.setBend(isBend()?(TGEffectBend)this.bend.clone(factory):null);

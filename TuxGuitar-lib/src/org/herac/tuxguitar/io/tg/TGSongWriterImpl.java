@@ -548,6 +548,7 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		header = (effect.isPopping())?header |= EFFECT_POPPING:header;
 		header = (effect.isFadeIn())?header |= EFFECT_FADE_IN:header;
 		header = (effect.isLetRing())?header |= EFFECT_LET_RING:header;
+		header = (effect.isFadeOut())?header |= EFFECT_FADE_OUT:header;
 		header = (effect.getSlideFrom()!=0)?header |= EFFECT_SLIDE_FROM:header;
 		header = (effect.getSlideTo()!=0)?header |= EFFECT_SLIDE_TO:header;
 		

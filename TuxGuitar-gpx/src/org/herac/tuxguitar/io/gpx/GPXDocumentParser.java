@@ -418,7 +418,19 @@ public class GPXDocumentParser {
 			tgNote.setString(tgString);
 			tgNote.setTiedNote(gpNote.isTieDestination());
 			tgNote.setVelocity(tgVelocity);
-			tgNote.getEffect().setFadeIn(parseFadeIn(gpBeat));
+			if (gpBeat.getFading()!=null) {
+				String type = gpBeat.getFading().trim();
+				boolean fadeIn = false, fadeOut = false;
+				if (type.equals("FadeIn"))
+					fadeIn = true;
+				else if (type.equals("FadeOut"))
+					fadeOut = true;
+				else if (type.equals("VolumeSwell")) {
+					fadeIn = fadeOut = true;
+				}
+				tgNote.getEffect().setFadeIn(fadeIn);
+				tgNote.getEffect().setFadeOut(fadeOut);
+			}
 			tgNote.getEffect().setVibrato(gpNote.isVibrato() || gpBeat.isVibrato());
 			tgNote.getEffect().setSlide(gpNote.isSlide());
 			tgNote.getEffect().setDeadNote(gpNote.isMutedEnabled());
@@ -722,15 +734,6 @@ public class GPXDocumentParser {
 	
 	private int parseTremoloBarPosition( Integer gpOffset ){
 		return Math.round(gpOffset.intValue() * (TGEffectTremoloBar.MAX_POSITION_LENGTH / GP_WHAMMY_BAR_POSITION));
-	}
-	
-	private boolean parseFadeIn(GPXBeat beat){
-		if( beat.getFadding() != null ){
-			if( beat.getFadding().equals("FadeIn")) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	private void parseRhythm(GPXRhythm gpRhythm , TGDuration tgDuration){

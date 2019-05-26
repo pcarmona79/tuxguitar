@@ -64,12 +64,20 @@ public class TGNoteImpl extends TGNote {
 			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_HEAVY_ACCENTUATED_EFFECT ));
 			paintHeavyAccentuated(layout, painter, x, y);
 		}
-		if(effect.isFadeIn()){
+		if(effect.isFadeIn() && effect.isFadeOut()){
+			float x = fromX + getPosX() + spacing;
+			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE_INOUT ));
+			paintFadeInOut(layout, painter, x, y);
+		} else if(effect.isFadeIn()){
 			float x = fromX + getPosX() + spacing;
 			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE_IN ));
 			paintFadeIn(layout, painter, x, y);
+		}else if(effect.isFadeOut()){
+			float x = fromX + getPosX() + spacing;
+			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE_OUT ));
+			paintFadeOut(layout, painter, x, y);    
 		}
-		if(effect.isHarmonic() && (layout.getStyle() & TGLayout.DISPLAY_SCORE) == 0 ){
+		if(effect.isHarmonic() && (layout.getStyle() & TGLayout.DISPLAY_SCORE) == 0){
 			float x = fromX + getPosX() + spacing;
 			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_HARMONIC_EFFEC ));
 			String key = new String();
@@ -780,7 +788,40 @@ public class TGNoteImpl extends TGNote {
 			painter.closePath();
 		}
 	}
-	
+
+ 	private void paintFadeInOut(TGLayout layout, UIPainter painter,float fromX,float fromY){
+ 		float scale = layout.getScale();
+ 		float x = fromX;
+ 		float y = fromY + (4.0f * scale );
+ 		float width = getVoiceImpl().getWidth()/2;
+ 		painter.initPath();
+ 		painter.moveTo ( x , y );
+ 		painter.cubicTo( x , y , x + width, y,  x + width, y - (4.0f * scale ));
+ 		painter.moveTo ( x , y );
+ 		painter.cubicTo( x , y , x + width, y,  x + width, y + (4.0f * scale ));
+		x+=width;
+ 		painter.moveTo ( x , y - (4.0f * scale ) );
+ 		painter.cubicTo( x, y - (4.0f * scale ), x, y,  x+width, y);
+ 		painter.moveTo ( x , y + (4.0f * scale ) );
+ 		painter.cubicTo( x, y + (4.0f * scale ), x, y,  x+width, y);
+ 		painter.moveTo ( x + width , y + (4.0f * scale ) );
+ 		painter.closePath();
+ 	}
+
+ 	private void paintFadeOut(TGLayout layout, UIPainter painter,float fromX,float fromY){
+ 		float scale = layout.getScale();
+ 		float x = fromX;
+ 		float y = fromY + (4.0f * scale );
+ 		float width = getVoiceImpl().getWidth();
+ 		painter.initPath();
+ 		painter.moveTo ( x , y - (4.0f * scale ) );
+ 		painter.cubicTo( x, y - (4.0f * scale ), x, y,  x+width, y);
+ 		painter.moveTo ( x , y + (4.0f * scale ) );
+ 		painter.cubicTo( x, y + (4.0f * scale ), x, y,  x+width, y);
+ 		painter.moveTo ( x + width , y + (4.0f * scale ) );
+ 		painter.closePath();
+ 	}
+
 	private void paintFadeIn(TGLayout layout, UIPainter painter,float fromX,float fromY){
 		float scale = layout.getScale();
 		float x = fromX;

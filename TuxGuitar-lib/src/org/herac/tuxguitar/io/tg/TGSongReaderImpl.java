@@ -588,6 +588,9 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 		//fade in
 		effect.setFadeIn(((header & EFFECT_FADE_IN) != 0));
 		
+		//fade out
+		effect.setFadeOut(((header & EFFECT_FADE_OUT) != 0));
+		
 		//let ring
 		effect.setLetRing(((header & EFFECT_LET_RING) != 0));
 	}

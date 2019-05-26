@@ -118,6 +118,8 @@ public class TGStream {
 	
 	protected static final int EFFECT_LET_RING = 0x080000;
 	
+	protected static final int EFFECT_FADE_OUT = 0x100000;
+	
 	protected static final int EFFECT_SLIDE_FROM = 0x200000;
         
 	protected static final int EFFECT_SLIDE_TO = 0x400000;

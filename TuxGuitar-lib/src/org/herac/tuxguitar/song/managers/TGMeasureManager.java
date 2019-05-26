@@ -1307,6 +1307,15 @@ public class TGMeasureManager {
 	}
 	
 	/** 
+	 * Agrega un fadeOut
+	 */
+	public void changeFadeOut(TGNote note){
+		if(note != null){
+			note.getEffect().setFadeOut(!note.getEffect().isFadeOut());
+		}
+	}
+	
+	/** 
 	 * Agrega un slideFrom
 	 */
 	public void changeSlideFromLow(TGNote note){

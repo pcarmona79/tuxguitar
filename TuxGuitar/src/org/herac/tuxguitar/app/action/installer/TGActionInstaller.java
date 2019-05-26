@@ -310,6 +310,7 @@ public class TGActionInstaller {
 		installAction(new TGChangeBendNoteAction(context));
 		installAction(new TGChangeDeadNoteAction(context));
 		installAction(new TGChangeFadeInAction(context));
+		installAction(new TGChangeFadeOutAction(context));
 		installAction(new TGChangeGhostNoteAction(context));
 		installAction(new TGChangeGraceNoteAction(context));
 		installAction(new TGChangeHammerNoteAction(context));

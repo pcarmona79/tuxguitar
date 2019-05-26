@@ -40,7 +40,8 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 	private UIToolCheckableItem slapping;
 	private UIToolCheckableItem popping;
 	private UIToolCheckableItem fadeIn;
-	
+	private UIToolCheckableItem fadeOut;
+
 	public TGEditToolBarSectionEffect(TGEditToolBar toolBar) {
 		super(toolBar, SECTION_TITLE);
 	}
@@ -141,6 +142,10 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		//--FADE IN
 		this.fadeIn = toolBar.createCheckItem();
 		this.fadeIn.addSelectionListener(this.createActionProcessor(TGChangeFadeInAction.NAME));
+
+		//--FADE OUT
+		this.fadeOut = toolBar.createCheckItem();
+		this.fadeOut.addSelectionListener(this.createActionProcessor(TGChangeFadeOutAction.NAME));
 	}
 	
 	public void loadSectionProperties() {
@@ -167,6 +172,7 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.slapping.setToolTipText(this.getText("effects.slapping"));
 		this.popping.setToolTipText(this.getText("effects.popping"));
 		this.fadeIn.setToolTipText(this.getText("effects.fade-in"));
+		this.fadeOut.setToolTipText(this.getText("effects.fade-out"));
 	}
 	
 	public void loadSectionIcons() {
@@ -193,6 +199,7 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.slapping.setImage(this.getIconManager().getEffectSlapping());
 		this.popping.setImage(this.getIconManager().getEffectPopping());
 		this.fadeIn.setImage(this.getIconManager().getEffectFadeIn());
+		this.fadeOut.setImage(this.getIconManager().getEffectFadeOut());
 	}
 	
 	public void updateSectionItems() {
@@ -253,7 +260,10 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		
 		this.palmMute.setEnabled(!running && !range.isEmpty());
 		this.palmMute.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isPalmMute()));
-		
+
+		this.letRing.setEnabled(!running && !range.isEmpty());
+		this.letRing.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isLetRing()));
+
 		this.staccato.setEnabled(!running && !range.isEmpty());
 		this.staccato.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isStaccato()));
 		
@@ -268,5 +278,8 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		
 		this.fadeIn.setEnabled(!running && !range.isEmpty());
 		this.fadeIn.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isFadeIn()));
+
+		this.fadeOut.setEnabled(!running && !range.isEmpty());
+		this.fadeOut.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isFadeOut()));
 	}
 }

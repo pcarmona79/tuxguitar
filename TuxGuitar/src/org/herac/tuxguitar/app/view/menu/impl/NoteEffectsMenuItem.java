@@ -41,7 +41,8 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 	private UIMenuCheckableItem slapping;
 	private UIMenuCheckableItem popping;
 	private UIMenuCheckableItem fadeIn;
-	
+ 	private UIMenuCheckableItem fadeOut;
+
 	public NoteEffectsMenuItem(UIMenuSubMenuItem noteEffectsMenuItem) {
 		this.noteEffectsMenuItem = noteEffectsMenuItem;
 	}
@@ -158,7 +159,11 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 		//--FADE IN
 		this.fadeIn = this.noteEffectsMenuItem.getMenu().createCheckItem();
 		this.fadeIn.addSelectionListener(this.createActionProcessor(TGChangeFadeInAction.NAME));
-		
+
+		//--FADE OUT
+		this.fadeOut = this.noteEffectsMenuItem.getMenu().createCheckItem();
+		this.fadeOut.addSelectionListener(this.createActionProcessor(TGChangeFadeOutAction.NAME));
+
 		this.loadIcons();
 		this.loadProperties();
 	}
@@ -214,6 +219,8 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 		this.popping.setEnabled(!running && note != null);
 		this.fadeIn.setChecked(note != null && note.getEffect().isFadeIn());
 		this.fadeIn.setEnabled(!running && note != null);
+		this.fadeOut.setChecked(note != null && note.getEffect().isFadeOut());
+		this.fadeOut.setEnabled(!running && note != null);
 	}
 	
 	public void loadProperties(){
@@ -242,6 +249,7 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.slapping, "effects.slapping", TGChangeSlappingAction.NAME);
 		setMenuItemTextAndAccelerator(this.popping, "effects.popping", TGChangePoppingAction.NAME);
 		setMenuItemTextAndAccelerator(this.fadeIn, "effects.fade-in", TGChangeFadeInAction.NAME);
+		setMenuItemTextAndAccelerator(this.fadeOut, "effects.fade-out", TGChangeFadeOutAction.NAME);
 	}
 	
 	public void loadIcons(){

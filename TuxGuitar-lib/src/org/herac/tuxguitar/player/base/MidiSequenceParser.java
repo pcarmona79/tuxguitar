@@ -260,9 +260,6 @@ public class MidiSequenceParser {
 
 		//--main note--//
 		long noteduration = applyStrokeDuration(note, note.getVoice().getDuration().getTime(), stroke);
-		if (note.getEffect().isFadeOut()) {
-			addFadeOut(sh, track.getNumber(), start, duration, tgChannel.getVolume(), channel);
-		}
 		if (!percussionChannel) {
 			isBended = isBended(note.getEffect());
 			holdBend = addNoteBend(sh, note.getEffect(), track.getNumber(), start, noteduration, channel, midiVoice, holdBend);
@@ -292,9 +289,6 @@ public class MidiSequenceParser {
 								//--tied note--//
 								isBended = isBended(nextNote.getEffect());
 								noteduration = nextNote.getVoice().getDuration().getTime();
-								if (nextNote.getEffect().isFadeOut()) {
-									addFadeOut(sh, track.getNumber(), start, duration, tgChannel.getVolume(), channel);
-								}
 								if (!percussionChannel) {
 									holdBend = addNoteBend(sh, nextNote.getEffect(), track.getNumber(), start, noteduration, channel, midiVoice, holdBend);
 									if (!isBended)
@@ -356,8 +350,14 @@ public class MidiSequenceParser {
 
 					boolean percussionChannel = tgChannel.isPercussionChannel();
 					//---Fade In---
-					if(note.getEffect().isFadeIn()){
-						addFadeIn(sh,track.getNumber(), start, duration, tgChannel.getVolume(), channel);
+
+					//---Fade In-Out---
+					if (note.getEffect().isFadeIn() && note.getEffect().isFadeOut()) {
+						addFadeInOut(sh, track.getNumber(), start, duration, tgChannel.getVolume(), channel);
+					} else if (note.getEffect().isFadeIn()) {
+						addFadeIn(sh, track.getNumber(), start, noteduration, tgChannel.getVolume(), channel);
+					} else if (note.getEffect().isFadeOut()) {
+						addFadeOut(sh, track.getNumber(), start, duration, tgChannel.getVolume(), channel);
 					}
 					bendMode = addTiedEffects(sh, tgChannel, note, track, mIndex, bIndex, stroke, start, duration);
 					if (!percussionChannel) {
@@ -596,7 +596,37 @@ public class MidiSequenceParser {
 		}
 		addBend(sh,track, tick2 ,DEFAULT_BEND, channel, midiVoice, bendMode);
 	}
-	
+
+	private void addFadeInOut(MidiSequenceHelper sh,int track,long start,long duration,int volume3,int channel){
+		int expression = 31;
+		int expressionIncrement = 2;
+		long tick = start;
+		long tickIncrement = (duration / ((127-expression) / (expressionIncrement/2)));
+		while( tick < (start + duration) && expression >= 31 ) {
+			sh.getSequence().addControlChange(getTick(tick),track,channel,MidiControllers.EXPRESSION, fix(expression));
+			tick += tickIncrement;
+			expression += expressionIncrement;
+			if (expression >= 127) {
+				expression = 127;
+				expressionIncrement = -expressionIncrement;
+			}
+		}
+		sh.getSequence().addControlChange(getTick((start + duration)),track,channel, MidiControllers.EXPRESSION, 127);
+	}
+
+	private void addFadeOut(MidiSequenceHelper sh,int track,long start,long duration,int volume3,int channel){
+		int expression = 127;
+		int expressionIncrement = 1;
+		long tick = start;
+		long tickIncrement = (duration / ((expression-31) / expressionIncrement));
+		while( tick < (start + duration) && expression >= 31 ) {
+			sh.getSequence().addControlChange(getTick(tick),track,channel,MidiControllers.EXPRESSION, fix(expression));
+			tick += tickIncrement;
+			expression -= expressionIncrement;
+		}
+		sh.getSequence().addControlChange(getTick((start + duration)),track,channel, MidiControllers.EXPRESSION, 127);
+	}
+
 	private void addFadeIn(MidiSequenceHelper sh,int track,long start,long duration,int volume3,int channel){
 		int expression = 31;
 		int expressionIncrement = 1;

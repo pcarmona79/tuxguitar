@@ -52,6 +52,7 @@ public class TGBeatImpl extends TGBeat{
 	private boolean vibrato;
 	private boolean trill;
 	private boolean fadeIn;
+	private boolean fadeOut;
 	
 	public TGBeatImpl(TGFactory factory){
 		super(factory);
@@ -193,6 +194,7 @@ public class TGBeatImpl extends TGBeat{
 		this.palmMute = false;
 		this.letRing = false;
 		this.fadeIn = false;
+		this.fadeOut = false;
 		this.vibrato = false;
 		this.trill = false;
 	}
@@ -224,6 +226,9 @@ public class TGBeatImpl extends TGBeat{
 		}
 		if(effect.isFadeIn()){
 			this.fadeIn = true;
+		}
+		if(effect.isFadeOut()){
+			this.fadeOut = true;
 		}
 		if(effect.isVibrato()){
 			this.vibrato = true;
@@ -260,6 +265,9 @@ public class TGBeatImpl extends TGBeat{
 		}
 		if(this.fadeIn){
 			this.bs.setSize(TGBeatSpacing.POSITION_FADE_IN,layout.getEffectSpacing());
+		}
+		if(this.fadeOut){
+			this.bs.setSize(TGBeatSpacing.POSITION_FADE_OUT,layout.getEffectSpacing());
 		}
 		if(this.vibrato){
 			this.bs.setSize(TGBeatSpacing.POSITION_VIBRATO_EFFEC,layout.getEffectSpacing());
