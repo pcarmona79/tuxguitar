@@ -8,20 +8,7 @@ import org.herac.tuxguitar.app.action.impl.effects.TGOpenTremoloBarDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTremoloPickingDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTrillDialogAction;
 import org.herac.tuxguitar.app.view.menu.TGMenuItem;
-import org.herac.tuxguitar.editor.action.effect.TGChangeAccentuatedNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeDeadNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeFadeInAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeGhostNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeHammerNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeHeavyAccentuatedNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeLetRingAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangePalmMuteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangePoppingAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeSlappingAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeSlideNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeStaccatoAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeTappingAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeVibratoNoteAction;
+import org.herac.tuxguitar.editor.action.effect.*;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.ui.menu.UIMenu;
 import org.herac.tuxguitar.ui.menu.UIMenuCheckableItem;
@@ -35,6 +22,10 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 	private UIMenuCheckableItem tremoloBar;
 	private UIMenuCheckableItem deadNote;
 	private UIMenuCheckableItem slide;
+ 	private UIMenuCheckableItem slideFromLow;
+ 	private UIMenuCheckableItem slideFromHigh;
+ 	private UIMenuCheckableItem slideToLow;
+ 	private UIMenuCheckableItem slideToHigh;
 	private UIMenuCheckableItem hammer;
 	private UIMenuCheckableItem ghostNote;
 	private UIMenuCheckableItem accentuatedNote;
@@ -79,8 +70,20 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 		//--SLIDE--
 		this.slide = this.noteEffectsMenuItem.getMenu().createCheckItem();
 		this.slide.addSelectionListener(this.createActionProcessor(TGChangeSlideNoteAction.NAME));
-		
-		//--SLIDE--
+
+		this.slideFromLow = this.noteEffectsMenuItem.getMenu().createCheckItem();
+		this.slideFromLow.addSelectionListener(this.createActionProcessor(TGChangeSlideFromLowAction.NAME));
+
+		this.slideFromHigh = this.noteEffectsMenuItem.getMenu().createCheckItem();
+		this.slideFromHigh.addSelectionListener(this.createActionProcessor(TGChangeSlideFromHighAction.NAME));
+
+		this.slideToLow = this.noteEffectsMenuItem.getMenu().createCheckItem();
+		this.slideToLow.addSelectionListener(this.createActionProcessor(TGChangeSlideToLowAction.NAME));
+
+		this.slideToHigh = this.noteEffectsMenuItem.getMenu().createCheckItem();
+		this.slideToHigh.addSelectionListener(this.createActionProcessor(TGChangeSlideToHighAction.NAME));
+
+		//--DEAD NOTE--
 		this.deadNote = this.noteEffectsMenuItem.getMenu().createCheckItem();
 		this.deadNote.addSelectionListener(this.createActionProcessor(TGChangeDeadNoteAction.NAME));
 		
@@ -173,6 +176,14 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 		this.deadNote.setEnabled(!running && note != null);
 		this.slide.setChecked(note != null && note.getEffect().isSlide());
 		this.slide.setEnabled(!running && note != null);
+		this.slideFromLow.setChecked(note != null && note.getEffect().isSlideFromLow());
+		this.slideFromLow.setEnabled(!running && note != null);
+		this.slideFromHigh.setChecked(note != null && note.getEffect().isSlideFromHigh());
+		this.slideFromHigh.setEnabled(!running && note != null);
+		this.slideToLow.setChecked(note != null && note.getEffect().isSlideToLow());
+		this.slideToLow.setEnabled(!running && note != null);
+		this.slideToHigh.setChecked(note != null && note.getEffect().isSlideToHigh());
+		this.slideToHigh.setEnabled(!running && note != null);
 		this.hammer.setChecked(note != null && note.getEffect().isHammer());
 		this.hammer.setEnabled(!running && note != null);
 		this.ghostNote.setChecked(note != null && note.getEffect().isGhostNote());
@@ -212,6 +223,10 @@ public class NoteEffectsMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.tremoloBar, "effects.tremolo-bar", TGOpenTremoloBarDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.deadNote, "effects.deadnote", TGChangeDeadNoteAction.NAME);
 		setMenuItemTextAndAccelerator(this.slide, "effects.slide", TGChangeSlideNoteAction.NAME);
+		setMenuItemTextAndAccelerator(this.slideFromLow, "effects.slide-fromlow", TGChangeSlideFromLowAction.NAME);
+		setMenuItemTextAndAccelerator(this.slideFromHigh, "effects.slide-fromhigh", TGChangeSlideFromHighAction.NAME);
+		setMenuItemTextAndAccelerator(this.slideToLow, "effects.slide-tolow", TGChangeSlideToLowAction.NAME);
+		setMenuItemTextAndAccelerator(this.slideToHigh, "effects.slide-tohigh", TGChangeSlideToHighAction.NAME);
 		setMenuItemTextAndAccelerator(this.hammer, "effects.hammer", TGChangeHammerNoteAction.NAME);
 		setMenuItemTextAndAccelerator(this.ghostNote, "effects.ghostnote", TGChangeGhostNoteAction.NAME);
 		setMenuItemTextAndAccelerator(this.accentuatedNote, "effects.accentuatednote", TGChangeAccentuatedNoteAction.NAME);

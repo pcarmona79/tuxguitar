@@ -592,7 +592,7 @@ public class GP4InputStream extends GTPInputStream {
 		}
 		if ((flags2 & 0x08) != 0) {
 			noteEffect.setSlide(true);
-			readByte();
+			readSlideFlags(noteEffect);
 		}
 		if ((flags2 & 0x10) != 0) {
 			TGEffectHarmonic harmonic = getFactory().newEffectHarmonic();
@@ -634,6 +634,26 @@ public class GP4InputStream extends GTPInputStream {
 			}
 		}
 	}
+	
+        private void readSlideFlags(TGNoteEffect effect) throws IOException {
+		boolean slide = false;
+                int flags = (int)readByte();
+                if (flags == -2) {
+                    effect.setSlideFrom(1);
+                } else if (flags == -1) {
+                    effect.setSlideFrom(-1);
+                } else if (flags == 1) {
+                    slide = true;
+		} else if (flags == 2) {    
+                    slide = true;
+                    effect.setHammer(true);
+                } else if (flags == 3) {
+                    effect.setSlideTo(-1);
+                } else if (flags == 4) {
+                    effect.setSlideTo(1);
+                } 
+		effect.setSlide(slide);
+        }
 	
 	private void readBeatEffects(TGBeat beat,TGNoteEffect noteEffect) throws IOException {
 		int flags1 = readUnsignedByte();

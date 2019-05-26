@@ -1307,6 +1307,36 @@ public class TGMeasureManager {
 	}
 	
 	/** 
+	 * Agrega un slideFrom
+	 */
+	public void changeSlideFromLow(TGNote note){
+		if(note != null){
+			note.getEffect().setSlideFrom(note.getEffect().isSlideFromLow() ? 0 : -1);
+		}
+	}
+
+	public void changeSlideFromHigh(TGNote note){
+		if(note != null){
+			note.getEffect().setSlideFrom(note.getEffect().isSlideFromHigh() ? 0 : 1);
+		}
+	}
+
+	/** 
+	 * Agrega un slideTo
+	 */
+	public void changeSlideToLow(TGNote note){
+		if(note != null){
+			note.getEffect().setSlideTo(note.getEffect().isSlideToLow() ? 0 : -1);
+		}
+	}
+
+	public void changeSlideToHigh(TGNote note){
+		if(note != null){
+			note.getEffect().setSlideTo(note.getEffect().isSlideToHigh() ? 0 : 1);
+		}
+	}
+
+	/** 
 	 * Cambia el Velocity
 	 */
 	public void changeVelocity(int velocity,TGNote note){

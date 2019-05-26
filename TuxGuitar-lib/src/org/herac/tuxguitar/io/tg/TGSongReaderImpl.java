@@ -539,6 +539,16 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 			effect.setTremoloPicking(readTremoloPickingEffect());
 		}
 		
+		//leo el slide from
+		if(((header & EFFECT_SLIDE_FROM) != 0)){
+			effect.setSlideFrom(readByte());
+		}
+		
+		//leo el slide from
+		if(((header & EFFECT_SLIDE_TO) != 0)){
+			effect.setSlideTo(readByte());
+		}
+		
 		//vibrato
 		effect.setVibrato(((header & EFFECT_VIBRATO) != 0));
 		

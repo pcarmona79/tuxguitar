@@ -332,6 +332,30 @@ public class GPXDocumentParser {
 		}
 	}
 	
+	private void parseSlideFlags(int flags, TGNote note) {
+		// 32 - from high, 16 - from low
+		// 2 - normal slide, 1 - slide and pick (normal in TG)
+		// 4 - to low, 8 - to high
+		boolean slide = false;
+		if ((flags & 32) > 0) {
+                    note.getEffect().setSlideFrom(1);
+		} else if ((flags & 16) > 0) {
+                    note.getEffect().setSlideFrom(-1);
+                }
+		if ((flags & 8) > 0) {
+                    note.getEffect().setSlideTo(1);
+		} else if ((flags & 4) > 0) {
+                    note.getEffect().setSlideTo(-1);
+                }
+                if ((flags & 1) > 0)
+			slide = true;
+		if ((flags & 2) > 0) {
+			note.getEffect().setHammer(true);
+			slide = true;
+		}
+		note.getEffect().setSlide(slide);
+	}
+	
 	private void parseGrace(GPXNote gpNote, TGDuration tgDuration, int tgVelocity, String type) {
 		if (gpNote.getFret() < 0)
 			return;
@@ -455,6 +479,7 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setBend(parseBend( gpNote ) );
 			tgNote.getEffect().setTremoloBar(parseTremoloBar( gpBeat ));
 			tgNote.getEffect().setLetRing(gpNote.isLetRing());
+			parseSlideFlags(gpNote.getSlideFlags(), tgNote);
 			if (grace != null)
 				tgNote.getEffect().setGrace(grace);
 			grace = null;

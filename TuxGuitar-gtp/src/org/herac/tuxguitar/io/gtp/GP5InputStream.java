@@ -577,7 +577,7 @@ public class GP5InputStream extends GTPInputStream {
 		}
 		if ((flags2 & 0x08) != 0) {
 			noteEffect.setSlide(true);
-			readByte();
+			readSlideFlags(noteEffect);
 		}
 		if ((flags2 & 0x10) != 0) {
 			readArtificialHarmonic(noteEffect);
@@ -591,6 +591,28 @@ public class GP5InputStream extends GTPInputStream {
 		noteEffect.setPalmMute(((flags2 & 0x02) != 0));
 		noteEffect.setStaccato(((flags2 & 0x01) != 0));
 	}
+	
+        private void readSlideFlags(TGNoteEffect effect) throws IOException {
+		boolean slide = false;
+                int flags = readUnsignedByte();
+		if ((flags & 32) > 0) {
+                    effect.setSlideFrom(1);
+		} else if ((flags & 16) > 0) {
+                    effect.setSlideFrom(-1);
+                }
+		if ((flags & 8) > 0) {
+                    effect.setSlideTo(1);
+		} else if ((flags & 4) > 0) {
+                    effect.setSlideTo(-1);
+                }
+                if ((flags & 1) > 0)
+			slide = true;
+		if ((flags & 2) > 0) {
+			effect.setHammer(true);
+			slide = true;
+		}
+		effect.setSlide(slide);
+        }
 	
 	private void readGrace(TGNoteEffect effect) throws IOException {
 		int fret = readUnsignedByte();

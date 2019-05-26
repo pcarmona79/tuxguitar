@@ -548,6 +548,8 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		header = (effect.isPopping())?header |= EFFECT_POPPING:header;
 		header = (effect.isFadeIn())?header |= EFFECT_FADE_IN:header;
 		header = (effect.isLetRing())?header |= EFFECT_LET_RING:header;
+		header = (effect.getSlideFrom()!=0)?header |= EFFECT_SLIDE_FROM:header;
+		header = (effect.getSlideTo()!=0)?header |= EFFECT_SLIDE_TO:header;
 		
 		writeHeader(header,3);
 		
@@ -579,6 +581,16 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		//leo el tremolo picking
 		if(((header & EFFECT_TREMOLO_PICKING) != 0)){
 			writeTremoloPickingEffect(effect.getTremoloPicking());
+		}
+		
+		//leo el slide from
+		if(((header & EFFECT_SLIDE_FROM) != 0)){
+			writeByte(effect.getSlideFrom());
+	}
+	
+		//leo el slide to
+		if(((header & EFFECT_SLIDE_TO) != 0)){
+			writeByte(effect.getSlideTo());
 		}
 	}
 	

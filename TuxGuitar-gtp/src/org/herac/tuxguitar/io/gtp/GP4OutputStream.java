@@ -348,7 +348,9 @@ public class GP4OutputStream extends GTPOutputStream{
 			note.getEffect().isPopping()  ||
 			note.getEffect().isHarmonic() ||
 			note.getEffect().isTrill()    ||
-			note.getEffect().isTremoloPicking()) {
+			note.getEffect().isTremoloPicking() ||
+                        note.getEffect().getSlideFrom() != 0 ||
+                        note.getEffect().getSlideTo() != 0) {
 			flags |= 0x08;
 		}
 		writeUnsignedByte(flags);
@@ -477,7 +479,7 @@ public class GP4OutputStream extends GTPOutputStream{
 		if(effect.isTremoloPicking()){
 			flags2 |= 0x04;
 		}
-		if (effect.isSlide()) {
+		if (effect.isSlide() || effect.getSlideFrom() != 0 || effect.getSlideTo() != 0) {
 			flags2 |= 0x08;
 		}
 		if (effect.isVibrato()) {
@@ -502,7 +504,7 @@ public class GP4OutputStream extends GTPOutputStream{
 			writeTremoloPicking(effect.getTremoloPicking());
 		}
 		if ((flags2 & 0x08) != 0) {
-			writeByte((byte)1);
+			writeSlideFlags(effect);
 		}
 		if ((flags2 & 0x10) != 0) {
 			if(effect.getHarmonic().getType() == TGEffectHarmonic.TYPE_NATURAL){
@@ -528,6 +530,24 @@ public class GP4OutputStream extends GTPOutputStream{
 			}
 		}
 	}
+	
+        private void writeSlideFlags(TGNoteEffect effect) throws IOException {
+                int flags = 0;
+		if (effect.getSlideFrom()>0) {
+                    flags = -2;
+		} else if (effect.getSlideFrom()<0) {
+                    flags = -1;
+                } else if (effect.getSlideTo()<0) {
+                    flags = 3;
+		} else if (effect.getSlideTo()>0) {
+                    flags = 4;
+		}
+                if (effect.isSlide() && effect.isHammer())
+                    flags = 2;
+                else if (effect.isSlide())
+                    flags = 1;
+                writeByte((byte) flags);
+        }
 	
 	private void writeBend(TGEffectBend bend) throws IOException {
 		int points = bend.getPoints().size();

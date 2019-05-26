@@ -513,13 +513,18 @@ public class TGNoteImpl extends TGNote {
 		}else if(effect.isTremoloBar()){
 			paintTremoloBar(layout, painter, (x + margin.getRight()), y);
 		}else if(effect.isSlide() || effect.isHammer()){
-			float nextFromX = fromX;
 			TGNoteImpl nextNote = (TGNoteImpl)layout.getSongManager().getMeasureManager().getNextNote(getMeasureImpl(),getBeatImpl().getStart(),getVoice().getIndex(),getString());
-			if(effect.isSlide()){
-				paintSlide(layout, painter, nextNote, x, y, nextFromX);
+			if (effect.isSlide() && effect.isHammer()) {
+				paintSlideHammer(layout, painter, nextNote, x, y, fromX);
+			}else if(effect.isSlide()){
+				paintSlide(layout, painter, nextNote, x, y, fromX);
 			}else if(effect.isHammer()){
-				paintHammer(layout, painter, nextNote, x, y, nextFromX);
+				paintHammer(layout, painter, nextNote, x, y, fromX);
 			}
+		}
+
+		if (effect.getSlideFrom()!=0 || effect.getSlideTo()!=0) {
+			paintUndeterminedSlide(effect, layout, painter, x, y);
 		}
 	}
 	
@@ -558,7 +563,32 @@ public class TGNoteImpl extends TGNote {
 		painter.lineTo(x2,y1);
 		painter.closePath();
 	}
-	
+
+	private void paintUndeterminedSlide(TGNoteEffect effect, TGLayout layout,UIPainter painter,float fromX,float fromY) {
+		float xScale = layout.getScale();
+		float yScale = (layout.getStringSpacing() / 10.0f);
+		float yMove = (3.0f * yScale);
+		float x = fromX;
+		float y = fromY;
+		layout.setTabEffectStyle(painter);
+		painter.initPath();
+		if (effect.getSlideTo() < 0) {
+			painter.moveTo(x + (6.0f * xScale), y - yMove);
+			painter.lineTo(x + (17.0f * xScale), y + yMove);
+		} else if (effect.getSlideTo() > 0) {
+			painter.moveTo(x + (6.0f * xScale), y + yMove);
+			painter.lineTo(x + (17.0f * xScale), y - yMove);
+		}
+		if (effect.getSlideFrom() < 0) {
+			painter.moveTo(x - (4.0f * xScale), y - yMove);
+			painter.lineTo(x - (15.0f * xScale), y + yMove);
+		} else if (effect.getSlideFrom() > 0) {
+			painter.moveTo(x - (4.0f * xScale), y + yMove);
+			painter.lineTo(x - (15.0f * xScale), y - yMove);
+		}
+		painter.closePath();
+	}
+
 	private void paintSlide(TGLayout layout,UIPainter painter,TGNoteImpl nextNote,float fromX,float fromY,float nextFromX){
 		float xScale = layout.getScale();
 		float yScale = (layout.getStringSpacing() / 10.0f);
@@ -592,7 +622,45 @@ public class TGNoteImpl extends TGNote {
 			painter.closePath();
 		}
 	}
-	
+
+	private void paintSlideHammer(TGLayout layout,UIPainter painter,TGNoteImpl nextNote,float fromX,float fromY,float nextFromX){
+		float xScale = layout.getScale();
+		float yScale = (layout.getStringSpacing() / 10.0f);
+		float yMove = (1.5f * yScale);
+		float x = fromX, xh = fromX + (6.0f * xScale);
+		float y = fromY, yh = fromY - (5.0f * yScale);
+		layout.setTabEffectStyle(painter);
+		if(nextNote != null){
+			float nextX = nextNote.getPosX() + nextFromX + nextNote.getBeatImpl().getSpacing(layout);
+			float nextY = y;
+			float width = nextX - (2.0f * xScale) - xh;
+			float height = 15.0f * yScale;
+
+			if(nextNote.getValue() < getValue()){
+				y -= yMove;
+				nextY += yMove;
+			}else if(nextNote.getValue() > getValue()){
+				y += yMove;
+				nextY -= yMove;
+			}else{
+				y -= yMove;
+				nextY -= yMove;
+			}
+			painter.initPath();
+			painter.moveTo(x + (6.5f * xScale),y);
+			painter.lineTo(nextX - (4.0f * xScale),nextY);
+			painter.moveTo(xh,yh);
+			painter.addArc(xh,yh, width, height, 45,90);
+			painter.closePath();
+		}else{
+			painter.initPath();
+			painter.moveTo(x + (6.0f * xScale),y - yMove);
+			painter.lineTo(x + (17.0f * xScale),y - yMove);
+			painter.closePath();
+		}
+	}
+
+
 	private void paintHammer(TGLayout layout, UIPainter painter, TGNoteImpl nextNote, float fromX, float fromY,float nextFromX){
 		float scale = layout.getScale();
 		float x = (fromX + (5.0f * scale));

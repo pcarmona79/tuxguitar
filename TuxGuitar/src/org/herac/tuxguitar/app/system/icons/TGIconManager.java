@@ -113,6 +113,10 @@ public class TGIconManager {
 	private UIImage effectBend;
 	private UIImage effectTremoloBar;
 	private UIImage effectSlide;
+	private UIImage effectSlideFromLow;
+	private UIImage effectSlideFromHigh;
+	private UIImage effectSlideToLow;
+	private UIImage effectSlideToHigh;
 	private UIImage effectHammer;
 	private UIImage effectVibrato;
 	private UIImage effectTrill;
@@ -281,6 +285,10 @@ public class TGIconManager {
 		this.effectBend = loadIcon("effect_bend");
 		this.effectTremoloBar = loadIcon("effect_tremolo_bar");
 		this.effectSlide = loadIcon("effect_slide");
+		this.effectSlideFromLow = loadIcon("effect_slide_fromlow");
+		this.effectSlideFromHigh = loadIcon("effect_slide_fromhigh");
+		this.effectSlideToLow = loadIcon("effect_slide_tolow");
+		this.effectSlideToHigh = loadIcon("effect_slide_tohigh");
 		this.effectHammer = loadIcon("effect_hammer");
 		this.effectVibrato = loadIcon("effect_vibrato");
 		this.effectTrill= loadIcon("effect_trill");
@@ -577,7 +585,23 @@ public class TGIconManager {
 	public UIImage getEffectSlide() {
 		return this.effectSlide;
 	}
-	
+
+	public UIImage getEffectSlideFromLow() {
+		return this.effectSlideFromLow;
+	}
+
+	public UIImage getEffectSlideFromHigh() {
+		return this.effectSlideFromHigh;
+	}
+
+	public UIImage getEffectSlideToLow() {
+		return this.effectSlideToLow;
+	}
+
+	public UIImage getEffectSlideToHigh() {
+		return this.effectSlideToHigh;
+	}
+
 	public UIImage getEffectStaccato() {
 		return this.effectStaccato;
 	}

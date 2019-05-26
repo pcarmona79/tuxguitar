@@ -27,6 +27,8 @@ public abstract class TGNoteEffect {
 	private TGEffectGrace grace;
 	private TGEffectTrill trill;
 	private TGEffectTremoloPicking tremoloPicking;
+	private int slideFrom;
+	private int slideTo;
 	private boolean vibrato;
 	private boolean deadNote;
 	private boolean slide;
@@ -50,6 +52,8 @@ public abstract class TGNoteEffect {
 		this.grace = null;
 		this.trill = null;
 		this.tremoloPicking = null;
+		this.slideFrom = 0;
+		this.slideTo = 0;
 		this.vibrato = false;
 		this.deadNote = false;
 		this.slide = false;
@@ -194,9 +198,10 @@ public abstract class TGNoteEffect {
 			this.trill = null;
 			this.bend = null;
 			this.deadNote = false;
-			this.slide = false;
+			//this.slide = false;
 			this.tremoloBar = null;
 			this.tremoloPicking = null;
+			this.slideTo = 0;
 		}
 	}
 	
@@ -226,6 +231,46 @@ public abstract class TGNoteEffect {
 			this.hammer = false;
 			this.tremoloBar = null;
 			this.tremoloPicking = null;
+			this.slideTo = 0;
+		}
+	}
+
+	public boolean isSlideFromLow() {
+		return this.slideFrom < 0;
+	}
+
+	public boolean isSlideFromHigh() {
+		return this.slideFrom > 0;
+	}
+
+	public boolean isSlideToLow() {
+		return this.slideTo < 0;
+	}
+
+	public boolean isSlideToHigh() {
+		return this.slideTo > 0;
+	}
+
+	public int getSlideFrom() {
+		return this.slideFrom;
+	}
+
+	public int getSlideTo() {
+		return this.slideTo;
+	}
+
+	public void setSlideFrom(int slideFrom) {
+		this.slideFrom = slideFrom;
+		if (this.getSlideFrom()!=0) {
+			this.grace = null;
+		}
+	}
+
+	public void setSlideTo(int slideTo) {
+		this.slideTo = slideTo;
+		if (this.getSlideTo()!=0) {
+			this.slide = false;
+			this.hammer = false;
 		}
 	}
 	
@@ -286,6 +331,8 @@ public abstract class TGNoteEffect {
 	
 	public void setGrace(TGEffectGrace grace) {
 		this.grace = grace;
+		if (this.isGrace())
+			this.slideFrom = 0;
 	}
 	
 	public boolean isGrace() {
@@ -399,7 +446,9 @@ public abstract class TGNoteEffect {
 				isTapping() ||
 				isSlapping() ||
 				isPopping() ||
-				isFadeIn());
+				isFadeIn() ||
+				getSlideTo() != 0 ||
+				getSlideFrom() != 0);
 	}
 	
 	public TGNoteEffect clone(TGFactory factory){
@@ -419,6 +468,8 @@ public abstract class TGNoteEffect {
 		effect.setSlapping(isSlapping());
 		effect.setPopping(isPopping());
 		effect.setFadeIn(isFadeIn());
+		effect.setSlideFrom(getSlideFrom());
+		effect.setSlideTo(getSlideTo());
 		effect.setBend(isBend()?(TGEffectBend)this.bend.clone(factory):null);
 		effect.setTremoloBar(isTremoloBar()?(TGEffectTremoloBar)this.tremoloBar.clone(factory):null);
 		effect.setHarmonic(isHarmonic()?(TGEffectHarmonic)this.harmonic.clone(factory):null);

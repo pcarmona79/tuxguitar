@@ -6,19 +6,7 @@ import org.herac.tuxguitar.app.action.impl.effects.TGOpenHarmonicDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTremoloBarDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTremoloPickingDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTrillDialogAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeAccentuatedNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeDeadNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeFadeInAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeGhostNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeHammerNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeHeavyAccentuatedNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangePalmMuteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangePoppingAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeSlappingAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeSlideNoteAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeStaccatoAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeTappingAction;
-import org.herac.tuxguitar.editor.action.effect.TGChangeVibratoNoteAction;
+import org.herac.tuxguitar.editor.action.effect.*;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
@@ -39,6 +27,10 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 	private UIToolCheckableItem bend;
 	private UIToolCheckableItem tremoloBar;
 	private UIToolCheckableItem slide;
+	private UIToolCheckableItem slideFromLow;
+	private UIToolCheckableItem slideFromHigh;
+	private UIToolCheckableItem slideToLow;
+	private UIToolCheckableItem slideToHigh;
 	private UIToolCheckableItem hammer;
 	private UIToolCheckableItem trill;
 	private UIToolCheckableItem tremoloPicking;
@@ -93,25 +85,37 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		//--BEND--
 		this.tremoloBar = toolBar.createCheckItem();
 		this.tremoloBar.addSelectionListener(this.createActionProcessor(TGOpenTremoloBarDialogAction.NAME));
-		
+
+		//--TRILL--
+		this.trill = toolBar.createCheckItem();
+		this.trill.addSelectionListener(this.createActionProcessor(TGOpenTrillDialogAction.NAME));
+
+		toolBar = this.createToolBar();
+
 		//--SLIDE--
 		this.slide = toolBar.createCheckItem();
 		this.slide.addSelectionListener(this.createActionProcessor(TGChangeSlideNoteAction.NAME));
-		
+
+		//--SLIDE FLAGS
+		this.slideFromLow = toolBar.createCheckItem();
+		this.slideFromLow.addSelectionListener(this.createActionProcessor(TGChangeSlideFromLowAction.NAME));
+		this.slideFromHigh = toolBar.createCheckItem();
+		this.slideFromHigh.addSelectionListener(this.createActionProcessor(TGChangeSlideFromHighAction.NAME));
+		this.slideToLow = toolBar.createCheckItem();
+		this.slideToLow.addSelectionListener(this.createActionProcessor(TGChangeSlideToLowAction.NAME));
+		this.slideToHigh = toolBar.createCheckItem();
+		this.slideToHigh.addSelectionListener(this.createActionProcessor(TGChangeSlideToHighAction.NAME));
+
 		toolBar = this.createToolBar();
 		
 		//--HAMMER--
 		this.hammer = toolBar.createCheckItem();
 		this.hammer.addSelectionListener(this.createActionProcessor(TGChangeHammerNoteAction.NAME));
-		
-		//--TRILL--
-		this.trill = toolBar.createCheckItem();
-		this.trill.addSelectionListener(this.createActionProcessor(TGOpenTrillDialogAction.NAME));
-		
+
 		//--TREMOLO PICKING--
 		this.tremoloPicking = toolBar.createCheckItem();
 		this.tremoloPicking.addSelectionListener(this.createActionProcessor(TGOpenTremoloPickingDialogAction.NAME));
-		
+
 		//--PALM MUTE--
 		this.palmMute = toolBar.createCheckItem();
 		this.palmMute.addSelectionListener(this.createActionProcessor(TGChangePalmMuteAction.NAME));
@@ -150,6 +154,10 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.bend.setToolTipText(this.getText("effects.bend"));
 		this.tremoloBar.setToolTipText(this.getText("effects.tremolo-bar"));
 		this.slide.setToolTipText(this.getText("effects.slide"));
+		this.slideFromLow.setToolTipText(this.getText("effects.slide-fromlow"));
+		this.slideFromHigh.setToolTipText(this.getText("effects.slide-fromhigh"));
+		this.slideToLow.setToolTipText(this.getText("effects.slide-tolow"));
+		this.slideToHigh.setToolTipText(this.getText("effects.slide-tohigh"));
 		this.hammer.setToolTipText(this.getText("effects.hammer"));
 		this.trill.setToolTipText(this.getText("effects.trill"));
 		this.tremoloPicking.setToolTipText(this.getText("effects.tremolo-picking"));
@@ -172,6 +180,10 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.bend.setImage(this.getIconManager().getEffectBend());
 		this.tremoloBar.setImage(this.getIconManager().getEffectTremoloBar());
 		this.slide.setImage(this.getIconManager().getEffectSlide());
+		this.slideFromLow.setImage(this.getIconManager().getEffectSlideFromLow());
+		this.slideFromHigh.setImage(this.getIconManager().getEffectSlideFromHigh());
+		this.slideToLow.setImage(this.getIconManager().getEffectSlideToLow());
+		this.slideToHigh.setImage(this.getIconManager().getEffectSlideToHigh());
 		this.hammer.setImage(this.getIconManager().getEffectHammer());
 		this.trill.setImage(this.getIconManager().getEffectTrill());
 		this.tremoloPicking.setImage(this.getIconManager().getEffectTremoloPicking());
@@ -217,7 +229,19 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		
 		this.slide.setEnabled(!running && !range.isEmpty());
 		this.slide.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlide()));
-		
+
+		this.slideFromLow.setEnabled(!running && !range.isEmpty());
+		this.slideFromLow.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideFromLow()));
+
+		this.slideFromHigh.setEnabled(!running && !range.isEmpty());
+		this.slideFromHigh.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideFromHigh()));
+
+		this.slideToLow.setEnabled(!running && !range.isEmpty());
+		this.slideToLow.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideToLow()));
+
+		this.slideToHigh.setEnabled(!running && !range.isEmpty());
+		this.slideToHigh.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideToHigh()));
+
 		this.hammer.setEnabled(!running && !range.isEmpty());
 		this.hammer.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isHammer()));
 		
