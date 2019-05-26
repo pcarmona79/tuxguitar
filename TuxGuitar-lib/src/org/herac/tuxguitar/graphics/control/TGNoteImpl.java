@@ -44,15 +44,17 @@ public class TGNoteImpl extends TGNote {
 		paintTablatureNote(layout, painter, fromX + tabMoveX, fromY + getPaintPosition(TGTrackSpacing.POSITION_TABLATURE),spacing);
 	}
 	
-	private void paintOfflineEffects(TGLayout layout,UIPainter painter,float fromX, float fromY, float spacing){		
+	private void paintOfflineEffects(TGLayout layout,UIPainter painter,float fromX, float fromY, float spacing){
 		TGSpacing bs = getBeatImpl().getBs();
 		TGSpacing ts = getMeasureImpl().getTs();
 		TGNoteEffect effect = getEffect();
-		
+                TGBeatImpl prev = getBeatImpl().getPreviousBeat();
+                TGBeatImpl next = getBeatImpl().getNextBeat();
+
 		float scale = layout.getScale();
 		float tsY = (fromY + ts.getPosition(TGTrackSpacing.POSITION_EFFECTS));
 		float bsY = (tsY + (ts.getSize(TGTrackSpacing.POSITION_EFFECTS) - bs.getSize( )));
-		
+
 		layout.setOfflineEffectStyle(painter);
 		if(effect.isAccentuatedNote()){
 			float x = fromX + getPosX() + spacing;
@@ -103,15 +105,35 @@ public class TGNoteImpl extends TGNote {
 			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_POPPING_EFFEC ));
 			painter.drawString("P", x, (y + painter.getFMTopLine() + (2f * scale)));
 		}
-		if(effect.isPalmMute()){
-			float x = fromX + getPosX() + spacing;
-			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_PALM_MUTE_EFFEC ));
-			painter.drawString("P.M", x, (y + painter.getFMTopLine() + (2f * scale)));
+		if (effect.isPalmMute()) {
+			float x = getPosX() + spacing;
+			float y = (bsY + bs.getPosition(TGBeatSpacing.POSITION_PALM_MUTE_EFFEC));
+			boolean prevPM = prev!=null && prev.isPalmMute();
+			if (prevPM && prev.getPMPosX()>0.0f)
+				x = prev.getPMPosX();
+			boolean nextPM = false;
+			float nextX = 0;
+			if (next!=null) {
+				nextPM = next.isPalmMute();
+				nextX = next.getPosX()+next.getSpacing(layout);
+			}
+			nextX = paintPalmMute(layout, painter, x, fromX, y, prevPM, nextPM, nextX, "P.M");
+			getBeatImpl().setPMPosX(nextX);
 		}
-		if(effect.isLetRing()){
-			float x = fromX + getPosX() + spacing;
-			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_LET_RING_EFFEC ));
-			painter.drawString("L.R", x, (y + painter.getFMTopLine() + (2f * scale)));
+		if (effect.isLetRing()) {
+			float x = getPosX() + spacing;
+			float y = (bsY + bs.getPosition(TGBeatSpacing.POSITION_LET_RING_EFFEC));
+			boolean prevLR = prev!=null && prev.isLetRing();
+			if (prevLR && prev.getLRPosX()>0.0f)
+				x = prev.getLRPosX();
+			boolean nextLR = false;
+			float nextX = 0;
+			if (next!=null) {
+				nextLR = next.isLetRing();
+				nextX = next.getPosX()+next.getSpacing(layout);
+			}
+			nextX = paintPalmMute(layout, painter, x, fromX, y, prevLR, nextLR, nextX, "L.R");
+			getBeatImpl().setLRPosX(nextX);
 		}
 		if(effect.isVibrato()){
 			float x = fromX + getPosX() + spacing;
@@ -124,8 +146,45 @@ public class TGNoteImpl extends TGNote {
 			paintTrill(layout, painter, x, y);
 		}
 	}
-	
-	public void paintTablatureNoteValue(TGLayout layout, UIPainter painter, UIInset margin, float fromX, float fromY, boolean running) {
+
+	private float paintPalmMute(TGLayout layout, UIPainter painter,float x, float fromX,float y,boolean prevPM,boolean nextPM,float nextX,String PMString) {
+		float xScale = layout.getScale();
+		float spacing = (3.0f * xScale);
+		if (!prevPM) {
+			painter.drawString(PMString, x+fromX, y);
+			x += painter.getFMWidth(PMString);
+		}
+		if (prevPM || nextPM) {
+			if (!nextPM)
+				nextX -= (2.0f*spacing);
+			if (nextX <= 0) {
+				nextX = x + (8.0f * xScale);
+			}
+			float fromY = y;
+			y += (3.0f * xScale);
+			painter.setLineWidth(layout.getLineWidth(1));
+			painter.setLineStyleDash();
+			painter.initPath();
+			painter.moveTo(x+fromX, y);
+			for (; x <= nextX; x += spacing) {
+				painter.lineTo(x+fromX, y);
+				x += spacing;
+				painter.moveTo(x+fromX, y);
+			}
+			if (!nextPM) {
+				painter.closePath();
+				painter.setLineStyleSolid();
+				painter.drawString("|", x+fromX-spacing*2.0f, fromY);
+			} else {
+				painter.closePath();
+				painter.setLineStyleSolid();
+				return x-spacing*2.0f;
+			}
+		}
+		return 0.0f;
+	}
+
+    public void paintTablatureNoteValue(TGLayout layout, UIPainter painter, UIInset margin, float fromX, float fromY, boolean running) {
 		if( layout.isTabNotePathRendererEnabled() ) {
 			this.paintTablatureNoteValuePathMode(layout, painter, margin, fromX, fromY, running);
 		} else {
@@ -495,9 +554,8 @@ public class TGNoteImpl extends TGNote {
 			TGBeat beat = getMeasureImpl().getBeat(i);
 			TGVoice voice = beat.getVoice( getVoice().getIndex() );
 			if (beat.getStart() < getBeatImpl().getStart() && !voice.isRestVoice()) {
-				Iterator<TGNote> it = voice.getNotes().iterator();
-				while(it.hasNext()){
-					TGNoteImpl note = (TGNoteImpl)it.next();
+				for (TGNote tgNote : voice.getNotes()) {
+					TGNoteImpl note = (TGNoteImpl) tgNote;
 					if (note.getString() == getString()) {
 						return note;
 					}
