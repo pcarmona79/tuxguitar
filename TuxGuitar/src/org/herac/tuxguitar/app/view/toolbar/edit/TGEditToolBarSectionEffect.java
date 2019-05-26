@@ -6,9 +6,11 @@ import org.herac.tuxguitar.app.action.impl.effects.TGOpenHarmonicDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTremoloBarDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTremoloPickingDialogAction;
 import org.herac.tuxguitar.app.action.impl.effects.TGOpenTrillDialogAction;
+import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.editor.action.effect.*;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.song.models.TGNote;
+import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
 import org.herac.tuxguitar.ui.toolbar.UIToolCheckableItem;
 import org.herac.tuxguitar.util.TGNoteRange;
@@ -210,9 +212,12 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 	}
 	
 	public void updateSectionItems() {
-		boolean running = MidiPlayer.getInstance(this.getToolBar().getContext()).isRunning();
+		Tablature tablature = this.getTablature();
+		TGTrack track = tablature.getCaret().getTrack();
 
-		TGNoteRange range = this.getTablature().getCurrentNoteRange();
+		boolean percussion = tablature.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId());
+		boolean running = MidiPlayer.getInstance(this.getToolBar().getContext()).isRunning();
+		TGNoteRange range = tablature.getCurrentNoteRange();
 		
 		this.deadNote.setEnabled(!running && !range.isEmpty());
 		this.deadNote.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isDeadNote()));
@@ -226,40 +231,40 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.heavyAccentuatedNote.setEnabled(!running && !range.isEmpty());
 		this.heavyAccentuatedNote.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isHeavyAccentuatedNote()));
 		
-		this.harmonicNote.setEnabled(!running && !range.isEmpty());
+		this.harmonicNote.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.harmonicNote.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isHarmonic()));
 		
-		this.graceNote.setEnabled(!running && !range.isEmpty());
+		this.graceNote.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.graceNote.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isGrace()));
 		
-		this.vibrato.setEnabled(!running && !range.isEmpty());
+		this.vibrato.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.vibrato.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isVibrato()));
 		
-		this.bend.setEnabled(!running && !range.isEmpty());
+		this.bend.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.bend.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isBend()));
 		
-		this.tremoloBar.setEnabled(!running && !range.isEmpty());
+		this.tremoloBar.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.tremoloBar.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isTremoloBar()));
 		
-		this.slide.setEnabled(!running && !range.isEmpty());
+		this.slide.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.slide.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlide()));
 
-		this.slideFromLow.setEnabled(!running && !range.isEmpty());
+		this.slideFromLow.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.slideFromLow.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideFromLow()));
 
-		this.slideFromHigh.setEnabled(!running && !range.isEmpty());
+		this.slideFromHigh.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.slideFromHigh.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideFromHigh()));
 
-		this.slideToLow.setEnabled(!running && !range.isEmpty());
+		this.slideToLow.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.slideToLow.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideToLow()));
 
-		this.slideToHigh.setEnabled(!running && !range.isEmpty());
+		this.slideToHigh.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.slideToHigh.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlideToHigh()));
 
-		this.hammer.setEnabled(!running && !range.isEmpty());
+		this.hammer.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.hammer.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isHammer()));
 		
-		this.trill.setEnabled(!running && !range.isEmpty());
+		this.trill.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.trill.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isTrill()));
 		
 		this.tremoloPicking.setEnabled(!running && !range.isEmpty());
@@ -274,13 +279,13 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.staccato.setEnabled(!running && !range.isEmpty());
 		this.staccato.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isStaccato()));
 		
-		this.tapping.setEnabled(!running && !range.isEmpty());
+		this.tapping.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.tapping.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isTapping()));
 		
-		this.slapping.setEnabled(!running && !range.isEmpty());
+		this.slapping.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.slapping.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isSlapping()));
 		
-		this.popping.setEnabled(!running && !range.isEmpty());
+		this.popping.setEnabled(!running && !percussion  && !range.isEmpty());
 		this.popping.setChecked(!range.isEmpty() && range.getNotes().stream().allMatch(n -> n.getEffect().isPopping()));
 		
 		this.fadeIn.setEnabled(!running && !range.isEmpty());

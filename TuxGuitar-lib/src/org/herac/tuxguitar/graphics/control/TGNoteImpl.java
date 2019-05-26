@@ -28,14 +28,18 @@ public class TGNoteImpl extends TGNote {
 	}
 	
 	public void update(TGLayout layout) {
-	    TGTrack track = getMeasureImpl().getTrack();
-		if (layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
+		if (isPercussion(layout)) {
 			this.accidental = getMeasureImpl().getNoteAccidental( getRealValue() );
 		}
 		this.tabPosY = ( (getString() * layout.getStringSpacing()) - layout.getStringSpacing() );
 		this.scorePosY = getVoiceImpl().getBeatGroup().getY1(layout,this,getMeasureImpl().getKeySignature(),getMeasureImpl().getClef());
 	}
-	
+
+	private boolean isPercussion(TGLayout layout) {
+		TGTrack track = getMeasureImpl().getTrack();
+		return layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId());
+	}
+
 	public void paint(TGLayout layout,UIPainter painter, float fromX, float fromY) {
 		float spacing = getBeatImpl().getSpacing(layout);
 		float tabMoveX = (2f * layout.getScale());
@@ -370,8 +374,7 @@ public class TGNoteImpl extends TGNote {
 			
 			layout.setScoreNoteStyle(painter,playing);
 
-			TGTrack track = getMeasureImpl().getTrack();
-			boolean percussion = layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId());
+			boolean percussion = isPercussion(layout);
 
 			//----------sostenido--------------------------------------
             if (!percussion) {
@@ -577,38 +580,43 @@ public class TGNoteImpl extends TGNote {
 			String value = Integer.toString(effect.getGrace().getFret());
 			painter.drawString(value, (x - margin.getLeft() - painter.getFMWidth(value)), y + painter.getFMMiddleLine());
 		}
-		if(effect.isBend()){
-			paintBend(layout, painter, (x + margin.getRight()), y, effect.getBend().getPoints());
-		}else if(effect.isTremoloBar()){
-			paintTremoloBar(layout, painter, (x + margin.getRight()), y, effect.getTremoloBar().getPoints());
-		}else if(effect.isSlide() || effect.isHammer()){
-			TGNoteImpl nextNote = (TGNoteImpl)layout.getSongManager().getMeasureManager().getNextNote(getMeasureImpl(),getBeatImpl().getStart(),getVoice().getIndex(),getString());
-			if (effect.isSlide() && effect.isHammer()) {
-				paintSlideHammer(layout, painter, nextNote, x, y, fromX);
-			}else if(effect.isSlide()){
-				paintSlide(layout, painter, nextNote, x, y, fromX);
-			}else if(effect.isHammer()){
-				paintHammer(layout, painter, nextNote, x, y, fromX);
+		if (!isPercussion(layout)) {
+			if (effect.isBend()) {
+				paintBend(layout, painter, (x + margin.getRight()), y, effect.getBend().getPoints());
+			} else if (effect.isTremoloBar()) {
+				paintTremoloBar(layout, painter, (x + margin.getRight()), y, effect.getTremoloBar().getPoints());
+			} else if (effect.isSlide() || effect.isHammer()) {
+				TGNoteImpl nextNote = (TGNoteImpl) layout.getSongManager().getMeasureManager().getNextNote(getMeasureImpl(), getBeatImpl().getStart(), getVoice().getIndex(), getString());
+				if (effect.isSlide() && effect.isHammer()) {
+					paintSlideHammer(layout, painter, nextNote, x, y, fromX);
+				} else if (effect.isSlide()) {
+					paintSlide(layout, painter, nextNote, x, y, fromX);
+				} else if (effect.isHammer()) {
+					paintHammer(layout, painter, nextNote, x, y, fromX);
+				}
 			}
-		}
 
-		if (effect.getSlideFrom()!=0 || effect.getSlideTo()!=0) {
-			paintUndeterminedSlide(effect, layout, painter, x, y);
+			if (effect.getSlideFrom() != 0 || effect.getSlideTo() != 0) {
+				paintUndeterminedSlide(effect, layout, painter, x, y);
+			}
 		}
 	}
 
 	public float getEffectSpacing(TGLayout layout) {
 		float es = 0.0f;
 		TGNoteEffect effect = getEffect();
-		if (effect.isBend()) {
-			float bendEs = getBendSpacing(layout, effect.getBend().getPoints());
-			if (bendEs>es)
-				es = bendEs;
-		}
-		if (effect.isTremoloBar()) {
-			float tremoloBarEs = getTremoloBarSpacing(layout, effect.getTremoloBar().getPoints());
-			if (tremoloBarEs>es)
-				es = tremoloBarEs;
+
+		if (!isPercussion(layout)) {
+			if (effect.isBend()) {
+				float bendEs = getBendSpacing(layout, effect.getBend().getPoints());
+				if (bendEs > es)
+					es = bendEs;
+			}
+			if (effect.isTremoloBar()) {
+				float tremoloBarEs = getTremoloBarSpacing(layout, effect.getTremoloBar().getPoints());
+				if (tremoloBarEs > es)
+					es = tremoloBarEs;
+			}
 		}
 		return es;
 	}
