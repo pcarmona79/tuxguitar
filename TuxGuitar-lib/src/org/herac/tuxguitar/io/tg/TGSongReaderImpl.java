@@ -64,6 +64,7 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 			TGSong song = this.read();
 			this.dataInputStream.close();
 			handle.setSong(song);
+			this.autoPercussion(handle.getFactory(), handle.getSong());
 		} catch (Throwable throwable) {
 			throw new TGFileFormatException(throwable);
 		}
@@ -754,5 +755,17 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 			sb.append(this.dataInputStream.readChar());
 		}
 		return sb.toString();
+	}
+
+	private void autoPercussion(TGFactory factory, TGSong song) {
+		for (int i=0; i<song.countChannels();i++)
+			if (song.getChannel(i).isPercussionChannel())
+				return;
+		TGChannel percussion = factory.newChannel();
+		percussion.setChannelId( song.countChannels() + 1 );
+		percussion.setName(("#" + percussion.getChannelId()));
+		percussion.setBank(TGChannel.DEFAULT_PERCUSSION_BANK);
+		percussion.setProgram(TGChannel.DEFAULT_PERCUSSION_PROGRAM);
+		song.addChannel(percussion);
 	}
 }
