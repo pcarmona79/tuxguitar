@@ -143,6 +143,7 @@ public class TGMeasureImpl extends TGMeasure{
 	private float width;
 	
 	private float beatEffectSpacing;
+        private float noteEffectSpacing;
 	private boolean text;
 	private boolean chord;
 	private boolean division1;
@@ -213,6 +214,7 @@ public class TGMeasureImpl extends TGMeasure{
 		else{
 			float quartersInSignature = ((1f / ((float)this.getTimeSignature().getDenominator().getValue())) * 4f) * ((float)this.getTimeSignature().getNumerator());
 			this.width = (getQuarterSpacing() * quartersInSignature);
+			this.width += this.noteEffectSpacing;
 		}
 		
 		this.width += getFirstNoteSpacing(layout);
@@ -238,6 +240,7 @@ public class TGMeasureImpl extends TGMeasure{
 		this.widthBeats = 0;
 		this.notEmptyBeats = 0;
 		this.notEmptyVoices = 0;
+		this.noteEffectSpacing = 0;
 		for(int v = 0 ; v < TGBeat.MAX_VOICES; v ++){
 			this.voiceGroups[v].clear();
 		}
@@ -254,6 +257,7 @@ public class TGMeasureImpl extends TGMeasure{
 				previousChord = beat.getChord();
 			}
 			boolean emptyBeat = true;
+			float beatEs = 0;
 			for( int v = 0; v < TGBeat.MAX_VOICES; v ++){
 				TGVoiceImpl voice = (TGVoiceImpl)beat.getVoice(v);
 				if(!voice.isEmpty()){
@@ -269,10 +273,16 @@ public class TGMeasureImpl extends TGMeasure{
 					}
 					
 					Iterator<TGNote> it = voice.getNotes().iterator();
+					float voiceEs = 0.0f;
 					while(it.hasNext()){
 						TGNoteImpl note = (TGNoteImpl)it.next();
 						voice.check(note);
+						float noteEs = note.getEffectSpacing(layout);
+						if (noteEs>voiceEs)
+							voiceEs = noteEs;
 					}
+					if (voiceEs>beatEs)
+						beatEs = voiceEs;
 					
 					if(!voice.isRestVoice()){
 						beat.check( layout, voice.getMinNote() );
@@ -295,7 +305,7 @@ public class TGMeasureImpl extends TGMeasure{
 							}
 						}
 					}
-					makeVoice(layout, voice, previousVoices[v], groups[v]);
+					makeVoice(layout, voice, previousVoices[v], groups[v], voiceEs);
 					previousVoices[v] = voice;
 				}
 			}
@@ -303,6 +313,7 @@ public class TGMeasureImpl extends TGMeasure{
 				System.out.println( "Empty Beat !!!!!! " + beat.getStart() + "  " + i);
 			}
 			
+                        this.noteEffectSpacing += beatEs;
 			makeBeat(layout,beat,previousBeat,chordEnabled);
 			previousBeat = beat;
 		}
@@ -346,8 +357,8 @@ public class TGMeasureImpl extends TGMeasure{
 		return  (   p1 == p2  );
 	}
 	
-	private void makeVoice(TGLayout layout,TGVoiceImpl voice,TGVoiceImpl previousVoice,TGBeatGroup group){
-		voice.setWidth(layout.getDurationWidth(voice.getDuration()));
+	private void makeVoice(TGLayout layout,TGVoiceImpl voice,TGVoiceImpl previousVoice,TGBeatGroup group,float voiceEs){
+		voice.setWidth(layout.getDurationWidth(voice.getDuration())+voiceEs);
 		voice.setBeatGroup( group );
 		
 		if(previousVoice != null){
@@ -439,8 +450,11 @@ public class TGMeasureImpl extends TGMeasure{
 		
 		float spacing = getFirstNoteSpacing(layout);
 		float tmpX = spacing;
+		this.noteEffectSpacing = 0;
+		TGBeatImpl previousBeat = null;
+		TGBeatImpl beat = null;
 		for (int i = 0; i < countBeats(); i++) {
-			TGBeatImpl beat = (TGBeatImpl) getBeat(i);
+			beat = (TGBeatImpl) getBeat(i);
 			beat.registerBuffer(layout);
 			beat.resetEffectsSpacing(layout);
 			
@@ -463,18 +477,32 @@ public class TGMeasureImpl extends TGMeasure{
 						voice.setWidth( width );
 					}
 				}
-				beat.setPosX( x1 );
+				beat.setPosX( x1+this.noteEffectSpacing );
 				beat.setWidth( minimumWidth );
 			}
+			
+                        float beatEs = 0.0f;
 			
 			for(int v = 0 ; v < beat.countVoices(); v ++){
 				TGVoiceImpl voice = beat.getVoiceImpl(v);
 				if(!voice.isEmpty()){
+                                        float voiceEs = 0.0f;
 					Iterator<TGNote> notes = voice.getNotes().iterator();
 					while(notes.hasNext()){
 						TGNoteImpl note = (TGNoteImpl)notes.next();
 						beat.updateEffectsSpacing(layout, note.getEffect());
 						note.update(layout);
+						if(!this.compactMode) {
+							float noteEs = note.getEffectSpacing(layout);
+							if (noteEs>voiceEs)
+								voiceEs = noteEs;
+						}
+
+					}
+					if(!this.compactMode) {
+						voice.setWidth(voice.getWidth()+voiceEs);
+						if (voiceEs > beatEs)
+							beatEs = voiceEs;
 					}
 					voice.update(layout);
 					
@@ -494,6 +522,10 @@ public class TGMeasureImpl extends TGMeasure{
 					}
 				}
 			}
+                        if(!this.compactMode) {
+                            beat.setWidth(beat.getMinimumWidth()+beatEs);
+                            this.noteEffectSpacing += beatEs;
+                        }
 			
 			float bsSize = beat.getEffectsSpacing(layout);
 			if( bsSize > this.beatEffectSpacing ){
@@ -507,7 +539,13 @@ public class TGMeasureImpl extends TGMeasure{
 			if(!this.text && beat.isTextBeat()){
 				this.text = true;
 			}
+			if (previousBeat!=null)
+				previousBeat.setNextBeat(beat);
+			beat.setPreviousBeat(previousBeat);
+			previousBeat = beat;
 		}
+		if (beat!=null)
+			beat.setNextBeat(null);
 		
 		if( (layout.getStyle() & TGLayout.DISPLAY_SCORE) != 0){
 			for(int i = 0; i < this.voiceGroups.length; i ++){
@@ -578,6 +616,7 @@ public class TGMeasureImpl extends TGMeasure{
 		this.division1 = false;
 		this.division2 = false;
 		this.beatEffectSpacing = 0;
+                this.noteEffectSpacing = 0;
 	}
 	
 	public void registerSpacing(TGLayout layout,TGTrackSpacing ts){

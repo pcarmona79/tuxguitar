@@ -1,13 +1,16 @@
 package org.herac.tuxguitar.graphics.control;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.herac.tuxguitar.graphics.control.painters.TGKeySignaturePainter;
 import org.herac.tuxguitar.graphics.control.painters.TGNotePainter;
 import org.herac.tuxguitar.graphics.control.painters.TGNumberPainter;
 import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.*;
+import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
+import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.ui.resource.UIInset;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIRectangle;
@@ -575,9 +578,9 @@ public class TGNoteImpl extends TGNote {
 			painter.drawString(value, (x - margin.getLeft() - painter.getFMWidth(value)), y + painter.getFMMiddleLine());
 		}
 		if(effect.isBend()){
-			paintBend(layout, painter, (x + margin.getRight()), y);
+			paintBend(layout, painter, (x + margin.getRight()), y, effect.getBend().getPoints());
 		}else if(effect.isTremoloBar()){
-			paintTremoloBar(layout, painter, (x + margin.getRight()), y);
+			paintTremoloBar(layout, painter, (x + margin.getRight()), y, effect.getTremoloBar().getPoints());
 		}else if(effect.isSlide() || effect.isHammer()){
 			TGNoteImpl nextNote = (TGNoteImpl)layout.getSongManager().getMeasureManager().getNextNote(getMeasureImpl(),getBeatImpl().getStart(),getVoice().getIndex(),getString());
 			if (effect.isSlide() && effect.isHammer()) {
@@ -593,41 +596,185 @@ public class TGNoteImpl extends TGNote {
 			paintUndeterminedSlide(effect, layout, painter, x, y);
 		}
 	}
-	
-	private void paintBend(TGLayout layout,UIPainter painter,float fromX,float fromY){
-		float scale = layout.getScale();
-		float x = (fromX + (1.0f * scale));
-		float y = (fromY - (2.0f * scale));
-		
-		layout.setTabEffectStyle(painter);
-		painter.setLineWidth(layout.getLineWidth(1));
-		painter.initPath();
-		painter.moveTo( x, y );
-		painter.lineTo( x + (1.0f * scale), y );
-		painter.cubicTo(x + (1.0f * scale), y,  x + (3.0f * scale), y , x + (3.0f * scale), y - (2.0f * scale));
-		painter.moveTo( x + (3.0f * scale), y - (2.0f * scale) );
-		painter.lineTo( x + (3.0f * scale), y - (12.0f * scale));
-		painter.moveTo( x + (3.0f * scale), y - (12.0f * scale));
-		painter.lineTo( x + (1.0f * scale), y - (10.0f * scale));
-		painter.moveTo( x + (3.0f * scale), y - (12.0f * scale));
-		painter.lineTo( x + (5.0f * scale), y - (10.0f * scale));
-		painter.closePath();
+
+	public float getEffectSpacing(TGLayout layout) {
+		float es = 0.0f;
+		TGNoteEffect effect = getEffect();
+		if (effect.isBend()) {
+			float bendEs = getBendSpacing(layout, effect.getBend().getPoints());
+			if (bendEs>es)
+				es = bendEs;
+		}
+		if (effect.isTremoloBar()) {
+			float tremoloBarEs = getTremoloBarSpacing(layout, effect.getTremoloBar().getPoints());
+			if (tremoloBarEs>es)
+				es = tremoloBarEs;
+		}
+		return es;
 	}
-	
-	private void paintTremoloBar(TGLayout layout,UIPainter painter,float fromX,float fromY){
+
+	private float getBendSpacing(TGLayout layout, List points) {
+		return makeBend(layout, null, 0.0f, 0.0f, points);
+	}
+
+	private void paintBend(TGLayout layout,UIPainter painter,float fromX,float fromY, List<TGEffectBend.BendPoint> points) {
+		makeBend(layout,painter,fromX,fromY,points);
+	}
+
+	private float makeBend(TGLayout layout,UIPainter painter,float fromX,float fromY, List<TGEffectBend.BendPoint> points){
+		if (points.isEmpty())
+			return 0.0f;
+		int[] character;
+		int[] lastValue;
+		// bend/prebend/release.
+		int j = -1;
+		if (points.size()>1) {
+			character = new int[points.size()-1];
+			lastValue = new int[points.size()-1];
+			for (int i = 0; i<points.size()-1;i++) {
+				TGEffectBend.BendPoint current = points.get(i);
+				TGEffectBend.BendPoint next = points.get(i+1);
+				if (current.getPosition()==next.getPosition())
+					continue;
+				if (current.getValue()>next.getValue() && (j==-1 || character[j]!=-1)) {
+					character[++j]=-1;
+				} else if (current.getValue()<next.getValue() && (j==-1 || character[j]!=1)) {
+					character[++j]=1;
+					if (current.getPosition()==next.getPosition()) // pre-bend
+						character[j]=0;
+				} else if (current.getValue()==next.getValue() && j==-1) { // pre-bend
+					character[++j]=0;
+				}
+				if (j>=0)
+					lastValue[j] = current.getValue();
+			}
+		} else {
+			TGEffectBend.BendPoint current = points.get(0);
+			character = new int[1];
+			lastValue = new int[1];
+			character[++j] = 0;
+			if (current !=  null)
+				lastValue[j] = current.getValue();
+		}
+
+		if (painter!=null)
+			layout.setTabEffectStyle(painter);
+		float scale = layout.getScale();
+		float width = (6.0f * scale);
+		float height = (12.0f * scale);
+		float spacing = (2.0f * scale);
+
+		float x = fromX + (3.0f * scale);
+		float basex = x + (4.0f * scale);
+		float y = fromY + (2.0f * scale);
+
+		if (painter!=null)
+			painter.initPath();
+		for (int i=0;i<=j;i++) {
+			if (painter!=null)
+				painter.moveTo(x, y);
+			if (character[i]>=0) {
+				if (character[i]!=0) {
+					if (painter!=null)
+						painter.addArc(x-width, y-height*2.0f, width*2.0f, height*2.0f, 0.0f, -90.0f); // Bottom Right Quarter
+					x+=width;
+				} else if (painter!=null) {
+					painter.lineTo(x, y-height);
+				}
+				if (painter!=null) {
+					painter.moveTo(x,y-height);
+					painter.lineTo(x-2.0f, y-height+2.0f);
+					painter.moveTo(x,y-height);
+					painter.lineTo(x+2.0f, y-height+2.0f);
+				}
+				x+=spacing;
+			} else if (character[i]<0) {
+				if (painter!=null)
+					painter.addArc(x-width, y-height, width*2.0f, height*2.0f, 0.0f, 90.0f); // Top Left Quarter
+				x+=width;
+				if (painter!=null) {
+					painter.moveTo(x-2.0f,y-2.0f);
+					painter.lineTo(x, y);
+					painter.moveTo(x+2.0f,y-2.0f);
+					painter.lineTo(x, y);
+				}
+				x+=spacing;
+			}
+		}
+		if (painter!=null)
+			painter.closePath();
+		return x>basex?x-basex:0.0f;
+	}
+
+	private float getTremoloBarSpacing(TGLayout layout, List points) {
+		return makeTremoloBar(layout, null, 0.0f, 0.0f, points);
+	}
+
+	private void paintTremoloBar(TGLayout layout,UIPainter painter,float fromX,float fromY, List<TGEffectTremoloBar.TremoloBarPoint> points) {
+		makeTremoloBar(layout,painter,fromX,fromY,points);
+	}
+
+ 	private float makeTremoloBar(TGLayout layout,UIPainter painter,float fromX,float fromY, List<TGEffectTremoloBar.TremoloBarPoint> points){
+		if (points.isEmpty())
+			return 0.0f;
+		int[] character;
+		int[] lastValue;
+		int j = -1;
+		if (points.size()>1) {
+			character = new int[points.size()-1];
+			lastValue = new int[points.size()-1];
+			for (int i = 0; i<points.size()-1;i++) {
+				TGEffectTremoloBar.TremoloBarPoint current = points.get(i);
+				TGEffectTremoloBar.TremoloBarPoint next = points.get(i+1);
+				if (current.getPosition()==next.getPosition())
+					continue;
+				if (current.getValue()>next.getValue() && (j==-1 || character[j]!=-1)) {
+					character[++j]=-1;
+				} else if (current.getValue()<next.getValue() && (j==-1 || character[j]!=1)) {
+					character[++j]=1;
+				} else if (current.getValue()==next.getValue() && (j==-1 || character[j]!=0)) {
+					character[++j]=0;
+				}
+				lastValue[j] = current.getValue();
+			}
+		} else {
+			TGEffectTremoloBar.TremoloBarPoint current = points.get(0);
+			character = new int[1];
+			lastValue = new int[1];
+			character[++j] = 0;
+			if (current !=  null)
+				lastValue[j] = current.getValue();
+		}
+		if (painter!=null)
+			layout.setTabEffectStyle(painter);
 		float scale = layout.getScale();
 		float x1 = fromX + (1.0f * scale);
-		float x2 = x1 + (8.0f * scale);
+		float diff = (4.5f * scale);
+		float basex = x1 + (6.0f * scale);
+
 		float y1 = fromY;
 		float y2 = y1 + (9.0f * scale);
-		layout.setTabEffectStyle(painter);
-		painter.setLineWidth(layout.getLineWidth(1));
-		painter.initPath();
-		painter.moveTo(x1,y1);
-		painter.lineTo(x1 + ( (x2 - x1) / 2 ),y2);
-		painter.moveTo(x1 + ( (x2 - x1) / 2 ),y2);
-		painter.lineTo(x2,y1);
-		painter.closePath();
+		float ty = y2;
+		if (character[0]==-1 || (character[0]==0 && (j<1 || character[1]==-1)))
+			ty = y1;
+		if (painter!=null) {
+			painter.initPath();
+			painter.moveTo(x1,ty);
+		}
+		for (int i=0;i<=j;i++) {
+			if (character[i]>0)
+				ty = y1;
+			else if (character[i]<0)
+				ty = y2;
+			x1+=diff;
+			if (painter!=null) {
+				painter.lineTo(x1,ty);
+				painter.moveTo(x1,ty);
+			}
+		}
+		if (painter!=null)
+			painter.closePath();
+		return x1>basex?x1-basex:0.0f;
 	}
 
 	private void paintUndeterminedSlide(TGNoteEffect effect, TGLayout layout,UIPainter painter,float fromX,float fromY) {

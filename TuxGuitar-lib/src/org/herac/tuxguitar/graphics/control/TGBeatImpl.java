@@ -27,6 +27,8 @@ public class TGBeatImpl extends TGBeat{
 	public static final int JOINED_TYPE_RIGHT = 4;
 	
 	private float posX;
+	private float PMPosX;
+	private float LRPosX;
 	private float width;
 	private TGNoteImpl maxNote;
 	private TGNoteImpl minNote;
@@ -64,6 +66,22 @@ public class TGBeatImpl extends TGBeat{
 	
 	public void setPosX(float posX) {
 		this.posX = posX;
+	}
+	
+	public void setPMPosX(float posX) {
+		this.PMPosX = posX;
+	}
+	
+	public void setLRPosX(float posX) {
+		this.LRPosX = posX;
+	}
+	
+	public float getPMPosX() {
+		return this.PMPosX;
+	}
+	
+	public float getLRPosX() {
+		return this.LRPosX;
 	}
 	
 	public float getMinimumWidth() {
@@ -157,6 +175,14 @@ public class TGBeatImpl extends TGBeat{
 		return layout.getComponent().isRunning(this);
 	}
 	
+	public boolean isPalmMute(){
+		return palmMute;
+	}
+	
+	public boolean isLetRing(){
+		return letRing;
+	}
+	
 	public TGVoiceImpl getVoiceImpl(int index){
 		TGVoice voice = super.getVoice(index);
 		if(voice instanceof TGVoiceImpl){
@@ -197,6 +223,8 @@ public class TGBeatImpl extends TGBeat{
 		this.fadeOut = false;
 		this.vibrato = false;
 		this.trill = false;
+		this.LRPosX = 0;
+		this.PMPosX = 0;
 	}
 	
 	public void updateEffectsSpacing(TGLayout layout,TGNoteEffect effect){
