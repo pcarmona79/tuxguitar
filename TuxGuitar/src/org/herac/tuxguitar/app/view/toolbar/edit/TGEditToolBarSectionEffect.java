@@ -35,6 +35,7 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 	private UIToolCheckableItem trill;
 	private UIToolCheckableItem tremoloPicking;
 	private UIToolCheckableItem palmMute;
+	private UIToolCheckableItem letRing;
 	private UIToolCheckableItem staccato;
 	private UIToolCheckableItem tapping;
 	private UIToolCheckableItem slapping;
@@ -120,7 +121,11 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		//--PALM MUTE--
 		this.palmMute = toolBar.createCheckItem();
 		this.palmMute.addSelectionListener(this.createActionProcessor(TGChangePalmMuteAction.NAME));
-		
+
+		//--LET RING--
+		this.letRing = toolBar.createCheckItem();
+		this.letRing.addSelectionListener(this.createActionProcessor(TGChangeLetRingAction.NAME));
+
 		//--STACCATO
 		this.staccato = toolBar.createCheckItem();
 		this.staccato.addSelectionListener(this.createActionProcessor(TGChangeStaccatoAction.NAME));
@@ -167,6 +172,7 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.trill.setToolTipText(this.getText("effects.trill"));
 		this.tremoloPicking.setToolTipText(this.getText("effects.tremolo-picking"));
 		this.palmMute.setToolTipText(this.getText("effects.palm-mute"));
+		this.letRing.setToolTipText(this.getText("effects.let-ring"));
 		this.staccato.setToolTipText(this.getText("effects.staccato"));
 		this.tapping.setToolTipText(this.getText("effects.tapping"));
 		this.slapping.setToolTipText(this.getText("effects.slapping"));
@@ -194,6 +200,7 @@ public class TGEditToolBarSectionEffect extends TGEditToolBarSection {
 		this.trill.setImage(this.getIconManager().getEffectTrill());
 		this.tremoloPicking.setImage(this.getIconManager().getEffectTremoloPicking());
 		this.palmMute.setImage(this.getIconManager().getEffectPalmMute());
+		this.letRing.setImage(this.getIconManager().getEffectLetRing());
 		this.staccato.setImage(this.getIconManager().getEffectStaccato());
 		this.tapping.setImage(this.getIconManager().getEffectTapping());
 		this.slapping.setImage(this.getIconManager().getEffectSlapping());

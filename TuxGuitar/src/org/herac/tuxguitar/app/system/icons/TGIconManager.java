@@ -122,6 +122,7 @@ public class TGIconManager {
 	private UIImage effectTrill;
 	private UIImage effectTremoloPicking;
 	private UIImage effectPalmMute;
+	private UIImage effectLetRing;
 	private UIImage effectStaccato;
 	private UIImage effectTapping;
 	private UIImage effectSlapping;
@@ -295,6 +296,7 @@ public class TGIconManager {
 		this.effectTrill= loadIcon("effect_trill");
 		this.effectTremoloPicking = loadIcon("effect_tremolo_picking");
 		this.effectPalmMute= loadIcon("effect_palm_mute");
+		this.effectLetRing = loadIcon("effect_let_ring");
 		this.effectStaccato = loadIcon("effect_staccato");
 		this.effectTapping = loadIcon("effect_tapping");
 		this.effectSlapping = loadIcon("effect_slapping");
@@ -579,7 +581,11 @@ public class TGIconManager {
 	public UIImage getEffectPalmMute() {
 		return this.effectPalmMute;
 	}
-	
+
+	public UIImage getEffectLetRing() {
+		return this.effectLetRing;
+	}
+
 	public UIImage getEffectPopping() {
 		return this.effectPopping;
 	}
