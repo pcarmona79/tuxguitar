@@ -35,6 +35,7 @@ import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
@@ -606,7 +607,17 @@ public class GP5OutputStream extends GTPOutputStream {
 		}
 		
 		if ((flags2 & 0x10) != 0) {
+			if(effect.getHarmonic().getType() == TGEffectHarmonic.TYPE_NATURAL){
 			writeByte((byte)1);
+			}else if(effect.getHarmonic().getType() == TGEffectHarmonic.TYPE_TAPPED){
+				writeByte((byte)3);
+			}else if(effect.getHarmonic().getType() == TGEffectHarmonic.TYPE_PINCH){
+				writeByte((byte)4);
+			}else if(effect.getHarmonic().getType() == TGEffectHarmonic.TYPE_SEMI){
+				writeByte((byte)5);
+			}else if(effect.getHarmonic().getType() == TGEffectHarmonic.TYPE_ARTIFICIAL){
+				writeByte((byte)15);
+		}
 		}
 		
 		if ((flags2 & 0x20) != 0) {
