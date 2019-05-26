@@ -65,6 +65,11 @@ public class TGPrintPainter implements UIPainter {
 		this.handle.addCircle(x, y, width);
 	}
 
+	@Override
+	public void addArc(float x, float y, float width, float height, float startAngle, float arcAngle) {
+		this.handle.addArc(x, y, width, height, startAngle, arcAngle);
+	}
+
 	public void addRectangle(float x, float y, float width, float height) {
 		this.handle.addRectangle(x, y, width, height);
 	}

@@ -111,7 +111,25 @@ public class SVGPainter extends SVGResourceFactory implements UIPainter {
 		this.svgPath.append((w / 2f) + " " + (w / 2f) + " 0 1 0 " + w + " 0 ");
 		this.svgPath.append((w / 2f) + " " + (w / 2f) + " 0 1 0 -" + w + " 0 ");
 	}
-	
+
+	public void addArc(float x, float y, float width, float height, float startAngle, float arcAngle) {
+	    double aa = Math.toRadians(startAngle);
+		double ab = Math.toRadians(startAngle + arcAngle);
+		float rx = width / 2f;
+		float ry = height / 2f;
+		float cx = x + rx;
+		float cy = y + ry;
+		double x1 = cx + Math.cos(aa) * rx;
+		double y1 = cy + Math.sin(aa) * ry;
+		double x2 = cx + Math.cos(ab) * rx;
+		double y2 = cy + Math.sin(ab) * ry;
+		int large = arcAngle >= 180 ? 1 : 0;
+		int sweep = arcAngle >= 0   ? 1 : 0;
+
+		this.svgPath.append("M " + x1 + " " + y1);
+		this.svgPath.append("A" + rx + " " + ry + " 0 " + large + " " + sweep + " " + x2 + " " + y2);
+	}
+
 	public void addRectangle(float x,float y,float width,float height) {
 		this.svgPath.append("M " + x + " " + y + " ");
 		this.svgPath.append("L " + (x + width) + " " + y + " ");

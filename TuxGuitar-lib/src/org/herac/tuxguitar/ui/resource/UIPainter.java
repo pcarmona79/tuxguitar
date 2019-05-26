@@ -27,7 +27,9 @@ public interface UIPainter extends UIResource {
 	void moveTo(float x, float y);
 	
 	void addCircle(float x, float y, float width);
-	
+
+	void addArc(float x, float y, float width, float height, float startAngle, float arcAngle);
+
 	void addRectangle(float x,float y,float width,float height);
 	
 	void setFont(UIFont font);

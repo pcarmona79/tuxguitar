@@ -96,6 +96,14 @@ public class AWTBufferedPainter extends AWTAbstractPainter {
 		});
 	}
 
+	public void addArc(float x, float y, float width, float height, float startAngle, float arcAngle) {
+		this.commands.add(new GTKPainterCommand() {
+			public void process(UIPainter painter) {
+				painter.addArc(x, y, width, height, startAngle, arcAngle);
+			}
+		});
+	}
+
 	public void addRectangle(final float x, final float y, final float width, final float height) {
 		this.commands.add(new GTKPainterCommand() {
 			public void process(UIPainter painter) {

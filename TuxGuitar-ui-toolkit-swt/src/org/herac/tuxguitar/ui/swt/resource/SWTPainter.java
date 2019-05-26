@@ -106,7 +106,12 @@ public class SWTPainter extends SWTComponent<GC> implements UIPainter {
 		this.path.addArc((x - (width / 2f)), (y - (width / 2f)), width, width, 0, 360);
 		this.pathEmpty = false;
 	}
-	
+
+	public void addArc(float x, float y, float width, float height, float startAngle, float arcAngle) {
+		this.path.addArc(x, y, width, height, startAngle, arcAngle);
+		this.pathEmpty = false;
+	}
+
 	public void addRectangle(float x,float y,float width,float height) {
 		this.path.addRectangle(x, y, width, height);
 		this.pathEmpty = false;

@@ -86,6 +86,10 @@ public class PDFPainter extends PDFResourceFactory implements UIPainter {
 		this.cb.arc((x - (width / 2f)), this.getY(y - (width / 2f)), (x + (width / 2f)), this.getY(y + (width / 2f)), 0, 360);
 	}
 
+	public void addArc(float x, float y, float width, float height, float startAngle, float arcAngle) {
+		this.cb.arc(x, this.getY(y), x + width, this.getY(y + width), startAngle, arcAngle);
+	}
+
 	public void addRectangle(float x, float y, float width, float height) {
 		this.cb.moveTo(x, this.getY(y));
 		this.cb.lineTo((x + width), this.getY(y));

@@ -183,7 +183,12 @@ public class AWTPainter extends AWTAbstractPainter {
 		this.path.append(new Arc2D.Float((x - (width / 2f)), (y - (width / 2f)), width, width, 0,360, Arc2D.OPEN), true);
 		this.pathEmpty = false;
 	}
-	
+
+	public void addArc(float x, float y, float width, float height, float startAngle, float arcAngle) {
+		this.path.append(new Arc2D.Float(x, y, width, height, startAngle, arcAngle, Arc2D.OPEN), true);
+		this.pathEmpty = false;
+	}
+
 	public void addRectangle(float x,float y,float width,float height) {
 		this.path.append(new Rectangle2D.Float(x, y, width, height), true);
 		this.pathEmpty = false;
