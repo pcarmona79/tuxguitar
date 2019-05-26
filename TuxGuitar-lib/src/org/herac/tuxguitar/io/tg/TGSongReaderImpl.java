@@ -150,6 +150,8 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 		//leo el mute
 		track.setMute((header & TRACK_MUTE) != 0);
 		
+                track.setLetRing((header & TRACK_LETRING_THROUGHOUT) != 0);
+		
 		//leo el id del canal
 		track.setChannelId(readShort());
 		

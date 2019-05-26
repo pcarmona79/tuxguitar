@@ -24,6 +24,7 @@ public abstract class TGTrack {
 	private int channelId;
 	private boolean solo;
 	private boolean mute;
+	private boolean letRing;
 	private boolean visible;
 	private String name;
 	private List<TGMeasure> measures;
@@ -38,6 +39,7 @@ public abstract class TGTrack {
 		this.channelId = -1;
 		this.solo = false;
 		this.mute = false;
+		this.letRing = false;
 		this.visible = true;
 		this.name = new String();
 		this.measures = new ArrayList<TGMeasure>();
@@ -123,6 +125,14 @@ public abstract class TGTrack {
 		this.solo = solo;
 	}
 	
+	public boolean isLetRing() {
+		return this.letRing;
+	}
+	
+	public void setLetRing(boolean letRing) {
+		this.letRing = letRing;
+	}
+	
 	public boolean isMute() {
 		return this.mute;
 	}
@@ -195,6 +205,7 @@ public abstract class TGTrack {
 		this.setOffset(track.getOffset());
 		this.setSolo(track.isSolo());
 		this.setMute(track.isMute());
+		this.setLetRing(track.isLetRing());
 		this.setVisible(track.isVisible());
 		this.setChannelId(track.getChannelId());
 		this.getColor().copyFrom(track.getColor());

@@ -499,7 +499,7 @@ public class MidiSequenceParser {
 	}
 	
 	private long getRealNoteDuration(MidiSequenceHelper sh, TGTrack track, TGNote note, TGTempo tempo, long duration,int mIndex, int bIndex) {
-		boolean letRing = (note.getEffect().isLetRing());
+		boolean letRing = (note.getEffect().isLetRing() || track.isLetRing());
 		boolean letRingBeatChanged = false;
 		long lastEnd = (note.getVoice().getBeat().getStart() + note.getVoice().getDuration().getTime() + sh.getMeasureHelper(mIndex).getMove());
 		long realDuration = duration;
@@ -508,16 +508,17 @@ public class MidiSequenceParser {
 		for (int m = mIndex; m < mCount; m++) {
 			MidiMeasureHelper mh = sh.getMeasureHelper( m );
 			TGMeasure measure = track.getMeasure( mh.getIndex() );
-			
+
 			int beatCount = measure.countBeats();
 			for (int b = nextBIndex; b < beatCount; b++) {
 				TGBeat beat = measure.getBeat(b);
 				TGVoice voice = beat.getVoice(note.getVoice().getIndex());
 				if(!voice.isEmpty()){
 					if(voice.isRestVoice()){
-						return applyDurationEffects(note, tempo, realDuration);
+						return realDuration;
 					}
 					int noteCount = voice.countNotes();
+					boolean anyLetRing = false;
 					for (int n = 0; n < noteCount; n++) {
 						TGNote nextNote = voice.getNote( n );
 						if (!nextNote.equals(note) || mIndex != m ) {
@@ -525,14 +526,19 @@ public class MidiSequenceParser {
 								if (nextNote.isTiedNote()) {
 									realDuration += (mh.getMove() + beat.getStart() - lastEnd) + (nextNote.getVoice().getDuration().getTime());
 									lastEnd = (mh.getMove() + beat.getStart() + voice.getDuration().getTime());
-									letRing = (nextNote.getEffect().isLetRing());
+									letRing = (nextNote.getEffect().isLetRing() || track.isLetRing());
+									anyLetRing = true;
 									letRingBeatChanged = true;
 								} else {
-									return applyDurationEffects(note, tempo, realDuration);
+									return realDuration;
 								}
+							} else {
+								anyLetRing = anyLetRing || nextNote.getEffect().isLetRing()|| track.isLetRing();
 							}
 						}
 					}
+					if (!anyLetRing)
+						return realDuration;
 					if(letRing && !letRingBeatChanged){
 						realDuration += ( voice.getDuration().getTime() );
 					}
@@ -541,7 +547,7 @@ public class MidiSequenceParser {
 			}
 			nextBIndex = 0;
 		}
-		return applyDurationEffects(note, tempo, realDuration);
+		return realDuration;
 	}
 	
 	private long applyDurationEffects(TGNote note, TGTempo tempo, long duration){

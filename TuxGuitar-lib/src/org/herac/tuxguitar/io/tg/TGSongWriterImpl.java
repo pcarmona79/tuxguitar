@@ -132,6 +132,9 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		if(!track.getLyrics().isEmpty()){
 			header |= TRACK_LYRICS;
 		}
+		if(track.isLetRing()){
+			header |= TRACK_LETRING_THROUGHOUT;
+		}
 		writeHeader(header);
 		
 		//escribo el nombre

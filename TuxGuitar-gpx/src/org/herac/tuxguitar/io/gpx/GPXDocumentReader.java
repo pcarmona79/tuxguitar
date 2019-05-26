@@ -132,7 +132,8 @@ public class GPXDocumentReader {
 					track.setId( getAttributeIntegerValue(trackNode, "id") );
 					track.setName(getChildNodeContent(trackNode, "Name" ));
 					track.setColor(getChildNodeIntegerContentArray(trackNode, "Color"));
-					
+					track.setLetRing(getChildNode(trackNode, "LetRingThroughout" )!=null);
+
 					if( this.version == GP6 ) {
 						Node gmNode = getChildNode(trackNode, "GeneralMidi");
 						if( gmNode != null ){

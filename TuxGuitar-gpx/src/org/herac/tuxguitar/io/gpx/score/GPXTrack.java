@@ -7,6 +7,7 @@ public class GPXTrack {
 	private int[] tunningPitches;
 	private int[] color;
 	private String name;
+        private boolean letRing;
 	
 	private int gmProgram;
 	private int gmChannel1;
@@ -15,6 +16,7 @@ public class GPXTrack {
 	public GPXTrack(){
 		super();
                 capo = 0;
+                letRing = false;
 	}
 	
 	public int getId() {
@@ -33,6 +35,14 @@ public class GPXTrack {
 		this.tunningPitches = tunningPitches;
 	}
 
+	public boolean isLetRing() {
+		return this.letRing;
+	}
+	
+	public void setLetRing(boolean letRing) {
+		this.letRing = letRing;
+	}
+        	
 	public int getCapo() {
 		return this.capo;
 	}

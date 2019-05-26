@@ -581,6 +581,9 @@ public class TGMeasureImpl extends TGMeasure{
 	}
 	
 	public void registerSpacing(TGLayout layout,TGTrackSpacing ts){
+		if(this.getHeaderImpl().shouldPaintLetRing() && getTrack().isLetRing()){
+			ts.setSize(TGTrackSpacing.POSITION_LOOP_MARKER,layout.getTextSpacing());
+		} else 
 		if(layout.hasLoopMarker( this.getHeader() )){
 			ts.setSize(TGTrackSpacing.POSITION_LOOP_MARKER,layout.getLoopMarkerSpacing());
 		}
@@ -644,6 +647,7 @@ public class TGMeasureImpl extends TGMeasure{
 			this.paintMarker(layout, painter);
 			this.paintTexts(layout,painter);
 			this.paintTempo(layout,painter);
+			this.paintLetRing(layout,painter);
 			this.paintTripletFeel(layout,painter);
 			this.paintDivisions(layout,painter);
 			this.paintRepeatEnding(layout,painter);
@@ -1122,7 +1126,17 @@ public class TGMeasureImpl extends TGMeasure{
 		painter.addRectangle(x, y, size, size);
 		painter.closePath();
 	}
-	
+
+ 	private void paintLetRing(TGLayout layout,UIPainter painter){
+		if (this.getHeaderImpl().shouldPaintLetRing() && getTrack().isLetRing()) {
+			float x = (getPosX() + getHeaderImpl().getLeftSpacing(layout) + getFirstNoteSpacing(layout));
+			float y = (getPosY() + getTs().getPosition(TGTrackSpacing.POSITION_LOOP_MARKER));
+
+			layout.setLetRingStyle(painter);
+			painter.drawString("let ring throughout", x, y);
+		}
+ 	}
+
 	private void paintMarker(TGLayout layout, UIPainter painter){
 		if( this.hasMarker() ){
 			float x = (getPosX() + getHeaderImpl().getLeftSpacing(layout) + getFirstNoteSpacing(layout));

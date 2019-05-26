@@ -376,7 +376,13 @@ public abstract class TGLayout {
 		painter.setBackground(getLightColor(getResources().getBackgroundColor()));
 		painter.setForeground(getDarkColor(color));
 	}
-	
+
+ 	public void setLetRingStyle(UIPainter painter){
+ 		painter.setFont(getResources().getDefaultFont());
+ 		painter.setBackground(getResources().getBackgroundColor());
+ 		painter.setForeground(getResources().getColorBlack());
+ 	}
+
 	public void setTextStyle(UIPainter painter){
 		painter.setFont(getResources().getTextFont());
 		painter.setBackground(getLightColor(getResources().getBackgroundColor()));

@@ -102,6 +102,7 @@ public class GPXDocumentParser {
 			TGTrack tgTrack = this.factory.newTrack();
 			tgTrack.setNumber( i + 1 );
 			tgTrack.setName(gpTrack.getName());
+                        tgTrack.setLetRing(gpTrack.isLetRing());
 			tgTrack.setChannelId(tgChannel.getChannelId());
 			
 			if( gpTrack.getTunningPitches() != null ){

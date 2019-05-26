@@ -273,7 +273,11 @@ public class TGTrackManager {
 	public void changeOffset(TGTrack track, int offset) {
 		track.setOffset(offset);
 	}
-	
+
+	public void changeLetRing(TGTrack track, boolean letRing) {
+		track.setLetRing(letRing);
+	}
+
 	public void changeStringCount(TGTrack track, int count){		
 		if( track.stringCount() != count ) {
 			if( count < track.getStrings().size() ){

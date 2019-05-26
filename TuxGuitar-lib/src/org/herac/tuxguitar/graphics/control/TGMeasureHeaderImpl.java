@@ -17,6 +17,8 @@ public class TGMeasureHeaderImpl extends TGMeasureHeader{
 	
 	private static final int PAINT_TIME_SIGNATURE = 0x04;
 	
+	private static final int PAINT_LETRING_THROUGHOUT = 0x08;
+	
 	private int paintFlags;
 	
 	private float maxQuarterSpacing;
@@ -54,7 +56,8 @@ public class TGMeasureHeaderImpl extends TGMeasureHeader{
 	public void calculateMeasureChanges(TGLayout layout) {
 		TGMeasureHeader previous = layout.getSongManager().getPrevMeasureHeader(layout.getSong(), this);
 		if(previous == null){
-			this.paintFlags |= PAINT_TEMPO; 
+			this.paintFlags |= PAINT_TEMPO;
+			this.paintFlags |= PAINT_LETRING_THROUGHOUT;
 			this.paintFlags |= ((this.getTripletFeel() != TGMeasureHeader.TRIPLET_FEEL_NONE)?PAINT_TRIPLET_FEEL:0);
 			this.paintFlags |= PAINT_TIME_SIGNATURE;
 		}else{
@@ -79,6 +82,10 @@ public class TGMeasureHeaderImpl extends TGMeasureHeader{
 	
 	public boolean shouldPaintTempo(){
 		return ( (this.paintFlags & PAINT_TEMPO) != 0 );
+	}
+	
+	public boolean shouldPaintLetRing(){
+		return ( (this.paintFlags & PAINT_LETRING_THROUGHOUT) != 0 );
 	}
 	
 	public boolean shouldPaintTripletFeel(){

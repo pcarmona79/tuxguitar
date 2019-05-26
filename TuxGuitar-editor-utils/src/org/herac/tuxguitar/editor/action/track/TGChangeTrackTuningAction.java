@@ -21,6 +21,7 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 	public static final String NAME = "action.track.change-tuning";
 	
 	public static final String ATTRIBUTE_OFFSET = "offset";
+	public static final String ATTRIBUTE_LET_RING = "letRing";
 	public static final String ATTRIBUTE_STRINGS = "strings";
 	public static final String ATTRIBUTE_PROGRAM = "program";
 	public static final String ATTRIBUTE_CLEF = "clef";
@@ -36,6 +37,7 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 	protected void processAction(TGActionContext context){
 		TGTrack track = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK);
 		Integer offset = context.getAttribute(ATTRIBUTE_OFFSET);
+		Boolean letRing = context.getAttribute(ATTRIBUTE_LET_RING);
 		List<TGString> strings = ((List<TGString>) context.getAttribute(ATTRIBUTE_STRINGS));
 		Short program = context.getAttribute(ATTRIBUTE_PROGRAM);
 		Integer clef = context.getAttribute(ATTRIBUTE_CLEF);
@@ -87,6 +89,9 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 			}
 			if( offset != null ) {
 				songManager.getTrackManager().changeOffset(track, offset);
+			}
+			if( letRing != null ) {
+				songManager.getTrackManager().changeLetRing(track, letRing);
 			}
 		}
 	}

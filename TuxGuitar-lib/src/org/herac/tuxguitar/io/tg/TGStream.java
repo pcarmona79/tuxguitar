@@ -24,6 +24,8 @@ public class TGStream {
 	
 	protected static final int TRACK_LYRICS = 0x04;
 	
+	protected static final int TRACK_LETRING_THROUGHOUT = 0x08;
+	
 	protected static final int MEASURE_HEADER_TIMESIGNATURE = 0x01;
 	
 	protected static final int MEASURE_HEADER_TEMPO = 0x02;

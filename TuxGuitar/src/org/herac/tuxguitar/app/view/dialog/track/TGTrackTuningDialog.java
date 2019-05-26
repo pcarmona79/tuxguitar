@@ -38,6 +38,7 @@ public class TGTrackTuningDialog {
 	private UICheckBox stringTranspositionTryKeepString;
 	private UICheckBox stringTranspositionApplyToChords;
 	private UISpinner offsetSpinner;
+	private UICheckBox letRing;
 	private UIButton buttonEdit;
 	private UIButton buttonDelete;
 	private UIButton buttonMoveUp;
@@ -178,7 +179,12 @@ public class TGTrackTuningDialog {
 		this.offsetSpinner.setMaximum(TGTrack.MAX_OFFSET);
 		this.offsetSpinner.setValue(track.getOffset());
 		topLayout.set(this.offsetSpinner, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
-		
+
+		this.letRing = factory.createCheckBox(top);
+		this.letRing.setText(TuxGuitar.getProperty("track.letring-throughout"));
+		this.letRing.setSelected(track.isLetRing());
+		topLayout.set(this.letRing, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+
 		//---------------------------------OPTIONS----------------------------------
 		this.stringTransposition = factory.createCheckBox(bottom);
 		this.stringTransposition.setText(TuxGuitar.getProperty("tuning.strings.transpose"));
@@ -356,7 +362,9 @@ public class TGTrackTuningDialog {
 		}
 		
 		final int offset = ((songManager.isPercussionChannel(song, track.getChannelId())) ? 0 : this.offsetSpinner.getValue());
+		final boolean letRing = ((songManager.isPercussionChannel(song, track.getChannelId())) ? false : this.letRing.isSelected());
 		final boolean offsetChanges = offset != track.getOffset();
+		final boolean letRingChanges = letRing != track.isLetRing();
 		final boolean tuningChanges = hasTuningChanges(track, strings);
 		final boolean transposeStrings = shouldTransposeStrings(track, track.getChannelId());
 		final boolean transposeApplyToChords = (transposeStrings && this.stringTranspositionApplyToChords.isSelected());
@@ -382,6 +390,9 @@ public class TGTrackTuningDialog {
 				}
 				if( offsetChanges ) {
 					tgActionProcessor.setAttribute(TGChangeTrackTuningAction.ATTRIBUTE_OFFSET, offset);
+				}
+				if( letRingChanges ) {
+					tgActionProcessor.setAttribute(TGChangeTrackTuningAction.ATTRIBUTE_LET_RING, letRing);
 				}
 				tgActionProcessor.process();
 			}
