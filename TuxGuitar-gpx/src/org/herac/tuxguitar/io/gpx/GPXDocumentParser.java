@@ -18,22 +18,9 @@ import org.herac.tuxguitar.io.gpx.score.GPXTrack;
 import org.herac.tuxguitar.io.gpx.score.GPXVoice;
 import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGChannelParameter;
-import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
-import org.herac.tuxguitar.song.models.TGText;
-import org.herac.tuxguitar.song.models.TGTrack;
-import org.herac.tuxguitar.song.models.TGVelocities;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
@@ -45,6 +32,8 @@ public class GPXDocumentParser {
 	private static final float GP_BEND_SEMITONE =  25f;
 	private static final float GP_WHAMMY_BAR_POSITION = 100f;
 	private static final float GP_WHAMMY_BAR_SEMITONE =  50f;
+	
+	private TGEffectGrace grace = null;
 	
 	private TGFactory factory;
 	private GPXDocument document;
@@ -139,8 +128,26 @@ public class GPXDocumentParser {
 				tgTrack.getColor().setG(gpTrack.getColor()[1]);
 				tgTrack.getColor().setB(gpTrack.getColor()[2]);
 			}
+                        tgTrack.setOffset(gpTrack.getCapo());
 			tgSong.addTrack(tgTrack);
 		}
+	}
+	
+	private TGMarker parseSectionText(String text, String letter, int measure) {
+		if (text != null)
+			text = text.trim();
+		if (letter != null)
+			letter = letter.trim();
+		if (letter != null && letter.length()>0)
+			text = "["+letter+"] "+text;
+		if (text != null && text.length()>0) {
+			TGMarker sectionText = this.factory.newMarker();
+			sectionText.setMeasure(measure);
+			sectionText.setTitle(text.trim());
+			sectionText.setColor(TGColor.GREEN);
+			return sectionText;
+		}
+		return null;
 	}
 	
 	private void parseMasterBars(TGSong tgSong){
@@ -155,7 +162,18 @@ public class GPXDocumentParser {
 			tgMeasureHeader.setStart(tgStart);
 			tgMeasureHeader.setNumber( i + 1 );
 			tgMeasureHeader.setRepeatOpen(mbar.isRepeatStart());
-			tgMeasureHeader.setRepeatClose(mbar.getRepeatCount());
+
+			if(mbar.getRepeatAlternative() != null) {
+				int repeats = 0;
+				// each byte for each checkbox
+				for (int ri = 0; ri < mbar.getRepeatAlternative().length; ri++) {
+					repeats += Math.pow(2,mbar.getRepeatAlternative()[ri]-1);
+				}
+				tgMeasureHeader.setRepeatAlternative(repeats);
+			}
+			
+			tgMeasureHeader.setMarker(parseSectionText(mbar.getSectionText(), mbar.getSectionLetter(), tgMeasureHeader.getNumber()));			
+			tgMeasureHeader.setRepeatClose(mbar.getRepeatCount()-1);
 			tgMeasureHeader.setTripletFeel(parseTripletFeel(mbar));
 			if( mbar.getTime() != null && mbar.getTime().length == 2){
 				tgMeasureHeader.getTimeSignature().setNumerator(mbar.getTime()[0]);
@@ -242,16 +260,33 @@ public class GPXDocumentParser {
 							GPXBeat beat = this.document.getBeat( voice.getBeatIds()[b] );
 							GPXRhythm gpRhythm = this.document.getRhythm( beat.getRhythmId() );
 							
+							if (beat.getGrace()!=null) {
+								TGDuration tgDuration = this.factory.newDuration();
+								this.parseRhythm(gpRhythm, tgDuration);
+								if( beat.getNoteIds() != null ){
+									int tgVelocity = this.parseDynamic(beat);
+									
+									for( int n = 0 ; n < beat.getNoteIds().length; n ++ ){
+										GPXNote gpNote = this.document.getNote( beat.getNoteIds()[n] );
+										if( gpNote != null ){
+												this.parseGrace(gpNote, tgDuration, tgVelocity, beat.getGrace());
+												break;
+										}
+									}
+								}
+								continue;
+							}
 							TGBeat tgBeat = getBeat(tgMeasure, tgStart);
 							TGVoice tgVoice = tgBeat.getVoice( v % tgBeat.countVoices() );
 							tgVoice.setEmpty(false);
-							tgBeat.getStroke().setDirection( this.parseStroke(beat) );
+							parseStroke(tgBeat.getStroke(), beat);
 
-							if (beat.getText().length() > 0) {
+							if (beat.getText() != null && beat.getText().trim().length() > 0) {
 								TGText text = this.factory.newText();
 								text.setValue(beat.getText().trim());
 								text.setBeat(tgBeat);
 								tgBeat.setText(text);
+								
 							}
 							if( beat.getChordId() != null ) {
 								GPXChord gpChord = this.document.getChord( beat.getChordId() );
@@ -284,7 +319,6 @@ public class GPXDocumentParser {
 									}
 								}
 							}
-							
 							tgStart += tgVoice.getDuration().getTime();
 						}
 					}
@@ -295,6 +329,32 @@ public class GPXDocumentParser {
 		if( tgMeasure.getNumber() == 1 ){
 			this.fixFirstMeasureStartPositions(tgMeasure);
 		}
+	}
+	
+	private void parseGrace(GPXNote gpNote, TGDuration tgDuration, int tgVelocity, String type) {
+		if (gpNote.getFret() < 0)
+			return;
+		TGEffectGrace grace = this.factory.newEffectGrace();
+		grace.setFret(gpNote.getFret());
+		grace.setOnBeat(type.equals("OnBeat"));	
+		grace.setDead(gpNote.isMutedEnabled());
+		int duration = tgDuration.getValue();
+		if (duration < 24)
+			duration = 3;
+		else if (duration < 48)
+			duration = 2;
+		else
+			duration = 1;
+		grace.setDuration(duration);
+		grace.setTransition(TGEffectGrace.TRANSITION_NONE);
+		if (gpNote.isHammer())
+			grace.setTransition(TGEffectGrace.TRANSITION_HAMMER);
+		if (gpNote.isSlide())
+			grace.setTransition(TGEffectGrace.TRANSITION_SLIDE);
+		if (gpNote.isBendEnabled())
+			grace.setTransition(TGEffectGrace.TRANSITION_BEND);
+		grace.setDynamic(tgVelocity);
+		this.grace = grace;
 	}
 	
 	private void parseNote(GPXNote gpNote, TGVoice tgVoice, int tgVelocity, GPXBeat gpBeat){
@@ -334,7 +394,7 @@ public class GPXDocumentParser {
 			tgNote.setTiedNote(gpNote.isTieDestination());
 			tgNote.setVelocity(tgVelocity);
 			tgNote.getEffect().setFadeIn(parseFadeIn(gpBeat));
-			tgNote.getEffect().setVibrato(gpNote.isVibrato());
+			tgNote.getEffect().setVibrato(gpNote.isVibrato() || gpBeat.isVibrato());
 			tgNote.getEffect().setSlide(gpNote.isSlide());
 			tgNote.getEffect().setDeadNote(gpNote.isMutedEnabled());
 			tgNote.getEffect().setPalmMute(gpNote.isPalmMutedEnabled());
@@ -388,12 +448,16 @@ public class GPXDocumentParser {
 			tgNote.getEffect().setStaccato(gpNote.getAccent() == 1);
 			tgNote.getEffect().setHeavyAccentuatedNote(gpNote.getAccent() == 4);
 			tgNote.getEffect().setAccentuatedNote(gpNote.getAccent() == 8);
-			tgNote.getEffect().setTrill(parseTrill(gpNote));
+			tgNote.getEffect().setTrill(parseTrill(gpNote, tgVoice.getBeat().getMeasure().getTrack().getString(tgString)));
 			tgNote.getEffect().setTremoloPicking(parseTremoloPicking(gpBeat, gpNote));
 			tgNote.getEffect().setHarmonic(parseHarmonic( gpNote ) );
 			tgNote.getEffect().setBend(parseBend( gpNote ) );
 			tgNote.getEffect().setTremoloBar(parseTremoloBar( gpBeat ));
-			
+			tgNote.getEffect().setLetRing(gpNote.isLetRing());
+			if (grace != null)
+				tgNote.getEffect().setGrace(grace);
+			grace = null;
+
 			// gpNote.getMidiNumber() is only set when XML set it
 			int midiValue = (tgVoice.getBeat().getMeasure().getTrack().getString(tgNote.getString()).getValue() + tgNote.getValue()); 
 			tgNote.getSpelling().setSpellingFromKey(midiValue, tgVoice.getBeat().getMeasure().getKeySignature());
@@ -471,20 +535,30 @@ public class GPXDocumentParser {
 			bend.addPoint(12, note.getBendDestinationValue() * 12 / 300);
 		}
 		return bend;
-	  }
-	
-	private TGEffectTrill parseTrill(GPXNote gpNote){
+	}
+
+	private TGEffectTrill parseTrill(GPXNote gpNote, TGString currentString){
 		TGEffectTrill tr = null;
-		if( gpNote.getTrill() > 0 ){
+		if( gpNote.getTrill() > 0 && gpNote.getTrillDuration() > 0 ){
 			// A trill from string E frets 3 to 4 returns : <Trill>68</Trill> and <XProperties><XProperty id="688062467"><Int>30</Int></XProperty></XProperties>
+			// XProperty ranges from 30 to 480, where 480 = 1/4, 240 = 1/8, 120 = 1/16 and 30 = 1/64
 			// gpNote.getTrill() returns the MIDI note to trill this note with, TG wants a duration as well.
 			tr = this.factory.newEffectTrill();
-			tr.setFret(gpNote.getTrill());
-			// TODO: add a duration
+			tr.setFret(gpNote.getTrill()-currentString.getValue());
+			TGDuration duration = this.factory.newDuration();
+			int dValue = Math.round(1920/gpNote.getTrillDuration());
+			// that's the only values TG supports
+			if (dValue <= 24) // 1/4 to 1/24 -> 1/16
+				duration.setValue(TGDuration.SIXTEENTH);
+			else if (dValue <= 48) // 1/24 to 1/48 -> 1/32
+				duration.setValue(TGDuration.THIRTY_SECOND);
+			else // else -> 1/64
+				duration.setValue(TGDuration.SIXTY_FOURTH);
+			tr.setDuration(duration);
 		}
 		return tr;
 	}
-	
+
 	private TGEffectTremoloPicking parseTremoloPicking(GPXBeat gpBeat, GPXNote gpNote){
 		TGEffectTremoloPicking tp = null;
 		if (gpBeat.getTremolo() != null && gpBeat.getTremolo().length == 2) {
@@ -655,15 +729,29 @@ public class GPXDocumentParser {
 		}
 	}
 	
-	private int parseStroke(GPXBeat beat){
-		int tgStroke = TGStroke.STROKE_NONE;
+	private void parseStroke(TGStroke tgStroke, GPXBeat beat){
+		int dir = TGStroke.STROKE_NONE;
 		String stroke = beat.getBrush(); 
+                if (!beat.getBrush().isEmpty() && beat.getBrushDuration()>0) {
 		if ( stroke.equals("Down")){
-			tgStroke = TGStroke.STROKE_DOWN;
+                    	dir = TGStroke.STROKE_DOWN;
 		}else if ( stroke.equals("Up")){
-			tgStroke = TGStroke.STROKE_UP;
+                    	dir = TGStroke.STROKE_UP;
 		}
-		return tgStroke;
+                    int dValue = Math.round(1920/beat.getBrushDuration());                    
+                    // that's the only values TG supports
+                    if (dValue <= 6) // 1/4 to 1/6 -> 1/4
+                    	tgStroke.setValue(TGDuration.QUARTER);
+                    else if (dValue <= 12) // 1/6 to 1/12 -> 1/8
+			tgStroke.setValue(TGDuration.EIGHTH);
+                    else if (dValue <= 24) // 1/12 to 1/24 -> 1/16
+			tgStroke.setValue(TGDuration.SIXTEENTH);
+                    else if (dValue <= 48) // 1/24 to 1/48 -> 1/32
+			tgStroke.setValue(TGDuration.THIRTY_SECOND);
+                    else // else -> 1/64
+                    	tgStroke.setValue(TGDuration.SIXTY_FOURTH);
+	}
+                tgStroke.setDirection(dir);
 	}
 	
 	private int parseDynamic(GPXBeat beat){

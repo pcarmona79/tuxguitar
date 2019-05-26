@@ -4,12 +4,15 @@ public class GPXMasterBar {
 	
 	private int[] barIds;
 	private int[] time;
+	private int[] repeatAlternative;
 	
 	private int repeatCount;
 	private boolean repeatStart;
 	private int accidentalCount;
 	private String mode;
 	private String tripletFeel;
+	private String sectionText;
+	private String sectionLetter;
 	
 	public GPXMasterBar(){
 		this.accidentalCount = 0;
@@ -30,6 +33,14 @@ public class GPXMasterBar {
 	
 	public void setTime(int[] time) {
 		this.time = time;
+	}
+
+	public int[] getRepeatAlternative() {
+		return repeatAlternative;
+	}
+
+	public void setRepeatAlternative(int[] repeatAlternative) {
+		this.repeatAlternative = repeatAlternative;
 	}
 
 	public int getRepeatCount() {
@@ -62,6 +73,22 @@ public class GPXMasterBar {
 
 	public void setMode(String mode) {
 		this.mode = mode;
+	}
+
+	public String getSectionText() {
+		return this.sectionText;
+	}
+	
+	public void setSectionText(String sectionText) {
+		this.sectionText = sectionText;
+	}
+	
+	public String getSectionLetter() {
+		return this.sectionLetter;
+	}
+	
+	public void setSectionLetter(String sectionLetter) {
+		this.sectionLetter = sectionLetter;
 	}
 
 	public String getTripletFeel() {

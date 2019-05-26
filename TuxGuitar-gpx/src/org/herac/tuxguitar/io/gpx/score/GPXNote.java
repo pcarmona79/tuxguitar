@@ -11,6 +11,7 @@ public class GPXNote {
 	private int trill;
 	private int variation;
 	private int midiNumber;
+	private int trillDuration;
 	// bends are measured in % of full step.  100 = full step, not 100 (cents) = half step
 	private boolean bendEnabled;
 	private Integer bendOriginValue;
@@ -26,6 +27,7 @@ public class GPXNote {
 	private boolean ghost;
 	private boolean slide;
 	private int slideFlags;	// 1, 2, 4, 8, 16 - 2 seems to be up, 4 seems to be down.
+        private boolean letRing;
 	private boolean vibrato;
 	private int accent;
 	private boolean tapped;
@@ -53,7 +55,11 @@ public class GPXNote {
 		this.midiNumber = -1;
 		this.hammer = false;
 		this.ghost = false;
+                this.slide = false;
+                this.letRing = false;
+                
 		this.trill = 0;
+                this.trillDuration = 0;
 		this.accent = 0;
 		this.slideFlags = 0;
 		this.harmonicType = "";
@@ -176,6 +182,22 @@ public class GPXNote {
 
 	public void setTrill(int trill) {
 		this.trill = trill;
+	}
+
+	public int getTrillDuration() {
+		return trillDuration;
+	}
+	
+	public void setTrillDuration(int trillDuration) {
+		this.trillDuration = trillDuration;
+	}        
+
+	public boolean isLetRing() {
+		return letRing;
+	}
+
+	public void setLetRing(boolean letRing) {
+		this.letRing = letRing;
 	}
 
 	public boolean isBendEnabled() {

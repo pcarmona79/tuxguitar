@@ -1,21 +1,22 @@
 package org.herac.tuxguitar.io.gpx.score;
 
 public class GPXBeat {
-	
+
 	private int id;
 	private int rhythmId;
 	private int[] noteIds;
 	private String dynamic;
 	private boolean slapped;
 	private boolean popped;
-	private String brush;	// up stroke, down stroke
+	private boolean vibrato;
+	private String brush;    // up stroke, down stroke
+ 	private int brushDuration;
 	private int[] tremolo; // 1/8, 1/4, etc.
-	private boolean fadeIn;
-	private boolean fadeOut;
-	private String fadding;
+	private String fading;
 	private String text;
+	private String grace;
 	private Integer chordId;
-	
+
 	private boolean whammyBarEnabled;
 	private Integer whammyBarOriginValue;
 	private Integer whammyBarMiddleValue;
@@ -24,38 +25,37 @@ public class GPXBeat {
 	private Integer whammyBarMiddleOffset1;
 	private Integer whammyBarMiddleOffset2;
 	private Integer whammyBarDestinationOffset;
-	
-	public GPXBeat(){
+
+	public GPXBeat() {
 		this.slapped = false;
 		this.popped = false;
 		this.tremolo = null;
 		this.brush = new String();
+		this.brushDuration = 0;
 		this.text = new String();
 		this.tremolo = null;
-		this.fadeIn = false;
-		this.fadeOut = false;
 	}
-	
+
 	public int getId() {
 		return this.id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public int getRhythmId() {
 		return this.rhythmId;
 	}
-	
+
 	public void setRhythmId(int rhythmId) {
 		this.rhythmId = rhythmId;
 	}
-	
+
 	public int[] getNoteIds() {
 		return this.noteIds;
 	}
-	
+
 	public void setNoteIds(int[] noteIds) {
 		this.noteIds = noteIds;
 	}
@@ -63,7 +63,7 @@ public class GPXBeat {
 	public String getDynamic() {
 		return this.dynamic;
 	}
-	
+
 	public void setDynamic(String dynamic) {
 		this.dynamic = dynamic;
 	}
@@ -92,6 +92,14 @@ public class GPXBeat {
 		this.brush = brush;
 	}
 
+	public int getBrushDuration() {
+		return brushDuration;
+	}
+
+	public void setBrushDuration(int brushDuration) {
+		this.brushDuration = brushDuration;
+	}
+
 	public int[] getTremolo() {
 		return tremolo;
 	}
@@ -100,12 +108,28 @@ public class GPXBeat {
 		this.tremolo = tremolo;
 	}
 	
-	public String getFadding() {
-		return fadding;
+	public boolean isVibrato() {
+		return vibrato;
 	}
 
-	public void setFadding(String fadding) {
-		this.fadding = fadding;
+	public void setVibrato(boolean vibrato) {
+		this.vibrato = vibrato;
+	}
+
+	public String getFading() {
+		return fading;
+	}
+
+	public void setFading(String fading) {
+		this.fading = fading;
+	}
+
+	public String getGrace() {
+		return grace;
+	}
+
+	public void setGrace(String grace) {
+		this.grace = grace;
 	}
 
 	public String getText() {
@@ -187,18 +211,4 @@ public class GPXBeat {
 	public void setWhammyBarDestinationOffset(Integer whammyBarDestinationOffset) {
 		this.whammyBarDestinationOffset = whammyBarDestinationOffset;
 	}
-	public void setFadeIn(boolean fade) {
-		this.fadeIn = fade;
-	}
-
-	public boolean isFadeIn() {
-		return this.fadeIn;
-	}
-
-	public void setFadeOut(boolean fade) {
-		this.fadeOut = fade;
-	}
-
-	public boolean isFadeOut() {
-		return this.fadeOut;
-	}}
+}

@@ -21,6 +21,15 @@ import org.w3c.dom.NodeList;
 import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGNoteSpelling;
 
+import java.io.File;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMSource;
+
 public class GPXDocumentReader {
 	
 	public static final Integer GP6 = 6;
@@ -45,8 +54,19 @@ public class GPXDocumentReader {
 		return null;
 	}
 	
+	public void xml2file() {
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(System.getProperty("user.home")+"/output.xml"));
+			Source input = new DOMSource(this.xmlDocument);
+
+			transformer.transform(input, output);
+		} catch (TransformerException e) {}
+	}
+	
 	public GPXDocument read(){
 		if( this.xmlDocument != null ){
+			//xml2file(); // for debug (saves xml file in home directory)
 			this.readScore();
 			this.readAutomations();
 			this.readTracks();
@@ -166,9 +186,11 @@ public class GPXDocumentReader {
 					if( propertiesNode != null ){
 						for( int p = 0 ; p < propertiesNode.getLength() ; p ++ ){
 							Node propertyNode = propertiesNode.item( p );
-							if (propertyNode.getNodeName().equals("Property") ){ 
-								if( getAttributeValue(propertyNode, "name").equals("Tuning") ){
-									track.setTunningPitches( getChildNodeIntegerContentArray(propertyNode, "Pitches") );
+							if (propertyNode.getNodeName().equals("Property") ) {
+								if (getAttributeValue(propertyNode, "name").equals("Tuning")) {
+									track.setTunningPitches(getChildNodeIntegerContentArray(propertyNode, "Pitches"));
+								} else if( getAttributeValue(propertyNode, "name").equals("CapoFret") ) {
+									track.setCapo(getChildNodeIntegerContent(propertyNode, "Fret"));
 								}
 							}
 						}
@@ -243,6 +265,16 @@ public class GPXDocumentReader {
 							masterBar.setRepeatCount( getAttributeIntegerValue(repeatNode, "count") - 1);
 						}
 					}
+					Node alternativeNode = getChildNode(masterBarNode, "AlternateEndings");
+					if( alternativeNode!=null){
+						masterBar.setRepeatAlternative( getChildNodeIntegerContentArray(masterBarNode, "AlternateEndings"));
+					}
+					
+					Node sectionNode = getChildNode(masterBarNode, "Section");
+					if( sectionNode!=null){
+						masterBar.setSectionLetter(getChildNodeContent(sectionNode, "Letter"));	
+						masterBar.setSectionText(getChildNodeContent(sectionNode, "Text"));						
+					}
 					
 					Node keyNode = getChildNode(masterBarNode, "Key");
 					if (keyNode != null) {
@@ -301,19 +333,14 @@ public class GPXDocumentReader {
 					beat.setDynamic(getChildNodeContent(beatNode, "Dynamic"));
 					beat.setRhythmId(getAttributeIntegerValue(getChildNode(beatNode, "Rhythm"), "ref"));
 					beat.setTremolo( getChildNodeIntegerContentArray(beatNode, "Tremolo", "/"));
-					String fade = getChildNodeContent(beatNode, "Fadding");
-					if ( fade != null ) {
-						beat.setFadeIn( fade.equals("FadeIn") );
-						beat.setFadeOut( fade.equals("FadeOut") );
-					}
-					
 					// TODO: <Legato destination="false" origin="true"/>
 					// TODO: <Hairpin>Crescendo</Hairpin>
 					beat.setNoteIds( getChildNodeIntegerContentArray(beatNode, "Notes"));
 					beat.setTremolo( getChildNodeIntegerContentArray(beatNode, "Tremolo", "/"));
 					beat.setChordId( getChildNodeIntegerContent(beatNode, "Chord", null));
-					beat.setFadding( getChildNodeContent(beatNode, "Fadding"));
-					
+					beat.setFading( getChildNodeContent(beatNode, "Fadding"));
+					beat.setGrace( getChildNodeContent(beatNode, "GraceNotes"));
+
 					String text = getChildNodeContent(beatNode, "FreeText");
 					if ( text != null ) {
 						beat.setText(text);
@@ -359,6 +386,23 @@ public class GPXDocumentReader {
 								if( propertyName.equals("Popped") ){
 									beat.setPopped( getChildNode(propertyNode, "Enable") != null );
 								}
+								if (propertyName.equals("VibratoWTremBar")) // has a child Strength with String content Wide or Slight
+									beat.setVibrato( true );
+								if (propertyName.equals("Brush"))
+									beat.setBrush( getChildNodeContent(propertyNode, "Direction"));
+							}
+						}
+					}
+					
+					NodeList xpropertyNodes = getChildNodeList(beatNode, "XProperties");
+					if( xpropertyNodes != null ){
+						for( int p = 0 ; p < xpropertyNodes.getLength() ; p ++ ){
+							Node xpropertyNode = xpropertyNodes.item( p );
+							if (xpropertyNode.getNodeName().equals("XProperty") ){ 
+								int propertyId = getAttributeIntegerValue(xpropertyNode, "id");
+								if( propertyId == 687935489 ){									
+									beat.setBrushDuration(getChildNodeIntegerContent(xpropertyNode, "Int"));
+								}
 							}
 						}
 					}
@@ -396,7 +440,7 @@ public class GPXDocumentReader {
 					
 					note.setAccent(getChildNodeIntegerContent(noteNode, "Accent"));
 					note.setTrill(getChildNodeIntegerContent(noteNode, "Trill"));
-
+                                        note.setLetRing( getChildNode(noteNode, "LetRing") != null );
 					note.setVibrato( getChildNode(noteNode, "Vibrato") != null );
 					
 					NodeList propertyNodes = getChildNodeList(noteNode, "Properties");
@@ -483,6 +527,19 @@ public class GPXDocumentReader {
 								}
 								if( propertyName.equals("HarmonicType") ){
 									note.setHarmonicType( getChildNodeContent (propertyNode, "HType"));
+								}
+							}
+						}
+					}
+					
+					NodeList xpropertyNodes = getChildNodeList(noteNode, "XProperties");
+					if( xpropertyNodes != null ){
+						for( int p = 0 ; p < xpropertyNodes.getLength() ; p ++ ){
+							Node xpropertyNode = xpropertyNodes.item( p );
+							if (xpropertyNode.getNodeName().equals("XProperty") ){ 
+								int propertyId = getAttributeIntegerValue(xpropertyNode, "id");
+								if( propertyId == 688062467 ){									
+									note.setTrillDuration(getChildNodeIntegerContent(xpropertyNode, "Int"));
 								}
 							}
 						}
