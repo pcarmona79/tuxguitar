@@ -21,6 +21,7 @@ import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public abstract class TGNoteEffect {
+    
 	private TGEffectBend bend;
 	private TGEffectTremoloBar tremoloBar;
 	private TGEffectHarmonic harmonic;
@@ -83,6 +84,7 @@ public abstract class TGNoteEffect {
 			this.bend = null;
 			this.trill = null;
 			this.slide = false;
+			this.vibrato = false;
 			this.hammer = false;
 			this.tremoloBar = null;
 			this.tremoloPicking = null;
@@ -98,7 +100,10 @@ public abstract class TGNoteEffect {
 		//si no es null quito los efectos incompatibles
 		if(this.isVibrato()){
 			this.trill = null;
+			this.bend = null;
+			this.tremoloBar = null;
 			this.tremoloPicking = null;
+			this.deadNote = false;
 		}
 	}
 	
@@ -113,9 +118,10 @@ public abstract class TGNoteEffect {
 			this.trill = null;
 			this.deadNote = false;
 			this.slide = false;
+			this.slideTo = 0;
 			this.hammer = false;
 			this.tremoloBar = null;
-			this.tremoloPicking = null;
+			this.vibrato = false;
 		}
 	}
 	
@@ -135,8 +141,8 @@ public abstract class TGNoteEffect {
 			this.trill = null;
 			this.deadNote = false;
 			this.slide = false;
+			this.slideTo = 0;
 			this.hammer = false;
-			this.tremoloPicking = null;
 		}
 	}
 	
@@ -160,6 +166,8 @@ public abstract class TGNoteEffect {
 			this.hammer = false;
 			this.deadNote = false;
 			this.vibrato = false;
+			this.palmMute = false;
+			this.staccato = false;
 		}
 	}
 	
@@ -176,8 +184,6 @@ public abstract class TGNoteEffect {
 		//si es true, quito los efectos incompatibles
 		if(this.isTremoloPicking()){
 			this.trill = null;
-			this.bend = null;
-			this.tremoloBar = null;
 			this.slide = false;
 			this.hammer = false;
 			this.deadNote = false;
@@ -200,7 +206,6 @@ public abstract class TGNoteEffect {
 			this.trill = null;
 			this.bend = null;
 			this.deadNote = false;
-			//this.slide = false;
 			this.tremoloBar = null;
 			this.tremoloPicking = null;
 			this.slideTo = 0;
@@ -230,7 +235,6 @@ public abstract class TGNoteEffect {
 			this.trill = null;
 			this.bend = null;
 			this.deadNote = false;
-			this.hammer = false;
 			this.tremoloBar = null;
 			this.tremoloPicking = null;
 			this.slideTo = 0;
@@ -271,6 +275,8 @@ public abstract class TGNoteEffect {
 	public void setSlideTo(int slideTo) {
 		this.slideTo = slideTo;
 		if (this.getSlideTo()!=0) {
+			this.bend = null;
+			this.tremoloBar = null;
 			this.slide = false;
 			this.hammer = false;
 		}
@@ -351,6 +357,7 @@ public abstract class TGNoteEffect {
 		if(this.isPalmMute()){
 			this.staccato = false;
 			this.letRing = false;
+			this.trill = null;
 		}
 	}
 	
@@ -364,6 +371,7 @@ public abstract class TGNoteEffect {
 		if(this.isStaccato()){
 			this.palmMute = false;
 			this.letRing = false;
+			this.trill = null;
 		}
 	}
 	
