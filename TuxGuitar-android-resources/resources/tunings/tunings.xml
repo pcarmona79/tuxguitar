@@ -2,64 +2,64 @@
 <tunings>
 	<group name="Guitar">
 		<group name="6-String">
-			<tuning name="E Tuning" notes="64,59,55,50,45,40" program="25" clef="1" />
+			<tuning name="E Tuning" notes="64,59,55,50,45,40" program="25" clef="1" frets="24" />
 		</group>
 		<group name="7-String">
-			<tuning name="B Tuning" notes="64,59,55,50,45,40,35" program="25" clef="1" />
+			<tuning name="B Tuning" notes="64,59,55,50,45,40,35" program="25" clef="1" frets="24" />
 		</group>
 		<group name="8-String">
-			<tuning name="F# Tuning" notes="64,59,55,50,45,40,35,30" program="25" clef="1" />
+			<tuning name="F# Tuning" notes="64,59,55,50,45,40,35,30" program="25" clef="1" frets="24" />
 		</group>
 		<group name="9-String">
-			<tuning name="C# Tuning" notes="64,59,55,50,45,40,35,30,25" program="25" clef="1" />
+			<tuning name="C# Tuning" notes="64,59,55,50,45,40,35,30,25" program="25" clef="1" frets="24" />
 		</group>
 	</group>
 	<group name="Bass">
 		<group name="4-String">
-			<tuning name="E Tuning" notes="43,38,33,28" program="34" clef="2" />
+			<tuning name="E Tuning" notes="43,38,33,28" program="34" clef="2" frets="24" />
 		</group>
 		<group name="5-String">
-			<tuning name="B Tuning" notes="43,38,33,28,23" program="34" clef="2" />
+			<tuning name="B Tuning" notes="43,38,33,28,23" program="34" clef="2" frets="24" />
 		</group>
 		<group name="6-String">
-			<tuning name="B Tuning" notes="48,43,38,33,28,23" program="34" clef="2" />
+			<tuning name="B Tuning" notes="48,43,38,33,28,23" program="34" clef="2" frets="24" />
 		</group>
 	</group>
 	<group name="Banjo">
 		<group name="4-String">
-			<tuning name="Tenor" notes="69,62,55,48" program="105" clef="1" />
-			<tuning name="Plectrum" notes="62,59,55,48" program="105" clef="1" />
+			<tuning name="Tenor" notes="69,62,55,48" program="105" clef="1" frets="24" />
+			<tuning name="Plectrum" notes="62,59,55,48" program="105" clef="1" frets="24" />
 		</group>
 		<group name="5-String">
-			<tuning name="Standard" notes="62,59,55,50,67" program="105" clef="1" />
+			<tuning name="Standard" notes="62,59,55,50,67" program="105" clef="1" frets="24" />
 		</group>
 	</group>
 	<group name="Ukulele">
 		<group name="4-String">
-			<tuning name="Standard" notes="69,64,60,67" program="24" clef="1" />
-			<tuning name="Tenor" notes="69,64,60,55" program="24" clef="1" />
-			<tuning name="Baritone" notes="64,59,55,50" program="24" clef="1" />
+			<tuning name="Standard" notes="69,64,60,67" program="24" clef="1" frets="17" />
+			<tuning name="Tenor" notes="69,64,60,55" program="24" clef="1" frets="17" />
+			<tuning name="Baritone" notes="64,59,55,50" program="24" clef="1" frets="17" />
 		</group>
 	</group>
 	<group name="Violin">
 		<group name="4-String">
-			<tuning name="Standard" notes="76,69,62,55" program="40" clef="1" />
-			<tuning name="Tenor" notes="64,57,50,43" program="40" clef="3" />
+			<tuning name="Standard" notes="76,69,62,55" program="40" clef="1" frets="24" />
+			<tuning name="Tenor" notes="64,57,50,43" program="40" clef="3" frets="24" />
 		</group>
 	</group>
 	<group name="Viola">
 		<group name="4-String">
-			<tuning name="Standard" notes="69,62,55,48" program="41" clef="4" />
+			<tuning name="Standard" notes="69,62,55,48" program="41" clef="4" frets="24" />
 		</group>
 	</group>
 	<group name="Cello">
 		<group name="4-String">
-			<tuning name="Standard" notes="57,50,43,36" program="42" clef="2" />
+			<tuning name="Standard" notes="57,50,43,36" program="42" clef="2" frets="29" />
 		</group>
 	</group>
 	<group name="Double Bass">
 		<group name="5-String">
-			<tuning name="Standard" notes="43,38,33,28,24" program="43" clef="2" />
+			<tuning name="Standard" notes="43,38,33,28,24" program="43" clef="2" frets="31" />
 		</group>
 	</group>
 </tunings>

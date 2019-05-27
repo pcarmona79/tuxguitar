@@ -6,13 +6,15 @@ public class TuningPreset {
     private int[] values;
     private short program;
     private int clef;
+    private int frets;
 
-    public TuningPreset(TuningGroup parent, String name, int[] values, short program, int clef) {
+    public TuningPreset(TuningGroup parent, String name, int[] values, short program, int clef, int frets) {
         this.parent = parent;
         this.name = name;
         this.values = values;
         this.program = program;
         this.clef = clef;
+        this.frets = frets;
     }
     public TuningGroup getParent() {
         return this.parent;
@@ -28,5 +30,8 @@ public class TuningPreset {
     }
     public int getClef() {
         return this.clef;
+    }
+    public int getFrets() {
+        return this.frets;
     }
 }

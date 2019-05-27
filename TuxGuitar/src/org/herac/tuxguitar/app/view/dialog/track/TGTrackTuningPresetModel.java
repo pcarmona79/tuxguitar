@@ -6,6 +6,7 @@ public class TGTrackTuningPresetModel {
 	private TGTrackTuningModel[] values;
 	private short program;
 	private int clef;
+	private int frets;
 	private TGTrackTuningGroupEntryModel entry;
 
 	public TGTrackTuningPresetModel() {
@@ -72,5 +73,13 @@ public class TGTrackTuningPresetModel {
 
 	public void setProgram(short program) {
 		this.program = program;
+	}
+
+	public int getFrets() {
+		return frets;
+	}
+
+	public void setFrets(int frets) {
+		this.frets = frets;
 	}
 }

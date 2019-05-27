@@ -85,16 +85,19 @@ public class TuningWriter {
             Attr attrNotes = document.createAttribute(NOTES_ATTRIBUTE);
             Attr attrProgram = document.createAttribute(PROGRAM_ATTRIBUTE);
             Attr attrClef = document.createAttribute(CLEF_ATTRIBUTE);
+            Attr attrFrets = document.createAttribute(FRETS_ATTRIBUTE);
 
             attrName.setNodeValue(preset.getName());
             attrNotes.setNodeValue(Arrays.stream(preset.getValues()).mapToObj(Integer::toString).collect(Collectors.joining(",")));
             attrProgram.setNodeValue(Integer.toString(preset.getProgram()));
             attrClef.setNodeValue(Integer.toString(preset.getClef()));
+            attrFrets.setNodeValue(Integer.toString(preset.getFrets()));
 
             node.getAttributes().setNamedItem(attrName);
             node.getAttributes().setNamedItem(attrNotes);
             node.getAttributes().setNamedItem(attrProgram);
             node.getAttributes().setNamedItem(attrClef);
+            node.getAttributes().setNamedItem(attrFrets);
 
             parent.appendChild(node);
         }

@@ -13,6 +13,7 @@ import org.herac.tuxguitar.song.helpers.tuning.TuningPreset;
 
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGMeasure;
+import org.herac.tuxguitar.song.models.TGTrack;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -26,6 +27,7 @@ public class TuningReader {
 	public static final String NOTES_ATTRIBUTE = "notes";
 	public static final String PROGRAM_ATTRIBUTE = "program";
 	public static final String CLEF_ATTRIBUTE = "clef";
+	public static final String FRETS_ATTRIBUTE = "frets";
 	public static final String KEY_SEPARATOR = ",";
 
 	public void loadTunings(TuningGroup group, InputStream stream){
@@ -62,6 +64,7 @@ public class TuningReader {
 				String notes = params.getNamedItem(NOTES_ATTRIBUTE).getNodeValue();
 				String program = params.getNamedItem(PROGRAM_ATTRIBUTE).getNodeValue();
 				String clef = params.getNamedItem(CLEF_ATTRIBUTE).getNodeValue();
+				String frets = params.getNamedItem(FRETS_ATTRIBUTE).getNodeValue();
 
 				if (name == null || notes == null || name.trim().equals("") || notes.trim().equals("")){
 					throw new RuntimeException("Invalid Tuning file format.");
@@ -79,7 +82,8 @@ public class TuningReader {
 
 				short programNumber = program == null ? TGChannel.DEFAULT_PROGRAM : Short.parseShort(program);
 				int clefValue = clef == null ? TGMeasure.DEFAULT_CLEF : Integer.parseInt(clef);
-				TuningPreset tuning = new TuningPreset(group, name, noteValues, programNumber, clefValue);
+				int fretValue = frets == null ? TGTrack.DEFAULT_FRETS : Integer.parseInt(frets);
+				TuningPreset tuning = new TuningPreset(group, name, noteValues, programNumber, clefValue, fretValue);
 				group.getTunings().add(tuning);
 			} else if (nodeName.equals(GROUP_TAG)) {
 				NamedNodeMap params = child.getAttributes();

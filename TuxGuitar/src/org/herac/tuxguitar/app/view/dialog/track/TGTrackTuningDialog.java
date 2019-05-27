@@ -179,7 +179,7 @@ public class TGTrackTuningDialog {
 		this.fretsSpinner.setMinimum(TGTrack.MIN_FRETS);
 		this.fretsSpinner.setMaximum(TGTrack.MAX_FRETS);
 		this.fretsSpinner.setValue(track.getFrets());
-		topLayout.set(this.fretsSpinner, 1, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, true, 1, 1, 80f, null, 0f);
+		topLayout.set(this.fretsSpinner, 1, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, true, 1, 1, 80f, null, 2f);
 
 		//---------------------------------OFFSET--------------------------------
 		UILabel offsetLabel = factory.createLabel(top);
@@ -190,7 +190,7 @@ public class TGTrackTuningDialog {
 		this.offsetSpinner.setMinimum(TGTrack.MIN_OFFSET);
 		this.offsetSpinner.setMaximum(TGTrack.MAX_OFFSET);
 		this.offsetSpinner.setValue(track.getOffset());
-		topLayout.set(this.offsetSpinner, 2, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, true, 1, 1, 80f, null, 0f);
+		topLayout.set(this.offsetSpinner, 2, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, true, 1, 1, 80f, null, 2f);
 
 		this.letRing = factory.createCheckBox(top);
 		this.letRing.setText(TuxGuitar.getProperty("track.letring-throughout"));
@@ -360,6 +360,7 @@ public class TGTrackTuningDialog {
 		}
 		this.program = preset.getProgram();
 		this.clef = preset.getClef();
+		this.fretsSpinner.setValue(preset.getFrets());
 		this.updateTuningModels(models);
 	}
 	
@@ -375,7 +376,7 @@ public class TGTrackTuningDialog {
 
 		final int frets = ((songManager.isPercussionChannel(song, track.getChannelId())) ? 0 : this.fretsSpinner.getValue());
 		final int offset = ((songManager.isPercussionChannel(song, track.getChannelId())) ? 0 : this.offsetSpinner.getValue());
-		final boolean letRing = ((songManager.isPercussionChannel(song, track.getChannelId())) ? false : this.letRing.isSelected());
+		final boolean letRing = ((!songManager.isPercussionChannel(song, track.getChannelId())) && this.letRing.isSelected());
 		final boolean fretsChanges = frets != track.getFrets();
 		final boolean offsetChanges = offset != track.getOffset();
 		final boolean letRingChanges = letRing != track.isLetRing();
@@ -385,7 +386,7 @@ public class TGTrackTuningDialog {
 		final boolean transposeTryKeepString = (transposeStrings && this.stringTranspositionTryKeepString.isSelected());
 		
 		if( this.validateTrackTuning(strings)) {
-			if( tuningChanges || fretsChanges || offsetChanges || this.program != -1 || this.clef != -1 ){
+			if( tuningChanges || fretsChanges || offsetChanges || this.program != -1 || this.clef != -1){
 				TGActionProcessor tgActionProcessor = new TGActionProcessor(this.context.getContext(), TGChangeTrackTuningAction.NAME);
 				tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG, song);
 				tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK, track);

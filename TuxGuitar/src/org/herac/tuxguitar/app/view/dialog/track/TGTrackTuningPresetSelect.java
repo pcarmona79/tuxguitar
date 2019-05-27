@@ -16,6 +16,7 @@ import org.herac.tuxguitar.song.helpers.tuning.TuningManager;
 import org.herac.tuxguitar.song.helpers.tuning.TuningPreset;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGMeasure;
+import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.*;
@@ -52,6 +53,7 @@ public class TGTrackTuningPresetSelect {
         this.temporary = new TGTrackTuningPresetModel();
         this.temporary.setProgram(TGChannel.DEFAULT_PROGRAM);
         this.temporary.setClef(TGMeasure.CLEF_TREBLE);
+        this.temporary.setFrets(TGTrack.DEFAULT_FRETS);
 
         this.layout = new UITableLayout(0f);
         this.panel = factory.createPanel(parent, false);
@@ -98,6 +100,7 @@ public class TGTrackTuningPresetSelect {
         preset.setValues(models);
         preset.setProgram(tuning.getProgram());
         preset.setClef(tuning.getClef());
+        preset.setFrets(tuning.getFrets());
         return preset;
     }
 
@@ -287,11 +290,26 @@ public class TGTrackTuningPresetSelect {
             clefs.setSelectedValue(this.temporary.getClef());
         }
 
+        UILabel fretsLabel = factory.createLabel(form);
+        fretsLabel.setText(TuxGuitar.getProperty("tuning.frets"));
+        formLayout.set(fretsLabel, 4, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);
+
+
+        UISpinner fretsSpinner = factory.createSpinner(form);
+        fretsSpinner.setMinimum(TGTrack.MIN_FRETS);
+        fretsSpinner.setMaximum(TGTrack.MAX_FRETS);
+        if (this.current != null) {
+            fretsSpinner.setValue(this.temporary.getFrets());
+        } else {
+            fretsSpinner.setValue(this.temporary.getFrets());
+        }
+        formLayout.set(clefs, 4, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false, 1, 1, 80f, null, 0f);
+
         dialogLayout.set(form, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_TOP, true, true);
 
         TGDialogButtons buttons = new TGDialogButtons(factory, nameDialog,
                 TGDialogButtons.ok(() -> {
-                    addPreset(nameEntry.getText(), program.getSelectedValue(), clefs.getSelectedValue());
+                    addPreset(nameEntry.getText(), program.getSelectedValue(), clefs.getSelectedValue(), fretsSpinner.getValue());
                     nameDialog.dispose();
                 }),
                 TGDialogButtons.cancel(nameDialog::dispose));
@@ -317,15 +335,16 @@ public class TGTrackTuningPresetSelect {
         for (int i = 0; i < values.length; i++) {
             values[i] = this.temporary.getValues()[i].getValue();
         }
-        return new TuningPreset(this.tuningManager.getCustomTunings(), this.temporary.getName(), values, this.temporary.getProgram(), this.temporary.getClef());
+        return new TuningPreset(this.tuningManager.getCustomTunings(), this.temporary.getName(), values, this.temporary.getProgram(), this.temporary.getClef(), this.temporary.getFrets());
     }
 
 
-    private void addPreset(String name, short program, int clef) {
+    private void addPreset(String name, short program, int clef, int frets) {
         TuningGroup custom = this.tuningManager.getCustomTunings();
         this.temporary.setName(name);
         this.temporary.setProgram(program);
         this.temporary.setClef(clef);
+        this.temporary.setFrets(frets);
         if (this.current != null) {
             this.presets.remove(this.current);
             int index = getIndex(this.current);
