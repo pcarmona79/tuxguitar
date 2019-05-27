@@ -2,6 +2,7 @@ package org.herac.tuxguitar.app.transport;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.util.MidiTickUtil;
+import org.herac.tuxguitar.app.view.component.tab.Caret;
 import org.herac.tuxguitar.document.TGDocumentManager;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
@@ -78,6 +79,8 @@ public class TGTransport {
 			if( playingMeasure == null || playingMeasure.getHeader().getNumber() != header.getNumber() ){
 				TuxGuitar.getInstance().getPlayer().setTickPosition(MidiTickUtil.getTick(header.getStart()));
 				if(moveCaret){
+					Caret caret = TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret();
+					caret.update(caret.getTrack().getNumber(), header.getStart(), caret.getStringNumber());
 					TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().goToTickPosition();
 					TuxGuitar.getInstance().updateCache(true);
 				}
@@ -99,13 +102,7 @@ public class TGTransport {
 	}
 	
 	public void gotoPlayerPosition(){
-		MidiPlayer player = TuxGuitar.getInstance().getPlayer();
-		TGMeasureHeader header = getSongManager().getMeasureHeaderAt(getSong(), MidiTickUtil.getStart(player.getTickPosition()));
-		if(header != null){
-			player.setTickPosition(MidiTickUtil.getTick(header.getStart()));
-		}
 		TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().goToTickPosition();
-		
 		TuxGuitar.getInstance().updateCache(true);
 	}
 	

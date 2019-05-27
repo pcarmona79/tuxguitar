@@ -24,16 +24,17 @@ public class TGTransportPlaySelectionAction extends TGActionBase {
 		TGTransport transport = TGTransport.getInstance(getContext());
 		Tablature tablature = TablatureEditor.getInstance(getContext()).getTablature();
 		MidiPlayer player = MidiPlayer.getInstance(getContext());
-		MidiPlayerMode pm = player.getMode();
 		Selector selector = tablature.getSelector();
-		if (selector.isActive()) {
-		    TGBeat endBeat = selector.getEndBeat();
-		    TGDuration duration = tablature.getSongManager().getMeasureManager().getMinimumDuration(endBeat);
-		    player.setSelection(selector.getStartBeat().getStart(), endBeat.getStart() + duration.getTime());
-			transport.gotoBeat(selector.getStartBeat());
-		} else {
-			player.setSelection(-1, -1);
-			transport.gotoBeat(tablature.getCaret().getSelectedBeat());
+		if (!player.isRunning()) {
+			if (selector.isActive()) {
+				TGBeat endBeat = selector.getEndBeat();
+				TGDuration duration = tablature.getSongManager().getMeasureManager().getMinimumDuration(endBeat);
+				player.setSelection(selector.getStartBeat().getStart(), endBeat.getStart() + duration.getTime());
+				transport.gotoBeat(selector.getStartBeat());
+			} else {
+				player.setSelection(-1, -1);
+				transport.gotoBeat(tablature.getCaret().getSelectedBeat());
+			}
 		}
 		transport.play();
 	}

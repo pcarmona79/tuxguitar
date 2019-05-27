@@ -340,7 +340,7 @@ public class Caret {
 	}
 	
 	private void checkTransport(){
-		TGTransport.getInstance(this.tablature.getContext()).gotoMeasure(getMeasure().getHeader());
+		TGTransport.getInstance(this.tablature.getContext()).gotoBeat(getSelectedBeat());
 	}
 	
 	public boolean hasChanges() {
