@@ -118,6 +118,6 @@ JNIEXPORT void JNICALL Java_org_herac_tuxguitar_player_impl_midiport_winmm_MidiS
 	midi_handle_t *handle = NULL;
 	memcpy(&handle, &ptr, sizeof(handle));
 	if(handle != NULL && handle->out != NULL){
-		midiOutShortMsg(*handle->out, ( ( 0xE0 | channel ) | ( (value * 128 * 2) << 8 ) ) );
+		midiOutShortMsg(*handle->out, ( ( 0xE0 | channel ) | ( (value & 0x7f) << 8 ) | ( ((value & 0x3f80) >> 7) << 16 ) ));
 	}
 }

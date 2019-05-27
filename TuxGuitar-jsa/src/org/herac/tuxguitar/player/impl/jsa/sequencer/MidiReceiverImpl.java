@@ -80,7 +80,7 @@ public class MidiReceiverImpl implements Receiver{
 	
 	private void parsePitchBend(byte[] data, int channel, int voice, boolean bendMode) throws MidiPlayerException{
 		int length = data.length;
-		int value = (length > 2)?(data[2] & 0xFF):-1;
+		int value = (length > 2)?(data[1]&0x7f)+((data[2]&0x7F)<<7):-1;
 		if(channel != -1 && value != -1){
 			this.sequencer.getTransmitter().sendPitchBend(channel,value,voice,bendMode);
 		}

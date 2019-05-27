@@ -11,11 +11,18 @@ public class MidiMessageUtils {
 	
 	private static int fixValue(int value){
 		int fixedValue = value;
-		fixedValue = Math.min(fixedValue,127);
+		fixedValue = Math.min(fixedValue,0x80-1);
 		fixedValue = Math.max(fixedValue,0);
 		return fixedValue;
 	}
-	
+
+	private static int fixPitchBend(int value){
+		int fixedValue = value;
+		fixedValue = Math.min(fixedValue,0x4000-1);
+		fixedValue = Math.max(fixedValue,0);
+		return fixedValue;
+	}
+
 	private static int fixChannel(int channel){
 		int fixedChannel = channel;
 		fixedChannel = Math.min(fixedChannel,15);
@@ -40,7 +47,8 @@ public class MidiMessageUtils {
 	}
 	
 	public static MidiMessage pitchBend(int channel,int value){
-		return MidiMessage.shortMessage(MidiMessage.PITCH_BEND, fixChannel(channel), 0, fixValue(value));
+		value = fixPitchBend(value);
+		return MidiMessage.shortMessage(MidiMessage.PITCH_BEND, fixChannel(channel), value & 0x7f, (value & 0x3f80) >> 7);
 	}
 	
 	public static MidiMessage systemReset(){

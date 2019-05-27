@@ -27,6 +27,8 @@ import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
 public class MidiPlayer{
 	
 	public static final int MAX_VOLUME = 10;
+
+	public static final int MAX_BEND_SEMITONES = 12;
 	
 	private static final long TIMER_DELAY = 10;
 	
@@ -87,7 +89,7 @@ public class MidiPlayer{
 	protected long tickPosition;
 	
 	private boolean tryOpenFistDevice;
-	
+
 	protected TGLock lock;
 	
 	private MidiPlayer(TGContext context) {
@@ -753,7 +755,7 @@ public class MidiPlayer{
 			
 			getOutputTransmitter().sendControlChange(tgChannel.getChannelId(),MidiControllers.RPN_MSB,0);
 			getOutputTransmitter().sendControlChange(tgChannel.getChannelId(),MidiControllers.RPN_LSB,0);
-			getOutputTransmitter().sendControlChange(tgChannel.getChannelId(),MidiControllers.DATA_ENTRY_MSB,12);
+			getOutputTransmitter().sendControlChange(tgChannel.getChannelId(),MidiControllers.DATA_ENTRY_MSB,MAX_BEND_SEMITONES);
 			getOutputTransmitter().sendControlChange(tgChannel.getChannelId(),MidiControllers.DATA_ENTRY_LSB, 0);
 		} catch (MidiPlayerException e) {
 			e.printStackTrace();

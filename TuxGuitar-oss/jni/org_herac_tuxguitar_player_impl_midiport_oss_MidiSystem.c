@@ -182,9 +182,9 @@ JNIEXPORT void JNICALL Java_org_herac_tuxguitar_player_impl_midiport_oss_MidiSys
 		unsigned char packet[4] = {SEQ_MIDIPUTC, 0, handle->port, 0};
 		packet[1] = (0xE0 | channel);
 		write(handle->fd, packet, sizeof(packet));
-		packet[1] = 0;
+		packet[1] = value & 0x7f;
 		write(handle->fd, packet, sizeof(packet));
-		packet[1] = value;
+		packet[1] = (value & 0x3f80) >> 7;
 		write(handle->fd, packet, sizeof(packet));
 	}
 }

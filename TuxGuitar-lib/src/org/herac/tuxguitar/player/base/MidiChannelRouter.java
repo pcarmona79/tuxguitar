@@ -77,7 +77,7 @@ public class MidiChannelRouter implements MidiReceiver{
 	public void sendPitchBendReset() throws MidiPlayerException {
 		List<Integer> midiChannelIds = getMidiChannelIds();
 		for(int i = 0; i < midiChannelIds.size(); i ++){
-			this.sendPitchBend(((Integer)midiChannelIds.get(i)).intValue(), 64, -1, false);
+			this.sendPitchBend(((Integer)midiChannelIds.get(i)).intValue(), 0x2000, -1, false);
 		}
 	}
 	

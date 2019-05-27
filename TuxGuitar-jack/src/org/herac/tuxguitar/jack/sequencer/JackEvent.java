@@ -56,7 +56,7 @@ public class JackEvent {
 	}
 	
 	public static JackEvent pitchBend(long tick,int track,int channel,int value,int voice,boolean bendMode){
-		return new JackEvent(tick,MIDI_EVENT_PITCH_BEND,track,new byte[]{(byte)channel,(byte)value,(byte)voice,(byte)(bendMode?1:0)});
+		return new JackEvent(tick,MIDI_EVENT_PITCH_BEND,track,new byte[]{(byte)channel,(byte)(value & 0x7f),(byte)((value & 0x3f80) >> 7),(byte)voice,(byte)(bendMode?1:0)});
 	}
 	
 	public static JackEvent controlChange(long tick,int track,int channel,int controller,int value){

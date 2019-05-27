@@ -170,7 +170,7 @@ JNIEXPORT void JNICALL Java_org_herac_tuxguitar_player_impl_midiport_fluidsynth_
 	fluid_handle_t *handle = NULL;
 	memcpy(&handle, &ptr, sizeof(handle));
 	if(handle != NULL && handle->synth != NULL){
-		fluid_synth_pitch_bend(handle->synth, channel,  ((value * 128)));
+		fluid_synth_pitch_bend(handle->synth, channel, value);
 	}
 }
 

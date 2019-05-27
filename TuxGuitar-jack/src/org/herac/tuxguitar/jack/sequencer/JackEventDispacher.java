@@ -17,7 +17,7 @@ public class JackEventDispacher{
 			this.sequencer.getTransmitter().sendNoteOff(event.getData()[0],event.getData()[1],event.getData()[2],event.getData()[3],(event.getData()[4] == 1));
 		}
 		else if(event.getType() == JackEvent.MIDI_EVENT_PITCH_BEND){
-			this.sequencer.getTransmitter().sendPitchBend(event.getData()[0],event.getData()[1],event.getData()[2],(event.getData()[3] == 1));
+			this.sequencer.getTransmitter().sendPitchBend(event.getData()[0],event.getData()[1]+(event.getData()[2]<<7),event.getData()[3],(event.getData()[4] == 1));
 		}
 		else if(event.getType() == JackEvent.MIDI_EVENT_CONTROL_CHANGE){
 			this.sequencer.getTransmitter().sendControlChange(event.getData()[0],event.getData()[1],event.getData()[2]);

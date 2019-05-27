@@ -26,7 +26,7 @@ import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar.TremoloBarPoint;
 
 public class MidiSequenceParser {
-	
+
 	public static final int ADD_DEFAULT_CONTROLS = 0x01;
 	public static final int ADD_MIXER_MESSAGES = 0x02;
 	public static final int ADD_BANK_SELECT = 0x04;
@@ -38,10 +38,10 @@ public class MidiSequenceParser {
 	private static final int DEFAULT_METRONOME_KEY = 37;
 	private static final int DEFAULT_DURATION_PM = 60;
 	private static final int DEFAULT_DURATION_DEAD = 30;
-	private static final int DEFAULT_BEND = 64;
+	private static final int DEFAULT_BEND = 0x2000;
 	private static final int DEFAULT_SLIDEFROM_DIFF = 5;
 	private static final int DEFAULT_SLIDETO_DIFF = 5;
-	private static final float DEFAULT_BEND_SEMI_TONE = 2.75f;
+	private static final float DEFAULT_BEND_SEMI_TONE = 0x2000/(MidiPlayer.MAX_BEND_SEMITONES * 2f);
 	
 	private TGSong song;
 	private TGSongManager songManager;
@@ -128,7 +128,7 @@ public class MidiSequenceParser {
 				int channelId = it.next().getChannelId();
 				sh.getSequence().addControlChange(getTick(TGDuration.QUARTER_TIME), getInfoTrack(), channelId, MidiControllers.RPN_MSB, 0);
 				sh.getSequence().addControlChange(getTick(TGDuration.QUARTER_TIME), getInfoTrack(), channelId, MidiControllers.RPN_LSB, 0);
-				sh.getSequence().addControlChange(getTick(TGDuration.QUARTER_TIME), getInfoTrack(), channelId, MidiControllers.DATA_ENTRY_MSB, 12);
+				sh.getSequence().addControlChange(getTick(TGDuration.QUARTER_TIME), getInfoTrack(), channelId, MidiControllers.DATA_ENTRY_MSB, MidiPlayer.MAX_BEND_SEMITONES);
 				sh.getSequence().addControlChange(getTick(TGDuration.QUARTER_TIME), getInfoTrack(), channelId, MidiControllers.DATA_ENTRY_LSB, 0);
 			}
 		}
@@ -170,38 +170,38 @@ public class MidiSequenceParser {
 		}
 	}
 
-	private int addNoteBend(MidiSequenceHelper sh, TGNoteEffect effect,int track, long start, long noteduration,int channel,int midiVoice, int holdBend) {
+	private int addNoteBend(MidiSequenceHelper sh, TGNoteEffect effect,int track, long start, long noteduration,int channel,int midiVoice, int holdBend, int defaultBend) {
 		//---Bend---
 		if (effect.isBend()) {
-			holdBend = addBend(sh, track, start, noteduration, effect.getBend(), channel, midiVoice, true);
+			holdBend = addBend(sh, track, start, noteduration, effect.getBend(), channel, midiVoice, defaultBend, true);
 		} //---TremoloBar---
 		else if (effect.isTremoloBar()) {
-			holdBend = addTremoloBar(sh, track, start, noteduration, effect.getTremoloBar(), channel, midiVoice, true);
+			holdBend = addTremoloBar(sh, track, start, noteduration, effect.getTremoloBar(), channel, midiVoice, defaultBend, true);
 		} //---Vibrato---
 		else if (effect.isVibrato()) {
-			addVibrato(sh, track, start, noteduration, channel, midiVoice, holdBend, true);
+			addVibrato(sh, track, start, noteduration, channel, midiVoice, holdBend, defaultBend, true);
 		}
 		return holdBend;
 	}
 
-	private void addNoteSlide(MidiSequenceHelper sh, TGNoteEffect effect,int track, int from, int to, long start, long duration, int velocity,int channel,int midiVoice) {
+	private void addNoteSlide(MidiSequenceHelper sh, TGNoteEffect effect,int track, int from, int to, long start, long duration, int velocity,int channel,int midiVoice,int defaultBend) {
 		//---Slide---
 		if (effect.isSlide() && to>=0) {
-			addSlideEffect(sh, track, start, duration, from, to, channel, midiVoice, true);
+			addSlideEffect(sh, track, start, duration, from, to, channel, midiVoice,defaultBend, true);
 		} //---SlideTo---
 		else if (effect.getSlideTo()!=0) {
-			addSlideTo(sh, track, start, duration, from, channel, midiVoice, effect.getSlideTo()>0, true);
+			addSlideTo(sh, track, start, duration, from, channel, midiVoice, defaultBend, effect.getSlideTo()>0, true);
 		}
 	}
 
-	private void addSlideEffect(MidiSequenceHelper sh,int track, long start, long duration, int from, int to,int channel,int midiVoice,boolean bendMode){
+	private void addSlideEffect(MidiSequenceHelper sh,int track, long start, long duration, int from, int to,int channel,int midiVoice,int defaultBend,boolean bendMode){
 		long tick1 = start+((long)(duration/2));
 		long tick2 = start+duration;
 
-		addSlide(sh, track, from, tick1, from, tick2, to, channel, midiVoice, bendMode);
+		addSlide(sh, track, from, tick1, from, tick2, to, channel, midiVoice, defaultBend, bendMode);
 	}
 
-	private void addSlideFrom(MidiSequenceHelper sh,int track,long start,int fret,int channel, int midiVoice, boolean high){
+	private void addSlideFrom(MidiSequenceHelper sh,int track,long start,int fret,int channel, int midiVoice, int defaultBend, boolean high){
 		int slideFret = fret;
 		long slideLength = (long)(TGDuration.QUARTER_TIME * (4.00 / TGDuration.SIXTEENTH) ); // Duration of 16th
 		if (high)
@@ -213,10 +213,10 @@ public class MidiSequenceParser {
 		else if (slideFret > 24)
 			slideFret = 24;
 
-		addSlide(sh, track, fret, start, slideFret, start + slideLength, fret, channel, midiVoice, true);
+		addSlide(sh, track, fret, start, slideFret, start + slideLength, fret, channel, midiVoice, defaultBend, true);
 	}
 
-	private void addSlideTo(MidiSequenceHelper sh,int track,long start,long duration,int fret,int channel, int midiVoice, boolean high, boolean bendMode){
+	private void addSlideTo(MidiSequenceHelper sh,int track,long start,long duration,int fret,int channel, int midiVoice, int defaultBend, boolean high, boolean bendMode){
 		int slideFret = fret;
 		if (high)
 			slideFret += DEFAULT_SLIDETO_DIFF;
@@ -227,7 +227,7 @@ public class MidiSequenceParser {
 		else if (slideFret > 24)
 			slideFret = 24;
 
-		addSlideEffect(sh, track, start, duration, fret, slideFret, channel, midiVoice, bendMode);
+		addSlideEffect(sh, track, start, duration, fret, slideFret, channel, midiVoice, defaultBend, bendMode);
 	}
 
 	private boolean isBended(TGNoteEffect effect) {
@@ -239,15 +239,15 @@ public class MidiSequenceParser {
 				|| effect.getSlideTo()!=0; // Bend-like effects
 	}
 
-	private void normalizeTiedBend(MidiSequenceHelper sh, int track, long start, long duration, int channel, int midiVoice, int noteBend, boolean bendMode) {
-		int note = noteBend>0?noteBend:DEFAULT_BEND;
+	private void normalizeTiedBend(MidiSequenceHelper sh, int track, long start, long duration, int channel, int midiVoice, int noteBend, int defaultBend, boolean bendMode) {
+		int note = noteBend>0?noteBend:defaultBend;
 		this.addBend(sh,track, start,note, channel, midiVoice, bendMode);
 		this.addBend(sh,track, start+duration,note, channel, midiVoice, bendMode);
 		if (noteBend>0)
-			this.addBend(sh, track, start+duration, DEFAULT_BEND, channel, midiVoice, bendMode);
+			this.addBend(sh, track, start+duration, defaultBend, channel, midiVoice, bendMode);
 	}
 
-	private boolean addTiedEffects(MidiSequenceHelper sh, TGChannel tgChannel,TGNote note,TGTrack track, int mIndex, int bIndex, int[] stroke, long start, long duration){
+	private boolean addTiedEffects(MidiSequenceHelper sh, TGChannel tgChannel,TGNote note,TGTrack track, int mIndex, int bIndex, int[] stroke, long start, long duration, int defaultBend){
 		int nextBIndex = (bIndex + 1);
 		int measureCount = sh.getMeasureHelpers().size();
 		boolean broken = false;
@@ -262,9 +262,9 @@ public class MidiSequenceParser {
 		long noteduration = applyStrokeDuration(note, note.getVoice().getDuration().getTime(), stroke);
 		if (!percussionChannel) {
 			isBended = isBended(note.getEffect());
-			holdBend = addNoteBend(sh, note.getEffect(), track.getNumber(), start, noteduration, channel, midiVoice, holdBend);
+			holdBend = addNoteBend(sh, note.getEffect(), track.getNumber(), start, noteduration, channel, midiVoice, holdBend, defaultBend);
 			if (!isBended)
-				normalizeTiedBend(sh, track.getNumber(), start, noteduration, channel, midiVoice, holdBend, true);
+				normalizeTiedBend(sh, track.getNumber(), start, noteduration, channel, midiVoice, holdBend, defaultBend, true);
 		}
 		start+=noteduration;
 		duration-=noteduration;
@@ -290,9 +290,9 @@ public class MidiSequenceParser {
 								isBended = isBended(nextNote.getEffect());
 								noteduration = nextNote.getVoice().getDuration().getTime();
 								if (!percussionChannel) {
-									holdBend = addNoteBend(sh, nextNote.getEffect(), track.getNumber(), start, noteduration, channel, midiVoice, holdBend);
+									holdBend = addNoteBend(sh, nextNote.getEffect(), track.getNumber(), start, noteduration, channel, midiVoice, holdBend, defaultBend);
 									if (!isBended)
-										normalizeTiedBend(sh, track.getNumber(), start, noteduration, channel, midiVoice, holdBend, true);
+										normalizeTiedBend(sh, track.getNumber(), start, noteduration, channel, midiVoice, holdBend, defaultBend, true);
 								}
 								start+=noteduration;
 								duration-=noteduration;
@@ -318,9 +318,9 @@ public class MidiSequenceParser {
 			int velocity = getRealVelocity(sh, note, track, tgChannel, mIndex, bIndex);
 			int from = lastNote.getValue();
 			int to = nextNote!=null&&nextNote.getString() == note.getString()?nextNote.getValue():-1;
-			addNoteSlide(sh, lastNote.getEffect(), track.getNumber(), from, to, start-noteduration, duration+noteduration, velocity,channel,midiVoice);
+			addNoteSlide(sh, lastNote.getEffect(), track.getNumber(), from, to, start-noteduration, duration+noteduration, velocity,channel,midiVoice,defaultBend);
 			if (duration > 0) { // let-ring f.e.
-				normalizeTiedBend(sh, track.getNumber(), start, duration, channel, midiVoice, holdBend, true);
+				normalizeTiedBend(sh, track.getNumber(), start, duration, channel, midiVoice, holdBend, defaultBend, true);
 			}
 		}
 		//----//
@@ -340,6 +340,12 @@ public class MidiSequenceParser {
 
 					long start = applyStrokeStart(note, (th.getStart() + startMove), stroke);
 					long noteduration = applyStrokeDuration(note, note.getVoice().getDuration().getTime(), stroke);
+					int defaultBend = DEFAULT_BEND;
+					MidiNoteHelper previousHammer = getPreviousHammer(sh, note,track,mIndex,bIndex,false);
+					// possibly have a switch here to force (previousHammer = null) to disable legato?
+					if (previousHammer != null) {
+						defaultBend = (DEFAULT_BEND + (int)((note.getValue() - previousHammer.getNote().getValue()) * (DEFAULT_BEND_SEMI_TONE * 2)));
+					}
 
 					int velocity = getRealVelocity(sh, note, track, tgChannel, mIndex, bIndex);
 					int channel = tgChannel.getChannelId();
@@ -359,11 +365,11 @@ public class MidiSequenceParser {
 					} else if (note.getEffect().isFadeOut()) {
 						addFadeOut(sh, track.getNumber(), start, duration, tgChannel.getVolume(), channel);
 					}
-					bendMode = addTiedEffects(sh, tgChannel, note, track, mIndex, bIndex, stroke, start, duration);
+					bendMode = addTiedEffects(sh, tgChannel, note, track, mIndex, bIndex, stroke, start, duration,defaultBend);
 					if (!percussionChannel) {
 						//---Slide From---
 						if (note.getEffect().getSlideFrom() != 0) {
-							addSlideFrom(sh, track.getNumber(), start, note.getValue(), channel, midiVoice, note.getEffect().getSlideFrom() > 0);
+							addSlideFrom(sh, track.getNumber(), start, note.getValue(), channel, midiVoice, defaultBend, note.getEffect().getSlideFrom() > 0);
 						}
 						//---Grace---
 						if (note.getEffect().isGrace()) {
@@ -398,17 +404,17 @@ public class MidiSequenceParser {
 						if(note.getEffect().isTrill() ){
 							int trillKey = track.getOffset() + note.getEffect().getTrill().getFret() + ((TGString)track.getStrings().get(note.getString() - 1)).getValue();
 							long trillLength = note.getEffect().getTrill().getDuration().getTime();
+							int trillbend = (defaultBend + (int)((trillKey - key) * (DEFAULT_BEND_SEMI_TONE * 2)));
 
 							boolean realKey = true;
 							long tick = start;
 							while(tick < (start + realDuration)){
 								if (tick + trillLength > (start + realDuration))
 									trillLength = (start + realDuration)-tick;
-								addNote(sh,track.getNumber(),((realKey)?key:trillKey),tick,trillLength,velocity,channel,midiVoice,bendMode);
+								addBend(sh,track.getNumber(), tick, realKey?defaultBend:trillbend, channel, midiVoice, bendMode);
 								realKey = (!realKey);
 								tick += trillLength;
 							}
-							continue;
 						}
 						//---Harmonic---
 						if( note.getEffect().isHarmonic()){
@@ -438,8 +444,14 @@ public class MidiSequenceParser {
 						}
 					}
 
-					//---Normal Note---
-					addNote(sh,track.getNumber(), Math.min(127,key), start, duration, velocity,channel,midiVoice,bendMode);
+
+					//Check for Hammer effect
+					if(previousHammer != null) {
+						addBend(sh,track.getNumber(), start, defaultBend, channel, midiVoice, bendMode);
+					} else {
+						//---Normal Note---
+						addNote(sh,track.getNumber(), Math.min(127,key), start, duration, velocity,channel,midiVoice,bendMode);
+					}
 				}
 			}
 		}
@@ -487,114 +499,111 @@ public class MidiSequenceParser {
 
 	
 	private void addBend(MidiSequenceHelper sh,int track, long tick,int bend, int channel, int midiVoice, boolean bendMode) {
-		sh.getSequence().addPitchBend(getTick(tick), track, channel, fix(bend), midiVoice, bendMode);
+		sh.getSequence().addPitchBend(getTick(tick), track, channel, fixBend(bend), midiVoice, bendMode);
 	}
 
-	public void addVibrato(MidiSequenceHelper sh,int track,long start, long duration,int channel, int midiVoice, int holdBend, boolean bendMode){
+	public void addVibrato(MidiSequenceHelper sh,int track,long start, long duration,int channel, int midiVoice, int holdBend,int defaultBend, boolean bendMode){
 		long nextStart = start;
 		long end = nextStart + duration;
-		int defbend = DEFAULT_BEND;
 		if (holdBend>0) {
-			defbend = holdBend;
+			defaultBend = holdBend;
 			addBend(sh, track, nextStart, holdBend, channel, midiVoice, bendMode);
 		}
 		while(nextStart < end){
 			nextStart = ((nextStart + 160 > end)?end:nextStart + 160);
-			addBend(sh, track, nextStart, defbend, channel, midiVoice, bendMode);
+			addBend(sh, track, nextStart, defaultBend, channel, midiVoice, bendMode);
 			nextStart = ((nextStart + 160 > end)?end:nextStart + 160);
-			addBend(sh, track, nextStart, defbend + (int)(DEFAULT_BEND_SEMI_TONE / 2.0f), channel, midiVoice, bendMode);
+			addBend(sh, track, nextStart, defaultBend + (int)(DEFAULT_BEND_SEMI_TONE / 2.0f), channel, midiVoice, bendMode);
 		}
-		addBend(sh, track, nextStart, DEFAULT_BEND, channel, midiVoice, bendMode);
+		addBend(sh, track, nextStart, defaultBend, channel, midiVoice, bendMode);
 	}
 
-	public int addBend(MidiSequenceHelper sh,int track,long start, long duration, TGEffectBend bend, int channel, int midiVoice, boolean bendMode){
+	public int addBend(MidiSequenceHelper sh,int track,long start, long duration, TGEffectBend bend, int channel, int midiVoice, int defaultBend, boolean bendMode){
 		List<BendPoint> points = bend.getPoints();
 		int value = 0;
 		for(int i=0;i<points.size();i++){
 			TGEffectBend.BendPoint point = (TGEffectBend.BendPoint)points.get(i);
 			long bendStart = start + point.getTime(duration);
-			value = DEFAULT_BEND + (int)(point.getValue() * DEFAULT_BEND_SEMI_TONE / TGEffectBend.SEMITONE_LENGTH);
-			value = ((value <= 127)?value:127);
-			value = ((value >= 0)?value:0);
+			value = defaultBend + (int)(point.getValue() * DEFAULT_BEND_SEMI_TONE / TGEffectBend.SEMITONE_LENGTH);
+			value = fixBend(value);
 			addBend(sh, track, bendStart, value, channel, midiVoice, bendMode);
 			
 			if(points.size() > i + 1){
 				TGEffectBend.BendPoint nextPoint = (TGEffectBend.BendPoint)points.get(i + 1);
-				int nextValue = DEFAULT_BEND + (int)(nextPoint.getValue() * DEFAULT_BEND_SEMI_TONE / TGEffectBend.SEMITONE_LENGTH);
+				int nextValue = defaultBend + (int)(nextPoint.getValue() * DEFAULT_BEND_SEMI_TONE / TGEffectBend.SEMITONE_LENGTH);
 				long nextBendStart = start + nextPoint.getTime(duration);
 				if(nextValue != value){
-					double width = ( (nextBendStart - bendStart) / Math.abs(  (nextValue - value) ) );
+					double width = ( (nextBendStart - bendStart) / Math.abs(  (nextValue - value) / 128f ) );
 					//ascendente
 					if(value < nextValue){
 						while(value < nextValue){
-							value ++;
+							value += 128;
 							bendStart +=width;
-							addBend(sh, track, bendStart,((value <= 127) ? value : 127), channel, midiVoice, bendMode);
+							addBend(sh, track, bendStart,fixBend(value), channel, midiVoice, bendMode);
 						}
 						//descendente
 					}else if(value > nextValue){
 						while(value > nextValue){
-							value --;
+							value -= 128;
 							bendStart +=width;
-							addBend(sh, track, bendStart,((value >= 0) ? value : 0), channel, midiVoice, bendMode);
+							addBend(sh, track, bendStart,fixBend(value), channel, midiVoice, bendMode);
 						}
 					}
 				}
 			}
 		}
-		addBend(sh, track, start + duration, DEFAULT_BEND, channel, midiVoice, bendMode);
+		addBend(sh, track, start + duration, defaultBend, channel, midiVoice, bendMode);
 		return value;
 	}
 	
-	public int addTremoloBar(MidiSequenceHelper sh,int track,long start, long duration, TGEffectTremoloBar effect, int channel, int midiVoice, boolean bendMode){
+	public int addTremoloBar(MidiSequenceHelper sh,int track,long start, long duration, TGEffectTremoloBar effect, int channel, int midiVoice, int defaultBend, boolean bendMode){
 		List<TremoloBarPoint> points = effect.getPoints();
 		int value = 0;
 		for(int i=0;i<points.size();i++){
 			TGEffectTremoloBar.TremoloBarPoint point = (TGEffectTremoloBar.TremoloBarPoint)points.get(i);
 			long pointStart = start + point.getTime(duration);
-			value = DEFAULT_BEND + (int)(point.getValue() * (DEFAULT_BEND_SEMI_TONE * 2) );
-			value = ((value <= 127)?value:127);
-			value = ((value >= 0)?value:0);
+			value = defaultBend + (int)(point.getValue() * (DEFAULT_BEND_SEMI_TONE * 2) );
+			value = fixBend(value);
 			addBend(sh, track, pointStart, value, channel, midiVoice, bendMode);
 			if(points.size() > i + 1){
 				TGEffectTremoloBar.TremoloBarPoint nextPoint = (TGEffectTremoloBar.TremoloBarPoint)points.get(i + 1);
-				int nextValue = DEFAULT_BEND + (int)(nextPoint.getValue() * (DEFAULT_BEND_SEMI_TONE * 2));
+				int nextValue = defaultBend + (int)(nextPoint.getValue() * (DEFAULT_BEND_SEMI_TONE * 2));
 				long nextPointStart = start + nextPoint.getTime(duration);
 				if(nextValue != value){
-					double width = ( (nextPointStart - pointStart) / Math.abs(  (nextValue - value) ) );
+					double width = ( (nextPointStart - pointStart) / Math.abs(  (nextValue - value) / 128f ) );
 					//ascendente
 					if(value < nextValue){
 						while(value < nextValue){
-							value ++;
+							value += 128;
 							pointStart +=width;
-							addBend(sh, track, pointStart,((value <= 127) ? value : 127), channel, midiVoice, bendMode);
+							addBend(sh, track, pointStart, fixBend(value), channel, midiVoice, bendMode);
 						}
 					//descendente
 					}else if(value > nextValue){
 						while(value > nextValue){
-							value --;
+							value -= 128;
 							pointStart += width;
-							addBend(sh, track, pointStart,((value >= 0) ? value : 0), channel, midiVoice, bendMode);
+							addBend(sh, track, pointStart,fixBend(value), channel, midiVoice, bendMode);
 						}
 					}
 				}
 			}
 		}
-		addBend(sh, track, start + duration, DEFAULT_BEND, channel, midiVoice, bendMode);
+		addBend(sh, track, start + duration, defaultBend, channel, midiVoice, bendMode);
 		return value;
 	}
 
-	public void addSlide(MidiSequenceHelper sh,int track,int initial,long tick1,int value1,long tick2,int value2,int channel, int midiVoice, boolean bendMode){
+	public void addSlide(MidiSequenceHelper sh,int track,int initial,long tick1,int value1,long tick2,int value2,int channel, int midiVoice, int defaultBend, boolean bendMode){
 		int distance = value2 - value1;
 		int initialDistance = initial - value1;
 		long length = tick2 - tick1;
 		int points = (int)(length / (TGDuration.QUARTER_TIME * (4. / TGDuration.THIRTY_SECOND)));
 		for(int i = initialDistance == 0 ? 1 : 0;i <= (initialDistance == 0 ? points : points - 1); i ++){
 			float tone = i * distance / (float) points - initialDistance;
-			int bend = (DEFAULT_BEND + (int)(tone * (DEFAULT_BEND_SEMI_TONE * 2)));
+			int bend = (defaultBend + (int)(tone * (DEFAULT_BEND_SEMI_TONE * 2)));
 			addBend(sh, track, tick1 + ( (length / points) * i), bend, channel, midiVoice, bendMode);
 		}
-		addBend(sh,track, tick2 ,DEFAULT_BEND, channel, midiVoice, bendMode);
+		addBend(sh,track, tick2 ,defaultBend, channel, midiVoice, bendMode);
 	}
 
 	private void addFadeInOut(MidiSequenceHelper sh,int track,long start,long duration,int volume3,int channel){
@@ -680,6 +689,7 @@ public class MidiSequenceParser {
 		long realDuration = duration;
 		int nextBIndex = (bIndex + 1);
 		int mCount = sh.getMeasureHelpers().size();
+		TGNote current = note;
 		for (int m = mIndex; m < mCount; m++) {
 			MidiMeasureHelper mh = sh.getMeasureHelper( m );
 			TGMeasure measure = track.getMeasure( mh.getIndex() );
@@ -698,12 +708,13 @@ public class MidiSequenceParser {
 						TGNote nextNote = voice.getNote( n );
 						if (!nextNote.equals(note) || mIndex != m ) {
 							if (nextNote.getString() == note.getString()) {
-								if (nextNote.isTiedNote()) {
+								if (nextNote.isTiedNote() || current.getEffect().isHammer()) {
 									realDuration += (mh.getMove() + beat.getStart() - lastEnd) + (nextNote.getVoice().getDuration().getTime());
 									lastEnd = (mh.getMove() + beat.getStart() + voice.getDuration().getTime());
 									letRing = (nextNote.getEffect().isLetRing() || track.isLetRing());
 									anyLetRing = true;
 									letRingBeatChanged = true;
+									current = nextNote;
 								} else {
 									return realDuration;
 								}
@@ -751,9 +762,9 @@ public class MidiSequenceParser {
 		
 		//Check for Hammer effect
 		if(!tgChannel.isPercussionChannel()){
-			MidiNoteHelper previousNote = getPreviousNote(sh, note,tgTrack,mIndex,bIndex,false);
-			if(previousNote != null && previousNote.getNote().getEffect().isHammer()){
-				velocity = Math.max(TGVelocities.MIN_VELOCITY,(velocity - 25));
+			MidiNoteHelper previousHammer = getPreviousHammer(sh, note,tgTrack,mIndex,bIndex,false);
+			if(previousHammer != null){
+				velocity = Math.max(TGVelocities.MIN_VELOCITY,(int) (velocity * 0.75f));
 			}
 		}
 		
@@ -929,8 +940,9 @@ public class MidiSequenceParser {
 		return null;
 	}
 	
-	private MidiNoteHelper getPreviousNote(MidiSequenceHelper pHelper, TGNote note,TGTrack track, int mIndex, int bIndex, boolean breakAtRest){
+	private MidiNoteHelper getPreviousHammer(MidiSequenceHelper pHelper, TGNote note,TGTrack track, int mIndex, int bIndex, boolean breakAtRest){
 		int nextBIndex = bIndex;
+		MidiNoteHelper previousHammer = null;
 		for (int m = mIndex; m >= 0; m--) {
 			MidiMeasureHelper mh = pHelper.getMeasureHelper( m );
 			
@@ -945,18 +957,22 @@ public class MidiSequenceParser {
 						for (int n = 0; n < noteCount; n ++) {
 							TGNote current = voice.getNote( n );
 							if(current.getString() == note.getString()){
-								return new MidiNoteHelper(mh,current);
+								if (current.getEffect().isHammer()) {
+									previousHammer = new MidiNoteHelper(mh, current);
+								} else {
+									return previousHammer;
+								}
 							}
 						}
 						if( breakAtRest ){
-							return null;
+							return previousHammer;
 						}
 					}
 				}
 			}
 			nextBIndex = -1;
 		}
-		return null;
+		return previousHammer;
 	}
 	
 	private int fix(int value, int minimum, int maximum) {
@@ -966,7 +982,11 @@ public class MidiSequenceParser {
 	private int fix(int value) {
 		return this.fix(value, 0, 127);
 	}
-	
+
+	private int fixBend(int value) {
+		return this.fix(value, 0, 0x4000-1);
+	}
+
 	private class MidiTickHelper{
 		private long start;
 		private long duration;

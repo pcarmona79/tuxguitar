@@ -14,7 +14,14 @@ public class MidiMessageFactory {
 		fixedValue = Math.max(fixedValue,0);
 		return fixedValue;
 	}
-	
+
+	private static int fixBend(int value){
+		int fixedValue = value;
+		fixedValue = Math.min(fixedValue,0x4000-1);
+		fixedValue = Math.max(fixedValue,0);
+		return fixedValue;
+	}
+
 	public static MidiMessage noteOn(int channel,int note,int velocity, int voice, boolean bendMode){
 		try {
 			return new MidiNoteOnMessage(channel, fixValue(note), fixValue(velocity), voice, bendMode);
@@ -121,7 +128,8 @@ public class MidiMessageFactory {
 	public static MidiMessage pitchBendGM(int channel,int value){
 		try {
 			ShortMessage shortMessage = new ShortMessage();
-			shortMessage.setMessage(ShortMessage.PITCH_BEND, channel, 0, fixValue(value));
+			value = fixBend(value);
+			shortMessage.setMessage(ShortMessage.PITCH_BEND, channel,value & 0x7f, (value & 0x3f80) >> 7);
 			return shortMessage;
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();

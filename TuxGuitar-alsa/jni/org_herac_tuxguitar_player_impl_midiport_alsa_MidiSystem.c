@@ -197,7 +197,7 @@ JNIEXPORT void JNICALL Java_org_herac_tuxguitar_player_impl_midiport_alsa_MidiSy
 		snd_seq_ev_set_direct(&handle->ev);
 		snd_seq_ev_set_source(&handle->ev,0);
 		snd_seq_ev_set_dest(&handle->ev,handle->address->client,handle->address->port);
-		snd_seq_ev_set_pitchbend(&handle->ev,channel, ((value * 128) - 8192));
+		snd_seq_ev_set_pitchbend(&handle->ev,channel, value - 8192);
 		if(snd_seq_event_output_direct(handle->seq, &handle->ev) < 0){
 			return;
 		}

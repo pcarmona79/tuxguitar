@@ -40,8 +40,8 @@ public class JackGmReceiver implements GMReceiver{
 	public void sendPitchBend(int channel, int value) {
 		byte[] event = new byte[3];
 		event[0] = (byte)(0xE0 | channel );
-		event[1] = (byte)0;
-		event[2] = (byte)value;
+		event[1] = (byte)(value & 0x7f);
+		event[2] = (byte)((value & 0x3f80) >> 7);
 		this.jackClient.addEventToQueue( this.jackPort , event);
 	}
 	
