@@ -21,6 +21,7 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
+import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar.TremoloBarPoint;
@@ -371,20 +372,34 @@ public class MidiSequenceParser {
 						if (note.getEffect().getSlideFrom() != 0) {
 							addSlideFrom(sh, track.getNumber(), start, note.getValue(), channel, midiVoice, defaultBend, note.getEffect().getSlideFrom() > 0);
 						}
-						//---Grace---
-						if (note.getEffect().isGrace()) {
-							int graceKey = track.getOffset() + note.getEffect().getGrace().getFret() + ((TGString) track.getStrings().get(note.getString() - 1)).getValue();
-							int graceLength = note.getEffect().getGrace().getDurationTime();
-							int graceVelocity = note.getEffect().getGrace().getDynamic();
-							long graceDuration = ((note.getEffect().getGrace().isDead()) ? applyStaticDuration(tempo, DEFAULT_DURATION_DEAD, graceLength) : graceLength);
+					}
+					//---Grace---
+					if (note.getEffect().isGrace()) {
+						int graceKey = track.getOffset() + note.getEffect().getGrace().getFret() + ((TGString) track.getStrings().get(note.getString() - 1)).getValue();
+						int graceLength = note.getEffect().getGrace().getDurationTime();
+						int graceVelocity = note.getEffect().getGrace().getDynamic();
+						long graceDuration = ((note.getEffect().getGrace().isDead()) ? applyStaticDuration(tempo, DEFAULT_DURATION_DEAD, graceLength) : graceLength);
 
-							if (note.getEffect().getGrace().isOnBeat() || (start - graceLength) < TGDuration.QUARTER_TIME) {
-								start += graceLength;
-								duration -= graceLength;
+						if (note.getEffect().getGrace().isOnBeat() || (start - graceLength) < TGDuration.QUARTER_TIME) {
+							start += graceLength;
+							duration -= graceLength;
+						}
+						if (note.getEffect().getGrace().getTransition() == TGEffectGrace.TRANSITION_NONE) {
+							addNote(sh, track.getNumber(), graceKey, start - graceLength, graceDuration, graceVelocity, channel, midiVoice, false);
+						} else if (!percussionChannel) {
+							int graceBend = (defaultBend + (int) ((graceKey - key) * (DEFAULT_BEND_SEMI_TONE * 2)));
+							addBend(sh, track.getNumber(), start - graceLength, graceBend, channel, midiVoice, bendMode);
+
+							long tick2 = (start - graceLength) + graceDuration;
+							if (note.getEffect().getGrace().getTransition() == TGEffectGrace.TRANSITION_SLIDE) {
+								long tick1 = (start - graceLength) + graceDuration / 2;
+								addSlide(sh, track.getNumber(), key, tick1, graceKey, tick2, key, channel, midiVoice, defaultBend, bendMode);
+							} else if (note.getEffect().getGrace().getTransition() == TGEffectGrace.TRANSITION_BEND) {
+								long tick1 = (start - graceLength);
+								addSlide(sh, track.getNumber(), key, tick1, graceKey, tick2, key, channel, midiVoice, defaultBend, bendMode);
+							} else if (note.getEffect().getGrace().getTransition() == TGEffectGrace.TRANSITION_HAMMER) {
+								addBend(sh, track.getNumber(), start, defaultBend, channel, midiVoice, bendMode);
 							}
-							// TODO: Grace Modulation
-							addNote(sh,track.getNumber(), graceKey,start - graceLength,graceDuration,graceVelocity,channel,midiVoice, false);
-
 						}
 					}
 					//---Tremolo Picking---

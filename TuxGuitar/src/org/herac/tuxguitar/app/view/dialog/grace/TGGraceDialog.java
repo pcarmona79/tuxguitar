@@ -42,6 +42,7 @@ public class TGGraceDialog {
 	}
 	
 	public void show(final TGViewContext context){
+		final TGTrack track = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK);
 		final TGMeasure measure = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_MEASURE);
 		final TGBeat beat = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT);
 		final TGString string = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_STRING);
@@ -70,7 +71,8 @@ public class TGGraceDialog {
 				dynamic = note.getEffect().getGrace().getDynamic();
 				transition = note.getEffect().getGrace().getTransition();
 			}
-			
+			boolean percussionChannel = TuxGuitar.getInstance().getSongManager().isPercussionChannel(track.getSong(), track.getChannelId());
+
 			//---------------------------------------------------
 			//------------------NOTE-----------------------------
 			//---------------------------------------------------
@@ -197,16 +199,19 @@ public class TGGraceDialog {
 			this.bendButton = uiFactory.createRadioButton(transitionGroup);
 			this.bendButton.setText(TuxGuitar.getProperty("effects.grace.transition-bend"));
 			this.bendButton.setSelected(transition == TGEffectGrace.TRANSITION_BEND);
+			this.bendButton.setEnabled(!percussionChannel);
 			transitionLayout.set(this.bendButton, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			this.slideButton = uiFactory.createRadioButton(transitionGroup);
 			this.slideButton.setText(TuxGuitar.getProperty("effects.grace.transition-slide"));
 			this.slideButton.setSelected(transition == TGEffectGrace.TRANSITION_SLIDE);
+			this.slideButton.setEnabled(!percussionChannel);
 			transitionLayout.set(this.slideButton, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			this.hammerButton = uiFactory.createRadioButton(transitionGroup);
 			this.hammerButton.setText(TuxGuitar.getProperty("effects.grace.transition-hammer"));
 			this.hammerButton.setSelected(transition == TGEffectGrace.TRANSITION_HAMMER);
+			this.hammerButton.setEnabled(!percussionChannel);
 			transitionLayout.set(this.hammerButton, 4, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 			
 			//---------------------------------------------------
