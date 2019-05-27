@@ -36,7 +36,6 @@ import java.util.Iterator;
 
 public class TGFretBoard extends TGDockedPlayingComponent {
 	
-	public static final int MAX_FRETS = 25; // show frets 0 to 24
 	public static final int TOP_SPACING = 10;
 	public static final int BOTTOM_SPACING = 10;
 	
@@ -148,12 +147,13 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	}
 	
 	private void calculateFretSpacing(float width) {
-		this.fretSpacing = (width / MAX_FRETS);
+		int maxFrets = getTrack().getFrets() + 1;
+		this.fretSpacing = (width / maxFrets);
 		int aux = 0;
-		for (int i = 0; i < MAX_FRETS; i++) {
+		for (int i = 0; i < maxFrets; i++) {
 			aux += (i * 2);
 		}
-		this.fretSpacing += (aux / MAX_FRETS) + 2;
+		this.fretSpacing += (aux / maxFrets) + 2;
 	}
 	
 	private void disposeFretBoardImage(){
@@ -162,8 +162,8 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		}
 	}
 	
-	protected void initFrets(int fromX) {
-		this.frets = new int[MAX_FRETS];
+	protected void initFrets(int fromX, int fretCount) {
+		this.frets = new int[fretCount + 1];
 		int nextX = fromX;
 		int direction = this.getDirection(this.config.getDirection());
 		if (direction == TGFretBoardConfig.DIRECTION_RIGHT) {
@@ -205,14 +205,23 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 			}else{
 				this.beat = TuxGuitar.getInstance().getEditorCache().getEditBeat();
 			}
-			
-			if (this.strings.length != getStringCount()) {
+
+			int fretCount = getFretCount();
+			int stringCount = getStringCount();
+			if (this.frets.length != fretCount || this.strings.length != stringCount) {
 				disposeFretBoardImage();
-				initStrings(getStringCount());
+
+				if (this.frets.length != fretCount) {
+					this.initFrets(10, fretCount);
+					this.lastSize.setWidth(0);
+				}
+				if (this.strings.length != stringCount) {
+					initStrings(stringCount);
+					this.lastSize.setHeight(0);
+                }
 				//Fuerzo a cambiar el ancho
-				this.lastSize.setHeight(0);
 			}
-			
+
 			UIRectangle childArea = this.control.getChildArea();
 			float clientWidth = childArea.getWidth();
 			float clientHeight = childArea.getHeight();
@@ -392,19 +401,40 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	
 	protected void paintEditor(UIPainter painter) {
 		this.updateEditor();
-		if (this.frets.length > 0 && this.strings.length > 0) {
-			float zoom = this.control.getDeviceZoom() / 100f;
 
-			UIFont font = this.config.getFont();
+		float zoom = this.control.getDeviceZoom() / 100f;
+		UIFont font = this.config.getFont();
+
+		if (this.frets.length > 0 && this.strings.length > 0) {
 			this.scaledFont = this.getUIFactory().createFont(font.getName(), font.getHeight() * zoom, font.isBold(), font.isItalic());
 			paintFretBoard(painter, zoom);
 			paintNotes(painter, zoom);
 			this.scaledFont.dispose();
+		} else {
+			UIFont percFont = this.getUIFactory().createFont(font.getName(), 14f * zoom, true, false);
+			UIRectangle area = this.canvas.getBounds();
+			painter.setBackground(this.config.getColorBackground());
+			painter.setForeground(this.config.getColorKeyTextBackground());
+			painter.setFont(percFont);
+
+			painter.initPath(UIPainter.PATH_FILL);
+			painter.addRectangle(0, 0, area.getWidth(), area.getHeight());
+			painter.closePath();
+
+			String percussionString = TuxGuitar.getProperty("instrument.percussion-channel");
+			float tx = (area.getWidth() - painter.getFMWidth(percussionString) / zoom) / 2f;
+			float ty = area.getHeight() / 2f + painter.getFMMiddleLine() / zoom;
+			painter.drawString(percussionString, tx * zoom, ty * zoom);
+
+			percFont.dispose();
 		}
 	}
 	
 	protected void hit(float x, float y) {
 		int fretIndex = getFretIndex(x);
+		if (fretIndex == -1) {
+			return;
+		}
 		int stringIndex = getStringIndex(y);
 		int stringNumber = (stringIndex + 1);
 		
@@ -438,6 +468,9 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	
 	private int getFretIndex(float x) {
 		int length = this.frets.length;
+		if (length == 0) {
+			return -1;
+		}
 		if ((x - 10) <= this.frets[0] && this.frets[0] < this.frets[length - 1]) {
 			return 0;
 		}
@@ -487,7 +520,17 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 		}
 		return TuxGuitar.getInstance().getTablatureEditor().getTablature().getCaret().getTrack();
 	}
-	
+
+	private int getFretCount() {
+		TGTrack track = getTrack();
+		if( track != null ){
+			if (!TuxGuitar.getInstance().getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
+				return track.getFrets();
+			}
+		}
+		return -1;
+	}
+
 	private int getStringCount() {
 		TGTrack track = getTrack();
 		if( track != null ){
@@ -509,7 +552,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	
 	protected void updateDirection( int direction ){
 		this.config.saveDirection( this.getDirection(direction) );
-		this.initFrets(10);
+		this.initFrets(10, getFretCount());
 		this.setChanges(true);
 		this.canvas.redraw();
 	}
@@ -578,6 +621,9 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	}
 	
 	public int getWidth(){
+		if (this.frets.length == 0) {
+			return 0;
+		}
 		return this.frets[this.frets.length - 1];
 	}
 	
@@ -589,7 +635,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	public void layout(float width){
 		this.disposeFretBoardImage();
 		this.calculateFretSpacing(width);
-		this.initFrets(10);
+		this.initFrets(10, getFretCount());
 		this.initStrings(getStringCount());
 		this.setChanges(false);
 	}

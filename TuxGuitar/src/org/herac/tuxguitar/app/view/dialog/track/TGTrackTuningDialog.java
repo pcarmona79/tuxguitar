@@ -37,6 +37,7 @@ public class TGTrackTuningDialog {
 	private UICheckBox stringTransposition;
 	private UICheckBox stringTranspositionTryKeepString;
 	private UICheckBox stringTranspositionApplyToChords;
+	private UISpinner fretsSpinner;
 	private UISpinner offsetSpinner;
 	private UICheckBox letRing;
 	private UIButton buttonEdit;
@@ -168,22 +169,33 @@ public class TGTrackTuningDialog {
 		UIPanel bottom = factory.createPanel(panel, false);
 		bottom.setLayout(bottomLayout);
 		panelLayout.set(bottom, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true, 1, 1, null, null, 0f);
-		
+
+		//---------------------------------FRETS--------------------------------
+		UILabel fretsLabel = factory.createLabel(top);
+		fretsLabel.setText(TuxGuitar.getProperty("tuning.frets"));
+		topLayout.set(fretsLabel, 1, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, true);
+
+		this.fretsSpinner = factory.createSpinner(top);
+		this.fretsSpinner.setMinimum(TGTrack.MIN_FRETS);
+		this.fretsSpinner.setMaximum(TGTrack.MAX_FRETS);
+		this.fretsSpinner.setValue(track.getFrets());
+		topLayout.set(this.fretsSpinner, 1, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, true, 1, 1, 80f, null, 0f);
+
 		//---------------------------------OFFSET--------------------------------
 		UILabel offsetLabel = factory.createLabel(top);
-		offsetLabel.setText(TuxGuitar.getProperty("tuning.offset") + ":");
-		topLayout.set(offsetLabel, 1, 1, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, true, true);
+		offsetLabel.setText(TuxGuitar.getProperty("tuning.offset"));
+		topLayout.set(offsetLabel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, true);
 		
 		this.offsetSpinner = factory.createSpinner(top);
 		this.offsetSpinner.setMinimum(TGTrack.MIN_OFFSET);
 		this.offsetSpinner.setMaximum(TGTrack.MAX_OFFSET);
 		this.offsetSpinner.setValue(track.getOffset());
-		topLayout.set(this.offsetSpinner, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		topLayout.set(this.offsetSpinner, 2, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_CENTER, false, true, 1, 1, 80f, null, 0f);
 
 		this.letRing = factory.createCheckBox(top);
 		this.letRing.setText(TuxGuitar.getProperty("track.letring-throughout"));
 		this.letRing.setSelected(track.isLetRing());
-		topLayout.set(this.letRing, 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true);
+		topLayout.set(this.letRing, 3, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, true);
 
 		//---------------------------------OPTIONS----------------------------------
 		this.stringTransposition = factory.createCheckBox(bottom);
@@ -360,9 +372,11 @@ public class TGTrackTuningDialog {
 		for(int i = 0; i < this.tuning.size(); i ++) {
 			strings.add(TGSongManager.newString(findSongManager().getFactory(),(i + 1), this.tuning.get(i).getValue()));
 		}
-		
+
+		final int frets = ((songManager.isPercussionChannel(song, track.getChannelId())) ? 0 : this.fretsSpinner.getValue());
 		final int offset = ((songManager.isPercussionChannel(song, track.getChannelId())) ? 0 : this.offsetSpinner.getValue());
 		final boolean letRing = ((songManager.isPercussionChannel(song, track.getChannelId())) ? false : this.letRing.isSelected());
+		final boolean fretsChanges = frets != track.getFrets();
 		final boolean offsetChanges = offset != track.getOffset();
 		final boolean letRingChanges = letRing != track.isLetRing();
 		final boolean tuningChanges = hasTuningChanges(track, strings);
@@ -371,7 +385,7 @@ public class TGTrackTuningDialog {
 		final boolean transposeTryKeepString = (transposeStrings && this.stringTranspositionTryKeepString.isSelected());
 		
 		if( this.validateTrackTuning(strings)) {
-			if( tuningChanges || offsetChanges || this.program != -1 || this.clef != -1 ){
+			if( tuningChanges || fretsChanges || offsetChanges || this.program != -1 || this.clef != -1 ){
 				TGActionProcessor tgActionProcessor = new TGActionProcessor(this.context.getContext(), TGChangeTrackTuningAction.NAME);
 				tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG, song);
 				tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK, track);
@@ -387,6 +401,9 @@ public class TGTrackTuningDialog {
 					tgActionProcessor.setAttribute(TGChangeTrackTuningAction.ATTRIBUTE_TRANSPOSE_STRINGS, transposeStrings);
 					tgActionProcessor.setAttribute(TGChangeTrackTuningAction.ATTRIBUTE_TRANSPOSE_TRY_KEEP_STRINGS, transposeTryKeepString);
 					tgActionProcessor.setAttribute(TGChangeTrackTuningAction.ATTRIBUTE_TRANSPOSE_APPLY_TO_CHORDS, transposeApplyToChords);
+				}
+				if( fretsChanges ) {
+					tgActionProcessor.setAttribute(TGChangeTrackTuningAction.ATTRIBUTE_FRETS, frets);
 				}
 				if( offsetChanges ) {
 					tgActionProcessor.setAttribute(TGChangeTrackTuningAction.ATTRIBUTE_OFFSET, offset);

@@ -185,10 +185,10 @@ public class MidiSequenceParser {
 		return holdBend;
 	}
 
-	private void addNoteSlide(MidiSequenceHelper sh, TGNoteEffect effect,int track, int from, int to, long start, long duration, int velocity,int channel,int midiVoice,int defaultBend) {
+	private void addNoteSlide(MidiSequenceHelper sh, TGNoteEffect effect,TGTrack track, int from, int to, long start, long duration, int velocity,int channel,int midiVoice,int defaultBend) {
 		//---Slide---
 		if (effect.isSlide() && to>=0) {
-			addSlideEffect(sh, track, start, duration, from, to, channel, midiVoice,defaultBend, true);
+			addSlideEffect(sh, track.getNumber(), start, duration, from, to, channel, midiVoice,defaultBend, true);
 		} //---SlideTo---
 		else if (effect.getSlideTo()!=0) {
 			addSlideTo(sh, track, start, duration, from, channel, midiVoice, defaultBend, effect.getSlideTo()>0, true);
@@ -202,7 +202,7 @@ public class MidiSequenceParser {
 		addSlide(sh, track, from, tick1, from, tick2, to, channel, midiVoice, defaultBend, bendMode);
 	}
 
-	private void addSlideFrom(MidiSequenceHelper sh,int track,long start,int fret,int channel, int midiVoice, int defaultBend, boolean high){
+	private void addSlideFrom(MidiSequenceHelper sh,TGTrack track,long start,int fret,int channel, int midiVoice, int defaultBend, boolean high){
 		int slideFret = fret;
 		long slideLength = (long)(TGDuration.QUARTER_TIME * (4.00 / TGDuration.SIXTEENTH) ); // Duration of 16th
 		if (high)
@@ -211,13 +211,13 @@ public class MidiSequenceParser {
 			slideFret -= DEFAULT_SLIDEFROM_DIFF;
 		if (slideFret < 0)
 			slideFret = 0;
-		else if (slideFret > 24)
-			slideFret = 24;
+		else if (slideFret > track.getFrets())
+			slideFret = track.getFrets();
 
-		addSlide(sh, track, fret, start, slideFret, start + slideLength, fret, channel, midiVoice, defaultBend, true);
+		addSlide(sh, track.getNumber(), fret, start, slideFret, start + slideLength, fret, channel, midiVoice, defaultBend, true);
 	}
 
-	private void addSlideTo(MidiSequenceHelper sh,int track,long start,long duration,int fret,int channel, int midiVoice, int defaultBend, boolean high, boolean bendMode){
+	private void addSlideTo(MidiSequenceHelper sh,TGTrack track,long start,long duration,int fret,int channel, int midiVoice, int defaultBend, boolean high, boolean bendMode){
 		int slideFret = fret;
 		if (high)
 			slideFret += DEFAULT_SLIDETO_DIFF;
@@ -225,10 +225,10 @@ public class MidiSequenceParser {
 			slideFret -= DEFAULT_SLIDETO_DIFF;
 		if (slideFret < 0)
 			slideFret = 0;
-		else if (slideFret > 24)
-			slideFret = 24;
+		else if (slideFret > track.getFrets())
+			slideFret = track.getFrets();
 
-		addSlideEffect(sh, track, start, duration, fret, slideFret, channel, midiVoice, defaultBend, bendMode);
+		addSlideEffect(sh, track.getNumber(), start, duration, fret, slideFret, channel, midiVoice, defaultBend, bendMode);
 	}
 
 	private boolean isBended(TGNoteEffect effect) {
@@ -319,7 +319,7 @@ public class MidiSequenceParser {
 			int velocity = getRealVelocity(sh, note, track, tgChannel, mIndex, bIndex);
 			int from = lastNote.getValue();
 			int to = nextNote!=null&&nextNote.getString() == note.getString()?nextNote.getValue():-1;
-			addNoteSlide(sh, lastNote.getEffect(), track.getNumber(), from, to, start-noteduration, duration+noteduration, velocity,channel,midiVoice,defaultBend);
+			addNoteSlide(sh, lastNote.getEffect(), track, from, to, start-noteduration, duration+noteduration, velocity,channel,midiVoice,defaultBend);
 			if (duration > 0) { // let-ring f.e.
 				normalizeTiedBend(sh, track.getNumber(), start, duration, channel, midiVoice, holdBend, defaultBend, true);
 			}
@@ -370,7 +370,7 @@ public class MidiSequenceParser {
 					if (!percussionChannel) {
 						//---Slide From---
 						if (note.getEffect().getSlideFrom() != 0) {
-							addSlideFrom(sh, track.getNumber(), start, note.getValue(), channel, midiVoice, defaultBend, note.getEffect().getSlideFrom() > 0);
+							addSlideFrom(sh, track, start, note.getValue(), channel, midiVoice, defaultBend, note.getEffect().getSlideFrom() > 0);
 						}
 					}
 					//---Grace---

@@ -20,6 +20,7 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 	
 	public static final String NAME = "action.track.change-tuning";
 	
+	public static final String ATTRIBUTE_FRETS = "frets";
 	public static final String ATTRIBUTE_OFFSET = "offset";
 	public static final String ATTRIBUTE_LET_RING = "letRing";
 	public static final String ATTRIBUTE_STRINGS = "strings";
@@ -36,6 +37,7 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 	@SuppressWarnings("unchecked")
 	protected void processAction(TGActionContext context){
 		TGTrack track = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK);
+		Integer frets = context.getAttribute(ATTRIBUTE_FRETS);
 		Integer offset = context.getAttribute(ATTRIBUTE_OFFSET);
 		Boolean letRing = context.getAttribute(ATTRIBUTE_LET_RING);
 		List<TGString> strings = ((List<TGString>) context.getAttribute(ATTRIBUTE_STRINGS));
@@ -86,6 +88,9 @@ public class TGChangeTrackTuningAction extends TGActionBase {
 					
 					songManager.getTrackManager().transposeNotes(track, transpositions, transposeTryKeepString, transposeApplyToChords );
 				}
+			}
+			if( frets != null ) {
+				songManager.getTrackManager().changeFrets(track, frets);
 			}
 			if( offset != null ) {
 				songManager.getTrackManager().changeOffset(track, offset);

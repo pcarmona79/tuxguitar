@@ -18,9 +18,13 @@ public abstract class TGTrack {
 	public static final int MIN_STRINGS = 1;
 	public static final int MAX_OFFSET = 24;
 	public static final int MIN_OFFSET = -24;
-	
+	public static final int MIN_FRETS = 10;
+	public static final int MAX_FRETS = 127;
+	public static final int DEFAULT_FRETS = 24;
+
 	private int number;
 	private int offset;
+	private int frets;
 	private int channelId;
 	private boolean solo;
 	private boolean mute;
@@ -36,6 +40,7 @@ public abstract class TGTrack {
 	public TGTrack(TGFactory factory) {
 		this.number = 0;
 		this.offset = 0;
+		this.frets = DEFAULT_FRETS;
 		this.channelId = -1;
 		this.solo = false;
 		this.mute = false;
@@ -116,7 +121,15 @@ public abstract class TGTrack {
 	public void setOffset(int offset) {
 		this.offset = offset;
 	}
-	
+
+	public int getFrets() {
+		return frets;
+	}
+
+	public void setFrets(int frets) {
+		this.frets = frets;
+	}
+
 	public boolean isSolo() {
 		return this.solo;
 	}
@@ -203,6 +216,7 @@ public abstract class TGTrack {
 		this.setNumber(track.getNumber());
 		this.setName(track.getName());
 		this.setOffset(track.getOffset());
+		this.setFrets(track.getFrets());
 		this.setSolo(track.isSolo());
 		this.setMute(track.isMute());
 		this.setLetRing(track.isLetRing());

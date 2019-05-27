@@ -269,7 +269,11 @@ public class TGTrackManager {
 		track.setOffset(offset);
 		track.getColor().copyFrom(color);
 	}
-	
+
+	public void changeFrets(TGTrack track, int frets) {
+		track.setFrets(frets);
+	}
+
 	public void changeOffset(TGTrack track, int offset) {
 		track.setOffset(offset);
 	}
