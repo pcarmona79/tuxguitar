@@ -213,11 +213,13 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		final TGDocumentManager documentManager = TGDocumentManager.getInstance(getContext());
 		final UISize size = this.display.getBounds().getSize();
 
-		long position;
-		if (player.isRunning()) {
-			position = player.getTickPosition();
-		} else {
-			position = tablature.getCaret().getSelectedBeat().getStart();
+		long position = -1;
+		if (!player.getLock().isLocked(null)) {
+			if (player.isRunning()) {
+				position = player.getTickPosition();
+			} else {
+				position = tablature.getCaret().getSelectedBeat().getStart();
+			}
 		}
 
 		TGMeasureHeader first = tablature.getSongManager().getFirstMeasureHeader(documentManager.getSong());
@@ -246,35 +248,37 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 			painter.addRectangle(1f, y, size.getWidth() - 2f, 1f);
 			painter.closePath();
 		}
-		painter.setAlpha(192);
-		painter.initPath(UIPainter.PATH_FILL);
-		painter.addRectangle(1f, size.getHeight() - 3f, (size.getWidth() - 2) * positionPercent, 2f);
-		painter.closePath();
+		if (position != -1) {
+			painter.setAlpha(192);
+			painter.initPath(UIPainter.PATH_FILL);
+			painter.addRectangle(1f, size.getHeight() - 3f, (size.getWidth() - 2) * positionPercent, 2f);
+			painter.closePath();
 
-		painter.setAlpha(255);
-		painter.setAntialias(true);
+			painter.setAlpha(255);
+			painter.setAntialias(true);
 
-		Map.Entry<Long, TGMeasureHeader> entry = headerMap.floorEntry(position);
-		TGMeasureHeader current = entry != null ? entry.getValue() : first;
-		Double seconds = tempoMap.get(current.getNumber());
-		if (seconds == null) {
-			seconds = 0.;
-		}
-		seconds += (position - current.getStart()) / ((double) TGDuration.QUARTER_TIME) * current.getTempo().getInSeconds();
+			Map.Entry<Long, TGMeasureHeader> entry = headerMap.floorEntry(position);
+			TGMeasureHeader current = entry != null ? entry.getValue() : first;
+			Double seconds = tempoMap.get(current.getNumber());
+			if (seconds == null) {
+				seconds = 0.;
+			}
+			seconds += (position - current.getStart()) / ((double) TGDuration.QUARTER_TIME) * current.getTempo().getInSeconds();
 
-		long s = (long) Math.floor(seconds);
-		long ms = (long) Math.floor((seconds - s) * 1000);
-		String time = String.format("%d:%02d:%02d.%03d", s / 3600, (s % 3600) / 60, (s % 60), ms);
+			long s = (long) Math.floor(seconds);
+			long ms = (long) Math.floor((seconds - s) * 1000);
+			String time = String.format("%d:%02d:%02d.%03d", s / 3600, (s % 3600) / 60, (s % 60), ms);
 
-		float hMargin = this.displayFont.getHeight() * .5f;
-		painter.setFont(this.displayFont);
-		painter.setForeground(foregroundColor);
-		painter.drawString(time, hMargin, (size.getHeight() - painter.getFMHeight()) / 2f);
+			float hMargin = this.displayFont.getHeight() * .5f;
+			painter.setFont(this.displayFont);
+			painter.setForeground(foregroundColor);
+			painter.drawString(time, hMargin, (size.getHeight() - painter.getFMHeight()) / 2f);
 
-		float newWidth = painter.getFMWidth(time) + hMargin * 2f;
-		if (newWidth > size.getWidth()) {
-			getLayout().set(this.display, UITableLayout.PACKED_WIDTH, newWidth);
-			getControl().layout();
+			float newWidth = painter.getFMWidth(time) + hMargin * 2f;
+			if (newWidth > size.getWidth()) {
+				getLayout().set(this.display, UITableLayout.PACKED_WIDTH, newWidth);
+				getControl().layout();
+			}
 		}
 	}
 	

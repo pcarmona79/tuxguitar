@@ -1364,7 +1364,11 @@ public class MidiPlayer{
 		}
 		return this.sequencer;
 	}
-	
+
+	public TGLock getLock() {
+		return this.lock;
+	}
+
 	public static MidiPlayer getInstance(TGContext context) {
 		return TGSingletonUtil.getInstance(context, MidiPlayer.class.getName(), new TGSingletonFactory<MidiPlayer>() {
 			public MidiPlayer createInstance(TGContext context) {
