@@ -86,7 +86,12 @@ public class SWTPainter extends SWTComponent<GC> implements UIPainter {
 		this.setAdvanced(false);
 		this.getControl().drawImage(getImage(image), toInt(x), toInt(y));
 	}
-	
+
+	public void drawImageAdvanced(UIImage image, float x, float y) {
+		this.setAdvanced(true);
+		this.getControl().drawImage(getImage(image), toInt(x), toInt(y));
+	}
+
 	public void cubicTo(float arg0, float arg1, float arg2, float arg3, float arg4, float arg5) {
 		this.path.cubicTo(arg0, arg1, arg2, arg3, arg4, arg5);
 		this.pathEmpty = false;

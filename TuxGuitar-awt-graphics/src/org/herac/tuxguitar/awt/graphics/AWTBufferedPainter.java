@@ -64,6 +64,14 @@ public class AWTBufferedPainter extends AWTAbstractPainter {
 		});
 	}
 
+	public void drawImageAdvanced(UIImage image, float x, float y) {
+		this.commands.add(new GTKPainterCommand() {
+			public void process(UIPainter painter) {
+				painter.drawImageAdvanced(image, x, y);
+			}
+		});
+	}
+
 	public void cubicTo(final float xc1, final float yc1, final float xc2, final float yc2, final float x1, final float y1) {
 		this.commands.add(new GTKPainterCommand() {
 			public void process(UIPainter painter) {

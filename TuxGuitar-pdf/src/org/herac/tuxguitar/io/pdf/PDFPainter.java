@@ -205,4 +205,8 @@ public class PDFPainter extends PDFResourceFactory implements UIPainter {
 	public void drawImage(UIImage image, float x, float y) {
 		// not implemented		
 	}
+
+	public void drawImageAdvanced(UIImage image, float x, float y) {
+		// not implemented
+	}
 }

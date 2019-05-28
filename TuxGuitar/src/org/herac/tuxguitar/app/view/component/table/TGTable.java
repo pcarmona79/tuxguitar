@@ -7,6 +7,7 @@ import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.track.TGAddAndEditNewTrackAction;
 import org.herac.tuxguitar.app.system.icons.TGIconManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
+import org.herac.tuxguitar.app.view.widgets.TGIconButton;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.event.UIMouseEvent;
@@ -30,7 +31,7 @@ public class TGTable {
 	private TGTableHeaderLabel columnInstrument;
 	private TGTableHeaderMeasures columnCanvas;
 	private List<TGTableRow> rows;
-	private UIImageView addTrackButton;
+	private TGIconButton addTrackButton;
 
 	public TGTable(TGContext context, TGTableViewer viewer, UILayoutContainer parent){
 		this.context = context;
@@ -51,16 +52,12 @@ public class TGTable {
 		this.columnNumber = new TGTableHeaderLabel(this);
 		this.columnButtons = new TGTableHeaderLabel(this);
 		this.columnName = new TGTableHeaderLabel(this);
-		this.addTrackButton = uiFactory.createImageView(this.columnName.getControl());
-		this.addTrackButton.addMouseUpListener(new UIMouseUpListener() {
-			public void onMouseUp(UIMouseEvent event) {
-				if (event.getButton() == 1) {
-					TGActionProcessor processor = new TGActionProcessor(context, TGAddAndEditNewTrackAction.NAME);
-					processor.process();
-                }
-			}
+		this.addTrackButton = new TGIconButton(uiFactory, this.columnName.getControl());
+		this.addTrackButton.addSelectionListener(event -> {
+			TGActionProcessor processor = new TGActionProcessor(context, TGAddAndEditNewTrackAction.NAME);
+			processor.process();
 		});
-		this.columnName.getLayout().set(this.addTrackButton, 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_RIGHT, false, true, 1, 1, null, null, 2f);
+		this.columnName.getLayout().set(this.addTrackButton.getControl(), 1, 2, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_RIGHT, false, true, 1, 1, null, null, 2f);
 		this.columnInstrument = new TGTableHeaderLabel(this);
 		this.columnCanvas = new TGTableHeaderMeasures(this);
 
@@ -185,14 +182,14 @@ public class TGTable {
 	public void loadProperties() {
 		this.getColumnName().setTitle(TuxGuitar.getProperty("track"));
 		this.getColumnInstrument().setTitle(TuxGuitar.getProperty("track.instrument"));
-		this.addTrackButton.setToolTipText(TuxGuitar.getProperty("track.add"));
+		this.addTrackButton.getControl().setToolTipText(TuxGuitar.getProperty("track.add"));
 		for (TGTableRow row : this.rows) {
 			row.loadProperties();
 		}
 	}
 
 	public void loadIcons() {
-		this.addTrackButton.setImage(TGIconManager.getInstance(context).getListAdd());
+		this.addTrackButton.setIcon(TGIconManager.getInstance(context).getListAdd());
 		for (TGTableRow row : this.rows) {
 			row.loadIcons();
 		}

@@ -163,7 +163,11 @@ public class AWTPainter extends AWTAbstractPainter {
 		this.setAntialias(false);
 		this.gc.drawImage(((AWTImage)image).getHandle(), toInt(x), toInt(y), toInt(x + width), toInt(y + height), 0, 0, toInt(width), toInt(height), null);		
 	}
-	
+
+	public void drawImageAdvanced(UIImage image, float x, float y) {
+		this.drawImage(image, x, y);
+	}
+
 	public void cubicTo(float arg0, float arg1, float arg2, float arg3, float arg4, float arg5) {
 		this.path.curveTo(arg0, arg1, arg2, arg3, arg4, arg5);
 		this.pathEmpty = false;
