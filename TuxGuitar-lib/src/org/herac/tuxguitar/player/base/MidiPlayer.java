@@ -8,15 +8,7 @@ import org.herac.tuxguitar.document.TGDocumentManager;
 import org.herac.tuxguitar.event.TGEventListener;
 import org.herac.tuxguitar.event.TGEventManager;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGChannelParameter;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGTrack;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.thread.TGThreadLoop;
 import org.herac.tuxguitar.thread.TGThreadManager;
 import org.herac.tuxguitar.util.TGContext;
@@ -208,7 +200,8 @@ public class MidiPlayer{
 			this.setMetronomeEnabled(isMetronomeEnabled());
 			this.getCountDown().setTempoPercent(getMode().getCurrentPercent());
 			this.changeTickPosition();
-			
+			this.updateMixerChanges();
+
 			TGThreadManager.getInstance(this.context).start(new Runnable() {
 				public void run() {
 					runPlayStartWhenReady(notifyStarted);
@@ -657,6 +650,34 @@ public class MidiPlayer{
 			this.unlock();
 		}
 	}
+
+	private void updateMixerChanges() {
+		Iterator<TGTrack> tracksIt = this.getSong().getTracks();
+		long tick = this.getTickPosition();
+		while( tracksIt.hasNext() ) {
+			TGTrack track = tracksIt.next();
+			TGMeasure measure = this.getSongManager().getTrackManager().getMeasureAt(track, tick);
+			if (measure != null) {
+				TGBeat beat = this.getSongManager().getMeasureManager().getBeatIn(measure, tick);
+				if (beat != null) {
+					TGMixerChange mixer = this.getSongManager().getMostRecentMixerChanges(track, beat, true);
+					int channelId = track.getChannelId();
+
+					final int bank = mixer.getBank();
+					final int program = mixer.getProgram();
+					final int volume = (int)((this.getVolume() / 10.00) * mixer.getVolume());
+					final int balance = mixer.getBalance();
+					final int chorus = mixer.getChorus();
+					final int reverb = mixer.getReverb();
+					final int phaser = mixer.getPhaser();
+					final int tremolo = mixer.getTremolo();
+
+					this.updateProgram(channelId, bank, program);
+					this.updateController(channelId, volume, balance, chorus, reverb, phaser, tremolo, 127);
+				}
+			}
+		}
+	}
 	
 	private void updateParameters(TGChannel tgChannel) {
 		try {
@@ -835,27 +856,29 @@ public class MidiPlayer{
 			for( int v = 0; v < beat.countVoices(); v ++){
 				notes.addAll( beat.getVoice(v).getNotes() );
 			}
-			this.playBeat(beat.getMeasure().getTrack(), notes);
+			TGTrack track = beat.getMeasure().getTrack();
+			TGMixerChange mixer = this.getSongManager().getMostRecentMixerChanges(track, beat, true);
+			this.playBeat(track, notes, mixer);
 		} finally {
 			this.unlock();
 		}
 	}
 	
-	public void playBeat(TGTrack track, List<TGNote> notes) {
+	public void playBeat(TGTrack track, List<TGNote> notes, TGMixerChange mixer) {
 		try {
 			this.lock();
 			
 			TGChannel tgChannel = this.getSongManager().getChannel(getSong(), track.getChannelId());
 			if( tgChannel != null ){
 				final int channelId = tgChannel.getChannelId();
-				final int bank = tgChannel.getBank();
-				final int program = tgChannel.getProgram();
-				final int volume = (int)((this.getVolume() / 10.00) * tgChannel.getVolume());
-				final int balance = tgChannel.getBalance();
-				final int chorus = tgChannel.getChorus();
-				final int reverb = tgChannel.getReverb();
-				final int phaser = tgChannel.getPhaser();
-				final int tremolo = tgChannel.getTremolo();
+				final int bank = mixer.getBank();
+				final int program = mixer.getProgram();
+				final int volume = (int)((this.getVolume() / 10.00) * mixer.getVolume());
+				final int balance = mixer.getBalance();
+				final int chorus = mixer.getChorus();
+				final int reverb = mixer.getReverb();
+				final int phaser = mixer.getPhaser();
+				final int tremolo = mixer.getTremolo();
 				final int size = notes.size();
 				final int[][] beat = new int[size][2];
 				for(int i = 0; i < size; i ++){
@@ -882,6 +905,9 @@ public class MidiPlayer{
 	public void playBeat(int channelId, int bank, int program, int volume, int balance, int chorus, int reverb, int phaser, int tremolo, int[][] beat, long duration, int interval) {
 		try {
 			this.updateChannels();
+
+			this.updateProgram(channelId, bank, program);
+			this.updateController(channelId, volume, balance, chorus, reverb, phaser, tremolo, 127);
 			
 			Object sync = new Object();
 			

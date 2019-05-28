@@ -5,18 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.factory.TGFactory;
-import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGChannelNames;
-import org.herac.tuxguitar.song.models.TGColor;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMarker;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGTempo;
-import org.herac.tuxguitar.song.models.TGTimeSignature;
-import org.herac.tuxguitar.song.models.TGTrack;
+import org.herac.tuxguitar.song.models.*;
 
 public class TGSongManager {
 	
@@ -1079,5 +1068,128 @@ public class TGSongManager {
 			TGTrack t = song.getTrack(i);
 			getTrackManager().changeVisible(t, t == track);
 		}
+	}
+
+	public TGMixerChange getMostRecentMixerChanges(TGTrack track, TGBeat beat, boolean includeStart) {
+		TGMixerChange mixer = factory.newMixerChange();
+		boolean percussionChannel = isPercussionChannel(track.getSong(), track.getChannelId());
+
+		TGBeat currentBeat = beat;
+		for (int m = beat.getMeasure().getNumber(); m > 0; m--) {
+			TGMeasure measure = getTrackManager().getMeasure(track, m);
+			if (currentBeat == null) {
+				currentBeat = getMeasureManager().getLastBeat(measure.getBeats());
+			}
+            for (;;) {
+                TGMixerChange current = currentBeat.getMixerChange();
+                if ((includeStart || currentBeat != beat) && current != null) {
+                	if (mixer.getProgram() == null && current.getProgram() != null) {
+                		mixer.setProgram(current.getProgram());
+                		if ((percussionChannel || mixer.getBank() != null)
+								&& mixer.getVolume() != null && mixer.getBalance() != null
+								&& mixer.getReverb() != null && mixer.getChorus() != null
+								&& mixer.getTremolo() != null && mixer.getPhaser() != null) {
+                			return mixer;
+						}
+					}
+					if (!percussionChannel && mixer.getBank() == null && current.getBank() != null) {
+						mixer.setBank(current.getBank());
+						if (mixer.getProgram() != null
+								&& mixer.getVolume() != null && mixer.getBalance() != null
+								&& mixer.getReverb() != null && mixer.getChorus() != null
+								&& mixer.getTremolo() != null && mixer.getPhaser() != null) {
+							return mixer;
+						}
+					}
+					if (mixer.getVolume() == null && current.getVolume() != null) {
+						mixer.setVolume(current.getVolume());
+						if (mixer.getProgram() != null && (percussionChannel || mixer.getBank() != null)
+								&& mixer.getBalance() != null
+								&& mixer.getReverb() != null && mixer.getChorus() != null
+								&& mixer.getTremolo() != null && mixer.getPhaser() != null) {
+							return mixer;
+						}
+					}
+					if (mixer.getBalance() == null && current.getBalance() != null) {
+						mixer.setBalance(current.getBalance());
+						if (mixer.getProgram() != null && (percussionChannel || mixer.getBank() != null)
+								&& mixer.getVolume() != null
+								&& mixer.getReverb() != null && mixer.getChorus() != null
+								&& mixer.getTremolo() != null && mixer.getPhaser() != null) {
+							return mixer;
+						}
+					}
+					if (mixer.getReverb() == null && current.getReverb() != null) {
+						mixer.setReverb(current.getReverb());
+						if (mixer.getProgram() != null && (percussionChannel || mixer.getBank() != null)
+								&& mixer.getVolume() != null && mixer.getBalance() != null
+								&& mixer.getChorus() != null
+								&& mixer.getTremolo() != null && mixer.getPhaser() != null) {
+							return mixer;
+						}
+					}
+					if (mixer.getChorus() == null && current.getChorus() != null) {
+						mixer.setChorus(current.getChorus());
+						if (mixer.getProgram() != null && (percussionChannel || mixer.getBank() != null)
+								&& mixer.getVolume() != null && mixer.getBalance() != null
+								&& mixer.getReverb() != null
+								&& mixer.getTremolo() != null && mixer.getPhaser() != null) {
+							return mixer;
+						}
+					}
+					if (mixer.getTremolo() == null && current.getTremolo() != null) {
+						mixer.setTremolo(current.getTremolo());
+						if (mixer.getProgram() != null && (percussionChannel || mixer.getBank() != null)
+								&& mixer.getVolume() != null && mixer.getBalance() != null
+								&& mixer.getReverb() != null && mixer.getChorus() != null
+								&& mixer.getPhaser() != null) {
+							return mixer;
+						}
+					}
+					if (mixer.getPhaser() == null && current.getPhaser() != null) {
+						mixer.setPhaser(current.getPhaser());
+						if (mixer.getProgram() != null && (percussionChannel || mixer.getBank() != null)
+								&& mixer.getVolume() != null && mixer.getBalance() != null
+								&& mixer.getReverb() != null && mixer.getChorus() != null
+								&& mixer.getTremolo() != null) {
+							return mixer;
+						}
+					}
+				}
+
+				currentBeat = getMeasureManager().getPreviousBeat(measure.getBeats(), currentBeat);
+				if (currentBeat == null) {
+					break;
+				}
+			}
+		}
+
+		TGChannel channel = getChannel(track.getSong(), track.getChannelId());
+		if (mixer.getProgram() == null) {
+			mixer.setProgram(channel.getProgram());
+		}
+		if (mixer.getBank() == null) {
+			mixer.setBank(channel.getBank());
+		}
+		if (mixer.getVolume() == null) {
+			mixer.setVolume(channel.getVolume());
+		}
+		if (mixer.getBalance() == null) {
+			mixer.setBalance(channel.getBalance());
+		}
+		if (mixer.getReverb() == null) {
+			mixer.setReverb(channel.getReverb());
+		}
+		if (mixer.getChorus() == null) {
+			mixer.setChorus(channel.getChorus());
+		}
+		if (mixer.getTremolo() == null) {
+			mixer.setTremolo(channel.getTremolo());
+		}
+		if (mixer.getPhaser() == null) {
+			mixer.setPhaser(channel.getPhaser());
+		}
+
+		return mixer;
 	}
 }

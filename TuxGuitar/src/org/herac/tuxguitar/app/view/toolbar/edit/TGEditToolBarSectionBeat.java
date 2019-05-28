@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenChordDialogAction;
+import org.herac.tuxguitar.app.action.impl.insert.TGOpenMixerChangeDialogAction;
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenTextDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenStrokeDownDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenStrokeUpDialogAction;
@@ -30,6 +31,7 @@ public class TGEditToolBarSectionBeat extends TGEditToolBarSection {
 	
 	private UIToolActionMenuItem chordMenu;
 	private UIToolCheckableItem text;
+	private UIToolCheckableItem mixerChange;
 	private UIToolCheckableItem strokeUp;
 	private UIToolCheckableItem strokeDown;
 	
@@ -45,7 +47,10 @@ public class TGEditToolBarSectionBeat extends TGEditToolBarSection {
 		
 		this.text = toolBar.createCheckItem();
 		this.text.addSelectionListener(this.createActionProcessor(TGOpenTextDialogAction.NAME));
-		
+
+		this.mixerChange = toolBar.createCheckItem();
+		this.mixerChange.addSelectionListener(this.createActionProcessor(TGOpenMixerChangeDialogAction.NAME));
+
 		this.strokeUp = toolBar.createCheckItem();
 		this.strokeUp.addSelectionListener(this.createActionProcessor(TGOpenStrokeUpDialogAction.NAME));
 		
@@ -56,6 +61,7 @@ public class TGEditToolBarSectionBeat extends TGEditToolBarSection {
 	public void loadSectionProperties() {
 		this.chordMenu.setToolTipText(this.getText("insert.chord"));
 		this.text.setToolTipText(this.getText("text.insert"));
+		this.mixerChange.setToolTipText(this.getText("mixer-change.insert"));
 		this.strokeUp.setToolTipText(this.getText("beat.stroke-up"));
 		this.strokeDown.setToolTipText(this.getText("beat.stroke-down"));
 	}
@@ -63,6 +69,7 @@ public class TGEditToolBarSectionBeat extends TGEditToolBarSection {
 	public void loadSectionIcons() {
 		this.chordMenu.setImage(this.getIconManager().getChord());
 		this.text.setImage(this.getIconManager().getText());
+		this.mixerChange.setImage(this.getIconManager().getMixerChange());
 		this.strokeUp.setImage(this.getIconManager().getStrokeUp());
 		this.strokeDown.setImage(this.getIconManager().getStrokeDown());
 	}
@@ -75,6 +82,8 @@ public class TGEditToolBarSectionBeat extends TGEditToolBarSection {
 		this.chordMenu.setEnabled(!running);
 		this.text.setEnabled(!running);
 		this.text.setChecked(beat.isTextBeat());
+		this.mixerChange.setEnabled(!running);
+		this.mixerChange.setChecked(beat.hasMixerChange());
 		this.strokeUp.setEnabled(!running && !beat.isRestBeat());
 		this.strokeUp.setChecked( beat != null && beat.getStroke().getDirection() == TGStroke.STROKE_UP );
 		this.strokeDown.setEnabled(!running && !beat.isRestBeat());

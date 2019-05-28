@@ -5,20 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGNoteEffect;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
-import org.herac.tuxguitar.song.models.TGTempo;
-import org.herac.tuxguitar.song.models.TGTrack;
-import org.herac.tuxguitar.song.models.TGVelocities;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
@@ -166,8 +153,40 @@ public class MidiSequenceParser {
 		TGBeat previous = null;
 		for (int bIndex = 0; bIndex < measure.countBeats(); bIndex++) {
 			TGBeat beat = measure.getBeat(bIndex);
+			TGMixerChange mixer = beat.getMixerChange();
+			if (mixer != null) {
+				addMixerChange(sh, track.getNumber(), channel, beat.getStart() + startMove, mixer);
+			}
 			addNotes( sh, channel, track, beat, measure.getTempo(), mIndex, bIndex, startMove, getStroke(beat, previous, stroke) );
 			previous = beat;
+		}
+	}
+
+	private void addMixerChange(MidiSequenceHelper sh, int trackNum, TGChannel channel, long tick, TGMixerChange mixer) {
+		int channelId = channel.getChannelId();
+		if (mixer.getProgram() != null) {
+			sh.getSequence().addProgramChange(tick,trackNum,channelId,fix(mixer.getProgram()));
+		}
+		if (mixer.getBank() != null && !channel.isPercussionChannel()) {
+			sh.getSequence().addControlChange(tick,trackNum,channelId,MidiControllers.BANK_SELECT,fix(mixer.getBank()));
+		}
+		if (mixer.getVolume() != null) {
+			sh.getSequence().addControlChange(tick,trackNum,channelId,MidiControllers.VOLUME,fix(mixer.getVolume()));
+		}
+		if (mixer.getBalance() != null) {
+			sh.getSequence().addControlChange(tick,trackNum,channelId,MidiControllers.BALANCE,fix(mixer.getBalance()));
+		}
+		if (mixer.getChorus() != null) {
+			sh.getSequence().addControlChange(tick,trackNum,channelId,MidiControllers.CHORUS,fix(mixer.getChorus()));
+		}
+		if (mixer.getReverb() != null) {
+			sh.getSequence().addControlChange(tick,trackNum,channelId,MidiControllers.REVERB,fix(mixer.getReverb()));
+		}
+		if (mixer.getPhaser() != null) {
+			sh.getSequence().addControlChange(tick,trackNum,channelId,MidiControllers.PHASER,fix(mixer.getPhaser()));
+		}
+		if (mixer.getTremolo() != null) {
+			sh.getSequence().addControlChange(tick,trackNum,channelId,MidiControllers.TREMOLO,fix(mixer.getTremolo()));
 		}
 	}
 

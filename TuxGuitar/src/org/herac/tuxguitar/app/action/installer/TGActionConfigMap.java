@@ -12,10 +12,7 @@ import org.herac.tuxguitar.app.action.impl.effects.*;
 import org.herac.tuxguitar.app.action.impl.file.*;
 import org.herac.tuxguitar.app.action.impl.help.TGOpenAboutDialogAction;
 import org.herac.tuxguitar.app.action.impl.help.TGOpenDocumentationDialogAction;
-import org.herac.tuxguitar.app.action.impl.insert.TGOpenChordDialogAction;
-import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatAlternativeDialogAction;
-import org.herac.tuxguitar.app.action.impl.insert.TGOpenRepeatCloseDialogAction;
-import org.herac.tuxguitar.app.action.impl.insert.TGOpenTextDialogAction;
+import org.herac.tuxguitar.app.action.impl.insert.*;
 import org.herac.tuxguitar.app.action.impl.layout.*;
 import org.herac.tuxguitar.app.action.impl.marker.*;
 import org.herac.tuxguitar.app.action.impl.measure.*;
@@ -217,6 +214,8 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGChangeStrokeAction.NAME, LOCKABLE | DISABLE_ON_PLAY, UPDATE_NOTE_RANGE_CTL, UNDOABLE_NOTE_RANGE);
 		this.map(TGInsertTextAction.NAME, LOCKABLE | DISABLE_ON_PLAY, UPDATE_MEASURE_CTL, UNDOABLE_MEASURE_GENERIC);
 		this.map(TGRemoveTextAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, UPDATE_MEASURE_CTL, UNDOABLE_MEASURE_GENERIC);
+		this.map(TGInsertMixerChangeAction.NAME, LOCKABLE | DISABLE_ON_PLAY, UPDATE_MEASURE_CTL, UNDOABLE_MEASURE_GENERIC);
+		this.map(TGRemoveMixerChangeAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, UPDATE_MEASURE_CTL, UNDOABLE_MEASURE_GENERIC);
 		this.map(TGInsertChordAction.NAME, LOCKABLE | DISABLE_ON_PLAY, UPDATE_MEASURE_CTL, UNDOABLE_MEASURE_GENERIC);
 		this.map(TGRemoveChordAction.NAME, LOCKABLE | DISABLE_ON_PLAY | SHORTCUT, UPDATE_MEASURE_CTL, UNDOABLE_MEASURE_GENERIC);
 		for( int i = 0 ; i < 10 ; i ++ ){
@@ -360,6 +359,7 @@ public class TGActionConfigMap extends TGActionMap<TGActionConfig> {
 		this.map(TGOpenGraceDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenBeatMoveDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenTextDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
+		this.map(TGOpenMixerChangeDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenChordDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenRepeatCloseDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);
 		this.map(TGOpenRepeatAlternativeDialogAction.NAME, LOCKABLE | SYNC_THREAD |DISABLE_ON_PLAY | SHORTCUT);

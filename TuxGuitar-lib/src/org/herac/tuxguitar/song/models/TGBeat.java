@@ -23,7 +23,8 @@ public abstract class TGBeat {
 	private TGText text;
 	private TGVoice[] voices;
 	private TGStroke stroke;
-	
+	private TGMixerChange mixer;
+
 	public TGBeat(TGFactory factory) {
 		this.start = TGDuration.QUARTER_TIME;
 		this.stroke = factory.newStroke();
@@ -104,7 +105,23 @@ public abstract class TGBeat {
 	public TGStroke getStroke() {
 		return this.stroke;
 	}
-	
+
+	public TGMixerChange getMixerChange() {
+		return mixer;
+	}
+
+	public void setMixerChange(TGMixerChange mixer) {
+		this.mixer = mixer;
+	}
+
+	public void removeMixerChange() {
+		this.mixer = null;
+	}
+
+	public boolean hasMixerChange() {
+		return this.mixer != null;
+	}
+
 	public boolean isRestBeat(){
 		for(int v = 0; v < this.countVoices() ; v ++ ){
 			TGVoice voice = this.getVoice( v );
@@ -127,6 +144,9 @@ public abstract class TGBeat {
 		}
 		if(this.text != null){
 			beat.setText( this.text.clone(factory));
+		}
+		if (this.mixer != null) {
+			beat.setMixerChange(this.mixer.clone(factory));
 		}
 		return beat;
 	}

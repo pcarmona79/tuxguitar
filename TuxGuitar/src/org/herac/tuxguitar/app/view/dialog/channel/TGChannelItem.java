@@ -21,9 +21,9 @@ import org.herac.tuxguitar.util.TGContext;
 
 public class TGChannelItem {
 	
-	private static final int MINIMUM_KNOB_VALUE = 0;
-	private static final int MAXIMUM_KNOB_VALUE = 127;
-	private static final int MINIMUM_KNOB_INCREMENT = 4;
+	public static final int MINIMUM_KNOB_VALUE = 0;
+	public static final int MAXIMUM_KNOB_VALUE = 127;
+	public static final int MINIMUM_KNOB_INCREMENT = 4;
 	
 	private TGChannel channel;
 	private TGChannelManagerDialog dialog;

@@ -37,7 +37,8 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 	private int value;
 	private float lastDragY;
 	private UISelectionListenerManager selectionHandler;
-	
+	private boolean enabled;
+
 	public SWTCustomKnob(SWTContainer<? extends Composite> parent) {
 		super(new Composite(parent.getControl(), SWT.DOUBLE_BUFFERED), parent);
 		
@@ -129,6 +130,7 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 	}
 
 	public void paintControl(PaintEvent e) {
+	    float alphaMultiply = this.isEnabled() ? 1f : .25f;
 		Rectangle area = this.getControl().getClientArea();
 		
 		// knob
@@ -154,14 +156,14 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 
         // background
 		uiPainter.setBackground(foreground);
-		uiPainter.setAlpha(96);
+		uiPainter.setAlpha((int) (96 * alphaMultiply));
 		uiPainter.initPath(UIPainter.PATH_FILL);
 		uiPainter.moveTo(x, y);
 		uiPainter.addCircle(x, y, ovalSize + MARGIN);
 		uiPainter.closePath();
 
 		// notches
-		uiPainter.setAlpha(128);
+		uiPainter.setAlpha((int) (128 * alphaMultiply));
 		uiPainter.setForeground(foreground);
 		uiPainter.initPath(UIPainter.PATH_DRAW);
 		uiPainter.moveTo(x - notchStart , y + notchStart);
@@ -174,7 +176,7 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 		uiPainter.closePath();
 
 		// knob
-		uiPainter.setAlpha(192);
+		uiPainter.setAlpha((int) (192 * alphaMultiply));
 		uiPainter.setBackground(background);
 		uiPainter.initPath(UIPainter.PATH_FILL);
 		uiPainter.moveTo(x, y);
@@ -182,7 +184,7 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 		uiPainter.closePath();
 
 		// value
-		uiPainter.setAlpha(255);
+		uiPainter.setAlpha((int) (255 * alphaMultiply));
 		uiPainter.setLineWidth(2.f);
 		uiPainter.setForeground(foreground);
 		uiPainter.initPath(UIPainter.PATH_DRAW);
@@ -191,12 +193,28 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 		uiPainter.closePath();
 
 	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+		super.setEnabled(enabled);
+		this.redraw();
+	}
+
+	public boolean isEnabled() {
+		return this.enabled;
+	}
 	
 	public void onMouseWheel(UIMouseWheelEvent event) {
+		if (!this.isEnabled()) {
+			return;
+		}
 		this.setValue(Math.round(Math.max(Math.min(this.value + (Math.signum(event.getValue()) * this.increment), this.maximum), this.minimum)));
 	}
 	
 	public void onMouseDrag(UIMouseEvent event) {
+		if (!this.isEnabled()) {
+			return;
+		}
 		float dragY = event.getPosition().getY();
 		float move = (this.lastDragY - dragY);
 		this.lastDragY = dragY;

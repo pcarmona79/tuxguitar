@@ -62,6 +62,12 @@ public class TGNoteImpl extends TGNote {
 		float tsY = (fromY + ts.getPosition(TGTrackSpacing.POSITION_EFFECTS));
 		float bsY = (tsY + (ts.getSize(TGTrackSpacing.POSITION_EFFECTS) - bs.getSize( )));
 
+		if (getBeatImpl().hasMixerChange()) {
+			layout.setTabEffectStyle(painter);
+			float x = fromX + getPosX() + spacing;
+			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_MIXER_CHANGE ));
+			paintMixerChange(layout, painter, x, y);
+		}
 		layout.setOfflineEffectStyle(painter);
 		if(effect.isAccentuatedNote()){
 			float x = fromX + getPosX() + spacing;
@@ -75,15 +81,15 @@ public class TGNoteImpl extends TGNote {
 		}
 		if(effect.isFadeIn() && effect.isFadeOut()){
 			float x = fromX + getPosX() + spacing;
-			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE_INOUT ));
+			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE ));
 			paintFadeInOut(layout, painter, x, y);
 		} else if(effect.isFadeIn()){
 			float x = fromX + getPosX() + spacing;
-			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE_IN ));
+			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE ));
 			paintFadeIn(layout, painter, x, y);
 		}else if(effect.isFadeOut()){
 			float x = fromX + getPosX() + spacing;
-			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE_OUT ));
+			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_FADE ));
 			paintFadeOut(layout, painter, x, y);    
 		}
 		if(effect.isHarmonic() && (layout.getStyle() & TGLayout.DISPLAY_SCORE) == 0){
@@ -1049,7 +1055,19 @@ public class TGNoteImpl extends TGNote {
 		painter.moveTo ( x + width, y + (4.0f * scale ) );
 		painter.closePath();
 	}
-	
+
+	private void paintMixerChange(TGLayout layout, UIPainter painter,float fromX,float fromY){
+		float scale = layout.getScale();
+		float x = fromX;
+		float y = fromY + (2f * scale );
+		float s = 4f * scale;
+
+		painter.setLineWidth(layout.getLineWidth(1));
+		painter.initPath(UIPainter.PATH_FILL);
+		painter.addRectangle(x, y, s, s);
+		painter.closePath();
+	}
+
 	private void paintAccentuated(TGLayout layout, UIPainter painter,float fromX,float fromY){
 		float scale = layout.getScale();
 		float x = fromX;

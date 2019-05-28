@@ -93,6 +93,7 @@ public class TGIconManager {
 	private UIImage filePrintPreview;
 	private UIImage chord;
 	private UIImage text;
+	private UIImage mixerChange;
 	private UIImage noteTied;
 	private UIImage instruments;
 	private UIImage percussion;
@@ -249,6 +250,7 @@ public class TGIconManager {
 		this.tuner = loadIcon("tuner");
 		this.chord = loadIcon("chord");
 		this.text = loadIcon("text");
+		this.mixerChange = loadIcon("mixer_change");
 		this.noteTied = loadIcon("tiednote");
 		this.playMode = loadIcon("play_mode");
 		this.transportFirst = loadIcon("transport_first");
@@ -417,7 +419,11 @@ public class TGIconManager {
 	public UIImage getText() {
 		return this.text;
 	}
-	
+
+	public UIImage getMixerChange() {
+		return this.mixerChange;
+	}
+
 	public UIImage getCompositionRepeatClose() {
 		return this.compositionRepeatClose;
 	}

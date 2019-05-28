@@ -7,16 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.factory.TGFactory;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
-import org.herac.tuxguitar.song.models.TGText;
-import org.herac.tuxguitar.song.models.TGTrack;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
@@ -869,7 +860,7 @@ public class TGMeasureManager {
 			addText(beat, text);
 		}
 	}
-	
+
 	/**
 	 * Agrega el texto al compas
 	 */
@@ -909,7 +900,15 @@ public class TGMeasureManager {
 		}
 		return false;
 	}
-	
+
+	public void addMixerChange(TGBeat beat, TGMixerChange mixerChange){
+        beat.setMixerChange(mixerChange);
+	}
+
+	public void removeMixerChange(TGBeat beat) {
+		beat.removeMixerChange();
+	}
+
 	public void cleanMeasure(TGMeasure measure){
 		while( measure.countBeats() > 0){
 			removeBeat( measure.getBeat(0));

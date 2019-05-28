@@ -8,27 +8,7 @@ import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGSongWriter;
 import org.herac.tuxguitar.io.base.TGSongWriterHandle;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGChannelParameter;
-import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
-import org.herac.tuxguitar.song.models.TGDivisionType;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGLyric;
-import org.herac.tuxguitar.song.models.TGMarker;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGNoteEffect;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
-import org.herac.tuxguitar.song.models.TGTempo;
-import org.herac.tuxguitar.song.models.TGText;
-import org.herac.tuxguitar.song.models.TGTimeSignature;
-import org.herac.tuxguitar.song.models.TGTrack;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
@@ -373,6 +353,10 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		if(beat.getText() != null){
 			header |= BEAT_HAS_TEXT;
 		}
+
+		if (beat.hasMixerChange()) {
+			header |= BEAT_HAS_MIXER_CHANGE;
+		}
 		
 		// escribo la cabecera
 		writeHeader(header);
@@ -393,6 +377,11 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		//escribo el texto
 		if(((header & BEAT_HAS_TEXT) != 0)){
 			writeText(beat.getText());
+		}
+
+		//escribo el texto
+		if(((header & BEAT_HAS_MIXER_CHANGE) != 0)){
+			writeMixerChange(beat.getMixerChange());
 		}
 	}
 	
@@ -482,7 +471,22 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		//escribo el texto
 		writeUnsignedByteString(text.getValue());
 	}
-	
+
+	private void writeMixerByte(Short b) throws IOException {
+		writeByte(b == null ? -1 : b);
+	}
+
+	private void writeMixerChange(TGMixerChange mixer) throws IOException {
+		writeMixerByte(mixer.getProgram());
+		writeMixerByte(mixer.getBank());
+		writeMixerByte(mixer.getVolume());
+		writeMixerByte(mixer.getBalance());
+		writeMixerByte(mixer.getReverb());
+		writeMixerByte(mixer.getChorus());
+		writeMixerByte(mixer.getTremolo());
+		writeMixerByte(mixer.getPhaser());
+	}
+
 	private void writeInstrumentString(TGString string) throws IOException{
 		//escribo el valor
 		writeByte(string.getValue());

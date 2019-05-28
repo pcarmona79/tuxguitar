@@ -14,26 +14,7 @@ import java.util.List;
 import org.herac.tuxguitar.gm.GMChannelRoute;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
-import org.herac.tuxguitar.song.models.TGDivisionType;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGMarker;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGNoteEffect;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
-import org.herac.tuxguitar.song.models.TGTempo;
-import org.herac.tuxguitar.song.models.TGText;
-import org.herac.tuxguitar.song.models.TGTimeSignature;
-import org.herac.tuxguitar.song.models.TGTrack;
-import org.herac.tuxguitar.song.models.TGVelocities;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
@@ -401,7 +382,7 @@ public class GP5OutputStream extends GTPOutputStream {
 		}
 		
 		if ((flags & 0x10) != 0) {
-			writeMixChange(measure.getTempo());
+			writeMixChange(beat, measure.getTempo());
 		}
 		int stringFlags = 0;
 		if (!voice.isRestVoice()) {
@@ -718,17 +699,18 @@ public class GP5OutputStream extends GTPOutputStream {
 		writeStringByteSizeOfInteger(text.getValue());
 	}
 	
-	private void writeMixChange(TGTempo tempo) throws IOException {
-		writeByte((byte) 0xff);
+	private void writeMixChange(TGBeat beat, TGTempo tempo) throws IOException {
+	    TGMixerChange mixer = beat.getMixerChange();
+		writeByte((byte) (mixer != null && mixer.getProgram() != null ? (short) mixer.getProgram() : 0xff));
 		for(int i = 0; i < 16; i++){
 			writeByte((byte) 0xff);
 		}
-		writeByte((byte) 0xff); //volume
-		writeByte((byte) 0xff); //int pan
-		writeByte((byte) 0xff); //int chorus
-		writeByte((byte) 0xff); //int reverb
-		writeByte((byte) 0xff); //int phaser
-		writeByte((byte) 0xff); //int tremolo
+		writeByte((byte) (mixer != null && mixer.getVolume() != null ? toChannelByte(mixer.getVolume()) : 0xff));
+		writeByte((byte) (mixer != null && mixer.getBalance() != null ? toChannelByte(mixer.getBalance()) : 0xff));
+		writeByte((byte) (mixer != null && mixer.getChorus() != null ? toChannelByte(mixer.getChorus()) : 0xff));
+		writeByte((byte) (mixer != null && mixer.getReverb() != null ? toChannelByte(mixer.getReverb()) : 0xff));
+		writeByte((byte) (mixer != null && mixer.getPhaser() != null ? toChannelByte(mixer.getPhaser()) : 0xff));
+		writeByte((byte) (mixer != null && mixer.getTremolo() != null ? toChannelByte(mixer.getTremolo()) : 0xff));
 		writeStringByteSizeOfInteger(""); //tempo name
 		writeInt((tempo != null)?tempo.getValue():-1); //tempo value
 		if((tempo != null)){

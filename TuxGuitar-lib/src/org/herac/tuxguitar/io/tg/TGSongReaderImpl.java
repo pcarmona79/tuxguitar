@@ -8,27 +8,7 @@ import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGSongReader;
 import org.herac.tuxguitar.io.base.TGSongReaderHandle;
 import org.herac.tuxguitar.song.factory.TGFactory;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGChannelParameter;
-import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
-import org.herac.tuxguitar.song.models.TGDivisionType;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGLyric;
-import org.herac.tuxguitar.song.models.TGMarker;
-import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGNoteEffect;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
-import org.herac.tuxguitar.song.models.TGTempo;
-import org.herac.tuxguitar.song.models.TGText;
-import org.herac.tuxguitar.song.models.TGTimeSignature;
-import org.herac.tuxguitar.song.models.TGTrack;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
@@ -345,7 +325,11 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 		if(((header & BEAT_HAS_TEXT) != 0)){
 			readText(beat);
 		}
-		
+
+		if(((header & BEAT_HAS_MIXER_CHANGE) != 0)){
+			readMixerChange(beat);
+		}
+
 		measure.addBeat(beat);
 	}
 	
@@ -445,7 +429,31 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 		
 		beat.setText(text);
 	}
-	
+
+	private Short readMixerByte() throws IOException {
+		byte b = readByte();
+		if (b < 0) {
+			return null;
+		}
+		return (short) b;
+	}
+
+	private void readMixerChange(TGBeat beat) throws IOException {
+		TGMixerChange mixer = factory.newMixerChange();
+
+		mixer.setProgram(readMixerByte());
+		mixer.setBank(readMixerByte());
+		mixer.setVolume(readMixerByte());
+		mixer.setBalance(readMixerByte());
+		mixer.setReverb(readMixerByte());
+		mixer.setChorus(readMixerByte());
+		mixer.setTremolo(readMixerByte());
+		mixer.setPhaser(readMixerByte());
+
+		beat.setMixerChange(mixer);
+	}
+
+
 	private TGString readInstrumentString(int number) throws IOException {
 		TGString string = this.factory.newString();
 		

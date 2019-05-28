@@ -42,7 +42,7 @@ public class TGBeatImpl extends TGBeat{
 	private TGBeatGroup group;
 	
 	private TGBeatSpacing bs;
-	
+
 	private boolean accentuated;
 	private boolean heavyAccentuated;
 	private boolean harmonic;
@@ -55,7 +55,7 @@ public class TGBeatImpl extends TGBeat{
 	private boolean trill;
 	private boolean fadeIn;
 	private boolean fadeOut;
-	
+
 	public TGBeatImpl(TGFactory factory){
 		super(factory);
 	}
@@ -267,6 +267,9 @@ public class TGBeatImpl extends TGBeat{
 	}
 	
 	public float getEffectsSpacing(TGLayout layout){
+		if(this.hasMixerChange()){
+			this.bs.setSize(TGBeatSpacing.POSITION_MIXER_CHANGE,layout.getEffectSpacing());
+		}
 		if(this.accentuated){
 			this.bs.setSize(TGBeatSpacing.POSITION_ACCENTUATED_EFFECT,layout.getEffectSpacing());
 		}
@@ -291,11 +294,8 @@ public class TGBeatImpl extends TGBeat{
 		if(this.letRing){
 			this.bs.setSize(TGBeatSpacing.POSITION_LET_RING_EFFEC,layout.getEffectSpacing());
 		}
-		if(this.fadeIn){
-			this.bs.setSize(TGBeatSpacing.POSITION_FADE_IN,layout.getEffectSpacing());
-		}
-		if(this.fadeOut){
-			this.bs.setSize(TGBeatSpacing.POSITION_FADE_OUT,layout.getEffectSpacing());
+		if(this.fadeIn || this.fadeOut){
+			this.bs.setSize(TGBeatSpacing.POSITION_FADE,layout.getEffectSpacing());
 		}
 		if(this.vibrato){
 			this.bs.setSize(TGBeatSpacing.POSITION_VIBRATO_EFFEC,layout.getEffectSpacing());

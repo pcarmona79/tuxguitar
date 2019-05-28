@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.app.view.menu.impl;
 
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.action.impl.insert.TGOpenMixerChangeDialogAction;
 import org.herac.tuxguitar.app.action.impl.insert.TGOpenTextDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenBeatMoveDialogAction;
 import org.herac.tuxguitar.app.action.impl.note.TGOpenStrokeDownDialogAction;
@@ -40,7 +41,8 @@ public class BeatMenuItem extends TGMenuItem {
 	private UIMenuActionItem deleteNoteOrRest;
 	private UIMenuActionItem cleanBeat;
 	private UIMenuActionItem removeVoice;
-	private UIMenuActionItem insertText;
+	private UIMenuCheckableItem insertText;
+	private UIMenuCheckableItem insertMixerChange;
 	private UIMenuActionItem voiceAuto;
 	private UIMenuActionItem voiceUp;
 	private UIMenuActionItem voiceDown;
@@ -58,7 +60,7 @@ public class BeatMenuItem extends TGMenuItem {
 	private ChordMenuItem chordMenuItem;
 	private NoteEffectsMenuItem effectMenuItem;
 	private DynamicMenuItem dynamicMenuItem;
-	
+
 	public BeatMenuItem(UIMenu parent) {
 		this.noteMenuItem = parent.createSubMenuItem();
 	}
@@ -113,13 +115,17 @@ public class BeatMenuItem extends TGMenuItem {
 		//--Dynamic--
 		this.dynamicMenuItem = new DynamicMenuItem(this.noteMenuItem.getMenu().createSubMenuItem());
 		this.dynamicMenuItem.showItems();
-		
+
 		//--SEPARATOR--
 		this.noteMenuItem.getMenu().createSeparator();
 		
-		this.insertText = this.noteMenuItem.getMenu().createActionItem();
+		this.insertText = this.noteMenuItem.getMenu().createCheckItem();
 		this.insertText.addSelectionListener(this.createActionProcessor(TGOpenTextDialogAction.NAME));
-		
+
+		//--Add Mixer Change
+		this.insertMixerChange = this.noteMenuItem.getMenu().createCheckItem();
+		this.insertMixerChange.addSelectionListener(this.createActionProcessor(TGOpenMixerChangeDialogAction.NAME));
+
 		//--SEPARATOR--
 		this.noteMenuItem.getMenu().createSeparator();
 		
@@ -182,7 +188,7 @@ public class BeatMenuItem extends TGMenuItem {
 		//--Move Beats Custom
 		this.moveBeatsCustom = this.noteMenuItem.getMenu().createActionItem();
 		this.moveBeatsCustom.addSelectionListener(this.createActionProcessor(TGOpenBeatMoveDialogAction.NAME));
-		
+
 		this.loadIcons();
 		this.loadProperties();
 	}
@@ -211,6 +217,9 @@ public class BeatMenuItem extends TGMenuItem {
 		this.shiftUp.setEnabled(!running && note != null);
 		this.shiftDown.setEnabled(!running && note != null);
 		this.insertText.setEnabled(!running);
+		this.insertText.setChecked(beat.isTextBeat());
+		this.insertMixerChange.setEnabled(!running);
+		this.insertMixerChange.setChecked(beat.hasMixerChange());
 		this.moveBeatsLeft.setEnabled(!running);
 		this.moveBeatsRight.setEnabled(!running);
 		this.moveBeatsCustom.setEnabled(!running);
@@ -237,6 +246,7 @@ public class BeatMenuItem extends TGMenuItem {
 		setMenuItemTextAndAccelerator(this.shiftUp, "note.shift-up", TGShiftNoteUpAction.NAME);
 		setMenuItemTextAndAccelerator(this.shiftDown, "note.shift-down", TGShiftNoteDownAction.NAME);
 		setMenuItemTextAndAccelerator(this.insertText, "text.insert", TGOpenTextDialogAction.NAME);
+		setMenuItemTextAndAccelerator(this.insertMixerChange, "mixer-change.insert", TGOpenMixerChangeDialogAction.NAME);
 		setMenuItemTextAndAccelerator(this.moveBeatsLeft, "beat.move-left", TGMoveBeatsLeftAction.NAME);
 		setMenuItemTextAndAccelerator(this.moveBeatsRight, "beat.move-right", TGMoveBeatsRightAction.NAME);
 		setMenuItemTextAndAccelerator(this.moveBeatsCustom, "beat.move-custom", TGOpenBeatMoveDialogAction.NAME);

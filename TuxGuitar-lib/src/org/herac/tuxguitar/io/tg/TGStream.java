@@ -55,7 +55,9 @@ public class TGStream {
 	protected static final int BEAT_HAS_VOICE = 0x10;
 	
 	protected static final int BEAT_HAS_VOICE_CHANGES = 0x20;
-	
+
+	protected static final int BEAT_HAS_MIXER_CHANGE = 0x40;
+
 	protected static final int VOICE_HAS_NOTES = 0x01;
 	
 	protected static final int VOICE_NEXT_DURATION = 0x02;
