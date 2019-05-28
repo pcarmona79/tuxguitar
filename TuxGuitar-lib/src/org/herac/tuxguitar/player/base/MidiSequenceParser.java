@@ -221,9 +221,8 @@ public class MidiSequenceParser {
 		addSlide(sh, track, from, tick1, from, tick2, to, channel, midiVoice, defaultBend, bendMode);
 	}
 
-	private void addSlideFrom(MidiSequenceHelper sh,TGTrack track,long start,int fret,int channel, int midiVoice, int defaultBend, boolean high){
+	private void addSlideFrom(MidiSequenceHelper sh,TGTrack track,long start,long slideLength,int fret,int channel, int midiVoice, int defaultBend, boolean high){
 		int slideFret = fret;
-		long slideLength = (long)(TGDuration.QUARTER_TIME * (4.00 / TGDuration.SIXTEENTH) ); // Duration of 16th
 		if (high)
 			slideFret += DEFAULT_SLIDEFROM_DIFF;
 		else
@@ -389,7 +388,8 @@ public class MidiSequenceParser {
 					if (!percussionChannel) {
 						//---Slide From---
 						if (note.getEffect().getSlideFrom() != 0) {
-							addSlideFrom(sh, track, start, note.getValue(), channel, midiVoice, defaultBend, note.getEffect().getSlideFrom() > 0);
+							long slideLength = Math.min(duration / 2, (long)(TGDuration.QUARTER_TIME * (4.00 / TGDuration.SIXTEENTH) )); // Duration of 16th
+							addSlideFrom(sh, track, start, slideLength, note.getValue(), channel, midiVoice, defaultBend, note.getEffect().getSlideFrom() > 0);
 						}
 					}
 					//---Grace---
