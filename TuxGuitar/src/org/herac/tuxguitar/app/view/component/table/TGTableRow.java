@@ -191,7 +191,7 @@ public class TGTableRow {
 		}
 		
 		public void onMouseDoubleClick(UIMouseEvent event) {
-			if( getMouseDoubleClickListenerLabel() != null){
+			if( getMouseDoubleClickListenerLabel() != null && event.getButton() == 1){
 				getMouseDoubleClickListenerLabel().onMouseDoubleClick(event);
 			}
 		}
@@ -216,7 +216,7 @@ public class TGTableRow {
 		}
 		
 		public void onMouseDoubleClick(UIMouseEvent event) {
-			if( getMouseDoubleClickListenerCanvas() != null){
+			if( getMouseDoubleClickListenerCanvas() != null && event.getButton() == 1){
 				getMouseDoubleClickListenerCanvas().onMouseDoubleClick(event);
 			}
 		}

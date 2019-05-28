@@ -226,6 +226,7 @@ public class TGTableViewer implements TGEventListener {
 				final TGTrack track = song.getTrack(i);
 				final TGTableRow row = this.table.getRow(i);
 				if(row != null){
+					row.getControl().setPopupMenu((UIPopupMenu) this.menu.getMenu());
 					//Number
 					this.updateTableTextRow(row.getNumber(), track, Integer.toString(track.getNumber()));
 					
@@ -237,7 +238,7 @@ public class TGTableViewer implements TGEventListener {
 					
 					//Instrument
 					this.updateTableTextRow(row.getInstrument(), track, getInstrument(track));
-					
+
 					row.setMouseUpListenerLabel(new UIMouseUpListener() {
 						public void onMouseUp(UIMouseEvent event) {
 							row.getPainter().setFocus();
@@ -329,7 +330,7 @@ public class TGTableViewer implements TGEventListener {
 	
 	private void updateTableRow(TGTableRowCell cell, TGTrack track) {
 		cell.setData(TGTrack.class.getName(), track);
-		cell.setMenu((UIPopupMenu) this.menu.getMenuItem());
+		cell.setMenu((UIPopupMenu) this.menu.getMenu());
 	}
 	
 	private void updateTableTextRow(TGTableRowTextCell cell, TGTrack track, String label) {
@@ -488,7 +489,7 @@ public class TGTableViewer implements TGEventListener {
 	}
 	
 	public void createTrackMenu() {
-		this.menu = new TrackMenu(this.getUIFactory().createPopupMenu(TGWindow.getInstance(this.context).getWindow()));
+		this.menu = new TrackMenu(this.getUIFactory().createPopupMenu(TGWindow.getInstance(this.context).getWindow()), false);
 		this.menu.showItems();
 		this.menu.update();
 	}

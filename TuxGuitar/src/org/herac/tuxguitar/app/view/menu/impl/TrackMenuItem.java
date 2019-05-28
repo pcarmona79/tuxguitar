@@ -11,7 +11,7 @@ public class TrackMenuItem extends TGMenuItem {
 	
 	public TrackMenuItem(UIMenu parent) {
 		this.trackMenuItem = parent.createSubMenuItem();
-		this.menu = new TrackMenu(this.trackMenuItem.getMenu());
+		this.menu = new TrackMenu(this.trackMenuItem.getMenu(), true);
 	}
 
 	public UIMenuSubMenuItem getMenuItem() {
