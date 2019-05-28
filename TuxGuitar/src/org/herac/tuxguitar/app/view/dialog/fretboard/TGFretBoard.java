@@ -147,6 +147,9 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	}
 	
 	private void calculateFretSpacing(float width) {
+		if (getTrack() == null) {
+			return;
+		}
 		int maxFrets = getTrack().getFrets() + 1;
 		this.fretSpacing = (width / maxFrets);
 		int aux = 0;

@@ -8,6 +8,7 @@ import org.herac.tuxguitar.app.action.impl.file.TGReadURLAction;
 import org.herac.tuxguitar.app.action.impl.marker.TGToggleMarkerListAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleChannelsDialogAction;
 import org.herac.tuxguitar.app.action.impl.view.TGToggleMatrixEditorAction;
+import org.herac.tuxguitar.app.document.TGDocument;
 import org.herac.tuxguitar.app.document.TGDocumentListAttributes;
 import org.herac.tuxguitar.app.document.TGDocumentListManager;
 import org.herac.tuxguitar.app.editor.EditorCache;
@@ -163,7 +164,10 @@ public class TuxGuitar {
 	}
 	
 	private void startSong(URL url){
-		TGDocumentListManager.getInstance(this.context).findCurrentDocument().setUnwanted(true);
+		TGDocument document = TGDocumentListManager.getInstance(this.context).findCurrentDocument();
+		if (document != null) {
+			document.setUnwanted(true);
+		}
 		if( url != null ){
 			TGActionProcessor tgActionProcessor = new TGActionProcessor(this.context, TGReadURLAction.NAME);
 			tgActionProcessor.setAttribute(TGReadURLAction.ATTRIBUTE_URL, url);

@@ -6,9 +6,12 @@ import java.net.URL;
 
 import org.herac.tuxguitar.action.TGActionContext;
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.document.TGDocument;
 import org.herac.tuxguitar.app.document.TGDocumentListAttributes;
 import org.herac.tuxguitar.app.document.TGDocumentListManager;
 import org.herac.tuxguitar.app.helper.TGFileHistory;
+import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
+import org.herac.tuxguitar.app.view.component.tabfolder.TGTabFolder;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.util.TGContext;
@@ -36,7 +39,8 @@ public class TGUpdateLoadedSongController extends TGUpdateItemsController {
 			
 			Boolean unwanted = Boolean.TRUE.equals(actionContext.getAttribute(TGDocumentListAttributes.ATTRIBUTE_UNWANTED));
 			TGDocumentListManager tgDocumentListManager = TGDocumentListManager.getInstance(context);
-			tgDocumentListManager.findCurrentDocument().setUnwanted(unwanted);
+			TGDocument document = tgDocumentListManager.findCurrentDocument();
+			document.setUnwanted(unwanted);
 			tgDocumentListManager.updateLoadedDocument();
 			
 			if( url != null ) {
@@ -55,6 +59,8 @@ public class TGUpdateLoadedSongController extends TGUpdateItemsController {
 			
 			TuxGuitar.getInstance().getEditorCache().reset();
 			TGWindow.getInstance(context).loadTitle();
+			TablatureEditor.getInstance(context).getTablature().restoreStateFrom(document);
+			TGTabFolder.getInstance(context).getInnerControl().setNeedsRestore();
 			// ------------------------------------------------------ //
 			
 			this.findUpdateBuffer(context, actionContext).requestUpdateLoadedSong();

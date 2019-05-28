@@ -78,7 +78,7 @@ public class MacToolbar {
 			dummyBar.release();
 			nsWindow.setShowsToolbarButton(true);
 			long windowId = (Long) NSWindow.class.getField("id").get(nsWindow);
-			OS.objc_msgSend(windowId, sel_setTitlebarAppearsTransparent_, true);
+			//OS.objc_msgSend(windowId, sel_setTitlebarAppearsTransparent_, true);
 
 			NSColor color = NSColor.windowBackgroundColor();
 			long ciColor = OS.objc_msgSend(OS.objc_getClass("CIColor"), OS.sel_alloc);

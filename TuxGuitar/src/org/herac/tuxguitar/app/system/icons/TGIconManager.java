@@ -152,6 +152,8 @@ public class TGIconManager {
 	private UIImage tableViewer;
 	private UIImage zoomIn;
 	private UIImage zoomOut;
+	private UIImage close;
+	private UIImage closeDim;
 	private UIImage listAdd;
 	private UIImage listAddDim;
 	private UIImage listEdit;
@@ -334,6 +336,8 @@ public class TGIconManager {
 		this.tableViewer = loadIcon("table_viewer");
 		this.zoomIn = loadIcon("zoom_in");
 		this.zoomOut = loadIcon("zoom_out");
+		this.close = loadIcon("close");
+		this.closeDim = loadIcon("close-dim");
 		this.listAdd = loadIcon("list_add");
 		this.listAddDim = loadIcon("list_add_dim");
 		this.listEdit = loadIcon("list_edit");
@@ -1000,6 +1004,14 @@ public class TGIconManager {
 
 	public UIImage getStatusInfo() {
 		return this.statusInfo;
+	}
+
+	public UIImage getClose() {
+		return close;
+	}
+
+	public UIImage getCloseDim() {
+		return closeDim;
 	}
 
 	public UIImage getListAdd() {

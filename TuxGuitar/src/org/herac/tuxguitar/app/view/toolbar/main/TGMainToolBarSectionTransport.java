@@ -217,7 +217,7 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 		if (!player.getLock().isLocked(null)) {
 			if (player.isRunning()) {
 				position = player.getTickPosition();
-			} else {
+			} else if (tablature.getCaret().getSelectedBeat() != null) {
 				position = tablature.getCaret().getSelectedBeat().getStart();
 			}
 		}

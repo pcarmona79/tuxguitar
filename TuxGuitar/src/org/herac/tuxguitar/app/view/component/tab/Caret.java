@@ -6,31 +6,23 @@
  */
 package org.herac.tuxguitar.app.view.component.tab;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.document.TGDocument;
+import org.herac.tuxguitar.app.document.TGDocumentListManager;
 import org.herac.tuxguitar.app.transport.TGTransport;
 import org.herac.tuxguitar.app.util.MidiTickUtil;
-import org.herac.tuxguitar.graphics.control.TGBeatImpl;
-import org.herac.tuxguitar.graphics.control.TGLayout;
-import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
-import org.herac.tuxguitar.graphics.control.TGTrackImpl;
-import org.herac.tuxguitar.graphics.control.TGTrackSpacing;
+import org.herac.tuxguitar.graphics.control.*;
 import org.herac.tuxguitar.song.managers.TGMeasureManager;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGDuration;
-import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.TGSong;
-import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGVelocities;
-import org.herac.tuxguitar.song.models.TGVoice;
+import org.herac.tuxguitar.song.models.*;
 import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.resource.UIColorModel;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIResource;
 import org.herac.tuxguitar.util.TGShapeUtil;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author julian
@@ -104,6 +96,7 @@ public class Caret {
 		this.updateBeat();
 		this.checkTransport();
 		this.setChanges(true);
+		this.saveState();
 	}
 	
 	private TGTrackImpl findTrack(int number){
@@ -278,6 +271,7 @@ public class Caret {
 	public void setStringNumber(int number){
 		this.string = number;
 		this.updateNote();
+		this.saveState();
 	}
 	
 	public int getStringNumber(){
@@ -305,6 +299,9 @@ public class Caret {
 	}
 	
 	public TGString getSelectedString() {
+		if (this.selectedTrack == null) {
+			return null;
+		}
 		List<TGString> strings = this.selectedTrack.getStrings();
 		Iterator<TGString> it = strings.iterator();
 		while (it.hasNext()) {
@@ -419,6 +416,20 @@ public class Caret {
 	public void setColor2Fill(UIColorModel cm) {
 		this.disposeResource( this.color2Fill );
 		this.color2Fill = this.tablature.getResourceFactory().createColor(cm);
+	}
+
+	private void saveState() {
+		TGDocument document = TGDocumentListManager.getInstance(this.tablature.getContext()).findDocument(selectedTrack.getSong());
+		document.setCaretBeat(this.getSelectedBeat());
+		document.setCaretString(this.getStringNumber());
+	}
+
+	public void restoreStateFrom(TGDocument document) {
+		TGBeat beat = document.getCaretBeat();
+		if (beat != null) {
+			TGMeasureImpl measure = (TGMeasureImpl) document.getCaretBeat().getMeasure();
+			this.moveTo((TGTrackImpl) measure.getTrack(), measure, document.getCaretBeat(), document.getCaretString());
+		}
 	}
 
 	public void disposeResource(UIResource resource){

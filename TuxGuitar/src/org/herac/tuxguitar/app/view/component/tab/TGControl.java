@@ -1,6 +1,8 @@
 package org.herac.tuxguitar.app.view.component.tab;
 
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.document.TGDocument;
+import org.herac.tuxguitar.app.document.TGDocumentListManager;
 import org.herac.tuxguitar.app.system.keybindings.KeyBindingActionManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.util.TGBufferedPainterListenerLocked;
@@ -8,12 +10,7 @@ import org.herac.tuxguitar.graphics.control.TGBeatImpl;
 import org.herac.tuxguitar.graphics.control.TGMeasureImpl;
 import org.herac.tuxguitar.player.base.MidiPlayer;
 import org.herac.tuxguitar.ui.UIFactory;
-import org.herac.tuxguitar.ui.event.UIDisposeEvent;
-import org.herac.tuxguitar.ui.event.UIDisposeListener;
-import org.herac.tuxguitar.ui.event.UIFocusEvent;
-import org.herac.tuxguitar.ui.event.UIFocusGainedListener;
-import org.herac.tuxguitar.ui.event.UISelectionEvent;
-import org.herac.tuxguitar.ui.event.UISelectionListener;
+import org.herac.tuxguitar.ui.event.*;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.ui.resource.UIPosition;
@@ -41,12 +38,10 @@ public class TGControl {
 	
 	private int scrollX;
 	private int scrollY;
-	private boolean resetScroll;
-	protected long lastVScrollTime;
-	protected long lastHScrollTime;
-	
+
 	private boolean painting;
-	
+	private boolean needsRestore;
+
 	public TGControl(TGContext context, UIContainer parent) {
 		this.context = context;
 		this.tablature = TablatureEditor.getInstance(this.context).getTablature();
@@ -106,8 +101,7 @@ public class TGControl {
 	public void paintTablature(UIPainter painter){
 		this.setPainting(true);
 		try{
-			this.checkScroll();
-			
+		    TGDocument document = TGDocumentListManager.getInstance(this.tablature.getContext()).findCurrentDocument();
 			int oldWidth = this.width;
 			int oldHeight = this.height;
 
@@ -115,9 +109,14 @@ public class TGControl {
 			UIRectangle area = createRectangle(this.canvas.getBounds());
 			UIRectangle scaledArea = createRectangle(area);
 			scaledArea.setSize(new UISize(area.getWidth() * scale, area.getHeight() * scale));
-			
-			this.scrollX = this.hScroll.getValue();
-			this.scrollY = this.vScroll.getValue();
+
+			if (this.needsRestore) {
+				this.restoreStateFrom(document);
+				this.needsRestore = false;
+			} else {
+				this.scrollX = this.hScroll.getValue();
+				this.scrollY = this.vScroll.getValue();
+			}
 			
 			this.tablature.paintTablature(painter, scaledArea, -this.scrollX * scale, -this.scrollY * scale);
 			
@@ -138,6 +137,7 @@ public class TGControl {
 				
 				this.moveScrollTo(this.tablature.getCaret().getMeasure(), area);
 			}
+			this.saveStateTo(document);
 		}catch(Throwable throwable){
 			throwable.printStackTrace();
 		}
@@ -159,19 +159,7 @@ public class TGControl {
 			throwable.printStackTrace();
 		}
 	}
-	
-	public void resetScroll(){
-		this.resetScroll = true;
-	}
-	
-	public void checkScroll(){
-		if( this.resetScroll ){
-			this.hScroll.setValue(0);
-			this.vScroll.setValue(0);
-			this.resetScroll = false;
-		}
-	}
-	
+
 	public void updateScroll(){
 		UIRectangle bounds = this.canvas.getBounds();
 
@@ -179,6 +167,8 @@ public class TGControl {
 		this.vScroll.setMaximum(Math.max(Math.round(this.height - bounds.getHeight()), 0));
 		this.hScroll.setThumb(Math.round(bounds.getWidth()));
 		this.vScroll.setThumb(Math.round(bounds.getHeight()));
+		this.hScroll.setValue(this.scrollX);
+		this.vScroll.setValue(this.scrollY);
 	}
 	
 	public void moveScrollTo(TGMeasureImpl measure){
@@ -239,7 +229,25 @@ public class TGControl {
 		}
 		return (value != null ? Math.max(value, 0) : null);
 	}
-	
+
+	public void saveStateTo(TGDocument document) {
+		document.setScrollX(this.scrollX);
+		document.setScrollY(this.scrollY);
+	}
+
+	private void restoreStateFrom(TGDocument document) {
+		if (document != null) {
+			this.scrollX = document.getScrollX();
+			this.scrollY = document.getScrollY();
+			this.hScroll.setValue(this.scrollX);
+			this.vScroll.setValue(this.scrollY);
+		}
+	}
+
+	public void setNeedsRestore() {
+		this.needsRestore = true;
+	}
+
 	public void setFocus() {
 		if(!this.isDisposed() ){
 			this.canvas.setFocus();

@@ -1,15 +1,19 @@
 package org.herac.tuxguitar.app.view.component.tab;
 
+import org.herac.tuxguitar.app.document.TGDocument;
+import org.herac.tuxguitar.app.document.TGDocumentListManager;
 import org.herac.tuxguitar.graphics.control.TGLayout;
 import org.herac.tuxguitar.graphics.control.TGTrackImpl;
 import org.herac.tuxguitar.song.helpers.TGBeatRangeIterator;
-import org.herac.tuxguitar.song.helpers.TGBeatRangeNoteIterator;
-import org.herac.tuxguitar.song.models.*;
+import org.herac.tuxguitar.song.models.TGBeat;
+import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.ui.resource.UIPainter;
 import org.herac.tuxguitar.util.TGBeatRange;
 import org.herac.tuxguitar.util.TGNoteRange;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by tubus on 20.12.16.
@@ -31,6 +35,8 @@ public class Selector {
 		start = beat;
 		end = beat;
 		active = false;
+
+		this.saveState();
 	}
 
 	public void updateSelection(TGBeat beat) {
@@ -47,6 +53,8 @@ public class Selector {
 				start = beat;
 				end = initial;
 			}
+			TGSong song = beat.getMeasure().getTrack().getSong();
+			this.saveState();
 		}
 	}
 
@@ -94,5 +102,19 @@ public class Selector {
 			beats.add(it.next());
 		}
 		return new TGBeatRange(beats);
+	}
+
+	private void saveState() {
+		TGDocumentListManager documents = TGDocumentListManager.getInstance(this.tablature.getContext());
+		TGDocument document = this.initial == null ? documents.findCurrentDocument() : documents.findDocument(this.initial.getMeasure().getTrack().getSong());
+		document.setSelectionStart(this.getStartBeat());
+		document.setSelectionEnd(this.getEndBeat());
+	}
+
+	public void restoreStateFrom(TGDocument document) {
+		TGBeat start = document.getSelectionStart();
+		TGBeat end = document.getSelectionEnd();
+		this.initializeSelection(start);
+		this.updateSelection(end);
 	}
 }

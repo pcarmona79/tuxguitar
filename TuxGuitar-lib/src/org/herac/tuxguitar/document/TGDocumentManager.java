@@ -14,7 +14,6 @@ public class TGDocumentManager {
 	
 	private TGDocumentManager() {
 		this.songManager = new TGSongManager(new TGFactoryImpl());
-		this.song = this.songManager.newSong();
 	}
 	
 	public TGSongManager getSongManager() {

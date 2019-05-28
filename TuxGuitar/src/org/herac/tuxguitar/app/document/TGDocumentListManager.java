@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.app.document;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.herac.tuxguitar.app.util.TGFileChooser;
@@ -8,6 +9,7 @@ import org.herac.tuxguitar.app.util.TGFileUtils;
 import org.herac.tuxguitar.document.TGDocumentManager;
 import org.herac.tuxguitar.editor.undo.TGUndoableBuffer;
 import org.herac.tuxguitar.editor.undo.TGUndoableManager;
+import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.singleton.TGSingletonFactory;
@@ -24,7 +26,7 @@ public class TGDocumentListManager {
 	}
 
 	public List<TGDocument> getDocuments() {
-		return documents;
+		return Collections.unmodifiableList(documents);
 	}
 	
 	public List<TGDocument> findUnwantedDocumentsToRemove() {
@@ -56,6 +58,9 @@ public class TGDocumentListManager {
 	}
 	
 	public TGDocument findDocument(TGSong song) {
+	    if (song == null) {
+	    	return null;
+		}
 		for(TGDocument document : this.documents) {
 			if( document.getSong().equals(song) ) {
 				return document;
@@ -67,6 +72,12 @@ public class TGDocumentListManager {
 		document.setUndoableBuffer(new TGUndoableBuffer());
 		document.setUnsaved(false);
 		document.setUnwanted(false);
+
+		TGMeasure measure = song.getTrack(0).getMeasure(0);
+		TGDocumentManager.getInstance(this.context).getSongManager().getMeasureManager().autoCompleteSilences(measure);
+		document.setCaretBeat(measure.getBeat(0));
+		document.setCaretString(0);
+
 		this.documents.add(document);
 		
 		return this.findDocument(song);

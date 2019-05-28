@@ -19,7 +19,7 @@ public class TGTabEventListener implements TGEventListener {
 	}
 	
 	public TGControl findTabControl() {
-		return TGTabFolder.getInstance(this.context).findSelectedControl();
+		return TGTabFolder.getInstance(this.context).getInnerControl();
 	}
 	
 	public void redraw() {

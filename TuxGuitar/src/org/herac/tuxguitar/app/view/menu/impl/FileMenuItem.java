@@ -23,6 +23,7 @@ import org.herac.tuxguitar.app.action.impl.file.TGPrintPreviewAction;
 import org.herac.tuxguitar.app.action.impl.file.TGReadURLAction;
 import org.herac.tuxguitar.app.action.impl.file.TGSaveAsFileAction;
 import org.herac.tuxguitar.app.action.impl.file.TGSaveFileAction;
+import org.herac.tuxguitar.app.document.TGDocumentListManager;
 import org.herac.tuxguitar.app.helper.TGFileHistory;
 import org.herac.tuxguitar.app.view.menu.TGMenuItem;
 import org.herac.tuxguitar.editor.action.file.TGLoadTemplateAction;
@@ -311,6 +312,10 @@ public class FileMenuItem extends TGMenuItem {
 			updateHistoryFiles();
 			fileHistory.setChanged(false);
 		}
+
+		TGDocumentListManager documentManager = TGDocumentListManager.getInstance(this.findContext());
+		this.save.setEnabled(documentManager.findCurrentDocument().isUnsaved());
+		this.closeOthers.setEnabled(documentManager.getDocuments().size() > 1);
 	}
 	
 	public void loadProperties(){

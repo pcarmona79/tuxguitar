@@ -88,9 +88,12 @@ public class TGSongManager {
 		track.setName(getDefaultTrackName(track));
 		track.setChannelId(channel.getChannelId());
 		track.setStrings(createDefaultInstrumentStrings());
-		track.addMeasure(getFactory().newMeasure(header));
 		track.getColor().copyFrom(TGColor.RED);
-		
+
+		TGMeasure measure = getFactory().newMeasure(header);
+		getMeasureManager().autoCompleteSilences(measure);
+		track.addMeasure(measure);
+
 		song.addChannel(channel);
 		song.addMeasureHeader(header);
 		song.addTrack(track);

@@ -1,12 +1,14 @@
 package org.herac.tuxguitar.app.view.component.tab;
 
 import org.herac.tuxguitar.app.TuxGuitar;
+import org.herac.tuxguitar.app.document.TGDocument;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
 import org.herac.tuxguitar.app.system.config.TGConfigManager;
 import org.herac.tuxguitar.app.tools.percussion.PercussionEntry;
 import org.herac.tuxguitar.app.tools.percussion.PercussionManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tab.edit.EditorKit;
+import org.herac.tuxguitar.app.view.component.tabfolder.TGTabFolder;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGSyncProcess;
 import org.herac.tuxguitar.document.TGDocumentManager;
@@ -62,7 +64,6 @@ public class Tablature implements TGController {
 	
 	public void updateTablature(){
 		this.getViewLayout().updateSong();
-		this.getCaret().update();
 		this.disposeUnregisteredResources.process();
 	}
 	
@@ -118,6 +119,11 @@ public class Tablature implements TGController {
 			}
 		}
 		return TGNoteRange.empty();
+	}
+
+	public void restoreStateFrom(TGDocument document) {
+		this.getCaret().restoreStateFrom(document);
+	    this.getSelector().restoreStateFrom(document);
 	}
 
 	public EditorKit getEditorKit() {

@@ -75,6 +75,9 @@ public class TGActionInstaller {
 		installAction(new TGCloseDocumentsAction(context));
 		installAction(new TGCloseDocumentAction(context));
 		installAction(new TGCloseCurrentDocumentAction(context));
+		installAction(new TGCloseAllButOneDocumentAction(context));
+		installAction(new TGCloseLeftDocumentsAction(context));
+		installAction(new TGCloseRightDocumentsAction(context));
 		installAction(new TGCloseOtherDocumentsAction(context));
 		installAction(new TGCloseAllDocumentsAction(context));
 		installAction(new TGExitAction(context));

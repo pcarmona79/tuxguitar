@@ -26,8 +26,7 @@ public class TablatureEditor implements TGEventListener{
 		this.tablature = new Tablature(this.context, TGDocumentManager.getInstance(this.context));
 		this.tablature.reloadViewLayout();
 		this.tablature.updateTablature();
-		this.tablature.resetCaret();
-		
+
 		this.initListener();
 		this.initMenu();
 	}
@@ -56,6 +55,7 @@ public class TablatureEditor implements TGEventListener{
 			getTablature().updateMeasure(((Integer) event.getAttribute(TGUpdateMeasureEvent.PROPERTY_MEASURE_NUMBER)).intValue());
 		} else if( type == TGUpdateEvent.SONG_UPDATED ){
 			getTablature().updateTablature();
+			this.getTablature().getCaret().update();
 		} else if( type == TGUpdateEvent.SONG_LOADED ){
 			getTablature().updateTablature();
 		}

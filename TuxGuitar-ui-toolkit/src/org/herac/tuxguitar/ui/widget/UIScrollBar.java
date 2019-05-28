@@ -8,6 +8,10 @@ public interface UIScrollBar extends UIComponent {
 	void setValue(int value);
 	
 	int getValue();
+
+	void setVisible(boolean visible);
+
+	boolean isVisible();
 	
 	void setMaximum(int maximum);
 	

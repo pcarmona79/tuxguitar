@@ -9,6 +9,8 @@ import org.herac.tuxguitar.app.view.component.tab.Selector;
 import org.herac.tuxguitar.app.view.component.tab.Tablature;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.document.TGDocumentManager;
+import org.herac.tuxguitar.song.models.TGBeat;
+import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.util.TGNoteRange;
 
@@ -23,18 +25,21 @@ public class TGActionContextFactoryImpl implements TGActionContextFactory{
 		tgActionContext.setAttribute(TGDocumentManager.class.getName(), tgDocumentManager);
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG_MANAGER, tgDocumentManager.getSongManager());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG, tgDocumentManager.getSong());
-		
+
+		TGMeasure measure = caret.getMeasure();
+		TGBeat beat = caret.getSelectedBeat();
+
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK, caret.getTrack());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_MEASURE, caret.getMeasure());
-		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER, caret.getMeasure().getHeader());
-		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT, caret.getSelectedBeat());
-		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_VOICE, caret.getSelectedBeat().getVoice(caret.getVoice()));
+		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER, measure == null ? null : measure.getHeader());
+		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT, beat);
+		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_VOICE, beat == null ? null : beat.getVoice(caret.getVoice()));
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_NOTE, caret.getSelectedNote());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_STRING, caret.getSelectedString());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_DURATION, caret.getDuration());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_VELOCITY, caret.getVelocity());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_POSITION, caret.getPosition());
-		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER, caret.getMeasure().getHeader().getMarker());
+		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_MARKER, measure == null ? null : measure.getHeader().getMarker());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT_RANGE, tablature.getCurrentBeatRange());
 		tgActionContext.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_NOTE_RANGE, tablature.getCurrentNoteRange());
 		

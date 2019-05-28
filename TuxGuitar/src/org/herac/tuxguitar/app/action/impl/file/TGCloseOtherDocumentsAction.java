@@ -1,8 +1,5 @@
 package org.herac.tuxguitar.app.action.impl.file;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.herac.tuxguitar.action.TGActionContext;
 import org.herac.tuxguitar.action.TGActionManager;
 import org.herac.tuxguitar.app.document.TGDocument;
@@ -21,11 +18,9 @@ public class TGCloseOtherDocumentsAction extends TGActionBase {
 	
 	protected void processAction(final TGActionContext context) {
 		TGDocument current = TGDocumentListManager.getInstance(this.getContext()).findCurrentDocument();
-		List<TGDocument> documents = new ArrayList<TGDocument>(TGDocumentListManager.getInstance(getContext()).getDocuments());
-		documents.remove(current);
-		context.setAttribute(TGDocumentListAttributes.ATTRIBUTE_DOCUMENTS, documents);
-		
+		context.setAttribute(TGDocumentListAttributes.ATTRIBUTE_DOCUMENT, current);
+
 		TGActionManager tgActionManager = TGActionManager.getInstance(getContext());
-		tgActionManager.execute(TGCloseDocumentsAction.NAME, context);
+		tgActionManager.execute(TGCloseAllButOneDocumentAction.NAME, context);
 	}
 }

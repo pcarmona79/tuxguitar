@@ -124,13 +124,11 @@ public class TGEditToolBarSectionDuration extends TGEditToolBarSection {
 	}
 	
 	public void loadSectionProperties() {
-		TGDuration duration = this.getTablature().getCaret().getDuration();
-		
 		this.dotted.setToolTipText(this.getText("duration.dotted"));
 		this.doubleDotted.setToolTipText(this.getText("duration.doubledotted"));
 		this.divisionTypeItem.setToolTipText(this.getText("duration.division-type"));
 		this.tiedNote.setToolTipText(this.getText("note.tiednote"));
-		this.loadDurationToolProperties(duration.getValue());
+		this.loadDurationToolProperties();
 		this.loadDivisionTypeMenuProperties();
 	}
 	
@@ -174,7 +172,7 @@ public class TGEditToolBarSectionDuration extends TGEditToolBarSection {
 		}
 	}
 	
-	private void loadDurationToolProperties(int selection) {
+	private void loadDurationToolProperties() {
 		for(UIToolActionItem uiToolItem : this.durationToolItems) {
 			Integer value = (Integer) uiToolItem.getData(DURATION_VALUE);
 			String nameKey = findDurationProperty(value);

@@ -94,7 +94,7 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 			delta.add(event.getPosition());
 			delta.sub(this.scrollPosition);
 			delta.mul(-1f);
-			TGTabFolder.getInstance(this.kit.getTablature().getContext()).findSelectedControl().scrollBy(delta);
+			TGTabFolder.getInstance(this.kit.getTablature().getContext()).getInnerControl().scrollBy(delta);
 			this.scrollPosition.sub(delta);
         }
 	}
