@@ -110,37 +110,41 @@ public class TGTableHeaderMeasures implements TGTableHeader, TGBufferedPainterHa
 
 		painter.setLineWidth(UIPainter.THINNEST_LINE_WIDTH);
 		painter.setBackground(colorBackground);
-		painter.setForeground(colorForeground);
 		painter.initPath(UIPainter.PATH_FILL);
 		painter.setAntialias(false);
 		painter.addRectangle(0, 0, width, cellSize);
 		painter.closePath();
 
+		painter.setAntialias(true);
+
 		int count = song.countMeasureHeaders();
 		int j = (int) Math.floor(scrollX / cellSize);
 		for(float x = -scrollX + j * cellSize; j < count && x < width; j++, x += cellSize) {
 		    TGMeasureHeader header = song.getMeasureHeader(j);
-		    if (header.hasMarker()) {
-		    	float xt = x + 2f;
-		    	float yt = cellSize / 2f - 2f;
-		    	float wt = cellSize - 4f;
-				float ht = cellSize / 2f;
 
+			float xt = x + 2f;
+			float yt = cellSize / 2f - 2f;
+			float wt = cellSize - 4f;
+			float ht = cellSize / 2f;
+
+		    if (header.hasMarker()) {
 
 		    	TGMarker marker = header.getMarker();
 		    	UIColor color = table.getUIFactory().createColor(marker.getColor().toColorModel());
 		    	painter.setBackground(color);
-		    	painter.setAntialias(true);
 		    	painter.initPath(UIPainter.PATH_FILL);
 		    	drawTriangle(painter, xt, yt, wt, ht);
 		    	painter.closePath();
 		    	color.dispose();
+			}
 
-		    	if (this.mousePosition != null && this.mousePosition.getX() >= x && this.mousePosition.getX() < x + cellSize) {
-					painter.initPath(UIPainter.PATH_DRAW);
-					drawTriangle(painter, xt, yt, wt, ht);
-					painter.closePath();
-				}
+			if (this.mousePosition != null && this.mousePosition.getX() >= x && this.mousePosition.getX() < x + cellSize) {
+			    painter.setAlpha(64);
+				painter.setBackground(colorForeground);
+				painter.initPath(UIPainter.PATH_FILL);
+				drawTriangle(painter, xt, yt, wt, ht);
+				painter.closePath();
+				painter.setAlpha(255);
 			}
 		}
 
