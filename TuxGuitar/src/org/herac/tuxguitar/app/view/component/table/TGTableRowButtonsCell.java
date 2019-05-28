@@ -16,7 +16,7 @@ import org.herac.tuxguitar.ui.resource.UIColor;
 import org.herac.tuxguitar.ui.widget.UIImageView;
 import org.herac.tuxguitar.util.TGContext;
 
-public class TGTableRowSoloMuteCell extends TGTableRowCell {
+public class TGTableRowButtonsCell extends TGTableRowCell {
 
   private UIImageView soloButton;
   private UIImageView muteButton;
@@ -27,7 +27,7 @@ public class TGTableRowSoloMuteCell extends TGTableRowCell {
   private boolean mute;
   private boolean visible;
 
-  public TGTableRowSoloMuteCell(final TGTableRow row) {
+  public TGTableRowButtonsCell(final TGTableRow row) {
     super(row);
     this.context = row.getTable().getContext();
     final TGTable table = row.getTable();

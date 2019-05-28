@@ -126,7 +126,7 @@ public class TGTableViewer implements TGEventListener {
 		UIMouseUpListener listener = mouseFocusListener();
 		this.table = new TGTable(this.context, this, getControl());
 		this.table.getColumnNumber().getControl().addMouseUpListener(listener);
-		this.table.getColumnSoloMute().getControl().addMouseUpListener(listener);
+		this.table.getColumnButtons().getControl().addMouseUpListener(listener);
 		this.table.getColumnName().getControl().addMouseUpListener(listener);
 		this.table.getColumnInstrument().getControl().addMouseUpListener(listener);
 		this.table.getColumnCanvas().getControl().addMouseUpListener(listener);
@@ -230,7 +230,7 @@ public class TGTableViewer implements TGEventListener {
 					this.updateTableTextRow(row.getNumber(), track, Integer.toString(track.getNumber()));
 					
 					//Solo-Mute
-					this.updateTableSoloMuteRow(row.getSoloMute(), track);
+					this.updateTableButtonsRow(row.getButtons(), track);
 					
 					//Name
 					this.updateTableTextRow(row.getName(), track, track.getName());
@@ -337,30 +337,30 @@ public class TGTableViewer implements TGEventListener {
 		updateTableRow(cell, track);
 	}
 	
-	private void updateTableSoloMuteRow(TGTableRowSoloMuteCell cell, TGTrack track) {
+	private void updateTableButtonsRow(TGTableRowButtonsCell cell, TGTrack track) {
 		cell.setSolo(track.isSolo());
 		cell.setMute(track.isMute());
 		cell.setVisible(track.isVisible());
 		updateTableRow(cell, track);
 	}
-	
+
 	private void updateTableMenu() {
 		this.disposeMenu();
 		this.createTrackMenu();
 	}
-	
+
 	private void updateMenuItems() {
 		if( this.menu != null && !this.menu.isDisposed() ) {
 			this.menu.update();
 		}
 	}
-	
+
 	private void loadMenuProperties() {
 		if( this.menu != null && !this.menu.isDisposed() ) {
 			this.menu.loadProperties();
 		}
 	}
-	
+
 	private void loadMenuIcons() {
 		if( this.menu != null && !this.menu.isDisposed() ) {
 			this.menu.loadIcons();
@@ -373,9 +373,9 @@ public class TGTableViewer implements TGEventListener {
 			TGTableRow row = this.table.getRow(i);
 			
 			row.getNumber().setText(Integer.toString(((TGTrack)row.getNumber().getData(TGTrack.class.getName())).getNumber()));
-			row.getSoloMute().setSolo(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isSolo());
-			row.getSoloMute().setMute(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isMute());
-			row.getSoloMute().setVisible(((TGTrack)row.getSoloMute().getData(TGTrack.class.getName())).isVisible());
+			row.getButtons().setSolo(((TGTrack)row.getButtons().getData(TGTrack.class.getName())).isSolo());
+			row.getButtons().setMute(((TGTrack)row.getButtons().getData(TGTrack.class.getName())).isMute());
+			row.getButtons().setVisible(((TGTrack)row.getButtons().getData(TGTrack.class.getName())).isVisible());
 			row.getName().setText(((TGTrack)row.getName().getData(TGTrack.class.getName())).getName());
 			row.getInstrument().setText(getInstrument((TGTrack)row.getInstrument().getData(TGTrack.class.getName())));
 		}

@@ -25,7 +25,7 @@ public class TGTable {
 	private UIPanel columnControl;
 	private UIPanel rowControl;
 	private TGTableHeaderLabel columnNumber;
-	private TGTableHeaderLabel columnSoloMute;
+	private TGTableHeaderLabel columnButtons;
 	private TGTableHeaderLabel columnName;
 	private TGTableHeaderLabel columnInstrument;
 	private TGTableHeaderMeasures columnCanvas;
@@ -49,7 +49,7 @@ public class TGTable {
 		this.columnControl.setBgColor(this.viewer.getBackgroundColor());
 
 		this.columnNumber = new TGTableHeaderLabel(this);
-		this.columnSoloMute = new TGTableHeaderLabel(this);
+		this.columnButtons = new TGTableHeaderLabel(this);
 		this.columnName = new TGTableHeaderLabel(this);
 		this.addTrackButton = uiFactory.createImageView(this.columnName.getControl());
 		this.addTrackButton.addMouseUpListener(new UIMouseUpListener() {
@@ -93,7 +93,7 @@ public class TGTable {
 		
 		int columnIndex = 0;
 		this.createColumnHeaderLayout(uiLayout, this.columnNumber, ++columnIndex, false, 25f);
-		this.createColumnHeaderLayout(uiLayout, this.columnSoloMute, ++columnIndex, false, 60f);
+		this.createColumnHeaderLayout(uiLayout, this.columnButtons, ++columnIndex, false, 60f);
 		this.createColumnHeaderLayout(uiLayout, this.columnName, ++columnIndex, false, 250f);
 		this.createColumnDividerLayout(uiLayout, dividerHelper.createDivider(this.columnName, this.columnInstrument, false), ++columnIndex);
 		this.createColumnHeaderLayout(uiLayout, this.columnInstrument, ++columnIndex, false, 250f);
@@ -151,8 +151,8 @@ public class TGTable {
 		return this.columnNumber;
 	}
 	
-	public TGTableHeaderLabel getColumnSoloMute() {
-		return this.columnSoloMute;
+	public TGTableHeaderLabel getColumnButtons() {
+		return this.columnButtons;
 	}
 	
 	public TGTableHeaderMeasures getColumnCanvas() {

@@ -26,7 +26,7 @@ public class TGTableRowLayout extends UIAbstractLayout {
 		float rowHeight = bounds.getHeight();
 		
 		this.setBounds(this.row.getTable().getColumnNumber(), this.row.getNumber(), rowHeight);
-		this.setBounds(this.row.getTable().getColumnSoloMute(), this.row.getSoloMute(), rowHeight);
+		this.setBounds(this.row.getTable().getColumnButtons(), this.row.getButtons(), rowHeight);
 		this.setBoundsPlusDivider(this.row.getTable().getColumnName(), this.row.getName(), rowHeight);
 		this.setBoundsPlusDivider(this.row.getTable().getColumnInstrument(), this.row.getInstrument(), rowHeight);
 		this.setBounds(this.row.getTable().getColumnCanvas(), this.row.getPainter(), rowHeight);

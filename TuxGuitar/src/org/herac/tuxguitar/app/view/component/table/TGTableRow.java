@@ -18,7 +18,7 @@ public class TGTableRow {
 	private TGTable table;
 	private UIPanel row;
 	private TGTableRowTextCell number;
-	private TGTableRowSoloMuteCell soloMute;
+	private TGTableRowButtonsCell buttons;
 	private TGTableRowTextCell name;
 	private TGTableRowTextCell instrument;
 	private UICanvas painter;
@@ -52,9 +52,9 @@ public class TGTableRow {
 		this.number.addMouseUpListener(mouseListenerLabel);
 		this.number.addMouseDoubleClickListener(mouseListenerLabel);
 		
-		this.soloMute = new TGTableRowSoloMuteCell(this);
-		this.soloMute.getLayout().set(UITableLayout.MARGIN_LEFT, 0f);
-		this.soloMute.getLayout().set(UITableLayout.MARGIN_RIGHT, 0f);
+		this.buttons = new TGTableRowButtonsCell(this);
+		this.buttons.getLayout().set(UITableLayout.MARGIN_LEFT, 0f);
+		this.buttons.getLayout().set(UITableLayout.MARGIN_RIGHT, 0f);
 
 		this.name = new TGTableRowTextCell(this);
 		this.name.addMouseDownListener(mouseListenerLabel);
@@ -75,23 +75,23 @@ public class TGTableRow {
 	}
 
 	public void loadProperties() {
-		this.soloMute.loadProperties();
+		this.buttons.loadProperties();
 	}
 
 	public void loadIcons() {
-	    this.soloMute.loadIcons();
+	    this.buttons.loadIcons();
 	}
 
 	public void setBgColor(UIColor background){
 		this.number.setBgColor(background);
-		this.soloMute.setBgColor(background);
+		this.buttons.setBgColor(background);
 		this.name.setBgColor(background);
 		this.instrument.setBgColor(background);
 	}
 	
 	public void setFgColor(UIColor foreground){
 		this.number.setFgColor(foreground);
-		this.soloMute.setFgColor(foreground);
+		this.buttons.setFgColor(foreground);
 		this.name.setFgColor(foreground);
 		this.instrument.setFgColor(foreground);
 	}
@@ -124,8 +124,8 @@ public class TGTableRow {
 		return this.number;
 	}
 	
-	public TGTableRowSoloMuteCell getSoloMute() {
-		return this.soloMute;
+	public TGTableRowButtonsCell getButtons() {
+		return this.buttons;
 	}
 
 	public UIMouseUpListener getMouseUpListenerLabel() {
