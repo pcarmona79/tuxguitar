@@ -17,10 +17,8 @@ import java.util.List;
 
 public class TGIconCheckButton extends TGIconButton {
 
-    private static final int UNSELECTED_ALPHA = 80;
-    private static final int UNSELECTED_HOVER_ALPHA = 128;
-
     private UIImage selectedIcon;
+    private UIImage selectedHoveredIcon;
     private boolean selected;
 
     public TGIconCheckButton(UIFactory factory, UILayoutContainer parent) {
@@ -28,25 +26,19 @@ public class TGIconCheckButton extends TGIconButton {
     }
 
     @Override
-    int getAlpha() {
-        if (this.getControl().isEnabled() && !selected) {
-            if (this.isHovered()) {
-                return UNSELECTED_HOVER_ALPHA;
+    UIImage getDisplayedImage() {
+        UIImage image = null;
+        if (selected) {
+            if (this.selectedIcon == null || (this.isHovered() && this.selectedHoveredIcon != null)) {
+                image = this.selectedHoveredIcon;
+            } else {
+                image = this.selectedIcon;
             }
-            return UNSELECTED_ALPHA;
         }
-        return super.getAlpha();
-    }
-
-    @Override
-    protected void paint(UIPaintEvent event) {
-        UIPainter painter = event.getPainter();
-        UIImage image = getIcon() == null || (selected && selectedIcon != null) ? selectedIcon : getIcon();
-        if (image != null) {
-            resizeTo(image);
-            painter.setAlpha(getAlpha());
-            painter.drawImageAdvanced(image, 0, 0);
+        if (image == null) {
+            return super.getDisplayedImage();
         }
+        return image;
     }
 
     public void setSelected(boolean selected) {
@@ -63,7 +55,17 @@ public class TGIconCheckButton extends TGIconButton {
     public void setSelectedIcon(UIImage icon) {
         if (icon != this.selectedIcon) {
             this.selectedIcon = icon;
-            if (this.selected || this.getIcon() == null) {
+            if (getDisplayedImage() == icon) {
+                resizeTo(icon);
+                this.getControl().redraw();
+            }
+        }
+    }
+
+    public void setSelectedHoveredIcon(UIImage icon) {
+        if (icon != this.selectedHoveredIcon) {
+            this.selectedHoveredIcon = icon;
+            if (getDisplayedImage() == icon) {
                 resizeTo(icon);
                 this.getControl().redraw();
             }

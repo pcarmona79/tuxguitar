@@ -189,7 +189,8 @@ public class TGTable {
 	}
 
 	public void loadIcons() {
-		this.addTrackButton.setIcon(TGIconManager.getInstance(context).getListAdd());
+		this.addTrackButton.setIcon(TGIconManager.getInstance(context).getListAddDim());
+		this.addTrackButton.setHoveredIcon(TGIconManager.getInstance(context).getListAdd());
 		for (TGTableRow row : this.rows) {
 			row.loadIcons();
 		}

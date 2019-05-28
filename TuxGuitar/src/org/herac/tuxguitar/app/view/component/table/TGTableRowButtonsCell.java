@@ -116,11 +116,17 @@ public class TGTableRowButtonsCell extends TGTableRowCell {
 
   public void loadIcons() {
     TGIconManager iconManager = TGIconManager.getInstance(context);
-    this.soloButton.setIcon(iconManager.getSoloDisabled());
-    this.soloButton.setSelectedIcon(iconManager.getSolo());
-    this.muteButton.setIcon(iconManager.getMuteDisabled());
-    this.muteButton.setSelectedIcon(iconManager.getMute());
-    this.visibleButton.setIcon(iconManager.getVisibleDisabled());
-    this.visibleButton.setSelectedIcon(iconManager.getVisible());
+    this.soloButton.setIcon(iconManager.getSoloDisabledDim());
+    this.soloButton.setSelectedIcon(iconManager.getSoloDim());
+    this.soloButton.setHoveredIcon(iconManager.getSoloDisabled());
+    this.soloButton.setSelectedHoveredIcon(iconManager.getSolo());
+    this.muteButton.setIcon(iconManager.getMuteDisabledDim());
+    this.muteButton.setSelectedIcon(iconManager.getMuteDim());
+    this.muteButton.setHoveredIcon(iconManager.getMuteDisabled());
+    this.muteButton.setSelectedHoveredIcon(iconManager.getMute());
+    this.visibleButton.setIcon(iconManager.getVisibleDisabledDim());
+    this.visibleButton.setSelectedIcon(iconManager.getVisibleDim());
+    this.visibleButton.setHoveredIcon(iconManager.getVisibleDisabled());
+    this.visibleButton.setSelectedHoveredIcon(iconManager.getVisible());
   }
 }

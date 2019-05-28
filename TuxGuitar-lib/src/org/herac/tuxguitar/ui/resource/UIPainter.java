@@ -20,8 +20,6 @@ public interface UIPainter extends UIResource {
 	
 	void drawImage(UIImage image, float x, float y);
 
-	void drawImageAdvanced(UIImage image, float x, float y);
-
 	void cubicTo(float xc1, float yc1, float xc2, float yc2, float x1, float y1);
 	
 	void lineTo(float x, float y);

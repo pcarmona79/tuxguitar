@@ -17,14 +17,11 @@ import java.util.List;
 
 public class TGIconButton {
 
-    private static final int DEFAULT_ALPHA = 192;
-    private static final int HOVER_ALPHA = 255;
-    private static final int DISABLED_ALPHA = 18;
-
     private List<UISelectionListener> listeners;
     private UICanvas canvas;
 
     private UIImage icon;
+    private UIImage hoveredIcon;
     private boolean hovered;
 
     public TGIconButton(UIFactory factory, UILayoutContainer parent) {
@@ -47,22 +44,19 @@ public class TGIconButton {
         return this.hovered;
     }
 
-    int getAlpha() {
-        if (!this.canvas.isEnabled()) {
-            return DISABLED_ALPHA;
-        } else {
-            if (hovered) {
-                return HOVER_ALPHA;
-            }
-            return DEFAULT_ALPHA;
+    UIImage getDisplayedImage() {
+        if (this.icon == null || (this.hovered && this.hoveredIcon != null)) {
+            return this.hoveredIcon;
         }
+        return this.icon;
     }
 
-    protected void paint(UIPaintEvent event) {
+    private void paint(UIPaintEvent event) {
         UIPainter painter = event.getPainter();
-        if (icon != null) {
-            painter.setAlpha(getAlpha());
-            painter.drawImageAdvanced(icon, 0, 0);
+        UIImage image = getDisplayedImage();
+        if (image != null) {
+            resizeTo(image);
+            painter.drawImage(image, 0, 0);
         }
     }
 
@@ -77,13 +71,29 @@ public class TGIconButton {
     public void setIcon(UIImage icon) {
         if (icon != this.icon) {
             this.icon = icon;
-            resizeTo(icon);
-            this.canvas.redraw();
+            if (getDisplayedImage() == icon) {
+                resizeTo(icon);
+                this.canvas.redraw();
+            }
+        }
+    }
+
+    public void setHoveredIcon(UIImage icon) {
+        if (icon != this.hoveredIcon) {
+            this.hoveredIcon = icon;
+            if (getDisplayedImage() == icon) {
+                resizeTo(icon);
+                this.canvas.redraw();
+            }
         }
     }
 
     public UIImage getIcon() {
         return this.icon;
+    }
+
+    public UIImage getHoveredIcon() {
+        return this.hoveredIcon;
     }
 
     void resizeTo(UIImage image) {

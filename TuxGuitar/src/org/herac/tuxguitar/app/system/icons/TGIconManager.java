@@ -153,14 +153,21 @@ public class TGIconManager {
 	private UIImage zoomIn;
 	private UIImage zoomOut;
 	private UIImage listAdd;
+	private UIImage listAddDim;
 	private UIImage listEdit;
 	private UIImage listRemove;
 	private UIImage solo;
 	private UIImage soloDisabled;
+	private UIImage soloDim;
+	private UIImage soloDisabledDim;
 	private UIImage mute;
 	private UIImage muteDisabled;
+	private UIImage muteDim;
+	private UIImage muteDisabledDim;
 	private UIImage visible;
 	private UIImage visibleDisabled;
+	private UIImage visibleDim;
+	private UIImage visibleDisabledDim;
 	private UIImage sharp;
 	private UIImage flat;
 
@@ -328,14 +335,21 @@ public class TGIconManager {
 		this.zoomIn = loadIcon("zoom_in");
 		this.zoomOut = loadIcon("zoom_out");
 		this.listAdd = loadIcon("list_add");
+		this.listAddDim = loadIcon("list_add_dim");
 		this.listEdit = loadIcon("list_edit");
 		this.listRemove = loadIcon("list_remove");
 		this.solo = loadIcon("solo");
 		this.soloDisabled = loadIcon("solo-disabled");
+		this.soloDim = loadIcon("solo-dim");
+		this.soloDisabledDim = loadIcon("solo-disabled-dim");
 		this.mute = loadIcon("mute");
 		this.muteDisabled = loadIcon("mute-disabled");
+		this.muteDim = loadIcon("mute-dim");
+		this.muteDisabledDim = loadIcon("mute-disabled-dim");
 		this.visible = loadIcon("visible");
 		this.visibleDisabled = loadIcon("visible-disabled");
+		this.visibleDim = loadIcon("visible-dim");
+		this.visibleDisabledDim = loadIcon("visible-disabled-dim");
 		this.sharp = loadIcon("sharp");
 		this.flat = loadIcon("flat");
 	}
@@ -992,6 +1006,10 @@ public class TGIconManager {
 		return this.listAdd;
 	}
 
+	public UIImage getListAddDim() {
+		return this.listAddDim;
+	}
+
 	public UIImage getListEdit() {
 		return this.listEdit;
 	}
@@ -1008,6 +1026,13 @@ public class TGIconManager {
 		return soloDisabled;
 	}
 
+	public UIImage getSoloDim() {
+		return soloDim;
+	}
+
+	public UIImage getSoloDisabledDim() {
+		return soloDisabledDim;
+	}
 	public UIImage getMute() {
 		return mute;
 	}
@@ -1016,12 +1041,28 @@ public class TGIconManager {
 		return muteDisabled;
 	}
 
+	public UIImage getMuteDim() {
+		return muteDim;
+	}
+
+	public UIImage getMuteDisabledDim() {
+		return muteDisabledDim;
+	}
+
 	public UIImage getVisible() {
 		return visible;
 	}
 
 	public UIImage getVisibleDisabled() {
 		return visibleDisabled;
+	}
+
+	public UIImage getVisibleDim() {
+		return visibleDim;
+	}
+
+	public UIImage getVisibleDisabledDim() {
+		return visibleDisabledDim;
 	}
 
 	public UIImage getSharp() {
