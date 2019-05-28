@@ -11,7 +11,7 @@ for more information.
 [![License: LGPLv2.1](https://img.shields.io/badge/License-LGPL%20v2.1-blue.svg?logo=gnu)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 
 ## System Requirements
-- Java 7 or higher
+- Java 9 or higher
 
 ## What's Changed
 - Global style update with a new skin
@@ -26,6 +26,7 @@ for more information.
 - Scale finder
 - Customizable scale intervals
 - Percussion dialog and percussion notation editor
+- Support for mix table change commands from GP3/GP4/GP5 files
 - UI cleanup, MIDI track name support by [Alex Abdugafarov](https://github.com/frozenspider/tuxguitar)
 - Various bug fixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
 - And lots of other small improvements and bug fixes
