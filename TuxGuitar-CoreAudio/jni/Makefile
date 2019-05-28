@@ -1,9 +1,6 @@
-CXX = g++
+CXX = clang++
 
-SDK = /Developer/SDKs/MacOSX10.4u.sdk
-JAVA_FRAMEWORK = $(SDK)/System/Library/Frameworks/JavaVM.framework
-
-INCLUDES = -I $(JAVA_FRAMEWORK)/Headers/
+INCLUDES = -I $(JAVA_HOME)/include/
 
 LIBRARIES = -framework CoreAudio -framework JavaVM -framework AudioUnit -framework AudioToolbox -framework Carbon
 
@@ -14,9 +11,8 @@ FILENAME = org_herac_tuxguitar_player_impl_midiport_coreaudio_MidiReceiverJNI.cp
 all:	$(LIBRARY)
 
 $(LIBRARY):	clean
-	g++ $(INCLUDES) -isysroot $(SDK) -arch ppc $(LIBRARIES) -msse -dynamiclib -o ppc_$(LIBRARY) $(FILENAME)
-	g++ $(INCLUDES) -isysroot $(SDK) -arch i386 $(LIBRARIES) -msse -dynamiclib -o intel_$(LIBRARY) $(FILENAME)
-	lipo -create ppc_$(LIBRARY) intel_$(LIBRARY) -output $(LIBRARY)
+	$(CXX) $(INCLUDES) -arch x86_64 $(LIBRARIES) -msse -dynamiclib -o intel64_$(LIBRARY) $(FILENAME)
+	lipo -create intel64_$(LIBRARY) -output ../$(LIBRARY)
 
 clean:
-	rm -f ppc_$(LIBRARY) intel_$(LIBRARY) $(LIBRARY)
+	rm -f intel64_$(LIBRARY) ../$(LIBRARY)

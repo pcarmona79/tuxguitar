@@ -2,6 +2,7 @@
 
 #include "org_herac_tuxguitar_player_impl_midiport_audiounit_MidiReceiverJNI.h"
 
+#include <AssertMacros.h>
 #include <AudioUnit/AudioUnit.h>
 #include <AudioToolbox/AudioToolbox.h>
 
@@ -43,34 +44,34 @@ class MidiPlayer
             //create the nodes of the graph
             AUNode synthNode, limiterNode, outNode;
             
-            ComponentDescription cd;
+            AudioComponentDescription cd;
             cd.componentManufacturer = kAudioUnitManufacturer_Apple;
             cd.componentFlags = 0;
             cd.componentFlagsMask = 0;
             
-            require_noerr (result = NewAUGraph (&outGraph), CreateAUGraph_home);
+            __Require_noErr (result = NewAUGraph (&outGraph), CreateAUGraph_home);
             
             cd.componentType = kAudioUnitType_MusicDevice;
             cd.componentSubType = kAudioUnitSubType_DLSSynth;
             
-            require_noerr (result = AUGraphAddNode (outGraph, &cd, &synthNode), CreateAUGraph_home);
+            __Require_noErr (result = AUGraphAddNode (outGraph, &cd, &synthNode), CreateAUGraph_home);
             
             cd.componentType = kAudioUnitType_Effect;
             cd.componentSubType = kAudioUnitSubType_PeakLimiter;  
             
-            require_noerr (result = AUGraphAddNode (outGraph, &cd, &limiterNode), CreateAUGraph_home);
+            __Require_noErr (result = AUGraphAddNode (outGraph, &cd, &limiterNode), CreateAUGraph_home);
             
             cd.componentType = kAudioUnitType_Output;
             cd.componentSubType = kAudioUnitSubType_DefaultOutput;  
-            require_noerr (result = AUGraphAddNode (outGraph, &cd, &outNode), CreateAUGraph_home);
+            __Require_noErr (result = AUGraphAddNode (outGraph, &cd, &outNode), CreateAUGraph_home);
             
-            require_noerr (result = AUGraphOpen (outGraph), CreateAUGraph_home);
+            __Require_noErr (result = AUGraphOpen (outGraph), CreateAUGraph_home);
             
-            require_noerr (result = AUGraphConnectNodeInput (outGraph, synthNode, 0, limiterNode, 0), CreateAUGraph_home);
-            require_noerr (result = AUGraphConnectNodeInput (outGraph, limiterNode, 0, outNode, 0), CreateAUGraph_home);
+            __Require_noErr (result = AUGraphConnectNodeInput (outGraph, synthNode, 0, limiterNode, 0), CreateAUGraph_home);
+            __Require_noErr (result = AUGraphConnectNodeInput (outGraph, limiterNode, 0, outNode, 0), CreateAUGraph_home);
             
             // ok we're good to go - get the Synth Unit...
-            require_noerr (result = AUGraphNodeInfo(outGraph, synthNode, 0, &outSynth), CreateAUGraph_home);
+            __Require_noErr (result = AUGraphNodeInfo(outGraph, synthNode, 0, &outSynth), CreateAUGraph_home);
             
         CreateAUGraph_home:
             return result;
@@ -82,25 +83,27 @@ class MidiPlayer
         MidiPlayer(char* bankPath = 0)
         {
             graph = 0;            
-            require_noerr (result = this->createAUGraph (graph, synthUnit), ctor_home);
+            __Require_noErr (result = this->createAUGraph (graph, synthUnit), ctor_home);
             
             // if the user supplies a sound bank, we'll set that before we initialize and start playing
             if (bankPath) 
             {
-                FSRef fsRef;
-                require_noerr (result = FSPathMakeRef ((const UInt8*)bankPath, &fsRef, 0), ctor_home);
+              	CFURLRef url = CFURLCreateFromFileSystemRepresentation(
+					                                                       kCFAllocatorDefault,
+					                                                       (const UInt8*)bankPath,
+					                                                       strlen(bankPath), false
+					                                                      );
                 
                 printf ("Setting Sound Bank:%s\n", bankPath);
                 
-                require_noerr (result = AudioUnitSetProperty (synthUnit,
-                                                              kMusicDeviceProperty_SoundBankFSRef,
-                                                              kAudioUnitScope_Global, 0,
-                                                              &fsRef, sizeof(fsRef)), ctor_home);
-                
+                __Require_noErr (result = AudioUnitSetProperty(synthUnit,
+                                                               kMusicDeviceProperty_SoundBankURL,
+                                                               kAudioUnitScope_Global, 0,
+                                                               &url, sizeof(url)), ctor_home);
             }
             
             // initialize and start the graph
-            require_noerr (result = AUGraphInitialize (graph), ctor_home);
+            __Require_noErr (result = AUGraphInitialize (graph), ctor_home);
             
             for (int n=0; n<15; n++)
             {
@@ -111,7 +114,7 @@ class MidiPlayer
             // print out the graph so we can see what it looks like...
             //CAShow (graph);
             
-            require_noerr (result = AUGraphStart (graph), ctor_home);
+            __Require_noErr (result = AUGraphStart (graph), ctor_home);
             return;
             
         ctor_home:
@@ -134,7 +137,7 @@ class MidiPlayer
         void noteOn(UInt32 noteNum, UInt32 onVelocity, UInt8 midiChannelInUse)
         {
             UInt32 noteOnCommand  = kMidiMessage_NoteOn << 4 | midiChannelInUse;
-            require_noerr (result = MusicDeviceMIDIEvent(synthUnit, noteOnCommand, noteNum, onVelocity, 0), home_note_on);
+            __Require_noErr (result = MusicDeviceMIDIEvent(synthUnit, noteOnCommand, noteNum, onVelocity, 0), home_note_on);
             
             return;
             
@@ -147,7 +150,7 @@ class MidiPlayer
         void noteOff(UInt32 noteNum, UInt8 midiChannelInUse)
         {
             UInt32 noteOffCommand = kMidiMessage_NoteOn << 4 | midiChannelInUse;
-            require_noerr (result = MusicDeviceMIDIEvent(synthUnit, noteOffCommand, noteNum, 0, 0), home_note_off);
+            __Require_noErr (result = MusicDeviceMIDIEvent(synthUnit, noteOffCommand, noteNum, 0, 0), home_note_off);
             
             return;
             
@@ -159,7 +162,7 @@ class MidiPlayer
         /** Program change event */
         void programChange(UInt8 progChangeNum, UInt8 midiChannelInUse)
         {
-            require_noerr (result = MusicDeviceMIDIEvent(synthUnit, 
+            __Require_noErr (result = MusicDeviceMIDIEvent(synthUnit, 
                                                          kMidiMessage_ProgramChange << 4 | midiChannelInUse, 
                                                          progChangeNum, 0,
                                                          0 /*sample offset*/), home_programChange);
@@ -172,7 +175,7 @@ class MidiPlayer
         /** Bank set event */
         void setBank(UInt8 midiChannelInUse)
         {
-            require_noerr (result = MusicDeviceMIDIEvent(synthUnit, 
+            __Require_noErr (result = MusicDeviceMIDIEvent(synthUnit, 
                                                          kMidiMessage_ControlChange << 4 | midiChannelInUse, 
                                                          kController_BankMSBControl, 0,
                                                          0 /*sample offset*/), home_setBank);
@@ -185,7 +188,7 @@ class MidiPlayer
         /** Control Event */
         void controlEvent(UInt8 controller, UInt7 value, UInt8 midiChannelInUse)
         {
-            require_noerr (result = MusicDeviceMIDIEvent(synthUnit, 
+            __Require_noErr (result = MusicDeviceMIDIEvent(synthUnit, 
                                                          kMidiMessage_ControlChange << 4 | midiChannelInUse, 
                                                          controller, value,
                                                          0 /*sample offset*/), home_setBank);
@@ -198,7 +201,7 @@ class MidiPlayer
         /** Pitch Bend Event */
         void pitchBend(UInt7 lsb_value, UInt7 msb_value, UInt8 midiChannelInUse)
         {
-            require_noerr (result = MusicDeviceMIDIEvent(synthUnit, 
+            __Require_noErr (result = MusicDeviceMIDIEvent(synthUnit, 
                                                          kMidiMessage_PitchBend << 4 | midiChannelInUse, 
                                                          lsb_value, msb_value,
                                                          0 /*sample offset*/), home_setBank);
