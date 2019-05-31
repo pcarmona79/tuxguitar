@@ -62,12 +62,6 @@ public class TGNoteImpl extends TGNote {
 		float tsY = (fromY + ts.getPosition(TGTrackSpacing.POSITION_EFFECTS));
 		float bsY = (tsY + (ts.getSize(TGTrackSpacing.POSITION_EFFECTS) - bs.getSize( )));
 
-		if (getBeatImpl().hasMixerChange()) {
-			layout.setTabEffectStyle(painter);
-			float x = fromX + getPosX() + spacing;
-			float y = (bsY + bs.getPosition( TGBeatSpacing.POSITION_MIXER_CHANGE ));
-			paintMixerChange(layout, painter, x, y);
-		}
 		layout.setOfflineEffectStyle(painter);
 		if(effect.isAccentuatedNote()){
 			float x = fromX + getPosX() + spacing;
@@ -1053,18 +1047,6 @@ public class TGNoteImpl extends TGNote {
 		painter.moveTo ( x , y );
 		painter.cubicTo( x , y , x + width, y,  x + width, y + (4.0f * scale ));
 		painter.moveTo ( x + width, y + (4.0f * scale ) );
-		painter.closePath();
-	}
-
-	private void paintMixerChange(TGLayout layout, UIPainter painter,float fromX,float fromY){
-		float scale = layout.getScale();
-		float x = fromX;
-		float y = fromY + (2f * scale );
-		float s = 4f * scale;
-
-		painter.setLineWidth(layout.getLineWidth(1));
-		painter.initPath(UIPainter.PATH_FILL);
-		painter.addRectangle(x, y, s, s);
 		painter.closePath();
 	}
 

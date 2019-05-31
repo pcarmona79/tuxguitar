@@ -406,7 +406,7 @@ public class TGVoiceImpl extends TGVoice{
 		}
 		
 		painter.closePath();
-		
+
 		if( getDuration().isDotted() || getDuration().isDoubleDotted()) {
 			paintDot(layout, painter, (x + 10f * layoutScale), (y + 2f * layoutScale), layoutScale);
 		}

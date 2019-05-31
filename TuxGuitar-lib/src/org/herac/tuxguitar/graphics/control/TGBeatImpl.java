@@ -208,7 +208,7 @@ public class TGBeatImpl extends TGBeat{
 		this.getUsedStrings();
 		this.usedStrings[note.getString() - 1] = true;
 	}
-	
+
 	public void resetEffectsSpacing( TGLayout layout ){
 		this.bs = new TGBeatSpacing( layout );
 		this.accentuated = false;
@@ -265,7 +265,7 @@ public class TGBeatImpl extends TGBeat{
 			this.trill = true;
 		}
 	}
-	
+
 	public float getEffectsSpacing(TGLayout layout){
 		if(this.hasMixerChange()){
 			this.bs.setSize(TGBeatSpacing.POSITION_MIXER_CHANGE,layout.getEffectSpacing());
@@ -322,6 +322,17 @@ public class TGBeatImpl extends TGBeat{
 		if(!layout.isPlayModeEnabled() && (layout.getStyle() & TGLayout.DISPLAY_SCORE) != 0 ){
 			paintExtraLines(painter, layout,fromX, fromY);
 		}
+
+		if (this.hasMixerChange()) {
+			float spacing = getSpacing(layout);
+			TGSpacing ts = getMeasureImpl().getTs();
+			float tsY = (fromY + ts.getPosition(TGTrackSpacing.POSITION_EFFECTS));
+			float bsY = (tsY + (ts.getSize(TGTrackSpacing.POSITION_EFFECTS) - bs.getSize( )));
+			float mx = fromX + getPosX() + spacing;
+			float my = (bsY + bs.getPosition( TGBeatSpacing.POSITION_MIXER_CHANGE ));
+			paintMixerChange(layout, painter, mx, my);
+		}
+
 		for(int v = 0; v < TGBeat.MAX_VOICES; v ++){
 			getVoiceImpl(v).paint(layout, painter, fromX, fromY);
 		}
@@ -343,7 +354,19 @@ public class TGBeatImpl extends TGBeat{
 			paintExtraLines(painter,layout,getMaxNote(), fromX, scoreY);
 		}
 	}
-	
+
+	private void paintMixerChange(TGLayout layout, UIPainter painter,float fromX,float fromY){
+		float scale = layout.getScale();
+		float x = fromX;
+		float y = fromY + (2f * scale );
+		float s = 4f * scale;
+
+		painter.setLineWidth(layout.getLineWidth(1));
+		painter.initPath(UIPainter.PATH_FILL);
+		painter.addRectangle(x, y, s, s);
+		painter.closePath();
+	}
+
 	private void paintExtraLines(UIPainter painter,TGLayout layout,TGNoteImpl note,float fromX,float fromY){
 		float scale = layout.getScale();
 		float scoreLineSpacing = layout.getScoreLineSpacing();
