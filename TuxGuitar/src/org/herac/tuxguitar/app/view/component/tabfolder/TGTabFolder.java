@@ -63,7 +63,7 @@ public class TGTabFolder implements TGEventListener {
 	public UIPanel getControl(){
 		return this.container;
 	}
-	
+
 	public boolean isDisposed() {
 		return (this.container == null || this.container.isDisposed());
 	}
@@ -98,9 +98,10 @@ public class TGTabFolder implements TGEventListener {
 		});
 		this.tabs.getControl().addFocusGainedListener(event -> updateFocus());
 		layout.set(this.tabs.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
+		this.container.setBgColor(this.tabs.getColors().getBorderColor());
 
-		this.toolbar = factory.createHorizontalToolBar(this.tabs.getControl());
-		this.tabs.packLeft(this.toolbar);
+		this.toolbar = factory.createHorizontalToolBar(this.tabs.getTopLeft());
+		this.tabs.getTopLeftLayout().set(this.toolbar, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 
 		this.newSong = this.toolbar.createActionItem();
 		this.newSong.addSelectionListener(new TGActionProcessorListener(this.context, TGNewSongAction.NAME));
@@ -136,7 +137,7 @@ public class TGTabFolder implements TGEventListener {
 			}
 			else {
 				this.ignoreEvents = true;
-				
+
 				int index = documentManager.findCurrentDocumentIndex();
 				this.tabs.setSelectedIndex(index);
 
@@ -205,7 +206,7 @@ public class TGTabFolder implements TGEventListener {
 			sb.append("*");
 		}
 		sb.append(TGDocumentListManager.getInstance(this.context).getDocumentName(document));
-		
+
 		return sb.toString();
 	}
 
@@ -281,10 +282,10 @@ public class TGTabFolder implements TGEventListener {
 			int type = event.getAttribute(TGUpdateEvent.PROPERTY_UPDATE_MODE);
 			if( type == TGUpdateEvent.SELECTION ){
 				this.updateSelectionProcess.process();
-			} 
+			}
 			else if( type == TGUpdateEvent.SONG_LOADED || type == TGUpdateEvent.SONG_SAVED ){
 				this.updateDocumentProcess.process();
-			} 
+			}
 		}
 		else if( TGLanguageEvent.EVENT_TYPE.equals(event.getEventType()) ) {
 			this.loadPropertiesProcess.process();

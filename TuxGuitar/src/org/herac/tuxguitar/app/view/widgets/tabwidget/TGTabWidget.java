@@ -22,6 +22,10 @@ public class TGTabWidget {
     private final UITableLayout tabsLayout;
     private final UIButton scrollLeft;
     private final UIButton scrollRight;
+    private final UIPanel left;
+    private final UITableLayout leftLayout;
+    private final UIPanel right;
+    private final UITableLayout rightLayout;
 
     private final List<TGTabItem> items;
     private final List<Listener> selectionListeners;
@@ -39,6 +43,20 @@ public class TGTabWidget {
         this.containerLayout = new UITableLayout(0f);
         this.container.setLayout(this.containerLayout);
 
+        UIPanel leftContainer = factory.createPanel(this.container, false);
+        UITableLayout leftContainerLayout = new UITableLayout(0f);
+        leftContainer.setLayout(leftContainerLayout);
+        this.containerLayout.set(leftContainer, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+
+        this.left = factory.createPanel(leftContainer, false);
+        this.leftLayout = new UITableLayout(0f);
+        this.left.setLayout(this.leftLayout);
+        leftContainerLayout.set(leftContainer, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+
+        UIPanel leftBorder = factory.createPanel(leftContainer, false);
+        leftBorder.setBgColor(this.colors.getBorderColor());
+        leftContainerLayout.set(leftBorder, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, 1f, 0f);
+
         this.scrollLeft = factory.createButton(this.container);
         this.scrollLeft.addSelectionListener(event -> scrollTabs(-1));
         this.containerLayout.set(this.scrollLeft, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
@@ -51,6 +69,20 @@ public class TGTabWidget {
         this.scrollRight = factory.createButton(this.container);
         this.scrollRight.addSelectionListener(event -> scrollTabs(1));
         this.containerLayout.set(this.scrollRight, 1, 4, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+
+        UIPanel rightContainer = factory.createPanel(this.container, false);
+        UITableLayout rightContainerLayout = new UITableLayout(0f);
+        rightContainer.setLayout(rightContainerLayout);
+        this.containerLayout.set(rightContainer, 1, 5, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+
+        this.right = factory.createPanel(rightContainer, false);
+        this.rightLayout = new UITableLayout(0f);
+        this.right.setLayout(this.rightLayout);
+        rightContainerLayout.set(rightContainer, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+
+        UIPanel rightBorder = factory.createPanel(rightContainer, false);
+        rightBorder.setBgColor(this.colors.getBorderColor());
+        rightContainerLayout.set(rightBorder, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, 1f, 0f);
 
         this.tabs = factory.createPanel(this.scroll, false);
         this.tabsLayout = new UITableLayout(0f);
@@ -193,14 +225,6 @@ public class TGTabWidget {
         return this.items.indexOf(item);
     }
 
-    public void packLeft(UIControl control) {
-        this.containerLayout.set(this.tabs, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
-    }
-
-    public void packRight(UIControl control) {
-        this.containerLayout.set(this.tabs, 1, 5, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
-    }
-
     public boolean isDisposed() {
         return this.container.isDisposed();
     }
@@ -215,6 +239,27 @@ public class TGTabWidget {
     public UIPanel getControl() {
         return this.container;
     }
+
+    public TGTabWidgetColorModel getColors() {
+        return this.colors;
+    }
+
+    public UIPanel getTopLeft() {
+        return left;
+    }
+
+    public UITableLayout getTopLeftLayout() {
+        return leftLayout;
+    }
+
+    public UIPanel getTopRight() {
+        return right;
+    }
+
+    public UITableLayout getTopRightLayout() {
+        return rightLayout;
+    }
+
 
     public void loadIcons() {
         for (TGTabItem item : items) {
