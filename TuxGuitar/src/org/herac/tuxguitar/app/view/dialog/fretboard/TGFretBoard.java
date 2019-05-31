@@ -80,7 +80,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	public void createControlLayout() {
 		UITableLayout uiLayout = new UITableLayout(0f);
 		uiLayout.set(this.toolbar.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);
-		uiLayout.set(this.canvas, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+		uiLayout.set(this.canvas, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, 1f, 0f);
 
 		this.control.setLayout(uiLayout);
 	}
