@@ -25,9 +25,20 @@ JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createButtonBox(JNI
     return (jlong) button_box;
 }
 
-static gboolean scrolled_configure(GtkWidget *widget, GdkRectangle *rect, gpointer data)
+JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createHidingScrolledWindow(JNIEnv* env, jclass that, jint alignment)
+{
+  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_kinetic_scrolling(GTK_SCROLLED_WINDOW(scrolled), FALSE);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled), GTK_POLICY_EXTERNAL, GTK_POLICY_NEVER);
+  gtk_widget_set_hexpand(scrolled, TRUE);
+  g_object_set_data(G_OBJECT(scrolled), "alignment", GINT_TO_POINTER(alignment));
+  return (jlong) scrolled;
+}
+
+static gboolean scrolled_window_do_overflow(GtkWidget *widget, GdkRectangle *rect, gpointer data)
 {
   GtkAdjustment *adjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(widget));
+  GtkWidget *popover_container = g_object_get_data(data, "box");
 
   int alignment = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget), "alignment"));
   if (alignment == GTK_ALIGN_END) {
@@ -39,29 +50,73 @@ static gboolean scrolled_configure(GtkWidget *widget, GdkRectangle *rect, gpoint
     container = gtk_bin_get_child(GTK_BIN(container));
   }
 
+  int outside_first = -1;
   if (container != NULL && GTK_IS_CONTAINER(container)) {
     int outerX = gtk_adjustment_get_value(adjustment);
     g_autoptr(GList) children = gtk_container_get_children(GTK_CONTAINER(container));
     GtkAllocation allocation;
+    int index = 0;
     for (; children != NULL; children = children->next) {
       gtk_widget_get_allocation(children->data, &allocation);
       gboolean outside = allocation.x < outerX || allocation.x + allocation.width > outerX + rect->width;
-      gtk_widget_set_visible(children->data, !outside);
+      if (outside && outside_first == -1) {
+        outside_first = index;
+      }
+      if (outside && !GTK_IS_INVISIBLE(children->data)) {
+        GtkWidget *placeholder = gtk_invisible_new();
+        gtk_widget_set_size_request(placeholder, allocation.width, allocation.height);
+        g_object_set_data(G_OBJECT(placeholder), "for", children->data);
+
+        g_object_ref(children->data);
+        gtk_container_remove(GTK_CONTAINER(container), children->data);
+        gtk_container_add(GTK_CONTAINER(popover_container), children->data);
+        gtk_box_reorder_child(GTK_BOX(popover_container), children->data, index - outside_first);
+        g_object_unref(children->data);
+
+        gtk_container_add(GTK_CONTAINER(container), placeholder);
+        gtk_box_reorder_child(GTK_BOX(container), placeholder, index);
+        gtk_widget_show(placeholder);
+      } else if (!outside && GTK_IS_INVISIBLE(children->data)) {
+        GtkWidget *original = g_object_get_data(children->data, "for");
+        gtk_container_remove(GTK_CONTAINER(container), children->data);
+
+        g_object_ref(original);
+        gtk_container_remove(GTK_CONTAINER(popover_container), original);
+        gtk_container_add(GTK_CONTAINER(container), original);
+        gtk_box_reorder_child(GTK_BOX(container), original, index);
+        g_object_unref(original);
+
+        gtk_widget_show(original);
+      }
+      index++;
     }
   }
+
+  gtk_widget_set_visible(GTK_WIDGET(data), outside_first != -1);
 
   return FALSE;
 }
 
-JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createHidingScrolledWindow(JNIEnv* env, jclass that, jint alignment)
+JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createOverflowMenuButton(JNIEnv *env, jclass that, jlong scrolled)
 {
-  GtkWidget *scrolled = gtk_scrolled_window_new(NULL, NULL);
-  gtk_scrolled_window_set_kinetic_scrolling(GTK_SCROLLED_WINDOW(scrolled), FALSE);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled), GTK_POLICY_EXTERNAL, GTK_POLICY_NEVER);
-  gtk_widget_set_hexpand(scrolled, TRUE);
-  g_object_set_data(G_OBJECT(scrolled), "alignment", GINT_TO_POINTER(alignment));
-  g_signal_connect(scrolled, "size-allocate", G_CALLBACK(scrolled_configure), NULL);
-  return (jlong) scrolled;
+
+  GtkWidget *button = gtk_menu_button_new();
+  gtk_button_set_image(GTK_BUTTON(button), gtk_image_new_from_icon_name("go-down-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_can_focus(button, FALSE);
+  gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
+
+  GtkWidget *popover = gtk_popover_new(button);
+  gtk_menu_button_set_popover(GTK_MENU_BUTTON(button), popover);
+
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_container_add(GTK_CONTAINER(popover), GTK_WIDGET(box));
+  gtk_container_set_border_width(GTK_CONTAINER(box), 10);
+  g_object_set_data(G_OBJECT(button), "box", box);
+  gtk_widget_show(box);
+
+  g_signal_connect(G_OBJECT(scrolled), "size-allocate", G_CALLBACK(scrolled_window_do_overflow), button);
+
+  return (jlong) button;
 }
 
 static const char *TG_ACTION_PREFIX = "tg";
@@ -79,10 +134,6 @@ JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createMenuButton(JN
   GtkWidget *popover = gtk_popover_menu_new();
   gtk_menu_button_set_popover(GTK_MENU_BUTTON(button), popover);
   gtk_container_add(GTK_CONTAINER(popover), GTK_WIDGET(box));
-  /*
-  gtk_container_child_set(GTK_CONTAINER(popover), GTK_WIDGET(box), "submenu", "main", NULL);
-  g_object_set(G_OBJECT(popover), "visible-submenu", "main", NULL);
-  */
 
   return (jlong) button;
 }

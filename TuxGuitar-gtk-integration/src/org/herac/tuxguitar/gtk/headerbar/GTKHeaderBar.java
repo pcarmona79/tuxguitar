@@ -200,6 +200,9 @@ public class GTKHeaderBar implements TGEventListener {
                     }
                     TGGTK.headerBarPackLeft(headerBar, scrolled);
 
+                    long overflow = TGGTK.createOverflowMenuButton(scrolled);
+                    TGGTK.headerBarPackLeft(headerBar, overflow);
+
                     // ---- CENTER ----
                     TGMainToolBarSection transport = (TGMainToolBarSection) this.toolBar.getSections().get(1);
                     for (Long box : createButtonBoxes(transport, false)) {
@@ -213,11 +216,13 @@ public class GTKHeaderBar implements TGEventListener {
                     container = GTK.gtk_box_new(GTK.GTK_ORIENTATION_HORIZONTAL, 6);
                     GTK.gtk_widget_set_halign(container, GTK.GTK_ALIGN_END);
                     GTK.gtk_container_add(scrolled, container);
-
                     for (Long box : createButtonBoxes(view, false)) {
                         GTK.gtk_container_add(container, box);
                     }
                     TGGTK.headerBarPackRight(headerBar, scrolled);
+
+                    overflow = TGGTK.createOverflowMenuButton(scrolled);
+                    TGGTK.headerBarPackRight(headerBar, overflow);
 
                 } else {
                     for (HeaderWidget widget : this.widgets) {

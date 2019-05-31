@@ -30,6 +30,8 @@ public class TGGTK {
 
     public static native long _createHidingScrolledWindow(int alignment);
 
+    public static native long _createOverflowMenuButton(long scrolled);
+
     public static native long _createMenuButton(long box);
 
     public static native long _createMenuActionItem(long menu, String nameStr);
@@ -80,6 +82,15 @@ public class TGGTK {
         Platform.lock.lock();
         try {
             return _createHidingScrolledWindow(alignment);
+        } finally {
+            Platform.lock.unlock();
+        }
+    }
+
+    public static long createOverflowMenuButton(long scrolled) {
+        Platform.lock.lock();
+        try {
+            return _createOverflowMenuButton(scrolled);
         } finally {
             Platform.lock.unlock();
         }

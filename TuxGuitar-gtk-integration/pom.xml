@@ -19,22 +19,22 @@
 				<directory>share</directory>
 			</resource>
 		</resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>9</source>
-                    <target>9</target>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>9</source>
+					<target>9</target>
 					<fork>true</fork>
 					<compilerArgs>
 						<arg>-h</arg>
 						<arg>${basedir}/jni</arg>
 					</compilerArgs>
 				</configuration>
-            </plugin>
-        </plugins>
-    </build>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>

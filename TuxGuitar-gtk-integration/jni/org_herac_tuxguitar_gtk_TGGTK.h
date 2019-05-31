@@ -33,6 +33,14 @@ JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createHidingScrolle
 
 /*
  * Class:     org_herac_tuxguitar_gtk_TGGTK
+ * Method:    _createOverflowMenuButton
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_org_herac_tuxguitar_gtk_TGGTK__1createOverflowMenuButton
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     org_herac_tuxguitar_gtk_TGGTK
  * Method:    _createMenuButton
  * Signature: (J)J
  */

@@ -2,7 +2,7 @@ button:not(.flat) {
   padding: 0px 5px;
 }
 
-headerbar buttonbox button:not(.flat) {
+headerbar buttonbox button:not(.flat), popover buttonbox button:not(.flat) {
   margin: 0;
   padding: 4px 9px;
 }
