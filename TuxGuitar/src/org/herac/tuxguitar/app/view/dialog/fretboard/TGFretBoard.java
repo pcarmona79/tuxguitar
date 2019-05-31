@@ -631,6 +631,7 @@ public class TGFretBoard extends TGDockedPlayingComponent {
 	}
 	
 	public void computePackedSize() {
+		this.initStrings(getStringCount());
 		this.control.getLayout().set(this.canvas, UITableLayout.PACKED_HEIGHT, Float.valueOf(((STRING_SPACING) * (this.strings.length - 1)) + TOP_SPACING + BOTTOM_SPACING));
 		this.control.computePackedSize(null, null);
 	}

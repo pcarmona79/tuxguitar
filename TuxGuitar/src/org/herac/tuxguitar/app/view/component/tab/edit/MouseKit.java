@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.app.view.component.tab.edit;
 
 import org.herac.tuxguitar.app.TuxGuitar;
-import org.herac.tuxguitar.app.action.impl.edit.tablature.TGMenuShownAction;
 import org.herac.tuxguitar.app.action.impl.edit.tablature.TGMouseClickAction;
 import org.herac.tuxguitar.app.action.impl.edit.tablature.TGMouseExitAction;
 import org.herac.tuxguitar.app.action.impl.edit.tablature.TGMouseMoveAction;
@@ -73,7 +72,6 @@ public class MouseKit implements UIMouseDownListener, UIMouseUpListener, UIMouse
 
 	public void onMouseUp(UIMouseEvent event) {
 		if (event.getButton() == 1) {
-			this.position.set(event.getPosition());
 			this.startPosition = null;
 			this.executeAction(TGMouseClickAction.NAME, this.position.clone(), event, false);
 		} else if (event.getButton() == 2) {
