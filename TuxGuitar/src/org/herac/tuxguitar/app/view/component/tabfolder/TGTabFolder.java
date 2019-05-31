@@ -76,6 +76,7 @@ public class TGTabFolder implements TGEventListener {
 	}
 
 	private void appendListeners(){
+		TuxGuitar.getInstance().getSkinManager().addLoader(this);
 		TGEditorManager tgEditorManager = TGEditorManager.getInstance(this.context);
 		tgEditorManager.addUpdateListener(this);
 		tgEditorManager.addRedrawListener(new TGTabEventListener(this.context));
