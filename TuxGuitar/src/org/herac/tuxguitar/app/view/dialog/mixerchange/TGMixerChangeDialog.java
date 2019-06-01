@@ -152,6 +152,7 @@ public class TGMixerChangeDialog {
 		control.knob.setMaximum(TGChannelItem.MAXIMUM_KNOB_VALUE);
 		control.knob.setIncrement(TGChannelItem.MINIMUM_KNOB_INCREMENT);
 		control.knob.setValue(initial != null && attribute.get(initial) != null ? attribute.get(initial) : attribute.get(defaults));
+		control.knob.setEnabled(initial != null && attribute.get(initial) != null);
 		layout.set(control.knob, 1, col, UITableLayout.ALIGN_CENTER, UITableLayout.ALIGN_FILL, false, false);
 
 		control.enable = factory.createCheckBox(parent);

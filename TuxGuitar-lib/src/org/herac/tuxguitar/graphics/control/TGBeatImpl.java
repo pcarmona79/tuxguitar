@@ -324,6 +324,7 @@ public class TGBeatImpl extends TGBeat{
 		}
 
 		if (this.hasMixerChange()) {
+			layout.setTabNotePathStyle(painter, false);
 			float spacing = getSpacing(layout);
 			TGSpacing ts = getMeasureImpl().getTs();
 			float tsY = (fromY + ts.getPosition(TGTrackSpacing.POSITION_EFFECTS));
