@@ -1,5 +1,7 @@
 package org.herac.tuxguitar.app.view.component.tab;
 
+import java.util.List;
+
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.document.TGDocument;
 import org.herac.tuxguitar.app.system.config.TGConfigKeys;
@@ -67,8 +69,8 @@ public class Tablature implements TGController {
 		this.disposeUnregisteredResources.process();
 	}
 	
-	public void updateMeasure(int number){
-		this.getViewLayout().updateMeasureNumber(number);
+	public void updateMeasures(List<Integer> numbers){
+		this.getViewLayout().updateMeasureNumbers(numbers);
 		this.getCaret().update();
 		this.disposeUnregisteredResources.process();
 	}
