@@ -69,7 +69,7 @@ public class TGConfirmDialog {
 			buttonList.add(TGDialogButtons.no(() -> exec(dialog, noRunnable), defaultButton == BUTTON_NO));
 		}
 		if((style & BUTTON_CANCEL) != 0){
-			buttonList.add(TGDialogButtons.yes(() -> exec(dialog, cancelRunnable), defaultButton == BUTTON_CANCEL));
+			buttonList.add(TGDialogButtons.cancel(() -> exec(dialog, cancelRunnable), defaultButton == BUTTON_CANCEL));
 		}
 		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog, buttonList);
 		dialogLayout.set(buttons.getControl(), 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_FILL, true, false);
