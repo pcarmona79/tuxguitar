@@ -15,7 +15,6 @@ import org.herac.tuxguitar.app.view.component.tab.TGControl;
 import org.herac.tuxguitar.app.view.util.TGSyncProcess;
 import org.herac.tuxguitar.app.view.util.TGSyncProcessLocked;
 import org.herac.tuxguitar.app.view.widgets.tabwidget.TGTabLabelItem;
-import org.herac.tuxguitar.app.view.widgets.tabwidget.TGTabPopup;
 import org.herac.tuxguitar.app.view.widgets.tabwidget.TGTabWidget;
 import org.herac.tuxguitar.document.TGDocumentContextAttributes;
 import org.herac.tuxguitar.editor.TGEditorManager;
@@ -95,6 +94,7 @@ public class TGTabFolder implements TGEventListener {
 			if( document != null ) {
 				closeDocument(document);
 			}
+			return false;
 		});
 		this.tabs.getControl().addFocusGainedListener(event -> updateFocus());
 		layout.set(this.tabs.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, null, 0f);

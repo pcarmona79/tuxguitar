@@ -1,4 +1,4 @@
-package org.herac.tuxguitar.app.view.widgets.tabwidget;
+package org.herac.tuxguitar.app.view.component.tabfolder;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.TGActionProcessorListener;

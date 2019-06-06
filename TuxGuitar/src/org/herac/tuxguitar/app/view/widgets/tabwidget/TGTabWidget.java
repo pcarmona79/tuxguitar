@@ -28,8 +28,8 @@ public class TGTabWidget {
     private final UITableLayout rightLayout;
 
     private final List<TGTabItem> items;
-    private final List<Listener> selectionListeners;
-    private final List<Listener> closeListeners;
+    private final List<SelectionListener> selectionListeners;
+    private final List<TabCloseListener> closeListeners;
     private int currentIndex = -1;
 
     public TGTabWidget(UIFactory factory, UIContainer parent) {
@@ -155,13 +155,26 @@ public class TGTabWidget {
     private <T extends TGTabItem> T addItem(T item) {
         this.items.add(item);
         item.addListeners(this);
-        item.getCloseButton().addSelectionListener(event -> removeItem(item));
+        item.getCloseButton().addSelectionListener(event -> tabCloseClicked(item));
         this.tabsLayout.set(item.getControl(), 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
         if (this.currentIndex == -1) {
             this.setSelectedIndex(0);
         }
         this.updateScrollButtons();
         return item;
+    }
+
+    private void tabCloseClicked(TGTabItem item) {
+        int index = this.items.indexOf(item);
+        if (index != -1) {
+            boolean result = true;
+            for (TabCloseListener listener : this.closeListeners) {
+                result = result && listener.onEvent(new Event(index, item));
+            }
+            if (result) {
+                this.removeIndex(index);
+            }
+        }
     }
 
     public int getItemCount() {
@@ -175,9 +188,6 @@ public class TGTabWidget {
     public void removeIndex(int index) {
         if (index >= 0 && index < this.items.size()) {
             TGTabItem item = this.items.get(index);
-            for (Listener listener : this.closeListeners) {
-                listener.onEvent(new Event(index, this.items.get(index)));
-            }
             this.items.remove(index);
             this.tabsLayout.removeControlAttributes(item.getControl());
             if (this.currentIndex >= this.items.size()) {
@@ -202,7 +212,7 @@ public class TGTabWidget {
             }
             this.currentIndex = index;
             this.items.get(this.currentIndex).setSelected(true);
-            for (Listener listener : this.selectionListeners) {
+            for (SelectionListener listener : this.selectionListeners) {
                 listener.onEvent(new Event(index, this.items.get(index)));
             }
             this.container.layout();
@@ -278,16 +288,20 @@ public class TGTabWidget {
         this.scrollRight.setToolTipText(TuxGuitar.getProperty("scroll-right"));
     }
 
-    public void addSelectionListener(Listener listener) {
+    public void addSelectionListener(SelectionListener listener) {
         this.selectionListeners.add(listener);
     }
 
-    public void addTabCloseListener(Listener listener) {
+    public void addTabCloseListener(TabCloseListener listener) {
         this.closeListeners.add(listener);
     }
 
-    public interface Listener {
+    public interface SelectionListener {
         void onEvent(Event event);
+    }
+
+    public interface TabCloseListener {
+        boolean onEvent(Event event);
     }
 
     public static class Event {
