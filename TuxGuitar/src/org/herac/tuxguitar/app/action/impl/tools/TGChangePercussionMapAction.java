@@ -3,11 +3,8 @@ package org.herac.tuxguitar.app.action.impl.tools;
 import org.herac.tuxguitar.action.TGActionContext;
 import org.herac.tuxguitar.app.tools.percussion.PercussionEntry;
 import org.herac.tuxguitar.app.tools.percussion.PercussionManager;
-import org.herac.tuxguitar.app.tools.scale.ScaleManager;
 import org.herac.tuxguitar.app.view.component.tab.TablatureEditor;
 import org.herac.tuxguitar.editor.action.TGActionBase;
-import org.herac.tuxguitar.graphics.control.TGPercussionNote;
-import org.herac.tuxguitar.song.models.TGScale;
 import org.herac.tuxguitar.util.TGContext;
 
 public class TGChangePercussionMapAction extends TGActionBase{
@@ -30,6 +27,6 @@ public class TGChangePercussionMapAction extends TGActionBase{
         if (save) {
 			percussionManager.savePercussion();
 		}
-		TablatureEditor.getInstance(getContext()).getTablature().setPercussionMap(entries);
+		TablatureEditor.getInstance(getContext()).getTablature().setDrumMap(entries);
 	}
 }

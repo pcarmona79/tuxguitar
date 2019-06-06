@@ -1,26 +1,20 @@
 package org.herac.tuxguitar.app.tools.percussion;
 
-import org.herac.tuxguitar.graphics.control.TGPercussionNote;
-
 public class PercussionEntry {
     private String name;
-    private int note;
+    private int position;
     private int kind;
     private boolean shown;
 
-    public PercussionEntry(String name, int note, int kind, boolean shown) {
+    public PercussionEntry(String name, int position, int kind, boolean shown) {
         this.name = name;
-        this.note = note;
+        this.position = position;
         this.kind = kind;
         this.shown = shown;
     }
 
-    public PercussionEntry(String name, TGPercussionNote note, boolean shown) {
-        this(name, note.getNote(), note.getKind(), shown);
-    }
-
     public PercussionEntry(PercussionEntry other) {
-        this(other.getName(), other.getNote(), other.getKind(), other.isShown());
+        this(other.getName(), other.getPosition(), other.getKind(), other.isShown());
     }
 
     public boolean isShown() {
@@ -39,12 +33,12 @@ public class PercussionEntry {
         this.name = name;
     }
 
-    public int getNote() {
-        return note;
+    public int getPosition() {
+        return position;
     }
 
-    public void setNote(int note) {
-        this.note = note;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public int getKind() {

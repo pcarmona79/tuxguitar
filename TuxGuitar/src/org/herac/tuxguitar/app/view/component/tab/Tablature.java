@@ -10,7 +10,6 @@ import org.herac.tuxguitar.app.tools.percussion.PercussionEntry;
 import org.herac.tuxguitar.app.tools.percussion.PercussionManager;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.view.component.tab.edit.EditorKit;
-import org.herac.tuxguitar.app.view.component.tabfolder.TGTabFolder;
 import org.herac.tuxguitar.app.view.main.TGWindow;
 import org.herac.tuxguitar.app.view.util.TGSyncProcess;
 import org.herac.tuxguitar.document.TGDocumentManager;
@@ -25,9 +24,7 @@ import org.herac.tuxguitar.util.TGBeatRange;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.TGNoteRange;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class Tablature implements TGController {
 
@@ -160,23 +157,23 @@ public class Tablature implements TGController {
 		if( this.getViewLayout() != null ){
 			float deviceScale = TGWindow.getInstance(context).getWindow().getDeviceZoom() / 100f;
 			this.getViewLayout().loadStyles(this.scale * deviceScale);
-			this.loadPercussionMap();
+			this.loadDrumMap();
 		}
 		this.loadCaretStyles();
 	}
 
-	private void loadPercussionMap() {
+	private void loadDrumMap() {
 		PercussionManager percussionManager = PercussionManager.getInstance(getContext());
-		setPercussionMap(percussionManager.getEntries());
+		setDrumMap(percussionManager.getEntries());
 	}
 
-	public void setPercussionMap(PercussionEntry[] entries) {
-		TGPercussionNote[] map = new TGPercussionNote[entries.length];
+	public void setDrumMap(PercussionEntry[] entries) {
+		int[][] map = new int[entries.length][];
 		for (int i = 0; i < entries.length; i++) {
 			PercussionEntry entry = entries[i];
-			map[i] = new TGPercussionNote(entry.getNote(), entry.getKind());
+			map[i] = new int[] {entry.getPosition(), entry.getKind()};
 		}
-		this.getViewLayout().setPercussionMap(map);
+		this.getViewLayout().setDrumMap(new TGDrumMap(map));
 	}
 	
 	public void reloadViewLayout(){

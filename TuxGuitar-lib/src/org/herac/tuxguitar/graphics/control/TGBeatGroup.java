@@ -120,12 +120,6 @@ public class TGBeatGroup {
 	}
 	
 	public float getY1(TGLayout layout,TGNoteImpl note, int key, int clef){
-		int noteValue = note.getRealValue();
-		TGTrack track = note.getBeatImpl().getMeasureImpl().getTrack();
-		if (layout.getSongManager().isPercussionChannel(track.getSong(), track.getChannelId())) {
-			// Transpose percussions notes according to current note mapping
-			noteValue = layout.getPercussionMap()[noteValue].getNote();
-		}
 		float scale = (layout.getScoreLineSpacing() / 2f);
 		float scoreLineY = (TGNotation.computePosition(layout, note) * scale);
 		

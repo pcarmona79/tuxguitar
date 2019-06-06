@@ -4,12 +4,13 @@ import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.action.impl.tools.TGChangePercussionMapAction;
 import org.herac.tuxguitar.app.tools.percussion.PercussionEntry;
 import org.herac.tuxguitar.app.tools.percussion.PercussionManager;
+import org.herac.tuxguitar.app.tools.percussion.xml.PercussionReader;
 import org.herac.tuxguitar.app.ui.TGApplication;
 import org.herac.tuxguitar.app.util.TGMusicKeyUtils;
 import org.herac.tuxguitar.app.view.util.TGDialogUtil;
 import org.herac.tuxguitar.app.view.widgets.TGDialogButtons;
 import org.herac.tuxguitar.editor.action.TGActionProcessor;
-import org.herac.tuxguitar.graphics.control.TGPercussionNote;
+import org.herac.tuxguitar.graphics.control.TGDrumMap;
 import org.herac.tuxguitar.player.base.MidiPercussionKey;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
@@ -27,24 +28,25 @@ public class TGPercussionConfig {
 
     private static final MidiPercussionKey[] PERCUSSIONS = TuxGuitar.getInstance().getPlayer().getPercussionKeys();
     private static final KindSelect[] KIND_NOTES = new KindSelect[]{
-            new KindSelect("percussion.kind.note", TGPercussionNote.KIND_NOTE),
-            new KindSelect("percussion.kind.cymbal", TGPercussionNote.KIND_CYMBAL),
-            new KindSelect("percussion.kind.diamond", TGPercussionNote.KIND_DIAMOND),
-            new KindSelect("percussion.kind.triangle-up", TGPercussionNote.KIND_TRIANGLE_UP),
-            new KindSelect("percussion.kind.triangle-down", TGPercussionNote.KIND_TRIANGLE_DOWN),
-            new KindSelect("percussion.kind.square", TGPercussionNote.KIND_SQUARE)
+            new KindSelect("percussion.kind.note", TGDrumMap.KIND_NOTE),
+            new KindSelect("percussion.kind.cymbal", TGDrumMap.KIND_CYMBAL),
+            new KindSelect("percussion.kind.slanted-diamond", TGDrumMap.KIND_SLANTED_DIAMOND),
+            new KindSelect("percussion.kind.effect-cymbal", TGDrumMap.KIND_EFFECT_CYMBAL),
+            new KindSelect("percussion.kind.triangle-up", TGDrumMap.KIND_TRIANGLE),
+            new KindSelect("percussion.kind.triangle-down", TGDrumMap.KIND_TRIANGLE_DOWN),
+            new KindSelect("percussion.kind.square", TGDrumMap.KIND_SQUARE)
     };
     private static final KindSelect[] KIND_ACCENTS = new KindSelect[]{
-            new KindSelect("percussion.kind.open", TGPercussionNote.KIND_OPEN),
-            new KindSelect("percussion.kind.closed", TGPercussionNote.KIND_CLOSED),
-            new KindSelect("percussion.kind.circled", TGPercussionNote.KIND_CIRCLED)
+            new KindSelect("percussion.kind.open", TGDrumMap.KIND_OPEN),
+            new KindSelect("percussion.kind.closed", TGDrumMap.KIND_CLOSED),
+            new KindSelect("percussion.kind.circled", TGDrumMap.KIND_CIRCLE_AROUND)
     };
 
     private TGContext context;
     private UITable<PercussionEntry> table;
     private PercussionEntry[] mapping;
     private UITextField nameEntry;
-    private UIDropDownSelect<Integer> noteSelect;
+    private UISpinner positionSpinner;
     private UICheckBox shown;
     private List<UIRadioButton> kindNotes;
     private List<UICheckBox> kindAccents;
@@ -53,20 +55,19 @@ public class TGPercussionConfig {
         this.context = context;
         this.kindNotes = new ArrayList<>();
         this.kindAccents = new ArrayList<>();
-        this.mapping = new PercussionEntry[TGPercussionNote.NOTE_COUNT];
+        this.mapping = new PercussionEntry[TGDrumMap.MAX_NOTES];
     }
 
     private void load() {
         PercussionEntry[] stored = PercussionManager.getInstance(context).getEntries();
-        for (int i = 0; i < TGPercussionNote.NOTE_COUNT; i++) {
+        for (int i = 0; i < TGDrumMap.MAX_NOTES; i++) {
             this.mapping[i] = new PercussionEntry(stored[i]);
         }
     }
 
     private void defaults() {
-        for (int i = 0; i < TGPercussionNote.NOTE_COUNT; i++) {
-            TGPercussionNote note = TGPercussionNote.DEFAULT_MAPPING[i];
-            this.mapping[i] = new PercussionEntry("", note.getNote(), note.getKind(), false);
+        for (int i = 0; i < TGDrumMap.MAX_NOTES; i++) {
+            this.mapping[i] = new PercussionEntry("", TGDrumMap.DEFAULT_MAP.getPosition(i), TGDrumMap.DEFAULT_MAP.getRenderType(i), false);
         }
         for (MidiPercussionKey key : PERCUSSIONS) {
             this.mapping[key.getValue()].setName(key.getName());
@@ -83,7 +84,7 @@ public class TGPercussionConfig {
     }
 
     private void displayItem(PercussionEntry entry) {
-        this.noteSelect.setSelectedValue(isNatural(entry.getNote()) ? entry.getNote() : entry.getNote() - 1);
+        this.positionSpinner.setValue(entry.getPosition());
         this.shown.setSelected(entry.isShown());
         setKind(entry.getKind());
         this.nameEntry.setText(entry.getName());
@@ -119,7 +120,7 @@ public class TGPercussionConfig {
 
     private void updateEntry(PercussionEntry entry) {
         entry.setName(this.nameEntry.getText());
-        entry.setNote(this.noteSelect.getSelectedValue());
+        entry.setPosition(this.positionSpinner.getValue());
         entry.setShown(this.shown.isSelected());
         entry.setKind(getKind());
         UITableItem<PercussionEntry> item = this.table.getSelectedItem();
@@ -186,18 +187,14 @@ public class TGPercussionConfig {
         this.nameEntry.addModifyListener(event -> entryEdited());
 
         UILabel noteLabel = factory.createLabel(form);
-        noteLabel.setText(TuxGuitar.getProperty("percussion.score-note"));
+        noteLabel.setText(TuxGuitar.getProperty("position"));
         formLayout.set(noteLabel, 2, 1, UITableLayout.ALIGN_RIGHT, UITableLayout.ALIGN_CENTER, false, false);
 
-        this.noteSelect = factory.createDropDownSelect(form);
-        String[] tuningTexts = getValueLabels();
-        for (int value = 0; value < tuningTexts.length; value++) {
-            if (isNatural(value)) {
-                this.noteSelect.addItem(new UISelectItem<>(tuningTexts[value], value));
-            }
-        }
-        formLayout.set(this.noteSelect, 2, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_FILL, false, false, 1, 1, 80f, null, 2f);
-        this.noteSelect.addSelectionListener(event -> entryEdited());
+        this.positionSpinner = factory.createSpinner(form);
+        this.positionSpinner.setMinimum(PercussionReader.POSITION_MIN);
+        this.positionSpinner.setMaximum(PercussionReader.POSITION_MAX);
+        formLayout.set(this.positionSpinner, 2, 2, UITableLayout.ALIGN_LEFT, UITableLayout.ALIGN_FILL, false, false, 1, 1, 80f, null, 2f);
+        this.positionSpinner.addSelectionListener(event -> entryEdited());
 
         this.shown = factory.createCheckBox(form);
         this.shown.setText(TuxGuitar.getProperty("percussion.show-in-editor"));
@@ -251,31 +248,6 @@ public class TGPercussionConfig {
         this.addTableItems();
 
         TGDialogUtil.openDialog(window, TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
-    }
-
-    private boolean isNatural(int value) {
-        value = value % 12;
-        return value == 0 || value == 2 || value == 4 || value == 5 || value == 7 || value == 9 || value == 11;
-    }
-
-    private String[] getValueLabels() {
-        String[] valueNames = new String[MAX_NOTES * MAX_OCTAVES];
-        for (int i = 0; i < valueNames.length; i++) {
-            valueNames[i] = this.getValueLabel(i, true);
-        }
-        return valueNames;
-    }
-
-    private String getValueLabel(Integer value, boolean octave) {
-        StringBuilder sb = new StringBuilder();
-        if (value != null) {
-            sb.append(NOTE_NAMES[value % NOTE_NAMES.length]);
-
-            if (octave) {
-                sb.append(value / MAX_NOTES);
-            }
-        }
-        return sb.toString();
     }
 
     private static class KindSelect {

@@ -68,7 +68,6 @@ public abstract class TGLayout {
 	private boolean playModeEnabled;
 	private boolean tabNotePathRendererEnabled;
 
-	private TGPercussionNote[] percussionMap;
 	private List<TrackPosition> trackPositions;
 	
 	private TGController controller;
@@ -91,7 +90,7 @@ public abstract class TGLayout {
 		this.trackPositions = new ArrayList<TrackPosition>();
 		this.playModeEnabled = false;
 		this.resources = new TGResources(this);
-		this.drumMap = new TGDrumMap();
+		this.drumMap = TGDrumMap.DEFAULT_MAP;
 		this.updateDependants = new HashMap<TGMeasureHeader, List<TGMeasureHeader>>();
 		this.style = style;
 		if((this.style & DISPLAY_TABLATURE) == 0 && (this.style & DISPLAY_SCORE) == 0 ){
@@ -602,6 +601,10 @@ public abstract class TGLayout {
 		return this.drumMap;
 	}
 
+	public void setDrumMap(TGDrumMap map) {
+		this.drumMap = map;
+	}
+
 	public float getHeight() {
 		return this.height;
 	}
@@ -753,15 +756,6 @@ public abstract class TGLayout {
 		return spacing;
 	}
 
-	public void setPercussionMap(TGPercussionNote[] map) {
-		this.percussionMap = map;
-	}
-
-	public TGPercussionNote[] getPercussionMap() {
-		return this.percussionMap;
-	}
-
-	
 	public boolean isFirstMeasure(TGMeasureHeader mh){
 		return (mh.getNumber() == 1);
 	}

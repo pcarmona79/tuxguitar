@@ -69,19 +69,19 @@ public class PercussionWriter {
             Attr attrName = document.createAttribute(NAME_ATTRIBUTE);
             Attr attrShow = document.createAttribute(SHOW_ATTRIBUTE);
             Attr attrMidi = document.createAttribute(MIDI_ATTRIBUTE);
-            Attr attrScore = document.createAttribute(SCORE_ATTRIBUTE);
+            Attr attrPosition = document.createAttribute(POSITION_ATTRIBUTE);
             Attr attrKind = document.createAttribute(KIND_ATTRIBUTE);
 
             attrName.setNodeValue(entry.getName());
             attrShow.setNodeValue(Boolean.toString(entry.isShown()));
             attrMidi.setNodeValue(Integer.toString(i));
-            attrScore.setNodeValue(Integer.toString(entry.getNote()));
+            attrPosition.setNodeValue(Integer.toString(entry.getPosition()));
             attrKind.setNodeValue(Integer.toString(entry.getKind()));
 
             node.getAttributes().setNamedItem(attrName);
             node.getAttributes().setNamedItem(attrShow);
             node.getAttributes().setNamedItem(attrMidi);
-            node.getAttributes().setNamedItem(attrScore);
+            node.getAttributes().setNamedItem(attrPosition);
             node.getAttributes().setNamedItem(attrKind);
         }
         document.appendChild(shortcutsNode);

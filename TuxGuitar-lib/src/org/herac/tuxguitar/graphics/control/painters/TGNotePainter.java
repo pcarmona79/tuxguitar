@@ -33,7 +33,14 @@ public class TGNotePainter {
 		new TGLineTo(0.666666666666666f, (0.85f - 0.866025403784439f)),
 		new TGLineTo(1.166666666666666f, 0.85f)
 	);
-	
+
+	private static final TGPaintCommand PERCUSSION_TRIANGLE_DOWN_MODEL = new TGPaintModel(
+			new TGMoveTo(1.166666666666666f, (0.85f - 0.866025403784439f)),
+			new TGLineTo(0.166666666666666f, (0.85f - 0.866025403784439f)),
+			new TGLineTo(0.666666666666666f, 0.85f),
+			new TGLineTo(1.166666666666666f, (0.85f - 0.866025403784439f))
+	);
+
 	private static final TGPaintCommand PERCUSSION_CYMBAL_MODEL = new TGPaintModel(
 		new TGMoveTo(0.166666666666666f, 0.0f),
 		new TGLineTo(1.166666666666666f, 1.0f),
@@ -116,26 +123,8 @@ public class TGNotePainter {
 			new TGLineTo( 0f,    0f)
 	);
 
-	private static final TGPaintCommand TRIANGLE_UP_MODEL = new TGPaintModel(
-			new TGMoveTo( 0f,      1f),
-			new TGLineTo( 0.66f,      0f),
-			new TGLineTo( 1.33f,      1f),
-			new TGLineTo( 0f,      1f)
-	);
-
-	private static final TGPaintCommand TRIANGLE_DOWN_MODEL = new TGPaintModel(
-			new TGMoveTo( 0f,      0f),
-			new TGLineTo( 0.66f,      1f),
-			new TGLineTo( 1.33f,      0f),
-			new TGLineTo( 0f,      0f)
-	);
-
 	private static final TGPaintCommand SQUARE_MODEL = new TGPaintModel(
-			new TGMoveTo( 0f,      0f),
-			new TGLineTo( 1.33f,   0f),
-			new TGLineTo( 1.33f,   1f),
-			new TGLineTo( 0f,      1f),
-			new TGLineTo( 0f,      0f)
+			new TGRectangle(0, 0, 1.33f, 1f)
 	);
 
 	public static void paintNote(UIPainter painter, float x, float y, float scale) {
@@ -146,10 +135,6 @@ public class TGNotePainter {
 		HARMONIC_MODEL.paint(painter, x, y, scale);
 	}
 	
-	public static void paintTriangle(UIPainter painter, float x, float y, float scale) {
-		PERCUSSION_TRIANGLE_MODEL.paint(painter, x, y, scale);
-	}
-
 	public static void paintEffectCymbalXNote(UIPainter painter, float x, float y, float scale) {
 		PERCUSSION_CYMBAL_MODEL.paint(painter, x, y, scale);
 	}
@@ -160,7 +145,7 @@ public class TGNotePainter {
 	}
 
 	public static void paintTriangle(UIPainter painter, float x, float y,int dir,float scale) {
-		TGPaintCommand tgPaintCommand = (dir > 0 ? TRIANGLE_DOWN_MODEL : TRIANGLE_UP_MODEL);
+		TGPaintCommand tgPaintCommand = (dir > 0 ? PERCUSSION_TRIANGLE_DOWN_MODEL : PERCUSSION_TRIANGLE_MODEL);
 		tgPaintCommand.paint(painter, x, y, scale);
 	}
 

@@ -2,6 +2,7 @@ package org.herac.tuxguitar.app.view.dialog.percussion;
 
 import org.herac.tuxguitar.app.TuxGuitar;
 import org.herac.tuxguitar.app.system.icons.TGSkinEvent;
+import org.herac.tuxguitar.app.system.keybindings.KeyBindingActionManager;
 import org.herac.tuxguitar.app.system.language.TGLanguageEvent;
 import org.herac.tuxguitar.app.tools.percussion.PercussionEntry;
 import org.herac.tuxguitar.app.tools.percussion.PercussionManager;
@@ -121,7 +122,9 @@ public class TGPercussionEditor implements TGEventListener {
     }
 
     private void createButtons(PercussionEntry[] entries) {
+        KeyBindingActionManager keyManager = KeyBindingActionManager.getInstance(this.context);
         for (UIToggleButton button : this.buttons.values()) {
+            keyManager.removeListenersFrom(button);
             button.dispose();
             this.compositeLayout.removeControlAttributes(button);
         }
@@ -143,6 +146,7 @@ public class TGPercussionEditor implements TGEventListener {
             if (entry.isShown()) {
                 final int value = i;
                 final UIToggleButton button = factory.createToggleButton(this.composite, true);
+                keyManager.appendListenersTo(button);
                 this.compositeLayout.set(button, y, x, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, false, 1, 1, null, null, 1f);
                 button.setText(value + " " + entry.getName());
                 button.addSelectionListener(new UISelectionListener() {
@@ -164,15 +168,16 @@ public class TGPercussionEditor implements TGEventListener {
 
     private void addListeners() {
         TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(this.composite);
-        for (UIToggleButton button : buttons.values()) {
-            TuxGuitar.getInstance().getKeyBindingManager().appendListenersTo(button);
-        }
         TuxGuitar.getInstance().getSkinManager().addLoader(this);
         TuxGuitar.getInstance().getLanguageManager().addLoader(this);
         TuxGuitar.getInstance().getEditorManager().addRedrawListener(this);
     }
 
     private void removeListeners() {
+        KeyBindingActionManager keyManager = KeyBindingActionManager.getInstance(this.context);
+        for (UIToggleButton button : this.buttons.values()) {
+            keyManager.removeListenersFrom(button);
+        }
         TuxGuitar.getInstance().getSkinManager().removeLoader(this);
         TuxGuitar.getInstance().getLanguageManager().removeLoader(this);
         TuxGuitar.getInstance().getEditorManager().removeRedrawListener(this);
