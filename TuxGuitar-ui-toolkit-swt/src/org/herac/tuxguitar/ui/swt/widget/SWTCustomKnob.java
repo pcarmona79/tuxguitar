@@ -45,6 +45,7 @@ public class SWTCustomKnob extends SWTControl<Composite> implements UIKnob, UIMo
 		this.maximum = DEFAULT_MAXIMUM;
 		this.minimum = DEFAULT_MINIMUM;
 		this.increment = DEFAULT_INCREMENT;
+		this.enabled = true;
 		this.selectionHandler = new UISelectionListenerManager();
 		this.addMouseUpListener(this);
 		this.addMouseDragListener(this);
