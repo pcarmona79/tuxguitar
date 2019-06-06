@@ -164,7 +164,13 @@ public class TGTabItem {
     }
 
     protected void addListeners(UIControl control, TGTabWidget tabs) {
-        control.addMouseDownListener(event -> tabs.setSelectedItem(this));
+        control.addMouseDownListener(event -> {
+            if (event.getButton() == 2) {
+                this.closeButton.fireSelectionListener();
+            } else {
+                tabs.setSelectedItem(this);
+            }
+        });
     }
 
     void addListeners(TGTabWidget tabs) {

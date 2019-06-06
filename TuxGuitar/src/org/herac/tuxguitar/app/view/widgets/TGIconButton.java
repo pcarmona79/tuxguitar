@@ -118,4 +118,10 @@ public class TGIconButton {
     public void addSelectionListener(UISelectionListener listener) {
         this.listeners.add(listener);
     }
+
+    public void fireSelectionListener() {
+        for (UISelectionListener listener : this.listeners) {
+            listener.onSelect(new UISelectionEvent(this.canvas, 0));
+        }
+    }
 }
