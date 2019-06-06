@@ -222,10 +222,11 @@ public class TGMainToolBarSectionTransport extends TGMainToolBarSection implemen
 			}
 		}
 
-		TGMeasureHeader first = tablature.getSongManager().getFirstMeasureHeader(documentManager.getSong());
-		TGMeasureHeader last = tablature.getSongManager().getLastMeasureHeader(documentManager.getSong());
-		long minimum = first.getStart();
-		long maximum = last.getStart() + last.getLength() - 1;
+		TGSong song = documentManager.getSong();
+		TGMeasureHeader first = song != null ? tablature.getSongManager().getFirstMeasureHeader(song) : null;
+		TGMeasureHeader last = song != null ? tablature.getSongManager().getLastMeasureHeader(song) : null;
+		long minimum = first != null ? first.getStart() : 0;
+		long maximum = last != null ? last.getStart() + last.getLength() - 1 : 1;
 		float positionPercent = (position - minimum) / (float) (maximum - minimum);
 
 		TGColorManager tgColorManager = TGColorManager.getInstance(getToolBar().getContext());
