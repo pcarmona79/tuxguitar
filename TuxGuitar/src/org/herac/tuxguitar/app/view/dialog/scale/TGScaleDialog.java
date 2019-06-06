@@ -182,10 +182,12 @@ public class TGScaleDialog implements TGEventListener {
 
     private void updateIntervalButtons() {
         ScaleInfo info = scaleSelect.getSelectedValue();
-        TGScale scale = TuxGuitar.getInstance().getSongManager().getFactory().newScale();
-        scale.setNotes(info == null ? 0 : info.getKeys());
-        for (int i = 0; i < intervalButtons.size(); i++) {
-            intervalButtons.get(i).setSelected(scale.getNote(i));
+        if (info != null) {
+            TGScale scale = TuxGuitar.getInstance().getSongManager().getFactory().newScale();
+            scale.setNotes(info.getKeys());
+            for (int i = 0; i < intervalButtons.size(); i++) {
+                intervalButtons.get(i).setSelected(scale.getNote(i));
+            }
         }
     }
 
@@ -194,7 +196,9 @@ public class TGScaleDialog implements TGEventListener {
         scale.setNotes(scaleManager.getScale().getNotes());
         scale.setKey(scaleManager.getScale().getKey());
         scale.setNote(index, button.isSelected());
+        scaleSelect.setIgnoreEvents(true);
         scaleSelect.setSelectedValue(scaleManager.getScaleInfo(scale));
+        scaleSelect.setIgnoreEvents(false);
         selectScale(scale);
         updatePresetButtons();
     }
