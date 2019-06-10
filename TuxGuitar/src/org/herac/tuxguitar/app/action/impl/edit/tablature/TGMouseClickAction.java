@@ -31,8 +31,6 @@ public class TGMouseClickAction extends TGActionBase{
 			if (MidiPlayer.getInstance(getContext()).isRunning()) {
 				context.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_KEEP_SELECTION, true);
 				actionManager.execute(TGMoveToAction.NAME, context);
-			} else {
-				actionManager.execute(TGUpdateDragSelectionAction.NAME, context);
 			}
 			if( editorKit.isMouseEditionAvailable() && editorKit.fillAddOrRemoveBeat(context) ) {
 				
