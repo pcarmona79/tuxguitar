@@ -458,6 +458,7 @@ public class TGTableViewer implements TGEventListener {
 				if(this.selectedTrack != selectedTrack || this.selectedMeasure != selectedMeasure){
 					this.redrawRows(selectedTrack);
 					this.followHorizontalScroll(selectedMeasure);
+					this.table.getColumnCanvas().getControl().redraw();
 				}
 				this.selectedTrack = selectedTrack;
 				this.selectedMeasure = selectedMeasure;
