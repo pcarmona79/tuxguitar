@@ -37,5 +37,8 @@ public class TGTransportPlaySelectionAction extends TGActionBase {
 			}
 		}
 		transport.play();
+		if (!player.isRunning()) {
+			tablature.getCaret().goToTickPosition();
+		}
 	}
 }

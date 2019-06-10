@@ -119,7 +119,11 @@ public class MidiPlayer{
 			this.lock();
 			
 			this.stop();
-			this.tickPosition = TGDuration.QUARTER_TIME;
+			if (this.selectionStartPosition != -1) {
+				this.tickPosition = this.selectionStartPosition;
+			} else {
+				this.tickPosition = TGDuration.QUARTER_TIME;
+			}
 			this.setChangeTickPosition(false);
 		} finally {
 			this.unlock();
@@ -353,7 +357,11 @@ public class MidiPlayer{
 			
 			if( this.getMode().isLoop()){
 				this.stopSequencer();
-				this.setTickPosition(TGDuration.QUARTER_TIME);
+				if (this.selectionStartPosition != -1) {
+					this.setTickPosition(this.selectionStartPosition);
+				} else {
+					this.setTickPosition(TGDuration.QUARTER_TIME);
+				}
 				this.getMode().notifyLoop();
 				this.notifyLoop();
 				this.play();
