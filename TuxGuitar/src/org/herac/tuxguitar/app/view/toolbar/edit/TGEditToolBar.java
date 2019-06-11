@@ -16,7 +16,7 @@ import org.herac.tuxguitar.util.singleton.TGSingletonFactory;
 import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
 
 public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListener {
-	
+
 	private static final int SCROLL_INCREMENT = 10;
 	
 	private UIPanel control;
@@ -36,7 +36,6 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 		this.control.setLayout(layout);
 		
 		this.scroll = factory.createScrollBarPanel(this.control, true, false, false);
-		this.scroll.setVisible(visible);
 		this.scroll.setLayout(new UIScrollBarPanelLayout(false, true, false, true, false, true));
 		this.scroll.addFocusGainedListener(this);
 		this.scroll.getVScroll().setIncrement(SCROLL_INCREMENT);
@@ -54,6 +53,8 @@ public class TGEditToolBar extends TGToolBarModel implements UIFocusGainedListen
 
 		UISeparator separator = factory.createVerticalSeparator(this.control);
 		layout.set(separator, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, 2f, null, 0f);
+
+		this.updateVisibility(visible);
 	}
 
 	public void createSection(TGEditToolBarSection section) {
