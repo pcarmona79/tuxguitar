@@ -1,4 +1,4 @@
-package org.herac.tuxguitar.io.tg;
+package org.herac.tuxguitar.io.tg.v15;
 
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.song.factory.TGFactory;
@@ -12,19 +12,17 @@ public class TGStream {
 	
 	public static final String TG_FORMAT_NAME = ("TuxGuitar File Format");
 	
-	public static final String TG_FORMAT_VERSION = (TG_FORMAT_NAME + " - " + new TGVersion(2,0,0).getVersion() );
+	public static final String TG_FORMAT_VERSION = (TG_FORMAT_NAME + " - " + new TGVersion(1,5,0).getVersion() );
 	
 	public static final String TG_FORMAT_CODE = ("tg");
 	
-	public static final TGFileFormat TG_FORMAT = new TGFileFormat("TuxGuitar", "audio/x-tuxguitar", new String[]{ TG_FORMAT_CODE });
+	public static final TGFileFormat TG_FORMAT = new TGFileFormat("TuxGuitar 1.5", "audio/x-tuxguitar", new String[]{ TG_FORMAT_CODE });
 	
 	protected static final int TRACK_SOLO = 0x01;
 	
 	protected static final int TRACK_MUTE = 0x02;
 	
 	protected static final int TRACK_LYRICS = 0x04;
-	
-	protected static final int TRACK_LETRING_THROUGHOUT = 0x08;
 	
 	protected static final int MEASURE_HEADER_TIMESIGNATURE = 0x01;
 	
@@ -55,9 +53,7 @@ public class TGStream {
 	protected static final int BEAT_HAS_VOICE = 0x10;
 	
 	protected static final int BEAT_HAS_VOICE_CHANGES = 0x20;
-
-	protected static final int BEAT_HAS_MIXER_CHANGE = 0x40;
-
+	
 	protected static final int VOICE_HAS_NOTES = 0x01;
 	
 	protected static final int VOICE_NEXT_DURATION = 0x02;
@@ -119,12 +115,6 @@ public class TGStream {
 	protected static final int EFFECT_FADE_IN = 0x040000;
 	
 	protected static final int EFFECT_LET_RING = 0x080000;
-	
-	protected static final int EFFECT_FADE_OUT = 0x100000;
-	
-	protected static final int EFFECT_SLIDE_FROM = 0x200000;
-        
-	protected static final int EFFECT_SLIDE_TO = 0x400000;
 	
 	protected static final int GRACE_FLAG_DEAD = 0x01;
 	
