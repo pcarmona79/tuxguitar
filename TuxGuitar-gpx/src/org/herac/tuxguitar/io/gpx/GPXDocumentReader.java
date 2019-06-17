@@ -22,6 +22,8 @@ import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGNoteSpelling;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -104,8 +106,7 @@ public class GPXDocumentReader {
 			Node masterTrackNode = getChildNode(this.xmlDocument.getFirstChild(), "MasterTrack");
 			if( masterTrackNode != null ){
 				NodeList automationNodes = getChildNodeList(masterTrackNode, "Automations");
-				for( int i = 0 ; i < automationNodes.getLength() ; i ++ ){
-					Node automationNode = automationNodes.item( i );
+				for (Node automationNode : iterable(automationNodes)) {
 					if( automationNode.getNodeName().equals("Automation") ){
 						GPXAutomation automation = new GPXAutomation();
 						automation.setType( getChildNodeContent(automationNode, "Type"));
@@ -125,8 +126,7 @@ public class GPXDocumentReader {
 	public void readTracks(){
 		if( this.xmlDocument != null ){
 			NodeList trackNodes = getChildNodeList(this.xmlDocument.getFirstChild(), "Tracks");
-			for( int i = 0 ; i < trackNodes.getLength() ; i ++ ){
-				Node trackNode = trackNodes.item( i );
+			for (Node trackNode : iterable(trackNodes)) {
 				if( trackNode.getNodeName().equals("Track") ){
 					GPXTrack track = new GPXTrack();
 					track.setId( getAttributeIntegerValue(trackNode, "id") );
@@ -159,8 +159,7 @@ public class GPXDocumentReader {
 						}
 						NodeList soundsNodes = getChildNodeList(trackNode, "Sounds");
 						if( soundsNodes != null ){
-							for( int s = 0 ; s < soundsNodes.getLength() ; s ++ ){
-								Node soundNode = soundsNodes.item( s );
+							for (Node soundNode : iterable(soundsNodes)) {
 								if( soundNode.getNodeName().equals("Sound")) {
 									Node midiNode = getChildNode(soundNode, "MIDI");
 									if( midiNode != null ) {
@@ -185,8 +184,7 @@ public class GPXDocumentReader {
 					}
 					
 					if( propertiesNode != null ){
-						for( int p = 0 ; p < propertiesNode.getLength() ; p ++ ){
-							Node propertyNode = propertiesNode.item( p );
+						for (Node propertyNode : iterable(propertiesNode)) {
 							if (propertyNode.getNodeName().equals("Property") ) {
 								if (getAttributeValue(propertyNode, "name").equals("Tuning")) {
 									track.setTunningPitches(getChildNodeIntegerContentArray(propertyNode, "Pitches"));
@@ -206,14 +204,12 @@ public class GPXDocumentReader {
 	
 	public void readChords(NodeList propertiesNode) {
 		if( propertiesNode != null ){
-			for( int p = 0 ; p < propertiesNode.getLength() ; p ++ ){
-				Node propertyNode = propertiesNode.item( p );
-				if (propertyNode.getNodeName().equals("Property") ){ 
+			for (Node propertyNode : iterable(propertiesNode)) {
+				if (propertyNode.getNodeName().equals("Property") ){
 					if( getAttributeValue(propertyNode, "name").equals("DiagramCollection") ) {
 						NodeList itemsNode = getChildNodeList(propertyNode, "Items");
 						if( itemsNode != null ) {
-							for( int i = 0 ; i < itemsNode.getLength() ; i ++ ){
-								Node itemNode = itemsNode.item( i );
+							for (Node itemNode : iterable(itemsNode)) {
 								if (itemNode.getNodeName().equals("Item")) {
 									Node diagramNode = getChildNode(itemNode, "Diagram");
 									NodeList fretsNode = getChildNodeList(itemNode, "Diagram");
@@ -227,8 +223,7 @@ public class GPXDocumentReader {
 										chord.setBaseFret(getAttributeIntegerValue(diagramNode, "baseFret"));
 										if( chord.getFretCount() != null ) {
 											chord.setFrets(new Integer[chord.getFretCount()]);
-											for( int f = 0 ; f < fretsNode.getLength() ; f ++ ){
-												Node fretNode = fretsNode.item( f );
+											for (Node fretNode : iterable(fretsNode)) {
 												if (fretNode.getNodeName().equals("Fret")) {
 													Integer string = getAttributeIntegerValue(fretNode, "string");
 													if( string != null && string > 0 && string <= chord.getFretCount() ) {
@@ -251,8 +246,7 @@ public class GPXDocumentReader {
 	public void readMasterBars(){
 		if( this.xmlDocument != null ){
 			NodeList masterBarNodes = getChildNodeList(this.xmlDocument.getFirstChild(), "MasterBars");
-			for( int i = 0 ; i < masterBarNodes.getLength() ; i ++ ){
-				Node masterBarNode = masterBarNodes.item( i );
+			for (Node masterBarNode : iterable(masterBarNodes)) {
 				if( masterBarNode.getNodeName().equals("MasterBar") ){
 					GPXMasterBar masterBar = new GPXMasterBar();
 					masterBar.setBarIds( getChildNodeIntegerContentArray(masterBarNode, "Bars"));
@@ -292,8 +286,7 @@ public class GPXDocumentReader {
 	public void readBars(){
 		if( this.xmlDocument != null ){
 			NodeList barNodes = getChildNodeList(this.xmlDocument.getFirstChild(), "Bars");
-			for( int i = 0 ; i < barNodes.getLength() ; i ++ ){
-				Node barNode = barNodes.item( i );
+			for (Node barNode : iterable(barNodes)) {
 				if( barNode.getNodeName().equals("Bar") ){
 					GPXBar bar = new GPXBar();
 					bar.setId(getAttributeIntegerValue(barNode, "id"));
@@ -310,8 +303,7 @@ public class GPXDocumentReader {
 	public void readVoices(){
 		if( this.xmlDocument != null ){
 			NodeList voiceNodes = getChildNodeList(this.xmlDocument.getFirstChild(), "Voices");
-			for( int i = 0 ; i < voiceNodes.getLength() ; i ++ ){
-				Node voiceNode = voiceNodes.item( i );
+			for (Node voiceNode : iterable(voiceNodes)) {
 				if( voiceNode.getNodeName().equals("Voice") ){
 					GPXVoice voice = new GPXVoice();
 					voice.setId(getAttributeIntegerValue(voiceNode, "id"));
@@ -326,8 +318,7 @@ public class GPXDocumentReader {
 	public void readBeats(){
 		if( this.xmlDocument != null ){
 			NodeList beatNodes = getChildNodeList(this.xmlDocument.getFirstChild(), "Beats");
-			for( int i = 0 ; i < beatNodes.getLength() ; i ++ ){
-				Node beatNode = beatNodes.item( i );
+			for (Node beatNode : iterable(beatNodes)) {
 				if( beatNode.getNodeName().equals("Beat") ){
 					GPXBeat beat = new GPXBeat();
 					beat.setId(getAttributeIntegerValue(beatNode, "id"));
@@ -349,9 +340,8 @@ public class GPXDocumentReader {
 					
 					NodeList propertyNodes = getChildNodeList(beatNode, "Properties");
 					if( propertyNodes != null ){
-						for( int p = 0 ; p < propertyNodes.getLength() ; p ++ ){
-							Node propertyNode = propertyNodes.item( p );
-							if (propertyNode.getNodeName().equals("Property") ){ 
+						for (Node propertyNode : iterable(propertyNodes)) {
+							if (propertyNode.getNodeName().equals("Property") ){
 								String propertyName = getAttributeValue(propertyNode, "name");
 								
 								if( propertyName.equals("WhammyBar") ){
@@ -397,9 +387,8 @@ public class GPXDocumentReader {
 					
 					NodeList xpropertyNodes = getChildNodeList(beatNode, "XProperties");
 					if( xpropertyNodes != null ){
-						for( int p = 0 ; p < xpropertyNodes.getLength() ; p ++ ){
-							Node xpropertyNode = xpropertyNodes.item( p );
-							if (xpropertyNode.getNodeName().equals("XProperty") ){ 
+						for (Node xpropertyNode : iterable(xpropertyNodes)) {
+							if (xpropertyNode.getNodeName().equals("XProperty") ){
 								int propertyId = getAttributeIntegerValue(xpropertyNode, "id");
 								if( propertyId == 687935489 ){									
 									beat.setBrushDuration(getChildNodeIntegerContent(xpropertyNode, "Int"));
@@ -417,8 +406,7 @@ public class GPXDocumentReader {
 	public void readNotes(){
 		if( this.xmlDocument != null ){
 			NodeList noteNodes = getChildNodeList(this.xmlDocument.getFirstChild(), "Notes");
-			for( int i = 0 ; i < noteNodes.getLength() ; i ++ ){
-				Node noteNode = noteNodes.item( i );
+			for (Node noteNode : iterable(noteNodes)) {
 				if( noteNode.getNodeName().equals("Note") ){
 					GPXNote note = new GPXNote();
 					note.setId( getAttributeIntegerValue(noteNode, "id") );
@@ -446,9 +434,8 @@ public class GPXDocumentReader {
 					
 					NodeList propertyNodes = getChildNodeList(noteNode, "Properties");
 					if( propertyNodes != null ){
-						for( int p = 0 ; p < propertyNodes.getLength() ; p ++ ){
-							Node propertyNode = propertyNodes.item( p );
-							if (propertyNode.getNodeName().equals("Property") ){ 
+						for (Node propertyNode : iterable(propertyNodes)) {
+							if (propertyNode.getNodeName().equals("Property") ){
 								String propertyName = getAttributeValue(propertyNode, "name");
 								if( propertyName.equals("String") ){
 									note.setString( getChildNodeIntegerContent(propertyNode, "String") );
@@ -535,9 +522,8 @@ public class GPXDocumentReader {
 					
 					NodeList xpropertyNodes = getChildNodeList(noteNode, "XProperties");
 					if( xpropertyNodes != null ){
-						for( int p = 0 ; p < xpropertyNodes.getLength() ; p ++ ){
-							Node xpropertyNode = xpropertyNodes.item( p );
-							if (xpropertyNode.getNodeName().equals("XProperty") ){ 
+						for (Node xpropertyNode : iterable(xpropertyNodes)) {
+							if (xpropertyNode.getNodeName().equals("XProperty") ){
 								int propertyId = getAttributeIntegerValue(xpropertyNode, "id");
 								if( propertyId == 688062467 ){									
 									note.setTrillDuration(getChildNodeIntegerContent(xpropertyNode, "Int"));
@@ -555,8 +541,7 @@ public class GPXDocumentReader {
 	public void readRhythms(){
 		if( this.xmlDocument != null ){
 			NodeList rhythmNodes = getChildNodeList(this.xmlDocument.getFirstChild(), "Rhythms");
-			for( int i = 0 ; i < rhythmNodes.getLength() ; i ++ ){
-				Node rhythmNode = rhythmNodes.item( i );
+			for (Node rhythmNode : iterable(rhythmNodes)) {
 				if( rhythmNode.getNodeName().equals("Rhythm") ){
 					Node primaryTupletNode = getChildNode(rhythmNode, "PrimaryTuplet");
 					Node augmentationDotNode = getChildNode(rhythmNode, "AugmentationDot");
@@ -599,8 +584,7 @@ public class GPXDocumentReader {
 	
 	private Node getChildNode(Node node, String name ){
 		NodeList childNodes = node.getChildNodes();
-		for( int i = 0 ; i < childNodes.getLength() ; i ++ ){
-			Node childNode = childNodes.item( i );
+		for (Node childNode : iterable(childNodes)) {
 			if( childNode.getNodeName().equals( name ) ){
 				return childNode;
 			}
@@ -663,5 +647,26 @@ public class GPXDocumentReader {
 	
 	private int[] getChildNodeIntegerContentArray(Node node, String name ){
 		return getChildNodeIntegerContentArray(node, name, (" ") );
+	}
+
+	private static Iterable<Node> iterable(final NodeList nodeList) {
+		return new Iterable<Node>() {
+			public Iterator<Node> iterator() {
+				return new Iterator<Node>() {
+					private Node node = nodeList.getLength() > 0 ? nodeList.item(0) : null;
+					public boolean hasNext() {
+						return node != null;
+					}
+					public Node next() {
+						if (!hasNext()) {
+							throw new NoSuchElementException();
+						}
+						Node current = node;
+						this.node = this.node.getNextSibling();
+						return current;
+					}
+				};
+			}
+		};
 	}
 }
