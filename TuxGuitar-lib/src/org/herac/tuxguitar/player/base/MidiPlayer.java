@@ -69,6 +69,8 @@ public class MidiPlayer{
 	private int loopEHeader;
 	
 	private long loopSPosition;
+
+	private boolean hammerLegato;
 	
 	private boolean anySolo;
 
@@ -559,6 +561,7 @@ public class MidiPlayer{
 			midiSequenceParser.setSHeader( getLoopSHeader() );
 			midiSequenceParser.setEHeader( getLoopEHeader() );
 			midiSequenceParser.setMetronomeChannelId(getPercussionChannelId());
+			midiSequenceParser.setHammerLegato(getHammerLegato());
 			midiSequenceParser.parse(getSequencer().createSequence(this.getSong().countTracks() + 2));
 			this.infoTrack = midiSequenceParser.getInfoTrack();
 			this.metronomeTrack = midiSequenceParser.getMetronomeTrack();
@@ -1335,6 +1338,21 @@ public class MidiPlayer{
 	public long getLoopSPosition() {
 		return this.loopSPosition;
 	}
+
+	public boolean getHammerLegato() {
+		return this.hammerLegato;
+	}
+
+	public void setHammerLegato(boolean hammerLegato) {
+		try {
+			this.lock();
+
+			this.hammerLegato = hammerLegato;
+		} finally {
+			this.unlock();
+		}
+	}
+
 
 	public boolean isTryOpenFistDevice() {
 		return tryOpenFistDevice;

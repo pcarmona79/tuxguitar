@@ -28,5 +28,6 @@ public class TGReloadMidiDevicesAction extends TGActionBase {
 		if( force || !midiPlayer.isOutputPortOpen(midiPort) ){
 			midiPlayer.openOutputPort(midiPort, false);
 		}
+		midiPlayer.setHammerLegato(config.getBooleanValue(TGConfigKeys.HAMMER_LEGATO));
 	}
 }

@@ -56,6 +56,7 @@ public class TGConfigKeys {
 	public static final String COLOR_MEASURE_NUMBER = "color.measure.number";
 	public static final String MIDI_PORT = "midi.port";
 	public static final String MIDI_SEQUENCER = "midi.sequencer";
+	public static final String HAMMER_LEGATO = "player.hammer-legato";
 	public static final String MAX_HISTORY_FILES = "history.max-files";
 	public static final String FRETBOARD_STRING_SPACING = "fretboard.string-spacing";
 	public static final String FRETBOARD_STYLE = "fretboard.style";

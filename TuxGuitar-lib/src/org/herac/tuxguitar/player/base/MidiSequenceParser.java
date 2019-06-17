@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.player.base;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class MidiSequenceParser {
 	private int transpose;
 	private int sHeader;
 	private int eHeader;
+	private boolean hammerLegato;
 	
 	public MidiSequenceParser(TGSong song, TGSongManager songManager, int flags) {
 		this.song = song;
@@ -52,6 +54,7 @@ public class MidiSequenceParser {
 		this.sHeader = -1;
 		this.eHeader = -1;
 		this.firstTickMove = (int) ((flags & ADD_FIRST_TICK_MOVE) != 0 ? -TGDuration.QUARTER_TIME : 0);
+		this.hammerLegato = false;
 	}
 	
 	public int getInfoTrack(){
@@ -84,6 +87,10 @@ public class MidiSequenceParser {
 
 	public void setTranspose(int transpose) {
 		this.transpose = transpose;
+	}
+
+	public void setHammerLegato(boolean hammerLegato) {
+		this.hammerLegato = hammerLegato;
 	}
 	
 	public void parse(MidiSequenceHandler sequence) {
@@ -360,25 +367,26 @@ public class MidiSequenceParser {
 					long start = applyStrokeStart(note, (th.getStart() + startMove), stroke);
 					long noteduration = applyStrokeDuration(note, note.getVoice().getDuration().getTime(), stroke);
 					int defaultBend = DEFAULT_BEND;
-					List<TGNote> hammerNotes = getHammerNotes(sh, note,track,mIndex,bIndex, true);
-					// use legato if the hammered note is less than 12 semitones away
-					// possibly add a switch here to force disable legato?
-					if (!hammerNotes.isEmpty()) {
-						int base = hammerNotes.get(0).getValue();
-						int baseIndex = 0;
-						for (int i = 1; i < hammerNotes.size(); i++) {
-							int val = hammerNotes.get(i).getValue();
-							if (Math.abs(val - base) > MidiPlayer.MAX_BEND_SEMITONES) {
-								baseIndex = i;
-							    base = val;
-							}
-						}
-						if (baseIndex == hammerNotes.size() - 1) {
-							hammerNotes.clear();
-						} else {
-							int delta = note.getValue() - base;
-							defaultBend = (DEFAULT_BEND + (int) (delta * (DEFAULT_BEND_SEMI_TONE * 2)));
-						}
+					List<TGNote> hammerNotes = Collections.emptyList();
+					if (this.hammerLegato) {
+					    hammerNotes = getHammerNotes(sh, note,track,mIndex,bIndex, true);
+                        if (!hammerNotes.isEmpty()) {
+                            int base = hammerNotes.get(0).getValue();
+                            int baseIndex = 0;
+                            for (int i = 1; i < hammerNotes.size(); i++) {
+                                int val = hammerNotes.get(i).getValue();
+                                if (Math.abs(val - base) > MidiPlayer.MAX_BEND_SEMITONES) {
+                                    baseIndex = i;
+                                    base = val;
+                                }
+                            }
+                            if (baseIndex == hammerNotes.size() - 1) {
+                                hammerNotes.clear();
+                            } else {
+                                int delta = note.getValue() - base;
+                                defaultBend = (DEFAULT_BEND + (int) (delta * (DEFAULT_BEND_SEMI_TONE * 2)));
+                            }
+                        }
 					}
 
 					int velocity = getRealVelocity(sh, note, track, tgChannel, mIndex, bIndex);
@@ -758,13 +766,13 @@ public class MidiSequenceParser {
 						TGNote nextNote = voice.getNote( n );
 						if (!nextNote.equals(note) || mIndex != m ) {
 							if (nextNote.getString() == note.getString()) {
-								if (current.getEffect().isHammer()) {
+								if (this.hammerLegato && current.getEffect().isHammer()) {
 									hammerdelta += nextNote.getValue() - current.getValue();
 									if (!nextNote.isTiedNote() && restBeats > 0) {
 										return realDuration;
 									}
 								}
-								if (nextNote.isTiedNote() || (current.getEffect().isHammer() && Math.abs(hammerdelta) <= MidiPlayer.MAX_BEND_SEMITONES)) {
+								if (nextNote.isTiedNote() || (this.hammerLegato && current.getEffect().isHammer() && Math.abs(hammerdelta) <= MidiPlayer.MAX_BEND_SEMITONES)) {
 									realDuration += (mh.getMove() + beat.getStart() - lastEnd) + (nextNote.getVoice().getDuration().getTime());
 									lastEnd = (mh.getMove() + beat.getStart() + voice.getDuration().getTime());
 									letRing = (nextNote.getEffect().isLetRing() || track.isLetRing());

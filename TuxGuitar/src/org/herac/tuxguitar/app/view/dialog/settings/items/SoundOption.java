@@ -10,10 +10,7 @@ import org.herac.tuxguitar.player.base.MidiSequencer;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.toolbar.UIToolBar;
-import org.herac.tuxguitar.ui.widget.UIDropDownSelect;
-import org.herac.tuxguitar.ui.widget.UILayoutContainer;
-import org.herac.tuxguitar.ui.widget.UIPanel;
-import org.herac.tuxguitar.ui.widget.UISelectItem;
+import org.herac.tuxguitar.ui.widget.*;
 import org.herac.tuxguitar.util.TGSynchronizer;
 
 public class SoundOption extends TGSettingsOption {
@@ -29,7 +26,8 @@ public class SoundOption extends TGSettingsOption {
 	private String mpCurrentKey;
 	private List<MidiOutputPort> mpList;
 	private UIDropDownSelect<MidiOutputPort> mpCombo;
-	
+	private UICheckBox hammerLegato;
+
 	public SoundOption(TGSettingsEditor configEditor, UIToolBar toolBar, UILayoutContainer parent){
 		super(configEditor, toolBar, parent, TuxGuitar.getProperty("settings.config.sound"));
 		this.initialized = false;
@@ -63,7 +61,19 @@ public class SoundOption extends TGSettingsOption {
 		
 		this.mpCombo = uiFactory.createDropDownSelect(mpComposite);
 		mpCompositeLayout.set(this.mpCombo, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		
+
+		//---Player Options---//
+		showLabel(getPanel(), TuxGuitar.getProperty("settings.config.sound.player"), true, 5, 1);
+
+		UITableLayout playerOptionsLayout = new UITableLayout();
+		UIPanel playerOptions = uiFactory.createPanel(getPanel(), false);
+		playerOptions.setLayout(playerOptionsLayout);
+		this.indent(playerOptions, 6, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false);
+
+		this.hammerLegato = uiFactory.createCheckBox(playerOptions);
+		this.hammerLegato.setText(TuxGuitar.getProperty("settings.config.sound.player.hammer-legato"));
+		playerOptionsLayout.set(this.hammerLegato, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
 		this.loadConfig();
 	}
 	
@@ -75,13 +85,14 @@ public class SoundOption extends TGSettingsOption {
 				
 				SoundOption.this.mpCurrentKey = getConfig().getStringValue(TGConfigKeys.MIDI_PORT);
 				SoundOption.this.msCurrentKey = getConfig().getStringValue(TGConfigKeys.MIDI_SEQUENCER);
-				
+				final boolean hammerLegato = getConfig().getBooleanValue(TGConfigKeys.HAMMER_LEGATO);
+
 				MidiSequencer sequencer = TuxGuitar.getInstance().getPlayer().getSequencer();
 				MidiOutputPort outputPort = TuxGuitar.getInstance().getPlayer().getOutputPort();
 				
 				final String msLoaded = (sequencer != null ? sequencer.getKey() : null ) ;
 				final String mpLoaded = (outputPort != null ? outputPort.getKey() : null );
-				
+
 				TGSynchronizer.getInstance(getViewContext().getContext()).executeLater(new Runnable() {
 					public void run() {
 						if(!isDisposed()){
@@ -126,7 +137,10 @@ public class SoundOption extends TGSettingsOption {
 							if( selectedPortItem != null ){
 								SoundOption.this.mpCombo.setSelectedItem(selectedPortItem);
 							}
-							
+
+							//---Hammer Legato---//
+							SoundOption.this.hammerLegato.setSelected(hammerLegato);
+
 							SoundOption.this.initialized = true;
 							SoundOption.this.pack();
 						}
@@ -146,6 +160,7 @@ public class SoundOption extends TGSettingsOption {
 			if( midiPort != null ){
 				getConfig().setValue(TGConfigKeys.MIDI_PORT, midiPort.getKey());
 			}
+			getConfig().setValue(TGConfigKeys.HAMMER_LEGATO, this.hammerLegato.isSelected());
 		}
 	}
 	
@@ -153,6 +168,7 @@ public class SoundOption extends TGSettingsOption {
 		if(this.initialized){
 			getConfig().setValue(TGConfigKeys.MIDI_PORT, getDefaults().getValue(TGConfigKeys.MIDI_PORT));
 			getConfig().setValue(TGConfigKeys.MIDI_SEQUENCER, getDefaults().getValue(TGConfigKeys.MIDI_SEQUENCER));
+			getConfig().setValue(TGConfigKeys.HAMMER_LEGATO, getDefaults().getValue(TGConfigKeys.HAMMER_LEGATO));
 		}
 	}
 }
