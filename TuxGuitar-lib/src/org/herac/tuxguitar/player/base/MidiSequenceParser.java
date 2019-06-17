@@ -360,7 +360,7 @@ public class MidiSequenceParser {
 					long start = applyStrokeStart(note, (th.getStart() + startMove), stroke);
 					long noteduration = applyStrokeDuration(note, note.getVoice().getDuration().getTime(), stroke);
 					int defaultBend = DEFAULT_BEND;
-					List<TGNote> hammerNotes = getHammerNotes(sh, note,track,mIndex,bIndex,false);
+					List<TGNote> hammerNotes = getHammerNotes(sh, note,track,mIndex,bIndex, true);
 					// use legato if the hammered note is less than 12 semitones away
 					// possibly add a switch here to force disable legato?
 					if (!hammerNotes.isEmpty()) {
@@ -737,6 +737,7 @@ public class MidiSequenceParser {
 		long lastEnd = (note.getVoice().getBeat().getStart() + note.getVoice().getDuration().getTime() + sh.getMeasureHelper(mIndex).getMove());
 		long realDuration = duration;
 		int hammerdelta = 0;
+		int restBeats = 0;
 		int nextBIndex = (bIndex + 1);
 		int mCount = sh.getMeasureHelpers().size();
 		TGNote current = note;
@@ -753,31 +754,33 @@ public class MidiSequenceParser {
 						return realDuration;
 					}
 					int noteCount = voice.countNotes();
-					boolean anyLetRing = false;
 					for (int n = 0; n < noteCount; n++) {
 						TGNote nextNote = voice.getNote( n );
 						if (!nextNote.equals(note) || mIndex != m ) {
 							if (nextNote.getString() == note.getString()) {
 								if (current.getEffect().isHammer()) {
 									hammerdelta += nextNote.getValue() - current.getValue();
+									if (!nextNote.isTiedNote() && restBeats > 0) {
+										return realDuration;
+									}
 								}
 								if (nextNote.isTiedNote() || (current.getEffect().isHammer() && Math.abs(hammerdelta) <= MidiPlayer.MAX_BEND_SEMITONES)) {
 									realDuration += (mh.getMove() + beat.getStart() - lastEnd) + (nextNote.getVoice().getDuration().getTime());
 									lastEnd = (mh.getMove() + beat.getStart() + voice.getDuration().getTime());
 									letRing = (nextNote.getEffect().isLetRing() || track.isLetRing());
-									anyLetRing = true;
 									letRingBeatChanged = true;
 									current = nextNote;
 								} else {
 									return realDuration;
 								}
-							} else {
-								anyLetRing = anyLetRing || nextNote.getEffect().isLetRing()|| track.isLetRing();
 							}
 						}
+						if (letRingBeatChanged) {
+							restBeats = 0;
+						} else {
+							restBeats++;
+						}
 					}
-					if (!anyLetRing)
-						return realDuration;
 					if(letRing && !letRingBeatChanged){
 						realDuration += ( voice.getDuration().getTime() );
 					}
@@ -815,8 +818,8 @@ public class MidiSequenceParser {
 		
 		//Check for Hammer effect
 		if(!tgChannel.isPercussionChannel()){
-			List<TGNote> hammerNotes = getHammerNotes(sh, note,tgTrack,mIndex,bIndex,false);
-			if(!hammerNotes.isEmpty()){
+			TGNote previousNote = getPreviousNote(sh, note,tgTrack,mIndex,bIndex,false);
+			if(previousNote != null && previousNote.getEffect().isHammer()){
 				velocity = Math.max(TGVelocities.MIN_VELOCITY,(int) (velocity * 0.75f));
 			}
 		}
@@ -992,7 +995,38 @@ public class MidiSequenceParser {
 		}
 		return null;
 	}
-	
+
+	private TGNote getPreviousNote(MidiSequenceHelper pHelper, TGNote note,TGTrack track, int mIndex, int bIndex, boolean breakAtRest){
+		int nextBIndex = bIndex;
+		for (int m = mIndex; m >= 0; m--) {
+			MidiMeasureHelper mh = pHelper.getMeasureHelper( m );
+
+			TGMeasure measure = track.getMeasure( mh.getIndex() );
+			if( this.sHeader == -1 || this.sHeader <= measure.getNumber() ){
+				nextBIndex = (nextBIndex < 0 ? measure.countBeats() : nextBIndex);
+				for (int b = (nextBIndex - 1); b >= 0; b--) {
+					TGBeat beat = measure.getBeat( b );
+					TGVoice voice = beat.getVoice( note.getVoice().getIndex() );
+					if( !voice.isEmpty() ){
+						int noteCount = voice.countNotes();
+						for (int n = 0; n < noteCount; n ++) {
+							TGNote current = voice.getNote( n );
+							if(current.getString() == note.getString()){
+								return current;
+							}
+						}
+						if( breakAtRest ){
+							return null;
+						}
+					}
+				}
+			}
+			nextBIndex = -1;
+		}
+		return null;
+	}
+
+
 	private List<TGNote> getHammerNotes(MidiSequenceHelper pHelper, TGNote note,TGTrack track, int mIndex, int bIndex, boolean breakAtRest){
 		int nextBIndex = bIndex;
 		List<TGNote> notes = new ArrayList<>();
@@ -1005,6 +1039,7 @@ public class MidiSequenceParser {
 				for (int b = (nextBIndex - 1); b >= 0; b--) {
 					TGBeat beat = measure.getBeat( b );
 					TGVoice voice = beat.getVoice( note.getVoice().getIndex() );
+					boolean anyNotesAdded = false;
 					if( !voice.isEmpty() ){
 						int noteCount = voice.countNotes();
 						for (int n = 0; n < noteCount; n ++) {
@@ -1015,14 +1050,16 @@ public class MidiSequenceParser {
 										notes.add(note);
 									}
 									notes.add(0, current);
+									anyNotesAdded = true;
+									break;
 								} else {
 									return notes;
 								}
 							}
 						}
-						if( breakAtRest ){
-							return notes;
-						}
+					}
+					if (breakAtRest && !anyNotesAdded) {
+						return notes;
 					}
 				}
 			}
