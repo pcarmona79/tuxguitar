@@ -22,10 +22,10 @@ public class TGTabWidget {
     private final UITableLayout tabsLayout;
     private final UIButton scrollLeft;
     private final UIButton scrollRight;
-    private final UIPanel left;
-    private final UITableLayout leftLayout;
-    private final UIPanel right;
-    private final UITableLayout rightLayout;
+    private UIPanel left;
+    private UITableLayout leftLayout;
+    private UIPanel right;
+    private UITableLayout rightLayout;
 
     private final List<TGTabItem> items;
     private final List<SelectionListener> selectionListeners;
@@ -43,6 +43,29 @@ public class TGTabWidget {
         this.containerLayout = new UITableLayout(0f);
         this.container.setLayout(this.containerLayout);
 
+        this.scrollLeft = factory.createButton(this.container);
+        this.scrollLeft.addSelectionListener(event -> scrollTabs(-1));
+        this.containerLayout.set(this.scrollLeft, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+
+        this.scroll = factory.createScrollBarPanel(this.container, false, true, false);
+        this.scroll.setLayout(new UIScrollBarPanelLayout(true, false, true, true, true, false));
+        this.scroll.getHScroll().setVisible(false);
+        this.containerLayout.set(this.scroll, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+
+        this.scrollRight = factory.createButton(this.container);
+        this.scrollRight.addSelectionListener(event -> scrollTabs(1));
+        this.containerLayout.set(this.scrollRight, 1, 4, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, true, 1, 1, null, null, 0f);
+
+        this.tabs = factory.createPanel(this.scroll, false);
+        this.tabsLayout = new UITableLayout(0f);
+        this.tabs.setLayout(this.tabsLayout);
+
+        this.scroll.addResizeListener(event -> updateScrollButtons());
+
+        this.updateScrollButtons();
+    }
+
+    private void createLeft() {
         UIPanel leftContainer = factory.createPanel(this.container, false);
         UITableLayout leftContainerLayout = new UITableLayout(0f);
         leftContainer.setLayout(leftContainerLayout);
@@ -55,21 +78,11 @@ public class TGTabWidget {
 
         UIPanel leftBorder = factory.createPanel(leftContainer, false);
         leftBorder.setBgColor(this.colors.getBorderColor());
-        leftContainerLayout.set(leftBorder, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, 1f, 0f);
+        leftContainerLayout.set(leftBorder, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true, 1, 1, null, 1f, 0f);
 
-        this.scrollLeft = factory.createButton(this.container);
-        this.scrollLeft.addSelectionListener(event -> scrollTabs(-1));
-        this.containerLayout.set(this.scrollLeft, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
+    }
 
-        this.scroll = factory.createScrollBarPanel(this.container, false, true, false);
-        this.scroll.setLayout(new UIScrollBarPanelLayout(true, false, true, true, true, false));
-        this.scroll.getHScroll().setVisible(false);
-        this.containerLayout.set(this.scroll, 1, 3, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
-
-        this.scrollRight = factory.createButton(this.container);
-        this.scrollRight.addSelectionListener(event -> scrollTabs(1));
-        this.containerLayout.set(this.scrollRight, 1, 4, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
-
+    private void createRight() {
         UIPanel rightContainer = factory.createPanel(this.container, false);
         UITableLayout rightContainerLayout = new UITableLayout(0f);
         rightContainer.setLayout(rightContainerLayout);
@@ -78,19 +91,12 @@ public class TGTabWidget {
         this.right = factory.createPanel(rightContainer, false);
         this.rightLayout = new UITableLayout(0f);
         this.right.setLayout(this.rightLayout);
-        rightContainerLayout.set(rightContainer, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+        rightContainerLayout.set(rightContainer, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, null, null, 0f);
 
         UIPanel rightBorder = factory.createPanel(rightContainer, false);
         rightBorder.setBgColor(this.colors.getBorderColor());
-        rightContainerLayout.set(rightBorder, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, false, 1, 1, null, 1f, 0f);
+        rightContainerLayout.set(rightBorder, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_BOTTOM, true, true, 1, 1, null, 1f, 0f);
 
-        this.tabs = factory.createPanel(this.scroll, false);
-        this.tabsLayout = new UITableLayout(0f);
-        this.tabs.setLayout(this.tabsLayout);
-
-        this.scroll.addResizeListener(event -> updateScrollButtons());
-
-        this.updateScrollButtons();
     }
 
     private void updateScrollButtons() {
@@ -255,19 +261,25 @@ public class TGTabWidget {
     }
 
     public UIPanel getTopLeft() {
-        return left;
+        if (this.left == null) {
+            this.createLeft();
+        }
+        return this.left;
     }
 
     public UITableLayout getTopLeftLayout() {
-        return leftLayout;
+        return this.leftLayout;
     }
 
     public UIPanel getTopRight() {
-        return right;
+        if (this.right == null) {
+            this.createRight();
+        }
+        return this.right;
     }
 
     public UITableLayout getTopRightLayout() {
-        return rightLayout;
+        return this.rightLayout;
     }
 
 

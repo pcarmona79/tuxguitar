@@ -101,7 +101,7 @@ public class TGTabFolder implements TGEventListener {
 		this.container.setBgColor(this.tabs.getColors().getBorderColor());
 
 		this.toolbar = factory.createHorizontalToolBar(this.tabs.getTopLeft());
-		this.tabs.getTopLeftLayout().set(this.toolbar, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+		this.tabs.getTopLeftLayout().set(this.toolbar, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, true, 1, 1, null, null, 0f);
 
 		this.newSong = this.toolbar.createActionItem();
 		this.newSong.addSelectionListener(new TGActionProcessorListener(this.context, TGNewSongAction.NAME));
