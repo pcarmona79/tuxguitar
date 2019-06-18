@@ -163,6 +163,9 @@ public class TGTabWidget {
         item.addListeners(this);
         item.getCloseButton().addSelectionListener(event -> tabCloseClicked(item));
         this.tabsLayout.set(item.getControl(), 1, this.items.size(), UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
+        this.scroll.computePackedSize(null, null);
+        float trim = this.scroll.getPackedSize().getHeight() - this.tabs.getPackedSize().getHeight();
+        this.tabsLayout.set(item.getControl(), UITableLayout.PACKED_HEIGHT, item.getControl().getPackedSize().getHeight() - trim);
         if (this.currentIndex == -1) {
             this.setSelectedIndex(0);
         }
