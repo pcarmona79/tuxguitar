@@ -1660,6 +1660,10 @@ public class TGMeasureManager {
 						beat.getStroke().copyFrom( currentBeat.getStroke() );
 						currentBeat.getStroke().setDirection(TGStroke.STROKE_NONE);
 					}
+					if( currentBeat.hasMixerChange() ){
+						beat.setMixerChange( currentBeat.getMixerChange() );
+						currentBeat.removeMixerChange();
+					}
 				}
 				// Make sure to remove another voice instance from old beat.
 				TGVoice newVoice = getSongManager().getFactory().newVoice(voice.getIndex());
