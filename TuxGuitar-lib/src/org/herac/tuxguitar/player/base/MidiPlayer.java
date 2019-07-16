@@ -306,6 +306,7 @@ public class MidiPlayer{
 					
 					if( this.isChangeTickPosition()) {
 						this.changeTickPosition();
+						this.updateMixerChanges();
 					}
 					this.tickPosition = getSequencer().getTickPosition();
 				} finally {
