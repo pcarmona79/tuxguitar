@@ -1651,6 +1651,10 @@ public class TGMeasureManager {
 						beat.setText( currentBeat.getText() );
 						currentBeat.removeText();
 				}
+				if ( currentBeat.hasMixerChange() && isUniqueVoice(voice, false) ){
+					beat.setMixerChange( currentBeat.getMixerChange() );
+					currentBeat.removeMixerChange();
+				}
 				if( isUniqueVoice(voice, true) ){
 					if( currentBeat.isChordBeat() ){
 						beat.setChord( currentBeat.getChord() );
@@ -1659,10 +1663,6 @@ public class TGMeasureManager {
 					if( currentBeat.getStroke().getDirection() != TGStroke.STROKE_NONE ){
 						beat.getStroke().copyFrom( currentBeat.getStroke() );
 						currentBeat.getStroke().setDirection(TGStroke.STROKE_NONE);
-					}
-					if( currentBeat.hasMixerChange() ){
-						beat.setMixerChange( currentBeat.getMixerChange() );
-						currentBeat.removeMixerChange();
 					}
 				}
 				// Make sure to remove another voice instance from old beat.
