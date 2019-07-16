@@ -82,7 +82,11 @@ public class TGTrackManager {
 		}
 		return measures;
 	}
-	
+
+	public List<TGMeasure> getMeasuresFrom(TGTrack track,long fromStart) {
+		return getMeasuresBetween(track, fromStart, Long.MAX_VALUE);
+	}
+
 	/**
 	 * Retorna Todos los desde Start hasta el final del compas
 	 */
@@ -166,7 +170,7 @@ public class TGTrackManager {
 	}
 	
 	public void moveOutOfBoundsBeatsToNewMeasure(TGTrack track, long start){
-		Iterator<TGMeasure> it = getMeasuresBeforeEnd(track,start).iterator();
+		Iterator<TGMeasure> it = getMeasuresFrom(track,start).iterator();
 		while( it.hasNext() ){
 			TGMeasure measure = (TGMeasure)it.next();
 			getSongManager().getMeasureManager().moveOutOfBoundsBeatsToNewMeasure(measure);
