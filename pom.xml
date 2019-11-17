@@ -331,7 +331,7 @@
 			<dependency>
 				<groupId>${org.eclipse.swt.groupId}</groupId>
 				<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-				<version>4.11</version>
+				<version>4.13</version>
 			</dependency>
 			<dependency>
 				<groupId>${org.eclipse.swt.groupId}</groupId>
@@ -351,12 +351,12 @@
 			<dependency>
 				<groupId>${org.eclipse.swt.groupId}</groupId>
 				<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
-				<version>4.11</version>
+				<version>4.13</version>
 			</dependency>
 			<dependency>
 				<groupId>${org.eclipse.swt.groupId}</groupId>
 				<artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
-				<version>4.11</version>
+				<version>4.13</version>
 			</dependency>
 			<dependency>
 				<groupId>${org.eclipse.swt.groupId}</groupId>
@@ -374,12 +374,12 @@
 			<dependency>
 				<groupId>com.itextpdf</groupId>
 				<artifactId>itextpdf</artifactId>
-				<version>5.3.4</version>
+				<version>5.5.13.1</version>
 			</dependency>
 			<dependency>
 				<groupId>com.itextpdf.tool</groupId>
 				<artifactId>xmlworker</artifactId>
-				<version>1.1.1</version>
+				<version>5.5.13.1</version>
 			</dependency>
 			<!-- /iText -->
 			
@@ -387,7 +387,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-compress</artifactId>
-				<version>1.18</version>
+				<version>1.19</version>
 			</dependency>
 			<!-- /commons compress -->
 		</dependencies>
