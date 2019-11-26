@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.io.tg;
 
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 
 import org.herac.tuxguitar.io.base.TGFileFormat;
@@ -22,7 +23,11 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 	
 	private DataInputStream dataInputStream;
 	private TGFactory factory;
-	
+
+	private long byteOffset = 0;
+	private int trackCounter = 0;
+	private int beatCounter = 0;
+
 	public TGSongReaderImpl() {
 		super();
 	}
@@ -30,26 +35,34 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 	public TGFileFormat getFileFormat(){
 		return TG_FORMAT;
 	}
-	
+
 	public void read(TGSongReaderHandle handle) throws TGFileFormatException {
 		try {
 			this.factory = handle.getFactory();
 			this.dataInputStream = new DataInputStream(handle.getInputStream());
 			
 			TGFileFormat fileFormat = new TGFileFormatDetectorImpl(SUPPORTED_FORMAT).getFileFormat(this.dataInputStream);
-			if( fileFormat == null || !fileFormat.equals(this.getFileFormat()) ) {
+			if (fileFormat == null || !fileFormat.equals(this.getFileFormat())) {
 				throw new TGFileFormatException("Unsupported Version");
 			}
-			
+
+			this.byteOffset = 1 + SUPPORTED_FORMAT.getVersion().length() * 2;
+
 			TGSong song = this.read();
 			this.dataInputStream.close();
 			handle.setSong(song);
 			this.autoPercussion(handle.getFactory(), handle.getSong());
+		} catch (EOFException ex) {
+			throw new TGFileFormatException(String.format("Unexpected end of file at %s. File may be corrupt.", this.formatFilePosition()), ex);
 		} catch (Throwable throwable) {
 			throw new TGFileFormatException(throwable);
 		}
 	}
-	
+
+	private String formatFilePosition() {
+		return String.format("0x%08X (Track %d, Beat %d)", this.byteOffset, this.trackCounter + 1, this.beatCounter + 1);
+	}
+
 	private TGSong read() throws IOException {
 		TGSong song = this.factory.newSong();
 		
@@ -108,6 +121,8 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 		
 		//leo las pistas
 		for(int i = 0;i < trackCount;i++){
+			this.trackCounter = i;
+			this.beatCounter = 0;
 			song.addTrack(readTrack(i + 1,song));
 		}
 		
@@ -295,12 +310,13 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 		
 		channel.addParameter(parameter);
 	}
-	
+
 	private void readBeats(TGMeasure measure,TGBeatData data) throws IOException {
 		int header = BEAT_HAS_NEXT;
 		while(((header & BEAT_HAS_NEXT) != 0)){
 			header = readShort();
 			readBeat(header, measure, data);
+			this.beatCounter++;
 		}
 	}
 	
@@ -730,11 +746,15 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 	}
 	
 	private byte readByte() throws IOException {
-		return (byte)this.dataInputStream.read();
+		byte b = this.dataInputStream.readByte();
+		this.byteOffset +=  1;
+		return b;
 	}
-	
+
 	private int readHeader() throws IOException {
-		return this.dataInputStream.read();
+		int b = this.dataInputStream.readUnsignedByte();
+		this.byteOffset += 1;
+		return b;
 	}
 	
 	private int readHeader(int bCount) throws IOException {
@@ -746,21 +766,26 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 	}
 	
 	private short readShort() throws IOException {
-		return this.dataInputStream.readShort();
+		short s = this.dataInputStream.readShort();
+		this.byteOffset += 2;
+		return s;
 	}
 	
 	private String readUnsignedByteString() throws IOException {
-		return readString( (this.dataInputStream.read() & 0xFF ));
+		return readString(this.readHeader() & 0xFF);
 	}
-	
+
 	private String readIntegerString() throws IOException {
-		return readString(this.dataInputStream.readInt());
+		int len = this.dataInputStream.readInt();
+		this.byteOffset += 4;
+		return readString(len);
 	}
 	
 	private String readString(int length) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < length; i ++){
 			sb.append(this.dataInputStream.readChar());
+			this.byteOffset += 2;
 		}
 		return sb.toString();
 	}
