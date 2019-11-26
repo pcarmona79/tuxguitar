@@ -359,7 +359,7 @@ public class TGSongWriterImpl extends TGStream implements TGSongWriter {
 		}
 		
 		// escribo la cabecera
-		writeHeader(header);
+		writeShort((short) header);
 		
 		//escribo las voces
 		writeVoices(header, beat, data);

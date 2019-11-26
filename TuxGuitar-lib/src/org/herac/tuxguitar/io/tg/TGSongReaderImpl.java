@@ -299,7 +299,7 @@ public class TGSongReaderImpl extends TGStream implements TGSongReader {
 	private void readBeats(TGMeasure measure,TGBeatData data) throws IOException {
 		int header = BEAT_HAS_NEXT;
 		while(((header & BEAT_HAS_NEXT) != 0)){
-			header = readHeader();
+			header = readShort();
 			readBeat(header, measure, data);
 		}
 	}
