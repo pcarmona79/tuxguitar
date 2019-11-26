@@ -98,7 +98,7 @@ public class EditorCache {
 					}
 					if (this.playMeasure != null && !isPlayingCountDown()) {
 						this.playBeat = (TGBeatImpl)manager.getMeasureManager().getBeatIn(this.playMeasure, start);
-						if(this.playBeat != null){
+						if(this.playBeat != null && this.playMeasure != null){
 							TGBeat next = manager.getMeasureManager().getNextBeat(this.playMeasure.getBeats(), this.playBeat);
 							if( next != null ){
 								this.playBeatEnd = next.getStart();
