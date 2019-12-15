@@ -672,20 +672,22 @@ public class MidiPlayer{
 			if (measure != null) {
 				TGBeat beat = this.getSongManager().getMeasureManager().getBeatIn(measure, tick);
 				if (beat != null) {
-					TGMixerChange mixer = this.getSongManager().getMostRecentMixerChanges(track, beat, true);
 					int channelId = track.getChannelId();
+					if (channelId != -1) {
+						TGMixerChange mixer = this.getSongManager().getMostRecentMixerChanges(track, beat, true);
 
-					final int bank = mixer.getBank();
-					final int program = mixer.getProgram();
-					final int volume = (int)((this.getVolume() / 10.00) * mixer.getVolume());
-					final int balance = mixer.getBalance();
-					final int chorus = mixer.getChorus();
-					final int reverb = mixer.getReverb();
-					final int phaser = mixer.getPhaser();
-					final int tremolo = mixer.getTremolo();
+						final int bank = mixer.getBank();
+						final int program = mixer.getProgram();
+						final int volume = (int) ((this.getVolume() / 10.00) * mixer.getVolume());
+						final int balance = mixer.getBalance();
+						final int chorus = mixer.getChorus();
+						final int reverb = mixer.getReverb();
+						final int phaser = mixer.getPhaser();
+						final int tremolo = mixer.getTremolo();
 
-					this.updateProgram(channelId, bank, program);
-					this.updateController(channelId, volume, balance, chorus, reverb, phaser, tremolo, 127);
+						this.updateProgram(channelId, bank, program);
+						this.updateController(channelId, volume, balance, chorus, reverb, phaser, tremolo, 127);
+					}
 				}
 			}
 		}
