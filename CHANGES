@@ -1,7 +1,130 @@
-TuxGuitar 1.5 changes:
+12/07/2021
+added bach bourree as template / startup file, location:
+/home/ptero/tuxguitar/TuxGuitar/share/templates/template-default.tg
 
-* String count range moved to 1 - 25
-* New Oxygen Dark skin created for dark themes
-* New synth host plugin with FX support
-* Native VST support (only for Windows/GNULinux releases) for the new synth host plugin.
-* Zomm in/out support  
+key names instead of number of sharps / flats for german language file in
+/home/ptero/tuxguitar/TuxGuitar/share/lang/messages_de.properties
+
+changed keys for note duration change near the cursor arrows.
+increase : ','  decrease: '-'
+/home/ptero/tuxguitar/TuxGuitar/dist/tuxguitar-shortcuts.xml
+i guess increase makes the notes smaller. 
+
+todo:
+put Export in top level menu???
+    ->menu structure too obscure
+make little "1" disappear from chord diagrams in pdf printout
+    ->in case diagrams begin at zero fret
+make tab decal for pdf export
+documentation opens in text editor???
+tuxguitar is not in the debian buster repo.... :-()
+
+delete measures takes in the clipboard range
+    ->this should also be in transpose
+/home/ptero/tuxguitar/TuxGuitar/src/org/herac/tuxguitar/app/view/dialog/measure/TGMeasureRemoveDialog.java
+...takes in measure range, i guess like this:
+TGBeatRange beats = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT_RANGE);
+could take this as blueprint for transpose ;-)
+
+save Tool values
+->how is file history saved?
+
+Transpose Patch
+Guess, there's two ways to copy and paste ... the clipboard used to 
+be there ever since and can be used via the menu:
+/home/ptero/tuxguitar/TuxGuitar/src/org/herac/tuxguitar/app/view/dialog/clipboard/TGMeasureCopyDialog.java
+this one does the same and is new
+/home/ptero/tuxguitar/TuxGuitar-editor-utils/src/org/herac/tuxguitar/editor/action/measure/TGPasteMeasureAction.java
+
+hey guys,
+i just tried to add the capability to transpose a range of measures .... 
+realized that the paste action has transpose functionality also.
+but only if copy measure dialog from the hamburger menu is called before.
+actually the new select 
+
+pasting measures makes use of the transpose tool in
+/home/ptero/tuxguitar/TuxGuitar/src/org/herac/tuxguitar/app/view/dialog/clipboard/TGPasteDialog.java
+...but it doesn't work. again uses TGActionProcessor ...
+/home/ptero/tuxguitar/TuxGuitar-editor-utils/src/org/herac/tuxguitar/editor/action/TGActionProcessor.java
+
+just pasting in the patch from tuxguitar 1.5.4 doesn't work ;-()
+
+obviously TGActionProcessor has changed, now contains new process method:
+> 	public static void process(TGContext context, String actionName, Object ... attributes) {
+> 		TGActionProcessor tgActionProcessor = new TGActionProcessor(context, actionName);
+> 		for (int i = 0; i < attributes.length - 1; i += 2) {
+> 			tgActionProcessor.setAttribute((String) attributes[i], attributes[i+1]);
+> 		}
+> 		tgActionProcessor.process();
+> 	}
+not sure how this affects TGTransposeAction.
+
+
+OLD transpose patch:
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/share/lang/messages_en.properties
+            -> added 
+        tools.transpose.measures
+        tools.transpose.measures-from
+        tools.transpose.measures-to
+        tools.transpose.apply-to-measure-range
+
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/action/impl/tools/TGTransposeAction.java
+            -> added attributes and logic for measure range 
+
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/action/impl/tools/TGTransposeAction.java
+            -> added new attributes for measure range
+
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar-editor-utils/src/org/herac/tuxguitar/editor/action/TGActionProcessor.java
+        contains a hashmap to make attributes available for actions...
+        so the transpose action needs a new attribute ??!?!?
+
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/view/dialog/transpose/TGTransposeDialog.java
+            -> added measures selection
+
+        where do these properties come from?
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/TuxGuitar.java
+        uses
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/system/language/TGLanguageManager.java
+        i think it originates here:
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/share/lang/messages_de.properties
+            -> added tools.transpose.measures-from tools.transpose.measures-to
+
+        mmmhh... UITableLayout ....is used to display the transpose dialog. But how to get in there?
+        looking for a place in the code where something is inserted...
+
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar-lib/src/org/herac/tuxguitar/song/models/TGSong.java
+        the lines here are:
+        //	public int countMeasureHeaders(){
+        //		return this.measureHeaders.size();
+        //	}
+
+        ok. looking for a place where number of measures is computed... should be in the copy and paste action.
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/view/dialog/measure/TGMeasureCopyDialog.java
+        and the line is ....
+        // int measureCount = song.countMeasureHeaders();
+
+        this is the plan:
+            - get the number of measures of current song
+            - display a checkbox in the transpose dialog to select 'from' and 'to' measures
+            - pass these parameters to the transpose action
+
+        ok, where to get the number of measures of the song?
+        not quite sure, but this apparently gives you the actual measure...:
+        // TGMeasure contextMeasure = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_MEASURE);
+        // ...
+        // TGMeasure measure = songManager.getTrackManager().getMeasure(track, contextMeasure.getNumber() );
+
+        heeeeeeere we go, transpose action found:
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/action/impl/tools/TGTransposeAction.java
+        ... uses SongManager and MeasureManager to do stuff...
+
+        looking for a place where an operation on multiple measures occurs....
+        here it is, copy and paste measures:
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar-editor-utils/src/org/herac/tuxguitar/editor/action/measure/TGCopyMeasureAction.java
+
+        make transposing multiple measures easier...?
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar/src/org/herac/tuxguitar/app/view/dialog/transpose/TGTransposeDialog.java
+            -> changed comment to "semitone selection"
+        ... uses ...
+        /home/ptero/eclipse-workspace/tuxguitar-1.5.4-src/TuxGuitar-editor-utils/src/org/herac/tuxguitar/editor/action/TGActionProcessor.java
+
