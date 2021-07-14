@@ -1,24 +1,17 @@
 # TODO:
 put Export in top level menu???
     ->menu structure too obscure
-make little "1" disappear from chord diagrams in pdf printout
-    ->in case diagrams begin at zero fret
 make tab decal for pdf export
 documentation opens in text editor???
 tuxguitar is not in the debian buster repo.... :-()
-
-delete measures takes in the clipboard range
-    ->this should also be in transpose
-/home/ptero/tuxguitar/TuxGuitar/src/org/herac/tuxguitar/app/view/dialog/measure/TGMeasureRemoveDialog.java
-...takes in measure range, i guess like this:
-TGBeatRange beats = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT_RANGE);
-could take this as blueprint for transpose ;-)
-
 save Tool values
-->how is file history saved?
+    ->how is file history saved?
 
 
 ## CHANGELOG:
+
+14/07/2021
+display fret numbers in chord diagrams only if higher than 1
 
 13/07/2021
 transpose tool has new option "transpose selection".
@@ -40,3 +33,4 @@ i guess increase makes the notes smaller.
 /home/ptero/tuxguitar/TuxGuitar/share/lang/messages_en.properties
     -> added :
 tools.transpose.apply-to-selection
+
