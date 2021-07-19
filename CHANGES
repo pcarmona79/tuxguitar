@@ -1,16 +1,23 @@
 # TODO:
 put Export in top level menu???
     ->menu structure too obscure
+        where is that little menu above the file tabs....?
 make tab decal for pdf export
     ->paint tab clef
 documentation opens in text editor???
-tuxguitar is not in the debian buster repo.... :-()
 save Tool values
     ->how is file history saved?
-note names in lilypond export?
 
 
 ## CHANGELOG:
+
+19/07/2021
+added save / save as option to tab folder menu
+
+16/07/2021
+lilypond export is reverted to 1.5.4 - in
+TuxGuitar-lilypond/src/org/herac/tuxguitar/io/lilypond/LilypondOutputStream.java
+due to false enharmonics when exporting from gp3
 
 14/07/2021
 display fret numbers in chord diagrams only if higher than 1
@@ -37,15 +44,3 @@ i guess increase makes the notes smaller.
 tools.transpose.apply-to-selection
 
 
-note names in lilypond export
-/home/ptero/tuxguitar/TuxGuitar-lilypond/src/org/herac/tuxguitar/io/lilypond/LilypondOutputStream.java
-uses TGNoteSpelling
-i guess addSong actually writes things... nope. only header and config stuff.
-addSongDefinitions calls addMusic....
-addMeasureComponents adds inner components
-addBeat adds what is in the beat
-notes get written starting from line 567
-using TGNoteSpelling.toLilypondString
-...lilypond export from gp3 files produces more enharmonic errors
-than lily exp from .tg native files.
-possible workaround: save as .tg .... exit tuxguitar .... start again and open file as .tg...

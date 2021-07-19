@@ -128,7 +128,7 @@ public abstract class TGNoteSpelling {
 				break;
 			}
 		}
-		System.out.println("fromString : " + keysignature);
+		// System.out.println("fromString : " + keysignature);
 		
 		// translate
 		keysignature = initializeKey(keysignature);
@@ -177,7 +177,7 @@ public abstract class TGNoteSpelling {
 			// update and return
 			this.keySignature = keysignature;
 		}
-		System.out.println(" init key end val: " + keysignature);
+		// System.out.println(" init key end val: " + keysignature);
 		return keysignature;
 	}
 	
@@ -225,7 +225,7 @@ public abstract class TGNoteSpelling {
 		{
 			accidental++;
 		}
-		System.out.println("setSpellingFromKey: pitch# " + newPitchNumber + " acc " + accidental + " octave " + thisOctave);
+		// System.out.println("setSpellingFromKey: pitch# " + newPitchNumber + " acc " + accidental + " octave " + thisOctave);
 		this.setSpelling(newPitchNumber,  accidental, thisOctave);
 	}
 
@@ -244,7 +244,7 @@ public abstract class TGNoteSpelling {
 			// flat accidentals are negative
 			this.accidental = 0- accidentals[newNoteSemitone];
 		}
-		System.out.println("setSpelling: notes " + notes[newNoteSemitone] + " midi " + midiValue + " acc " + accidentals[newNoteSemitone] );
+		// System.out.println("setSpelling: notes " + notes[newNoteSemitone] + " midi " + midiValue + " acc " + accidentals[newNoteSemitone] );
 		
 		this.pitchNumber = notes[newNoteSemitone];
 		this.midiValue = midiValue;
@@ -339,7 +339,7 @@ public abstract class TGNoteSpelling {
 				t++;
 			}
 		}
-		System.out.println("result: " + result + " pitch# " + pitchNumber + " midi " + midiValue + " accidental " + getAccidental());
+		// System.out.println("result: " + result + " pitch# " + pitchNumber + " midi " + midiValue + " accidental " + getAccidental());
 		return result;
 	}
 
