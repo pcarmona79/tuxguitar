@@ -1,15 +1,15 @@
 # TODO:
-put Export in top level menu???
-    ->menu structure too obscure
-        where is that little menu above the file tabs....?
 make tab decal for pdf export
     ->paint tab clef
 documentation opens in text editor???
 save Tool values
     ->how is file history saved?
-
+more intuitive tuner
 
 ## CHANGELOG:
+
+22/07/2021
+added default shortcut for tuner: "shift t"
 
 19/07/2021
 added save / save as option to tab folder menu
@@ -44,3 +44,32 @@ i guess increase makes the notes smaller.
 tools.transpose.apply-to-selection
 
 
+yin pitch detection:
+TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTuner.java
+...opens dataline with settings and reads audio
+doFFT does actual processing
+computeFFT seems unused
+TGTuner owns FFT, which has the method computeFFT
+when dataline is opened, fft is initialized before
+->so we should create a yin class, and instantiate with settings ...?!?
+TGTuner owns settings object
+do they normalize audio data????
+
+
+
+
+existing tuner:
+TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTuner.java
+...fires frequency to main window, is a
+TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTunerListener.java
+TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTunerDialog.java
+implements TGTunerListener.
+here it splits in rough and fine widget...
+the rough widget shows frequency on a tone axis
+fine widget represents area around specific tone 
+with a needle like pointer
+tuner when 'idle' shows 119 hz, would be better to show nothing.
+tone recognition is ok, but no auto fine widget.
+fine widget only works when string is selected.
+    -> the needle doesn't display anything, unless you select a string to tune.
+nice to have: auto string selection !

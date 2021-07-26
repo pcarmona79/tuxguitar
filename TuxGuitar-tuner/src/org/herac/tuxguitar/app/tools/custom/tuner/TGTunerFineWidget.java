@@ -115,6 +115,7 @@ public class TGTunerFineWidget {
 	
 	public void setCurrentFrequency(double freq) {
 		this.currentFrequency = freq;
+		// todo: get nearest string && activate
 		this.redraw();
 	}
 

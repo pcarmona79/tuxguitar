@@ -108,4 +108,5 @@
 	<shortcut keys="Control =" action="action.view.layout-increment-scale"/>
 	<shortcut keys="Control -" action="action.view.layout-decrement-scale"/>
 	<shortcut keys="Control 0" action="action.view.layout-reset-scale"/>
+    <shortcut action="Guitar Tuner" keys="Shift t"/>	
 </shortcuts>

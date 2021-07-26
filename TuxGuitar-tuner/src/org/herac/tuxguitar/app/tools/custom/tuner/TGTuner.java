@@ -29,6 +29,7 @@ public class TGTuner extends Thread {
 	//static final int LOG2_FFTSIZE = 14;
 	//protected int FFT_SIZE; 
 	protected FFT fft;
+	protected Yin yin;
 	protected double[] ar;
 	protected double[] ai;
 	protected byte[] data;
@@ -50,6 +51,8 @@ public class TGTuner extends Thread {
 		}
 
 		this.setWantedRange();
+
+		this.yin = new Yin(this.settings);
 		
 	}
 
@@ -62,6 +65,7 @@ public class TGTuner extends Thread {
 		
 		
 		if (this.dataLine!=null) {
+			// this creates fft from settings and inits buffers
 			this.openDataLine();
 		}
 
@@ -75,6 +79,8 @@ public class TGTuner extends Thread {
 					
 					// preapare the arrays for FFT
 					for (int i=0; i<this.settings.getBufferSize(); i++) {
+						// maybe normalize audio data ...?: buffer_value * (1.0f / 127.0f);
+						// but what is our audio format? fft here does no normalization.
 						this.ar[i] = this.data[i]; // implicit cast to double
 						this.ai[i] = 0.0f;
 					}
@@ -90,6 +96,9 @@ public class TGTuner extends Thread {
 					cycles++;
 					long startTime = System.currentTimeMillis();
 					
+					// yin pitch detection on byte array, we normalize there 
+					this.yin.processBuffer(this.data);
+
 					if (this.fft!=null)
 						this.fft.doFFT(this.ar, this.ai, false);
 					//TGTuner.computeFFT(1, this.settings.getFFTSize(), this.ar, this.ai);
@@ -123,7 +132,7 @@ public class TGTuner extends Thread {
 					
 					//** buffer the frequency
 					this.queue.add(frequency);
-					
+					System.out.println("minFreq: " + this.minimumFrequency + " maxFreq: " + this.maximumFrequency + " freq: " + frequency);
 					// fire the frequency event on GUI
 					this.mainWindow.fireFrequency(this.queue.getFreqApproximation());
 					
@@ -155,7 +164,7 @@ public class TGTuner extends Thread {
 				for (int i=0; i<20; i++) { // count log2
 					number/=2;
 					if (number < 1) {
-						this.fft = new FFT(log); // instantiate proper FFT alrgorithm
+						this.fft = new FFT(log); // instantiate proper FFT algorithm
 						break;
 					}
 					log++;

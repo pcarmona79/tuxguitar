@@ -24,6 +24,10 @@ import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.TGSynchronizer;
 import org.herac.tuxguitar.util.error.TGErrorManager;
 
+import org.herac.tuxguitar.ui.widget.UIToggleButton;
+import org.herac.tuxguitar.ui.UIComponent;
+
+
 /**
  * @author Nikola Kolarovic <nikola.kolarovic at gmail.com>
  *
@@ -180,11 +184,24 @@ public class TGTunerDialog implements TGTunerListener {
 		this.allStringButtons.add(tempString);
 		tempString.getStringButton().addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
+
+				// make unselect possible
+				UIComponent uiComponent = event.getComponent();
+				System.out.println( "instanceof TGTuningString: " + (uiComponent instanceof TGTuningString));
+				// System.out.println( "TGTuningString isSelected(): " + TGTuningString.this.getStringButton().isSelected());
+				System.out.println( "ToggleButton isSelected(): " + ((UIToggleButton) uiComponent).isSelected());
+				if( uiComponent instanceof UIToggleButton && ((UIToggleButton) uiComponent).isSelected() ) {
+					System.out.println("unselect");
+					// uiComponent.setSelected(false);
+					// TGTuningString.this.listener.fireCurrentString(0);
+				}
+
 				// disable all others
 				TGTunerDialog.this.fineTuner.setCurrentFrequency(-1);
 				Iterator<TGTuningString> it = TGTunerDialog.this.allStringButtons.iterator();
 				while (it.hasNext()) {
 					TGTuningString tmp = (TGTuningString)it.next();
+					System.out.println(tmp.getStringButton().getText() + " is " + tmp.getStringButton().isSelected());
 					tmp.getStringButton().setSelected(false);
 				}
 			}
