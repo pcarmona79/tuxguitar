@@ -12,8 +12,7 @@ package org.herac.tuxguitar.app.tools.custom.tuner;
 public class TGTunerQueue {
 	
 	/** size of the queue */
-	// this used to be 5
-	int QUEUE_SIZE = 20;
+	int QUEUE_SIZE = 5;
 	
 	/** pointer to index of the newest element */
 	protected int head = 0;

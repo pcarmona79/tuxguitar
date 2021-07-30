@@ -3,12 +3,11 @@ package org.herac.tuxguitar.app.tools.custom.tuner;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
-import craigl.spectrumanalyzer.FFT;
+// import craigl.spectrumanalyzer.FFT;
 
 
 /**
  * @author Nikola Kolarovic <nikola.kolarovic at gmail.com>
- * 
  * 
  * Having great help analizyng project:
  * 
@@ -16,6 +15,8 @@ import craigl.spectrumanalyzer.FFT;
  * www.openstudio.fr
  * Copyright (2005) Arnault Pachot.
  * Project URL: http://sourceforge.net/projects/guitartuner
+ * 
+ * yin integration by cn pterodactylus42 <carmaneu at gmx dot de>
  *
  */
 public class TGTuner extends Thread {
@@ -26,17 +27,17 @@ public class TGTuner extends Thread {
 	protected TargetDataLine dataLine;
 	protected TGTunerQueue queue;
 	
-	//static final int LOG2_FFTSIZE = 14;
-	//protected int FFT_SIZE; 
-	protected FFT fft;
+	// static final int LOG2_FFTSIZE = 14;
+	// protected int FFT_SIZE; 
+	// protected FFT fft;
 	protected Yin yin;
-	protected double[] ar;
-	protected double[] ai;
+	// protected double[] ar;
+	// protected double[] ai;
 	protected byte[] data;
-	protected double rate;
+	// protected double rate;
 	
-	protected double maximumFrequency;
-	protected double minimumFrequency;
+	// protected double maximumFrequency;
+	// protected double minimumFrequency;
 	
 	TGTuner(TGTunerListener mainWindow) {
 		this.mainWindow = mainWindow;
@@ -50,7 +51,7 @@ public class TGTuner extends Thread {
 			this.mainWindow.fireException(ex);
 		}
 
-		this.setWantedRange();
+		// this.setWantedRange();
 
 		this.yin = new Yin(this.settings);
 		
@@ -77,30 +78,28 @@ public class TGTuner extends Thread {
 					// read from the input
 					this.dataLine.read(this.data,0,this.settings.getBufferSize());
 					
-					// preapare the arrays for FFT
-					for (int i=0; i<this.settings.getBufferSize(); i++) {
-						// maybe normalize audio data ...?: buffer_value * (1.0f / 127.0f);
-						// but what is our audio format? fft here does no normalization.
-						this.ar[i] = this.data[i]; // implicit cast to double
-						this.ai[i] = 0.0f;
-					}
+					// // preapare the arrays for FFT
+					// for (int i=0; i<this.settings.getBufferSize(); i++) {
+					// 	this.ar[i] = this.data[i]; // implicit cast to double
+					// 	this.ai[i] = 0.0f;
+					// }
 					
-					// when buffer size is smaller than FFT_SIZE 
-					for (int i=this.settings.getBufferSize(); i<this.settings.getFFTSize(); i++) {
-						this.ar[i] = 0.0f;
-						this.ai[i] = 0.0f;
-					}
+					// // when buffer size is smaller than FFT_SIZE 
+					// for (int i=this.settings.getBufferSize(); i<this.settings.getFFTSize(); i++) {
+					// 	this.ar[i] = 0.0f;
+					// 	this.ai[i] = 0.0f;
+					// }
 					
 					/////////////////////////////////////////////////////////////
 					// TODO: look at the benchmark, uncoment the other one and comment the first one
 					cycles++;
 					long startTime = System.currentTimeMillis();
 					
-					// yin pitch detection on byte array, we normalize there 
+					// yin pitch detection on byte array, we convert values to [-1, 1] there 
 					this.yin.processBuffer(this.data);
 
-					if (this.fft!=null)
-						this.fft.doFFT(this.ar, this.ai, false);
+					// if (this.fft!=null)
+					// 	this.fft.doFFT(this.ar, this.ai, false);
 					//TGTuner.computeFFT(1, this.settings.getFFTSize(), this.ar, this.ai);
 					
 					timePassed+=System.currentTimeMillis()-startTime;
@@ -108,31 +107,32 @@ public class TGTuner extends Thread {
 					
 					
 					// ------ determine the dominant frequency -------
-					double frequency = -1;
-					double maxAmplitude = this.settings.getThreshold(); // noise gate
+					// double frequency = -1;
+					// double maxAmplitude = this.settings.getThreshold(); // noise gate
 					
 					
 					// TODO: maybe to analyze only the data around the area of interest
 					// start has to be at least 1, because we want to skip the DC component!
 					
 					//for (int i=0; i<this.settings.getFFTSize(); i++) {
-					for (int i=(int)Math.round(this.minimumFrequency / this.rate); i < Math.round(this.maximumFrequency / this.rate); i++) {
-						double curFreq = i * this.rate;
-						// z = x*i + y*j  // power = |z| = sqrt(x^2 + y^2)
-						double power = Math.sqrt(Math.pow(this.ar[i], 2) + Math.pow(this.ai[i], 2));
+					// for (int i=(int)Math.round(this.minimumFrequency / this.rate); i < Math.round(this.maximumFrequency / this.rate); i++) {
+					// 	double curFreq = i * this.rate;
+					// 	// z = x*i + y*j  // power = |z| = sqrt(x^2 + y^2)
+					// 	double power = Math.sqrt(Math.pow(this.ar[i], 2) + Math.pow(this.ai[i], 2));
 						
-						if (power > maxAmplitude) {
-							maxAmplitude = power;
-							frequency = curFreq;
-						}
+					// 	if (power > maxAmplitude) {
+					// 		maxAmplitude = power;
+					// 		frequency = curFreq;
+					// 	}
 						
-					}
+					// }
 					
-					//System.out.println("Max Amplitude: "+maxAmplitude);
+					//System.out.println("Max Amplitude: " + maxAmplitude);
 					
 					//** buffer the frequency
-					this.queue.add(frequency);
-					System.out.println("minFreq: " + this.minimumFrequency + " maxFreq: " + this.maximumFrequency + " freq: " + frequency);
+					// this.queue.add(frequency);
+					this.queue.add(this.yin.getfZeroCandidate());
+					//System.out.println("fft minFreq: " + this.minimumFrequency + " maxFreq: " + this.maximumFrequency + " freq: " + frequency);
 					// fire the frequency event on GUI
 					this.mainWindow.fireFrequency(this.queue.getFreqApproximation());
 					
@@ -152,7 +152,8 @@ public class TGTuner extends Thread {
 		
 		
 		this.closeDataLine();
-		System.out.println(" Average FFT time: "+(double)timePassed/(double)cycles);
+		// System.out.println(" Average FFT time: "+(double)timePassed/(double)cycles);
+		System.out.println(" Average Yin cycle time: "+(double)timePassed/(double)cycles);
 		
 	}
 	
@@ -160,21 +161,21 @@ public class TGTuner extends Thread {
 	protected void computeFFTParams() {
 		if (this.settings!=null) {
 			
-			    int number = this.settings.getFFTSize(), log=0;
-				for (int i=0; i<20; i++) { // count log2
-					number/=2;
-					if (number < 1) {
-						this.fft = new FFT(log); // instantiate proper FFT algorithm
-						break;
-					}
-					log++;
-				}
+			    // int number = this.settings.getFFTSize(), log=0;
+				// for (int i=0; i<20; i++) { // count log2
+				// 	number/=2;
+				// 	if (number < 1) {
+				// 		this.fft = new FFT(log); // instantiate proper FFT algorithm
+				// 		break;
+				// 	}
+				// 	log++;
+				// }
 				this.data = new byte[this.settings.getBufferSize()]; // data buffer
-				this.ar = new double[this.settings.getFFTSize()]; // create real array for FFT
-				this.ai = new double[this.settings.getFFTSize()]; // create imaginary array for FFT
+				// this.ar = new double[this.settings.getFFTSize()]; // create real array for FFT
+				// this.ai = new double[this.settings.getFFTSize()]; // create imaginary array for FFT
 				
-				// TODO: rate is maybe not the best /2 ?
-				this.rate = ((double) this.settings.getSampleRate()) / this.settings.getFFTSize();
+				// // TODO: rate is maybe not the best /2 ?
+				// this.rate = ((double) this.settings.getSampleRate()) / this.settings.getFFTSize();
 		}
 	}
 
@@ -211,18 +212,18 @@ public class TGTuner extends Thread {
 			return this.settings;
 	}
 	
-	public void setWantedNote(int note) {
-		// TODO: maybe too restrictive? But eliminates fifths harmonics...
-		this.minimumFrequency = getNoteFrequency(note-3);
-		this.maximumFrequency = getNoteFrequency(note+3);
-	}
+	// public void setWantedNote(int note) {
+	// 	// TODO: maybe too restrictive? But eliminates fifths harmonics...
+	// 	this.minimumFrequency = getNoteFrequency(note-3);
+	// 	this.maximumFrequency = getNoteFrequency(note+3);
+	// }
 	
-	public void setWantedRange() {
-		// TODO: maybe to restrict only to 1 or 2 octaves!!!!!!!!!
-		int[] tuning = this.mainWindow.getTuning();
-		this.maximumFrequency = getNoteFrequency(tuning[0]+3); // 3 frets higher that the thiniest string
-		this.minimumFrequency = getNoteFrequency(tuning[tuning.length-1]-3); // 3 frets lower that the thickest string
-	}
+	// public void setWantedRange() {
+	// 	// TODO: maybe to restrict only to 1 or 2 octaves!!!!!!!!!
+	// 	int[] tuning = this.mainWindow.getTuning();
+	// 	this.maximumFrequency = getNoteFrequency(tuning[0]+3); // 3 frets higher that the thiniest string
+	// 	this.minimumFrequency = getNoteFrequency(tuning[tuning.length-1]-3); // 3 frets lower that the thickest string
+	// }
 	
 	
 	public void openDataLine() {
@@ -255,57 +256,52 @@ public class TGTuner extends Thread {
 		return 110 * Math.pow(2.0, (midiNote-45)/12.0 );
 	}
 	
-	
-	 public static void computeFFT(int sign, int n, double[] ar, double[] ai)
-	   {
-	      double scale = 2.0 / n;
-	      int i, j;
-	      for(i = j = 0; i < n; ++i)
-	      {
-	         if (j >= i)
-	         {
-	            double tempr = ar[j] * scale;
-	            double tempi = ai[j] * scale;
-	            ar[j] = ar[i] * scale;
-	            ai[j] = ai[i] * scale;
-	            ar[i] = tempr;
-	            ai[i] = tempi;
-	         }
-	         int m = n/2;
-	         while ((m >= 1) && (j >= m))
-	         {
-	            j -= m;
-	            m /= 2;
-	         }
-	         j += m;
-	      }
-	      int mmax, istep;
-	      for(mmax = 1, istep = 2 * mmax; mmax < n; mmax = istep, istep = 2 * mmax)
-	      {
-	         double delta = sign * Math.PI / mmax;
-	         for(int m = 0; m < mmax; ++m)
-	         {
-	            double w = m * delta;
-	            double wr = Math.cos(w);
-	            double wi = Math.sin(w);
-	            for(i = m; i < n; i += istep)
-	            {
-	               j = i + mmax;
-	               double tr = wr * ar[j] - wi * ai[j];
-	               double ti = wr * ai[j] + wi * ar[j];
-	               ar[j] = ar[i] - tr;
-	               ai[j] = ai[i] - ti;
-	               ar[i] += tr;
-	               ai[i] += ti;
-	            }
-	         }
-	         mmax = istep;
-	      }
-	   }
-	
-
-	 
-	 
+	//  public static void computeFFT(int sign, int n, double[] ar, double[] ai)
+	//    {
+	//       double scale = 2.0 / n;
+	//       int i, j;
+	//       for(i = j = 0; i < n; ++i)
+	//       {
+	//          if (j >= i)
+	//          {
+	//             double tempr = ar[j] * scale;
+	//             double tempi = ai[j] * scale;
+	//             ar[j] = ar[i] * scale;
+	//             ai[j] = ai[i] * scale;
+	//             ar[i] = tempr;
+	//             ai[i] = tempi;
+	//          }
+	//          int m = n/2;
+	//          while ((m >= 1) && (j >= m))
+	//          {
+	//             j -= m;
+	//             m /= 2;
+	//          }
+	//          j += m;
+	//       }
+	//       int mmax, istep;
+	//       for(mmax = 1, istep = 2 * mmax; mmax < n; mmax = istep, istep = 2 * mmax)
+	//       {
+	//          double delta = sign * Math.PI / mmax;
+	//          for(int m = 0; m < mmax; ++m)
+	//          {
+	//             double w = m * delta;
+	//             double wr = Math.cos(w);
+	//             double wi = Math.sin(w);
+	//             for(i = m; i < n; i += istep)
+	//             {
+	//                j = i + mmax;
+	//                double tr = wr * ar[j] - wi * ai[j];
+	//                double ti = wr * ai[j] + wi * ar[j];
+	//                ar[j] = ar[i] - tr;
+	//                ai[j] = ai[i] - ti;
+	//                ar[i] += tr;
+	//                ai[i] += ti;
+	//             }
+	//          }
+	//          mmax = istep;
+	//       }
+	//    }
 	 
 	 static class TGTunerException extends Exception {
 
@@ -313,9 +309,6 @@ public class TGTuner extends Thread {
 
 		public TGTunerException(String string) {
 			super(string);
-		}
-		 
-	 }
-
-	
+		}	 
+	}
 }

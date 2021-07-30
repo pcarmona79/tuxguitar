@@ -8,6 +8,9 @@ more intuitive tuner
 
 ## CHANGELOG:
 
+26/07/2021
+added yin algorithm to tuner
+
 22/07/2021
 added default shortcut for tuner: "shift t"
 
@@ -53,23 +56,31 @@ TGTuner owns FFT, which has the method computeFFT
 when dataline is opened, fft is initialized before
 ->so we should create a yin class, and instantiate with settings ...?!?
 TGTuner owns settings object
-do they normalize audio data????
-
-
-
-
-existing tuner:
-TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTuner.java
-...fires frequency to main window, is a
-TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTunerListener.java
-TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTunerDialog.java
-implements TGTunerListener.
-here it splits in rough and fine widget...
-the rough widget shows frequency on a tone axis
-fine widget represents area around specific tone 
-with a needle like pointer
-tuner when 'idle' shows 119 hz, would be better to show nothing.
-tone recognition is ok, but no auto fine widget.
-fine widget only works when string is selected.
-    -> the needle doesn't display anything, unless you select a string to tune.
-nice to have: auto string selection !
+do they normalize audio data???? 
+    ->tuxguitar calculates with raw byte values from the driver, 
+    ranging from -128 to 127.
+in tarsos dsp .... they use [-1, 1]
+yin does not do autocorrelation.
+BAM it works ;-))))
+maybe remove tuning strings ... to make tuning automatic
+UIWindow dialog....
+    UIPanel group
+        groupLayout
+dialogLayout -> groupLayout -> specialLayout -> fine tuner -> string buttons
+                1.1             1.1             1.1             1.2
+                            -> tunLayout
+                                2.1
+                            -> rough tuner
+                                3.1
+somehow removing string buttons does not work ;-(
+ok, so we leave buttons and remove functionality first
+TGTuningString is not needed any more...
+String Buttons and fireCurrentString disabled in TGTunerDialog
+todo: cleaning up, make it really work
+how does frequency get from tuner to FineWidget?
+TGTunerDialog 
+    ->fireFrequency
+        ->fineTuner.setCurrentFrequency
+TGTuner
+    ->owns TGTunerDialog as mainWindow
+        ->mainWindow.fireFrequency

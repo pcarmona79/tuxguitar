@@ -150,29 +150,26 @@ public class TGTunerSettings {
 		//return null;
 	}
 
-	
-	
-	
 	/* MAYBE USEFUL CODE
-	 * 
-	 * Port lineIn;
-FloatControl volCtrl;
-try {
-  mixer = AudioSystem.getMixer(null);
-  lineIn = (Port)mixer.getLine(Port.Info.LINE_IN);
-  lineIn.open();
-  volCtrl = (FloatControl) lineIn.getControl(
-      FloatControl.Type.VOLUME);
-  // Assuming getControl call succeeds, 
-  // we now have our LINE_IN VOLUME control.
-} catch (Exception e) {
-  System.out.println("Failed trying to find LINE_IN"
-    + " VOLUME control: exception = " + e);
-}
-float newValue = 2.0F;
-if (volCtrl != null)
-  // This changes the volume of the signal flowing though the line that "owns" the control.
-  volCtrl.setValue(newValue); 
+	 *
+		Port lineIn;
+		FloatControl volCtrl;
+		try {
+			mixer = AudioSystem.getMixer(null);
+			lineIn = (Port)mixer.getLine(Port.Info.LINE_IN);
+			lineIn.open();
+			volCtrl = (FloatControl) lineIn.getControl(
+				FloatControl.Type.VOLUME);
+			// Assuming getControl call succeeds, 
+			// we now have our LINE_IN VOLUME control.
+		} catch (Exception e) {
+			System.out.println("Failed trying to find LINE_IN"
+				+ " VOLUME control: exception = " + e);
+		}
+		float newValue = 2.0F;
+		if (volCtrl != null)
+			// This changes the volume of the signal flowing though the line that "owns" the control.
+			volCtrl.setValue(newValue); 
 	 * 
 	 */
 	

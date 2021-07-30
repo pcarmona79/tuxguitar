@@ -8,6 +8,6 @@ public interface TGTunerListener {
 	
 	public void fireException(Exception ex);
 	
-	public void fireCurrentString(int string);
+	// public void fireCurrentString(int string);
 	
 }
