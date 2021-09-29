@@ -1,4 +1,9 @@
 # Build Instructions
+
+### Known Errors
+In some cases SWT Libs need to be added manually because maven fails ... check out 
+https://archive.eclipse.org/eclipse/downloads/drops4/R-4.13-201909161045/
+
 ## Prerequisites
 - JDK 7 or higher
 - Maven 3.3 or higher
