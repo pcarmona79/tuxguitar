@@ -47,7 +47,7 @@ public class TGTuningString {
 				// } else {
 					System.out.println("select");
 					TGTuningString.this.stringButton.setSelected(true);
-					TGTuningString.this.listener.fireCurrentString(TGTuningString.this.string);	
+					// TGTuningString.this.listener.fireCurrentString(TGTuningString.this.string);	
 				// }
 			}
 		});
