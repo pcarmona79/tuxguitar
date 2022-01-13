@@ -1,19 +1,19 @@
 /*
     Copyright (C) 2002 Paul Davis
     Copyright (C) 2003 Jack O'Quin
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation; either version 2.1 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public License
-    along with this program; if not, write to the Free Software 
+    along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 */
@@ -26,6 +26,7 @@ extern "C" {
 #endif
 
 #include <jack/types.h>
+#include <jack/weakmacros.h>
 
 /**
  * @defgroup TransportControl Transport and Timebase control
@@ -48,7 +49,7 @@ extern "C" {
  *
  * @return 0 on success, otherwise a non-zero error code.
  */
-int  jack_release_timebase (jack_client_t *client);
+int  jack_release_timebase (jack_client_t *client) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Register (or unregister) as a slow-sync client, one that cannot
@@ -72,7 +73,7 @@ int  jack_release_timebase (jack_client_t *client);
  */
 int  jack_set_sync_callback (jack_client_t *client,
 			     JackSyncCallback sync_callback,
-			     void *arg);
+			     void *arg) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Set the timeout value for slow-sync clients.
@@ -92,7 +93,7 @@ int  jack_set_sync_callback (jack_client_t *client,
  * @return 0 on success, otherwise a non-zero error code.
  */
 int  jack_set_sync_timeout (jack_client_t *client,
-			    jack_time_t timeout);
+			    jack_time_t timeout) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Register as timebase master for the JACK subsystem.
@@ -122,7 +123,7 @@ int  jack_set_sync_timeout (jack_client_t *client,
 int  jack_set_timebase_callback (jack_client_t *client,
 				 int conditional,
 				 JackTimebaseCallback timebase_callback,
-				 void *arg);
+				 void *arg) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Reposition the transport to a new frame number.
@@ -134,14 +135,14 @@ int  jack_set_timebase_callback (jack_client_t *client,
  * sync_callbacks until ready.  This function is realtime-safe.
  *
  * @see jack_transport_reposition, jack_set_sync_callback
- * 
+ *
  * @param client the JACK client structure.
  * @param frame frame number of new transport position.
  *
  * @return 0 if valid request, non-zero otherwise.
  */
 int  jack_transport_locate (jack_client_t *client,
-			    jack_nframes_t frame);
+			    jack_nframes_t frame) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Query the current transport state and position.
@@ -159,7 +160,7 @@ int  jack_transport_locate (jack_client_t *client,
  * @return Current transport state.
  */
 jack_transport_state_t jack_transport_query (const jack_client_t *client,
-					     jack_position_t *pos);
+					     jack_position_t *pos) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Return an estimate of the current transport frame,
@@ -168,8 +169,8 @@ jack_transport_state_t jack_transport_query (const jack_client_t *client,
  *
  * @param client the JACK client structure
  */
-jack_nframes_t jack_get_current_transport_frame (const jack_client_t *client);
-						 
+jack_nframes_t jack_get_current_transport_frame (const jack_client_t *client) JACK_OPTIONAL_WEAK_EXPORT;
+
 /**
  * Request a new transport position.
  *
@@ -180,14 +181,14 @@ jack_nframes_t jack_get_current_transport_frame (const jack_client_t *client);
  * sync_callbacks until ready.  This function is realtime-safe.
  *
  * @see jack_transport_locate, jack_set_sync_callback
- * 
+ *
  * @param client the JACK client structure.
  * @param pos requested new transport position.
  *
  * @return 0 if valid request, EINVAL if position structure rejected.
  */
 int  jack_transport_reposition (jack_client_t *client,
-				jack_position_t *pos);
+				const jack_position_t *pos) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Start the JACK transport rolling.
@@ -200,7 +201,7 @@ int  jack_transport_reposition (jack_client_t *client,
  *
  * @param client the JACK client structure.
  */
-void jack_transport_start (jack_client_t *client);
+void jack_transport_start (jack_client_t *client) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Stop the JACK transport.
@@ -210,7 +211,7 @@ void jack_transport_start (jack_client_t *client);
  *
  * @param client the JACK client structure.
  */
-void jack_transport_stop (jack_client_t *client);
+void jack_transport_stop (jack_client_t *client) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Gets the current transport info structure (deprecated).
@@ -225,7 +226,7 @@ void jack_transport_stop (jack_client_t *client);
  * @pre Must be called from the process thread.
  */
 void jack_get_transport_info (jack_client_t *client,
-			      jack_transport_info_t *tinfo);
+			      jack_transport_info_t *tinfo) JACK_OPTIONAL_WEAK_EXPORT;
 
 /**
  * Set the transport info structure (deprecated).
@@ -235,10 +236,10 @@ void jack_get_transport_info (jack_client_t *client,
  * a ::JackTimebaseCallback.
  */
 void jack_set_transport_info (jack_client_t *client,
-			      jack_transport_info_t *tinfo);
+			      jack_transport_info_t *tinfo) JACK_OPTIONAL_WEAK_EXPORT;
 
 /*@}*/
-	
+
 #ifdef __cplusplus
 }
 #endif

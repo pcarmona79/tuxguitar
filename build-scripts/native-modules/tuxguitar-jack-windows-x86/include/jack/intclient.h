@@ -40,7 +40,7 @@ extern "C"
  *
  * @return NULL if unsuccessful, otherwise pointer to the internal
  * client name obtained from the heap via malloc().  The caller should
- * free() this storage when no longer needed.
+ * jack_free() this storage when no longer needed.
  */
 char *jack_get_internal_client_name (jack_client_t *client,
                                      jack_intclient_t intclient);
@@ -96,7 +96,7 @@ jack_intclient_t jack_internal_client_handle (jack_client_t *client,
  * object file from which to load the new internal client (otherwise
  * use the @a client_name).
  *
- * @arg [@ref JackLoadInit] <em>(char *) load_init</em> an arbitary
+ * @arg [@ref JackLoadInit] <em>(char *) load_init</em> an arbitrary
  * string passed to the internal client's jack_initialize() routine
  * (otherwise NULL), of no more than @ref JACK_LOAD_INIT_LIMIT bytes.
  *
