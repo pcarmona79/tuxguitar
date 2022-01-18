@@ -16,13 +16,13 @@ def plugins = [
 ]
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     
     defaultConfig {
         applicationId "org.herac.tuxguitar.android.application"
-        minSdkVersion 14
-        targetSdkVersion 27
+        minSdkVersion 16
+        targetSdkVersion 28
         multiDexEnabled true
         versionCode Integer.parseInt(new Date().format('yyMMddHH'))
         versionName "2.0-SNAPSHOT"
@@ -74,8 +74,6 @@ task generateSources {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
     implementation project(':tuxguitar-android')
     implementation project(':tuxguitar-android-resources')
     implementation project(':tuxguitar-android-gervill')
