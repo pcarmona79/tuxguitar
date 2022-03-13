@@ -4,6 +4,18 @@
 In some cases SWT Libs need to be added manually because maven fails ... check out 
 https://archive.eclipse.org/eclipse/downloads/drops4/R-4.13-201909161045/
 
+ohli's solution from https://github.com/pterodactylus42/tuxguitar/issues/2
+:
+# download SWT
+wget -qO- https://archive.eclipse.org/eclipse/downloads/drops4/R-4.13-201909161045/download.php?dropFile=swt-4.13-gtk-linux-x86_64.zip | unzip
+
+cd <where tuxguitar is>/build-scripts/tuxguitar-linux-x86_64
+
+mvn install:install-file -Dfile=<absolute path to your swt download>/swt-4.13-gtk-linux-x86_64/swt.jar -DartifactId=org.eclipse.swt.gtk.linux.x86_64 -Dpackaging=jar -DgroupId=org.eclipse.swt -Dversion=4.13
+
+# now you can build tuxguitar without errors
+mvn -P native-modules package
+
 ## Prerequisites
 - JDK 7 or higher
 - Maven 3.3 or higher
