@@ -6,7 +6,7 @@ https://archive.eclipse.org/eclipse/downloads/drops4/R-4.13-201909161045/
 
 ohli's solution from https://github.com/pterodactylus42/tuxguitar/issues/2
 :
-# download SWT
+#### download SWT
 wget -qO- https://archive.eclipse.org/eclipse/downloads/drops4/R-4.13-201909161045/download.php?dropFile=swt-4.13-gtk-linux-x86_64.zip | unzip
 
 cd <where tuxguitar is>/build-scripts/tuxguitar-linux-x86_64
