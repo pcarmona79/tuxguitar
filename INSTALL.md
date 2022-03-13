@@ -13,7 +13,7 @@ cd <where tuxguitar is>/build-scripts/tuxguitar-linux-x86_64
 
 mvn install:install-file -Dfile=<absolute path to your swt download>/swt-4.13-gtk-linux-x86_64/swt.jar -DartifactId=org.eclipse.swt.gtk.linux.x86_64 -Dpackaging=jar -DgroupId=org.eclipse.swt -Dversion=4.13
 
-# now you can build tuxguitar without errors
+now you can build tuxguitar without errors:
 mvn -P native-modules package
 
 ## Prerequisites
