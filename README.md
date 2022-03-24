@@ -1,5 +1,27 @@
-# TuxGuitar
+# TuxGuitar 2.0
+This fork revives some features built by the community. You are great!!! Go ahead, check the instructions in [INSTALL.md](INSTALL.md) and contribute :-)
 
+## What's new in v2.0:
+- Global style update with a new skin
+- Main toolbar redesigned
+- Native window header and toolbar for the SWT GTK backend
+- High DPI display support
+- Hiding/showing of individual tracks
+- Click-and-drag selection support, started by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
+- Cut/Copy/Paste of individual notes
+- More tuning presets, grouped by instrument and number of strings
+- Default program/clef support for tunings
+- Scale finder
+- Customizable scale intervals
+- Percussion dialog and percussion notation editor
+- Support for mix table change commands from GP3/GP4/GP5 files
+- UI cleanup, MIDI track name support by [Alex Abdugafarov](https://github.com/frozenspider/tuxguitar)
+- Various bug fixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
+- And lots of other small improvements and bug fixes
+
+VST2 instrument support has been disabled, due to the SDK being discontinued.
+
+## Recent changes in this fork:
 26/07/2021
 added yin algorithm to tuner
 
@@ -52,25 +74,6 @@ for more information.
 ## System Requirements
 - Java 9 or higher
 
-## What's Changed
-- Global style update with a new skin
-- Main toolbar redesigned
-- Native window header and toolbar for the SWT GTK backend
-- High DPI display support
-- Hiding/showing of individual tracks
-- Click-and-drag selection support, started by [Bartek Poleszak](https://github.com/bart-poleszak/TuxGuitar-workspace)
-- Cut/Copy/Paste of individual notes
-- More tuning presets, grouped by instrument and number of strings
-- Default program/clef support for tunings
-- Scale finder
-- Customizable scale intervals
-- Percussion dialog and percussion notation editor
-- Support for mix table change commands from GP3/GP4/GP5 files
-- UI cleanup, MIDI track name support by [Alex Abdugafarov](https://github.com/frozenspider/tuxguitar)
-- Various bug fixes in importers/exporters by [b4dc0d3r](https://sourceforge.net/p/tuxguitar-fork)
-- And lots of other small improvements and bug fixes
-
-VST2 instrument support has been disabled, due to the SDK being discontinued.
 
 ## Build Instructions
 See [INSTALL.md](INSTALL.md)
