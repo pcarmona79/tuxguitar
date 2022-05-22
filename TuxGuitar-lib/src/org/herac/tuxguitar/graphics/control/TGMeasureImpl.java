@@ -52,9 +52,11 @@ public class TGMeasureImpl extends TGMeasure{
 		{FLAT,FLAT,FLAT,NATURAL,FLAT,FLAT,FLAT},                   // 6 FLATS
 		{FLAT,FLAT,FLAT,FLAT,FLAT,FLAT,FLAT},                      // 7 FLATS
 	};
-	
-	public static final int ACCIDENTAL_SHARP_NOTES[] = new int[]{0,0,1,1,2,3,3,4,4,5,5,6};
-	public static final int ACCIDENTAL_FLAT_NOTES [] = new int[]{0,1,1,2,2,3,4,4,5,5,6,6};
+																// for pitch number calculation
+																//c c# d d# e f f# g g# a a# b
+	public static final int ACCIDENTAL_SHARP_NOTES[] = new int[]{ 0,0, 1,1, 2,3,3, 4,4, 5,5, 6};
+																//c db d eb e f gb g ab a bb b
+	public static final int ACCIDENTAL_FLAT_NOTES [] = new int[]{ 0,1, 1,2, 2,3,4, 4,5, 5,6, 6};
 	public static final boolean ACCIDENTAL_NOTES[] = new boolean[]{false,true,false,true,false,false,true,false,true,false,true,false};
 	
 	public static final int SCORE_KEY_SHARP_POSITIONS[][] = new int[][]{ 

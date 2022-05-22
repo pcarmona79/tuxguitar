@@ -8,6 +8,7 @@ import org.herac.tuxguitar.ui.event.UISelectionEvent;
 import org.herac.tuxguitar.ui.event.UISelectionListener;
 import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UIToggleButton;
+// import org.herac.tuxguitar.ui.UIComponent;
 
 /**
  * @author Nikola Kolarovic <johnny47ns@yahoo.com>
@@ -34,8 +35,20 @@ public class TGTuningString {
 	void addListener() {
 		this.stringButton.addSelectionListener(new UISelectionListener() {
 			public void onSelect(UISelectionEvent event) {
-				TGTuningString.this.stringButton.setSelected(true);
-				TGTuningString.this.listener.fireCurrentString(TGTuningString.this.string);
+				// make unselect possible
+				// UIComponent uiComponent = event.getComponent();
+				// System.out.println( "instanceof UIToggleButton: " + (uiComponent instanceof UIToggleButton) + " : isSelected: " + ((UIToggleButton) uiComponent).isSelected());
+				// System.out.println( "StringButton isSelected(): " + TGTuningString.this.getStringButton().isSelected());
+				// System.out.println( "StringButton getText(): " + TGTuningString.this.getStringButton().getText());
+				// if( uiComponent instanceof UIToggleButton && ((UIToggleButton) uiComponent).isSelected() ) {
+				// 	System.out.println("unselect");
+				// 	TGTuningString.this.stringButton.setSelected(false);
+				// 	TGTuningString.this.listener.fireCurrentString(0);
+				// } else {
+					System.out.println("select");
+					TGTuningString.this.stringButton.setSelected(true);
+					// TGTuningString.this.listener.fireCurrentString(TGTuningString.this.string);	
+				// }
 			}
 		});
 	}

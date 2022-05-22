@@ -258,6 +258,7 @@ public class GP3InputStream extends GTPInputStream {
 		}
 		measure.setClef( getClef(track) );
 		measure.setKeySignature(this.keySignature);
+		System.out.println("i have set key " + this.keySignature + " for you ....");
 	}
 	
 	private long readBeat(long start, TGMeasure measure,TGTrack track, TGTempo tempo) throws IOException{

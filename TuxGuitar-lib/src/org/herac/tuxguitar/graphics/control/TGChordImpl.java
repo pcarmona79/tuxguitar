@@ -320,11 +320,14 @@ public class TGChordImpl extends TGChord {
 		float x = fromX + getStringSpacing();
 		float y = fromY + getFretSpacing();
 		
+		// print first fret string only if higher than 1
 		if( font != null ){
-			String firstFretString = Integer.toString(getFirstFret());
-			painter.setFont(font);
-			painter.drawString(firstFretString, fromX + (getFirstFretSpacing() - painter.getFMWidth(firstFretString)), (y + ((getFretSpacing() / 2f) + painter.getFMMiddleLine())));
-			x += getFirstFretSpacing();
+			if(getFirstFret() > 1) {
+				String firstFretString = Integer.toString(getFirstFret());
+				painter.setFont(font);
+				painter.drawString(firstFretString, fromX + (getFirstFretSpacing() - painter.getFMWidth(firstFretString)), (y + ((getFretSpacing() / 2f) + painter.getFMMiddleLine())));
+				x += getFirstFretSpacing();
+			}
 		}
 		
 		painter.initPath();

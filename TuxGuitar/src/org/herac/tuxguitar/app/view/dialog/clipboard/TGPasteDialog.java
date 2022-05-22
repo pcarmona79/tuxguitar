@@ -118,12 +118,14 @@ public abstract class TGPasteDialog {
 	}
 
 	public void processAction(TGContext context, Integer pasteMode, Integer pasteCount, int transposition, boolean tryKeepString, boolean applyToChords) {
-		TGActionProcessor tgActionProcessor = new TGActionProcessor(context, this.action);
-		tgActionProcessor.setAttribute(TGPasteNoteAction.ATTRIBUTE_PASTE_MODE, pasteMode);
-		tgActionProcessor.setAttribute(TGPasteNoteAction.ATTRIBUTE_PASTE_COUNT, pasteCount);
-		tgActionProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_TRANSPOSITION, transposition);
-		tgActionProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_TRY_KEEP_STRING, tryKeepString);
-		tgActionProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_CHORDS, applyToChords);
-		tgActionProcessor.process();
+		TGActionProcessor tgPasteProcessor = new TGActionProcessor(context, this.action);
+		tgPasteProcessor.setAttribute(TGPasteNoteAction.ATTRIBUTE_PASTE_MODE, pasteMode);
+		tgPasteProcessor.setAttribute(TGPasteNoteAction.ATTRIBUTE_PASTE_COUNT, pasteCount);
+		tgPasteProcessor.process();
+		TGActionProcessor tgTransposeProcessor = new TGActionProcessor(context, TGTransposeAction.NAME);
+		tgTransposeProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_TRANSPOSITION, transposition);
+		tgTransposeProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_TRY_KEEP_STRING, tryKeepString);
+		tgTransposeProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_CHORDS, applyToChords);
+		tgTransposeProcessor.process();
 	}
 }

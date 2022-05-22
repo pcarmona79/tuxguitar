@@ -408,12 +408,12 @@
 		</plugins>
 	</build>
 
-	<repositories>
+	<!--	<repositories>
 		<repository>
-			<id>swt-repo</id>
-			<url>https://cyclopsian.github.io/maven-eclipse/maven/</url>
+			<id>swt-in-project-repo</id>
+			<url>file://${project.basedir}/lib</url>
 		</repository>
-	</repositories>
+	</repositories> -->
 
 	<!-- We need a cross platform SWT version to compile projects -->
 	<properties>

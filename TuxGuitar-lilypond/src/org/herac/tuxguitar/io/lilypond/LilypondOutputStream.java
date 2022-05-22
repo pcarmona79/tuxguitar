@@ -325,13 +325,17 @@ public class LilypondOutputStream {
 	}
 	
 	private void addMeasure(TGSong song, TGMeasure measure,TGMeasure previous,int voice,int indent,boolean isLast){
+		// check for tempo change
 		if(previous == null || measure.getTempo().getValue() != previous.getTempo().getValue()){
 			this.addTempo(measure.getTempo(),indent);
 		}
 		
+		// clef change?
 		if(previous == null || measure.getClef() != previous.getClef()){
 			this.addClef(measure.getClef(),indent);
 		}
+
+		// key signature change?
 		if(previous == null || measure.getKeySignature() != previous.getKeySignature()){
 			if (measure.getKeySignature() == 0) {
 				// TODO: allow users to enter a key signature in the ui
@@ -342,6 +346,7 @@ public class LilypondOutputStream {
 			}
 		}
 		
+		// time signature change?
 		if(previous == null || !measure.getTimeSignature().isEqual(previous.getTimeSignature())){
 			this.addTimeSignature(measure.getTimeSignature(),indent);
 		}
@@ -353,6 +358,7 @@ public class LilypondOutputStream {
 		if(measure.isRepeatOpen()){
 			this.addRepeatOpen(song, measure.getHeader(),indent);
 		}
+
 		// If is first measure, and it don't have a repeat-open,
 		// We check on next measures if should open it.
 		else if(measure.getNumber() == 1){
@@ -361,6 +367,7 @@ public class LilypondOutputStream {
 				this.addRepeatOpen(song, measure.getHeader(),indent);
 			}
 		}
+
 		// Open a repeat alternative only if this measure isn't who openned the repeat.
 		if(!measure.isRepeatOpen() && measure.getHeader().getRepeatAlternative() > 0){
 			this.addRepeatAlternativeOpen(indent);
@@ -480,7 +487,7 @@ public class LilypondOutputStream {
 		this.writer.println();
 	}
 	
-	private void addComponents(TGMeasure measure,int vIndex){
+	private void addComponents(TGMeasure measure,int vIndex) {
 		int key = measure.getKeySignature();
 		TGBeat previous = null;
 		
@@ -518,7 +525,7 @@ public class LilypondOutputStream {
 		}
 	}
 	
-	private void addBeat(int key,TGBeat beat, TGVoice voice){		
+	private void addBeat(int key, TGBeat beat, TGVoice voice){		
 		// keep track of octave displacements
 		int ottava = 0;
 		if(voice.isRestVoice()){
@@ -550,24 +557,35 @@ public class LilypondOutputStream {
 				this.addOttava(ottava);
 			}
 
+			// begin every note string with opening brace <
 			this.writer.print("<");
 
-			for(int i = 0 ; i < size ; i ++){
+			for(int i = 0 ; i < size ; i ++) {
 				TGNote note = voice.getNote(i);
-				
+				//int thisnote = beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue();
+
 				this.addEffectsBeforeNote(note);
 				
-				String spelling = note.getSpelling().toLilyPondString();
-				if (spelling.length() > 0) {
-					this.writer.print(spelling);
-				} else {
-					this.addKey(key, (beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()) );
-				}
+				// // here the note spelling is computed
+				// // and the note gets written to the file 
+				// String spelling = note.getSpelling().toLilyPondString();
+				// //System.out.println("note: " + thisnote + " spelling: " + spelling);
+				// if (spelling.length() > 0) {
+				// 	this.writer.print(spelling);
+				// } else {
+				// 	this.addKey(key, (beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()) );
+				// }
+
+				// addKey calls getLilypondKey, which should rather be called
+				// getLilypondNote, as it returns a string with note name and
+				// octave info.
+				this.addKey(key, (beat.getMeasure().getTrack().getString(note.getString()).getValue() + note.getValue()) );
 				
 				if(this.isAnyTiedTo(note)){
 					this.writer.print("~");
 				}
 				
+				// print out on which string the note is played  
 				this.addString(note.getString());
 				this.addEffectsOnNote(note.getEffect());
 				
@@ -581,6 +599,8 @@ public class LilypondOutputStream {
 			this.addDuration( voice.getDuration() );
 			this.addEffectsOnDuration( voice );
 			this.addEffectsOnBeat( voice );
+			// should look something like this....:
+			// <g'\1 e,\6 >4
 		}
 		
 		// Add Chord, if was not previously added in another voice

@@ -24,9 +24,13 @@ import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.TGSynchronizer;
 import org.herac.tuxguitar.util.error.TGErrorManager;
 
+import org.herac.tuxguitar.ui.widget.UIToggleButton;
+import org.herac.tuxguitar.ui.UIComponent;
+
+
 /**
  * @author Nikola Kolarovic <nikola.kolarovic at gmail.com>
- *
+ * made automatic by cn pterodactylus42 <carmaneu at gmx dot de>
  */
 public class TGTunerDialog implements TGTunerListener {
 	
@@ -35,9 +39,10 @@ public class TGTunerDialog implements TGTunerListener {
 	private int[] tuning = null;
 	private UILabel currentFrequency = null;
 	private UIWindow dialog = null;
-	private TGTunerRoughWidget roughTuner = null;
-	private List<TGTuningString> allStringButtons = null;
+	// private TGTunerRoughWidget roughTuner = null;
+	// private List<TGTuningString> allStringButtons = null;
 	private TGTunerFineWidget fineTuner = null;
+	// private TGTunerLCDWidget tunerLCD = null;
 	
 	public TGTunerDialog(TGContext context, int[] tuning) {
 		this.context = context;
@@ -58,37 +63,42 @@ public class TGTunerDialog implements TGTunerListener {
 		UIPanel group = uiFactory.createPanel(this.dialog, false);
 		group.setLayout(groupLayout);
 		dialogLayout.set(group, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 400f, null, null);
+		// public void set(UIControl control, Integer row, Integer col, Integer alignX, Integer alignY, Boolean fillX, Boolean fillY, Integer rowSpan, Integer colSpan,Float minPackedWidth, Float minPackedHeight, Float margin){
+		// TuxGuitar-ui-toolkit/src/org/herac/tuxguitar/ui/layout/UITableLayout.java
+
+		// UITableLayout specialLayout = new UITableLayout();
+		// UIPanel specialComposite = uiFactory.createPanel(group, false);
+		// specialComposite.setLayout(specialLayout);
+		// groupLayout.set(specialComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
+		// this.fineTuner = new TGTunerFineWidget(this.context, uiFactory, specialComposite);
+		// specialLayout.set(this.fineTuner.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
 		
-		UITableLayout specialLayout = new UITableLayout(0f);
-		UIPanel specialComposite = uiFactory.createPanel(group, false);
-		specialComposite.setLayout(specialLayout);
-		groupLayout.set(specialComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
-		this.allStringButtons = new ArrayList<TGTuningString>(this.tuning.length);
+		// this.allStringButtons = new ArrayList<TGTuningString>(this.tuning.length);
+		// UITableLayout stringButtonsLayout = new UITableLayout();
+		// UIPanel stringButtonsComposite = uiFactory.createPanel(specialComposite, false);
+		// stringButtonsComposite.setLayout(stringButtonsLayout);
+		// specialLayout.set(stringButtonsComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
 		
-		this.fineTuner = new TGTunerFineWidget(this.context, uiFactory, specialComposite);
-		specialLayout.set(this.fineTuner.getControl(), 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
-		
-		UITableLayout stringButtonsLayout = new UITableLayout();
-		UIPanel stringButtonsComposite = uiFactory.createPanel(specialComposite, false);
-		stringButtonsComposite.setLayout(stringButtonsLayout);
-		specialLayout.set(stringButtonsComposite, 1, 2, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, false, true, 1, 1, null, null, 0f);
-		
-		for (int i=0; i<this.tuning.length; i++) {
-			createTuningString(uiFactory, stringButtonsComposite, i);
-		}
+		// for (int i=0; i<this.tuning.length; i++) {
+		// 	createTuningString(uiFactory, stringButtonsComposite, i);
+		// }
 		
 		UITableLayout tunLayout = new UITableLayout();
 		UIPanel tunComposite = uiFactory.createPanel(group, false);
 		tunComposite.setLayout(tunLayout);
-		groupLayout.set(tunComposite, 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+		groupLayout.set(tunComposite, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		this.currentFrequency = uiFactory.createLabel(tunComposite);
 		tunLayout.set(this.currentFrequency, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false);
+		// public void set(UIControl control, Integer row, Integer col, Integer alignX, Integer alignY, Boolean fillX, Boolean fillY, Integer rowSpan, Integer colSpan,Float minPackedWidth, Float minPackedHeight, Float margin){
 		
-		this.roughTuner = new TGTunerRoughWidget(this.context, uiFactory, group);
-		groupLayout.set(this.roughTuner.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 600f, null, null);
-		
-		
+		this.fineTuner = new TGTunerFineWidget(this.context, uiFactory, tunComposite);
+		tunLayout.set(this.fineTuner.getControl(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, true, false);
+
+		// this.roughTuner = new TGTunerRoughWidget(this.context, uiFactory, group);
+		// groupLayout.set(this.roughTuner.getControl(), 3, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, 600f, null, null);
+				
 		//------------------BUTTONS--------------------------
 		UITableLayout buttonsLayout = new UITableLayout(0f);
 		UIPanel buttons = uiFactory.createPanel(this.dialog, false);
@@ -136,9 +146,9 @@ public class TGTunerDialog implements TGTunerListener {
 		if (!this.dialog.isDisposed()) {
 			 TGSynchronizer.getInstance(this.context).executeLater(new Runnable() {				
 				 public void run() {
-					if (!TGTunerDialog.this.dialog.isDisposed() && !TGTunerDialog.this.roughTuner.isDisposed()) {
+					if (!TGTunerDialog.this.dialog.isDisposed() /* && !TGTunerDialog.this.roughTuner.isDisposed()*/) {
 						TGTunerDialog.this.currentFrequency.setText(Math.floor(freq)+" Hz");
-						TGTunerDialog.this.roughTuner.setCurrentFrequency(freq);
+						// TGTunerDialog.this.roughTuner.setCurrentFrequency(freq);
 					}
 					if (!TGTunerDialog.this.dialog.isDisposed() && !TGTunerDialog.this.fineTuner.isDisposed()) {
 						TGTunerDialog.this.fineTuner.setCurrentFrequency(freq);
@@ -162,38 +172,51 @@ public class TGTunerDialog implements TGTunerListener {
 		TGErrorManager.getInstance(this.context).handleError(ex);
 	}
 	
-	public void fireCurrentString(final int string) {
-		this.tuner.pause();
-		if (string == 0) { // TODO: it never happens
-			this.tuner.setWantedRange();
-			this.fineTuner.getControl().setEnabled(false);
-		}
-		else {
-			this.tuner.setWantedNote(string);
-			this.fineTuner.setWantedTone(string);
-		}
-		this.tuner.resumeFromPause();
-	}
+	// public void fireCurrentString(final int string) {
+	// 	this.tuner.pause();
+	// 	if (string == 0) { // TODO: it never happens
+	// 		this.tuner.setWantedRange();
+	// 		this.fineTuner.getControl().setEnabled(false);
+	// 	}
+	// 	else {
+	// 		this.tuner.setWantedNote(string);
+	// 		this.fineTuner.setWantedTone(string);
+	// 	}
+	// 	this.tuner.resumeFromPause();
+	// }
 	
-	private void createTuningString(UIFactory factory, UILayoutContainer parent, int index) {
-		TGTuningString tempString = new TGTuningString(factory, parent, this, this.tuning[index]);
-		this.allStringButtons.add(tempString);
-		tempString.getStringButton().addSelectionListener(new UISelectionListener() {
-			public void onSelect(UISelectionEvent event) {
-				// disable all others
-				TGTunerDialog.this.fineTuner.setCurrentFrequency(-1);
-				Iterator<TGTuningString> it = TGTunerDialog.this.allStringButtons.iterator();
-				while (it.hasNext()) {
-					TGTuningString tmp = (TGTuningString)it.next();
-					tmp.getStringButton().setSelected(false);
-				}
-			}
-		});
-		tempString.addListener();
+	// private void createTuningString(UIFactory factory, UILayoutContainer parent, int index) {
+	// 	TGTuningString tempString = new TGTuningString(factory, parent, this, this.tuning[index]);
+	// 	this.allStringButtons.add(tempString);
+	// 	tempString.getStringButton().addSelectionListener(new UISelectionListener() {
+	// 		public void onSelect(UISelectionEvent event) {
+
+	// 			// make unselect possible
+	// 			UIComponent uiComponent = event.getComponent();
+	// 			System.out.println( "instanceof TGTuningString: " + (uiComponent instanceof TGTuningString));
+	// 			// System.out.println( "TGTuningString isSelected(): " + TGTuningString.this.getStringButton().isSelected());
+	// 			System.out.println( "ToggleButton isSelected(): " + ((UIToggleButton) uiComponent).isSelected());
+	// 			if( uiComponent instanceof UIToggleButton && ((UIToggleButton) uiComponent).isSelected() ) {
+	// 				System.out.println("unselect");
+	// 				// uiComponent.setSelected(false);
+	// 				// TGTuningString.this.listener.fireCurrentString(0);
+	// 			}
+
+	// 			// disable all others
+	// 			TGTunerDialog.this.fineTuner.setCurrentFrequency(-1);
+	// 			Iterator<TGTuningString> it = TGTunerDialog.this.allStringButtons.iterator();
+	// 			while (it.hasNext()) {
+	// 				TGTuningString tmp = (TGTuningString)it.next();
+	// 				System.out.println(tmp.getStringButton().getText() + " is " + tmp.getStringButton().isSelected());
+	// 				tmp.getStringButton().setSelected(false);
+	// 			}
+	// 		}
+	// 	});
+	// 	tempString.addListener();
 		
-		UITableLayout uiLayout = (UITableLayout) parent.getLayout();
-		uiLayout.set(tempString.getStringButton(), (index + 1), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
-	}
+	// 	UITableLayout uiLayout = (UITableLayout) parent.getLayout();
+	// 	uiLayout.set(tempString.getStringButton(), (index + 1), 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, false);
+	// }
 
 	public UIFactory getUIFactory() {
 		return TGApplication.getInstance(this.context).getFactory();
