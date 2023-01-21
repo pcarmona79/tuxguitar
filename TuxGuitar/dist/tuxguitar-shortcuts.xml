@@ -12,8 +12,8 @@
 	<shortcut keys="9" action="action.note.general.set-fret-number-9"/>
 	<shortcut keys="Del" action="action.beat.general.delete-note-or-rest"/>
 	<shortcut keys="Ins" action="action.beat.general.insert-rest"/>
-	<shortcut keys="-" action="action.note.duration.increment-duration"/>
-	<shortcut keys="=" action="action.note.duration.decrement-duration"/>
+	<shortcut keys="," action="action.note.duration.increment-duration"/>
+	<shortcut keys="-" action="action.note.duration.decrement-duration"/>
 	<shortcut keys="Up" action="action.caret.go-up"/>
 	<shortcut keys="Down" action="action.caret.go-down"/>
 	<shortcut keys="Left" action="action.caret.go-left"/>
@@ -108,4 +108,5 @@
 	<shortcut keys="Control =" action="action.view.layout-increment-scale"/>
 	<shortcut keys="Control -" action="action.view.layout-decrement-scale"/>
 	<shortcut keys="Control 0" action="action.view.layout-reset-scale"/>
+    <shortcut action="Guitar Tuner" keys="Shift t"/>	
 </shortcuts>

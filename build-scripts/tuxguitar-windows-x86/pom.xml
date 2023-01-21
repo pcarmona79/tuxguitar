@@ -339,6 +339,9 @@
 								<copy todir="${project.build.directory}/${project.finalName}" overwrite="true">
 									<fileset dir="../common-resources/common-windows"/>
 								</copy>
+								<copy todir="${project.build.directory}/${project.finalName}" overwrite="true">
+									<fileset dir="../common-resources/common-windows-x86"/>
+								</copy>
 							</target>
 						</configuration>
 						<goals>

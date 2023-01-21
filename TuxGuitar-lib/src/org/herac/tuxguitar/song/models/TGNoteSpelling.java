@@ -128,6 +128,7 @@ public abstract class TGNoteSpelling {
 				break;
 			}
 		}
+		// System.out.println("fromString : " + keysignature);
 		
 		// translate
 		keysignature = initializeKey(keysignature);
@@ -136,6 +137,8 @@ public abstract class TGNoteSpelling {
 	}
 	
 	private int initializeKey (int keysignature) {
+		System.out.print("init key called initial val: " + keysignature);
+
 		// TuxGuitar keysignature 1 to 7 is number of sharps, 8 to 14 is (number of flats + 7)
 		// rearrange so these are in order Cb=-7, C=0, C#=7
 		// Tuxguitar leaves out G#, D#, A#, E#, B#, and Fb 
@@ -155,8 +158,16 @@ public abstract class TGNoteSpelling {
 				scale[i] = ACCIDENTAL_FLAT;
 			}
 
-			// raise the seventh until we get to the right key
-			// starting with Fb -> F natural to go from Cb to Gb
+			// ....actually this raises the fourth, starting in the
+			// vicious circle of fifths with all flats, that represents
+			// the key of Cb or C Flat.
+			// offset of 3 raises scale[3], which is the fourth note
+			// of the scale - that is f. starting values when all flat:
+			// scale:	0	1	2	3	4	5	6
+			// value:	-1	-1	-1	-1	-1	-1	-1
+			// so we walk through the circle of fifths backwards.
+			// keysignature is number of iterations in the circle of fiths
+			// backwards.
 			int offset = 3; 
 			for ( int i = -7; i < keysignature; i++) {
 				scale[offset]++; // ACCIDENTAL_FLAT goes to ACCIDENTAL_NONE, which goes to ACCIDENTAL_SHARP
@@ -166,6 +177,7 @@ public abstract class TGNoteSpelling {
 			// update and return
 			this.keySignature = keysignature;
 		}
+		// System.out.println(" init key end val: " + keysignature);
 		return keysignature;
 	}
 	
@@ -213,7 +225,7 @@ public abstract class TGNoteSpelling {
 		{
 			accidental++;
 		}
-		
+		// System.out.println("setSpellingFromKey: pitch# " + newPitchNumber + " acc " + accidental + " octave " + thisOctave);
 		this.setSpelling(newPitchNumber,  accidental, thisOctave);
 	}
 
@@ -222,14 +234,17 @@ public abstract class TGNoteSpelling {
 		semitoneCount[newNoteSemitone]++;
 		
 		int[] notes;
-		// keySignature is translated above
+		// keySignature is translated above -7 ... 0 ... 7
 		if (this.keySignature >= 0) {
 			notes = TGMeasureImpl.ACCIDENTAL_SHARP_NOTES;
+			// sharp accidentals are additive
 			this.accidental = accidentals[newNoteSemitone];
 		} else {
 			notes = TGMeasureImpl.ACCIDENTAL_FLAT_NOTES;
+			// flat accidentals are negative
 			this.accidental = 0- accidentals[newNoteSemitone];
 		}
+		// System.out.println("setSpelling: notes " + notes[newNoteSemitone] + " midi " + midiValue + " acc " + accidentals[newNoteSemitone] );
 		
 		this.pitchNumber = notes[newNoteSemitone];
 		this.midiValue = midiValue;
@@ -271,7 +286,8 @@ public abstract class TGNoteSpelling {
 	public String toLilyPondString() {
 		String noteNames[] = { "c", "d", "e", "f", "g", "a", "b" };
 		String result = "";
-		if (pitchNumber >= 0){
+		if (pitchNumber >= 0) { // if pitch number is defined ....
+			System.out.print("pitch# is defined ... ");
 			result += noteNames[getPitchNumber()];
 			switch(getAccidental())
 			{
@@ -290,16 +306,18 @@ public abstract class TGNoteSpelling {
 				result += "eses";
 				break;
 			}
-		} else {
+		} else { // pitch number undefined
+			System.out.print("pitch# is UNdefined ... ");
 				final String[] LILYPOND_SHARP_NOTES = new String[]{"c","cis","d","dis","e","f","fis","g","gis","a","ais","b"};
 				final String[] LILYPOND_FLAT_NOTES = new String[]{"c","des","d","ees","e","f","ges","g","aes","a","bes","b"};
 				
 				// logic from getLilypondKey()
-				String[] LILYPOND_NOTES = (keySignature >= 0 ? LILYPOND_SHARP_NOTES : LILYPOND_FLAT_NOTES );
+				String[] LILYPOND_NOTES = (keySignature < 1000 ? LILYPOND_SHARP_NOTES : LILYPOND_FLAT_NOTES );
 				result = (LILYPOND_NOTES[ this.midiValue % 12 ]);
 		}
 		
-		if (this.midiValue>= 0)
+		// generate additional octave information
+		if (this.midiValue >= 0)
 		{
 			// logic from getLilypondKey()
 			for(int i = 4; i < (this.midiValue / 12); i ++){
@@ -321,7 +339,7 @@ public abstract class TGNoteSpelling {
 				t++;
 			}
 		}
-		
+		// System.out.println("result: " + result + " pitch# " + pitchNumber + " midi " + midiValue + " accidental " + getAccidental());
 		return result;
 	}
 
@@ -412,7 +430,7 @@ public abstract class TGNoteSpelling {
 				
 			}
 		}
-
+		//System.out.println("guessKey: " + tuxGuitarKey);
 		return tuxGuitarKey;
 	}
 }

@@ -86,14 +86,14 @@ install -pm 644 %{SOURCE9} $RPM_BUILD_ROOT/%{_datadir}/applications/
 # icons
 for dim in 16x16 24x24 32x32 48x48 64x64 96x96; do
  install -dm 755 $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/$dim/apps/%{name}.png
- install -pm 644 TuxGuitar/share/skins/Lavender/icon-$dim.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/$dim/apps/%{name}.png
+ install -pm 644 TuxGuitar/share/skins/Symbolic/icon-$dim.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/$dim/apps/%{name}.png
 done
 
 # mime-type icons
 install -dm 755 $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/96x96/mimetypes
-install -pm 644 TuxGuitar/share/skins/Lavender/icon-96x96.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/96x96/mimetypes/audio-x-tuxguitar.png
-install -pm 644 TuxGuitar/share/skins/Lavender/icon-96x96.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/96x96/mimetypes/audio-x-gtp.png
-install -pm 644 TuxGuitar/share/skins/Lavender/icon-96x96.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/96x96/mimetypes/audio-x-ptb.png
+install -pm 644 TuxGuitar/share/skins/Symbolic/icon-96x96.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/96x96/mimetypes/audio-x-tuxguitar.png
+install -pm 644 TuxGuitar/share/skins/Symbolic/icon-96x96.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/96x96/mimetypes/audio-x-gtp.png
+install -pm 644 TuxGuitar/share/skins/Symbolic/icon-96x96.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/96x96/mimetypes/audio-x-ptb.png
 
 desktop-file-install --dir $RPM_BUILD_ROOT%{_datadir}/applications --delete-original $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 

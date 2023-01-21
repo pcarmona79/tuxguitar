@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 def plugins = [
 	'TuxGuitar-android-gervill-plugin',
 	'TuxGuitar-android-midi-plugin',
-	'TuxGuitar-android-midimaster-plugin',
 	'TuxGuitar-android-browser-saf-plugin',
 	'TuxGuitar-android-gdrive-plugin',
 	'TuxGuitar-compat',
@@ -16,13 +15,19 @@ def plugins = [
 ]
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     
+   compileOptions {
+       sourceCompatibility JavaVersion.VERSION_1_8
+       targetCompatibility JavaVersion.VERSION_1_8
+   }
+
+
     defaultConfig {
         applicationId "org.herac.tuxguitar.android.application"
-        minSdkVersion 14
-        targetSdkVersion 27
+        minSdkVersion 16
+        targetSdkVersion 28
         multiDexEnabled true
         versionCode Integer.parseInt(new Date().format('yyMMddHH'))
         versionName "2.0-SNAPSHOT"
@@ -74,13 +79,10 @@ task generateSources {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
     implementation project(':tuxguitar-android')
     implementation project(':tuxguitar-android-resources')
     implementation project(':tuxguitar-android-gervill')
     implementation project(':tuxguitar-android-midi')
-    implementation project(':tuxguitar-android-midimaster')
     implementation project(':tuxguitar-android-browser-saf')
     implementation project(':tuxguitar-android-gdrive')
     implementation project(':tuxguitar-android-gervill-soundbank')

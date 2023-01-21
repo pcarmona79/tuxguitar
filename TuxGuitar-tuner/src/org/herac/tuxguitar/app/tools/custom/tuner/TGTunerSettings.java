@@ -27,7 +27,7 @@ public class TGTunerSettings {
 	
 	
 	
-	/** default settings, if faild to load from properties */
+	/** default settings, if failed to load from properties */
 	public static TGTunerSettings getDefaults() {
 		TGTunerSettings retValue = new TGTunerSettings();
 		retValue.setSampleRate(11025);
@@ -72,7 +72,13 @@ public class TGTunerSettings {
 
 	/** creates AudioFormat based on settings */
 	public AudioFormat getAudioFormat() {
+
+		// AudioFormat(float sampleRate, int sampleSizeInBits, int channels, boolean signed, boolean bigEndian)
+		// Constructs an AudioFormat with a linear PCM encoding and the given parameters.
 		return new AudioFormat(this.getSampleRate(),this.getSampleSize(),1,true,false);
+		// so this format is mono signed little endian
+
+
 		// TODO: this is changed!!!!
 		/* return new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, // PCM encoding
 				this.getSampleRate(), // sample rate
@@ -144,29 +150,26 @@ public class TGTunerSettings {
 		//return null;
 	}
 
-	
-	
-	
 	/* MAYBE USEFUL CODE
-	 * 
-	 * Port lineIn;
-FloatControl volCtrl;
-try {
-  mixer = AudioSystem.getMixer(null);
-  lineIn = (Port)mixer.getLine(Port.Info.LINE_IN);
-  lineIn.open();
-  volCtrl = (FloatControl) lineIn.getControl(
-      FloatControl.Type.VOLUME);
-  // Assuming getControl call succeeds, 
-  // we now have our LINE_IN VOLUME control.
-} catch (Exception e) {
-  System.out.println("Failed trying to find LINE_IN"
-    + " VOLUME control: exception = " + e);
-}
-float newValue = 2.0F;
-if (volCtrl != null)
-  // This changes the volume of the signal flowing though the line that "owns" the control.
-  volCtrl.setValue(newValue); 
+	 *
+		Port lineIn;
+		FloatControl volCtrl;
+		try {
+			mixer = AudioSystem.getMixer(null);
+			lineIn = (Port)mixer.getLine(Port.Info.LINE_IN);
+			lineIn.open();
+			volCtrl = (FloatControl) lineIn.getControl(
+				FloatControl.Type.VOLUME);
+			// Assuming getControl call succeeds, 
+			// we now have our LINE_IN VOLUME control.
+		} catch (Exception e) {
+			System.out.println("Failed trying to find LINE_IN"
+				+ " VOLUME control: exception = " + e);
+		}
+		float newValue = 2.0F;
+		if (volCtrl != null)
+			// This changes the volume of the signal flowing though the line that "owns" the control.
+			volCtrl.setValue(newValue); 
 	 * 
 	 */
 	

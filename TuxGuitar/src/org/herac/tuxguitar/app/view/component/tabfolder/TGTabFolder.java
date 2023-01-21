@@ -33,6 +33,9 @@ import org.herac.tuxguitar.ui.widget.UIContainer;
 import org.herac.tuxguitar.ui.widget.UIPanel;
 import org.herac.tuxguitar.util.TGContext;
 import org.herac.tuxguitar.util.singleton.TGSingletonUtil;
+import org.herac.tuxguitar.app.action.impl.file.TGSaveAsFileAction;
+import org.herac.tuxguitar.app.action.impl.file.TGSaveFileAction;
+
 
 import java.util.List;
 
@@ -47,6 +50,8 @@ public class TGTabFolder implements TGEventListener {
 	private UIToolBar toolbar;
 	private UIToolActionItem newSong;
 	private UIToolActionItem openSong;
+	private UIToolActionItem saveSong;
+	private UIToolActionItem saveSongAs;
 	private TGControl control;
 	private boolean ignoreEvents;
 	private boolean currentUnsaved;
@@ -108,6 +113,12 @@ public class TGTabFolder implements TGEventListener {
 
 		this.openSong = this.toolbar.createActionItem();
 		this.openSong.addSelectionListener(new TGActionProcessorListener(this.context, TGOpenFileAction.NAME));
+
+		this.saveSong = this.toolbar.createActionItem();
+		this.saveSong.addSelectionListener(new TGActionProcessorListener(this.context, TGSaveFileAction.NAME));
+
+		this.saveSongAs = this.toolbar.createActionItem();
+		this.saveSongAs.addSelectionListener(new TGActionProcessorListener(this.context, TGSaveAsFileAction.NAME));
 
 		this.control = new TGControl(this.context, this.container);
 		layout.set(this.control.getContainer(), 2, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true, 1, 1, null, null, 0f);
@@ -215,6 +226,9 @@ public class TGTabFolder implements TGEventListener {
 		this.tabs.loadIcons();
 		this.newSong.setImage(iconManager.getFileNew());
 		this.openSong.setImage(iconManager.getFileOpen());
+		this.saveSong.setImage(iconManager.getFileSave());
+		this.saveSongAs.setImage(iconManager.getFileSaveAs());
+
 	}
 
 	private void loadProperties() {
@@ -225,6 +239,8 @@ public class TGTabFolder implements TGEventListener {
 		}
 		this.newSong.setToolTipText(TuxGuitar.getProperty("file.new"));
 		this.openSong.setToolTipText(TuxGuitar.getProperty("file.open"));
+		this.saveSong.setToolTipText(TuxGuitar.getProperty("file.save"));
+		this.saveSongAs.setToolTipText(TuxGuitar.getProperty("file.save-as"));
 	}
 	
 	private void createSyncProcesses() {

@@ -1,7 +1,86 @@
-TuxGuitar 1.5 changes:
+# TODO:
+make tab decal for pdf export
+    ->paint tab clef
+documentation opens in text editor???
+save Tool values
+    ->how is file history saved?
+more intuitive tuner
 
-* String count range moved to 1 - 25
-* New Oxygen Dark skin created for dark themes
-* New synth host plugin with FX support
-* Native VST support (only for Windows/GNULinux releases) for the new synth host plugin.
-* Zomm in/out support  
+## CHANGELOG:
+
+26/07/2021
+added yin algorithm to tuner
+
+22/07/2021
+added default shortcut for tuner: "shift t"
+
+19/07/2021
+added save / save as option to tab folder menu
+
+16/07/2021
+lilypond export is reverted to 1.5.4 - in
+TuxGuitar-lilypond/src/org/herac/tuxguitar/io/lilypond/LilypondOutputStream.java
+due to false enharmonics when exporting from gp3
+
+14/07/2021
+display fret numbers in chord diagrams only if higher than 1
+
+13/07/2021
+transpose tool has new option "transpose selection".
+
+12/07/2021
+added bach bourree as template / startup file, location:
+/home/ptero/tuxguitar/TuxGuitar/share/templates/template-default.tg
+
+key names instead of number of sharps / flats for german language file in
+/home/ptero/tuxguitar/TuxGuitar/share/lang/messages_de.properties
+
+changed keys for note duration change near the cursor arrows.
+increase : ','  decrease: '-'
+/home/ptero/tuxguitar/TuxGuitar/dist/tuxguitar-shortcuts.xml
+i guess increase makes the notes smaller. 
+
+01/07/2021
+/home/ptero/tuxguitar/TuxGuitar/share/lang/messages_de.properties
+/home/ptero/tuxguitar/TuxGuitar/share/lang/messages_en.properties
+    -> added :
+tools.transpose.apply-to-selection
+
+
+yin pitch detection:
+TuxGuitar-tuner/src/org/herac/tuxguitar/app/tools/custom/tuner/TGTuner.java
+...opens dataline with settings and reads audio
+doFFT does actual processing
+computeFFT seems unused
+TGTuner owns FFT, which has the method computeFFT
+when dataline is opened, fft is initialized before
+->so we should create a yin class, and instantiate with settings ...?!?
+TGTuner owns settings object
+do they normalize audio data???? 
+    ->tuxguitar calculates with raw byte values from the driver, 
+    ranging from -128 to 127.
+in tarsos dsp .... they use [-1, 1]
+yin does not do autocorrelation.
+BAM it works ;-))))
+maybe remove tuning strings ... to make tuning automatic
+UIWindow dialog....
+    UIPanel group
+        groupLayout
+dialogLayout -> groupLayout -> specialLayout -> fine tuner -> string buttons
+                1.1             1.1             1.1             1.2
+                            -> tunLayout
+                                2.1
+                            -> rough tuner
+                                3.1
+somehow removing string buttons does not work ;-(
+ok, so we leave buttons and remove functionality first
+TGTuningString is not needed any more...
+String Buttons and fireCurrentString disabled in TGTunerDialog
+todo: cleaning up, make it really work
+how does frequency get from tuner to FineWidget?
+TGTunerDialog 
+    ->fireFrequency
+        ->fineTuner.setCurrentFrequency
+TGTuner
+    ->owns TGTunerDialog as mainWindow
+        ->mainWindow.fireFrequency

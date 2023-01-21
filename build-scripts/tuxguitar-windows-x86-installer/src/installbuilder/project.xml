@@ -54,7 +54,7 @@
 					<platforms>windows</platforms>
 					<windowsExec>${installdir}/tuxguitar.exe</windowsExec>
 					<windowsExecArgs></windowsExecArgs>
-					<windowsIcon>${installdir}/share/skins/Lavender/icon.ico</windowsIcon>
+					<windowsIcon>${installdir}/share/skins/Symbolic/icon.ico</windowsIcon>
 					<windowsPath>${installdir}/</windowsPath>
 				</shortcut>
 			</desktopShortcutList>
@@ -87,7 +87,7 @@
 					<name>Launch ${product_fullname}</name>
 					<windowsExec>${installdir}/tuxguitar.exe</windowsExec>
 					<windowsExecArgs></windowsExecArgs>
-					<windowsIcon>${installdir}/share/skins/Lavender/icon.ico</windowsIcon>
+					<windowsIcon>${installdir}/share/skins/Symbolic/icon.ico</windowsIcon>
 					<windowsPath>${installdir}/</windowsPath>
 				</startMenuShortcut>
 			</startMenuShortcutList>

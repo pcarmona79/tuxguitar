@@ -25,7 +25,7 @@ public abstract class TGMeasure {
 	public static final int CLEF_ALTO = 4;
 	
 	public static final int DEFAULT_CLEF = CLEF_TREBLE;
-	public static final int DEFAULT_KEY_SIGNATURE= 0;
+	public static final int DEFAULT_KEY_SIGNATURE = 0;
 	
 	private TGMeasureHeader header;
 	private TGTrack track;

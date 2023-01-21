@@ -11,6 +11,9 @@ import org.herac.tuxguitar.editor.action.tools.TGTransposeAction;
 import org.herac.tuxguitar.ui.UIFactory;
 import org.herac.tuxguitar.ui.layout.UITableLayout;
 import org.herac.tuxguitar.ui.widget.*;
+import org.herac.tuxguitar.util.TGBeatRange;
+import org.herac.tuxguitar.song.models.TGMeasureHeader;
+
 
 public class TGTransposeDialog {
 	
@@ -21,11 +24,24 @@ public class TGTransposeDialog {
 		final UIWindow uiParent = context.getAttribute(TGViewContext.ATTRIBUTE_PARENT);
 		final UITableLayout dialogLayout = new UITableLayout();
 		final UIWindow dialog = uiFactory.createWindow(uiParent, true, false);
+
+		// compute selected range
+		TGBeatRange beats = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_BEAT_RANGE);
+		int start;
+		int end;
+		if (!beats.isEmpty()) {
+			start = beats.firstMeasure().getHeader().getNumber();
+			end = beats.lastMeasure().getHeader().getNumber();
+		} else {
+			final TGMeasureHeader header = context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_HEADER);
+			start = end = header.getNumber();
+		}
+
 		
 		dialog.setLayout(dialogLayout);
 		dialog.setText(TuxGuitar.getProperty("tools.transpose"));
 		
-		//-----------------TEMPO------------------------
+		//-----------------SEMITONES SELECTION------------------------
 		UITableLayout groupLayout = new UITableLayout();
 		UIPanel group = uiFactory.createPanel(dialog, false);
 		group.setLayout(groupLayout);
@@ -35,6 +51,7 @@ public class TGTransposeDialog {
 		transpositionLabel.setText(TuxGuitar.getProperty("tools.transpose.semitones"));
 		groupLayout.set(transpositionLabel, 1, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_CENTER, false, true);
 		
+		// this used to be a dropdown select in 1.5.4
 		final UISpinner transpositionSpinner = uiFactory.createSpinner(group);
 		transpositionSpinner.setMinimum(-127);
 		transpositionSpinner.setMaximum(127);
@@ -70,6 +87,11 @@ public class TGTransposeDialog {
 		tryKeepStringButton.setText(TuxGuitar.getProperty("tools.transpose.try-keep-strings"));
 		tryKeepStringButton.setSelected(true);
 		optionsLayout.set(tryKeepStringButton, 5, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
+
+		// transpose selection?
+		final UIRadioButton applyToSelectionButton = uiFactory.createRadioButton(options);
+		applyToSelectionButton.setText(TuxGuitar.getProperty("tools.transpose.apply-to-selection"));
+		optionsLayout.set(applyToSelectionButton, 6, 1, UITableLayout.ALIGN_FILL, UITableLayout.ALIGN_FILL, true, true);
 		
 		//------------------BUTTONS--------------------------
 		TGDialogButtons buttons = new TGDialogButtons(uiFactory, dialog,
@@ -80,8 +102,9 @@ public class TGTransposeDialog {
 						final boolean applyToChords = applyToChordsButton.isSelected();
 						final boolean applyToAllTracks = applyToAllTracksButton.isSelected();
 						final boolean applyToAllMeasures = applyToAllMeasuresButton.isSelected();
+						final boolean applyToSelection = applyToSelectionButton.isSelected();
 
-						transposeNotes(context, transposition, tryKeepString, applyToChords , applyToAllMeasures, applyToAllTracks);
+						transposeNotes(context , transposition , tryKeepString , applyToChords , applyToAllMeasures , applyToAllTracks , applyToSelection);
 					}
 					dialog.dispose();
                 }), TGDialogButtons.cancel(dialog::dispose));
@@ -90,7 +113,10 @@ public class TGTransposeDialog {
 		TGDialogUtil.openDialog(dialog,TGDialogUtil.OPEN_STYLE_CENTER | TGDialogUtil.OPEN_STYLE_PACK);
 	}
 	
-	public void transposeNotes(TGViewContext context, int transposition , boolean tryKeepString , boolean applyToChords , boolean applyToAllMeasures , boolean applyToAllTracks) {
+	public void transposeNotes(TGViewContext context, int transposition , 
+								boolean tryKeepString , boolean applyToChords , 
+								boolean applyToAllMeasures , boolean applyToAllTracks , 
+								boolean applyToSelection) {
 		TGActionProcessor tgActionProcessor = new TGActionProcessor(context.getContext(), TGTransposeAction.NAME);
 		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG, context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_SONG));
 		tgActionProcessor.setAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK, context.getAttribute(TGDocumentContextAttributes.ATTRIBUTE_TRACK));
@@ -100,6 +126,7 @@ public class TGTransposeDialog {
 		tgActionProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_CHORDS, applyToChords);
 		tgActionProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_ALL_TRACKS, applyToAllTracks);
 		tgActionProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_ALL_MEASURES, applyToAllMeasures);
+		tgActionProcessor.setAttribute(TGTransposeAction.ATTRIBUTE_APPLY_TO_SELECTION, applyToSelection);
 		tgActionProcessor.processOnNewThread();
 	}
 }

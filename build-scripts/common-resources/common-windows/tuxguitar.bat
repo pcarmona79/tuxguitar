@@ -3,7 +3,7 @@ cd "."
 SET "TG_HOME=."
 SET "TG_MAIN_CLASS=org.herac.tuxguitar.app.TGMainSingleton"
 
-SET "JAVA=java"
+SET "JAVA=jre\bin\java"
 
 SET "JAVA_LIBRARY_PATH=%JAVA_LIBRARY_PATH%;lib\"
 
@@ -18,7 +18,6 @@ SET "JAVA_CLASSPATH=%JAVA_CLASSPATH%;lib\swt.jar"
 SET "JAVA_CLASSPATH=%JAVA_CLASSPATH%;lib\gervill.jar"
 SET "JAVA_CLASSPATH=%JAVA_CLASSPATH%;lib\itext-pdf.jar"
 SET "JAVA_CLASSPATH=%JAVA_CLASSPATH%;lib\itext-xmlworker.jar"
-SET "JAVA_CLASSPATH=%JAVA_CLASSPATH%;lib\commons-compress.jar"
 SET "JAVA_CLASSPATH=%JAVA_CLASSPATH%;share\"
 SET "JAVA_CLASSPATH=%JAVA_CLASSPATH%;dist\"
 
